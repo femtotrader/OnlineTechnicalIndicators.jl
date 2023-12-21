@@ -311,8 +311,17 @@ end
                 @test isapprox(ind.output[end - 1], 141.667617; atol=ATOL)
                 @test isapprox(ind.output[end], 89.601438; atol=ATOL)
                 @test length(ind.output) == P
-            end   
+            end
 
+            @testset_skip "MassIndex - help wanted" begin
+                ind = MassIndex{Float64}(ema_period=9, ema_ema_period=9, ema_ratio_period=10)
+                append!(ind, V_OHLCV)
+                @test isapprox(ind.output[end - 2], 9.498975; atol=ATOL)
+                @test isapprox(ind.output[end - 1], 9.537927; atol=ATOL)
+                @test isapprox(ind.output[end], 9.648128; atol=ATOL)
+                @test length(ind.output) == 9
+            end
+            
         end
 
 

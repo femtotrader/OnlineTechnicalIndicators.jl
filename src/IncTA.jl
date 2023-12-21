@@ -26,6 +26,7 @@ module IncTA
     export ForceIndex
     export OBV
     export CCI
+    export MassIndex
 
     using DataStructures
     using OnlineStats
@@ -73,5 +74,6 @@ module IncTA
     include("indicators/ForceIndex.jl")
     include("indicators/OBV.jl")
     include("indicators/CCI.jl")
+    include("indicators/MassIndex.jl")
 
 end
