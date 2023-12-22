@@ -34,9 +34,30 @@ function Base.push!(ind::MACD{Tval}, val::Tval) where {Tval}
     push!(ind.ema_fast, val)
     push!(ind.ema_slow, val)
 
-    macd, signal, histogram = 0.0, 0.0, 0.0
+    if length(ind.ema_fast.output) > 0 && length(ind.ema_slow.output) > 0
+        macd = ind.ema_fast.output[end] - ind.ema_slow.output[end]
+        push!(ind.signal_line, macd)
 
-    out_val = MACDVal{Tval}(macd, signal, histogram)
-    push!(ind.output, out_val)
-    return out_val
+        if length(ind.signal_line.output) > 0
+            signal = ind.signal_line.output[end]
+        else
+            signal = missing
+        end
+
+        histogram = missing
+        if (!ismissing(macd)) && (!ismissing(signal))
+            histogram = macd - signal
+        end
+
+        # macd, signal, histogram = 0.0, 0.0, 0.0
+        out_val = MACDVal{Tval}(macd, signal, histogram)
+        push!(ind.output, out_val)
+        println(out_val)
+        return out_val
+    else
+        out_val = missing
+        push!(ind.output, out_val)
+        println(out_val)
+        return out_val
+    end
 end
