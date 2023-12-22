@@ -27,6 +27,7 @@ module IncTA
     export OBV
     export CCI
     export MassIndex
+    export CHOP
 
     using DataStructures
     using OnlineStats
@@ -75,5 +76,6 @@ module IncTA
     include("indicators/OBV.jl")
     include("indicators/CCI.jl")
     include("indicators/MassIndex.jl")
+    include("indicators/CHOP.jl")
 
 end

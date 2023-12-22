@@ -28,7 +28,7 @@ See [tests](test/)
 | `BB` | Bollinger Bands | :heavy_check_mark:
 | `BOP` | Balance Of Power | :heavy_check_mark:
 | `CCI` | Commodity Channel Index | :heavy_check_mark:
-| `CHOP` | Choppiness Index |
+| `CHOP` | Choppiness Index | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `ChaikinOsc` | Chaikin Oscillator |
 | `ChandeKrollStop` | Chande Kroll Stop |
 | `CoppockCurve` | Coppock Curve |

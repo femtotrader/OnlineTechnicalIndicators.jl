@@ -321,6 +321,15 @@ end
                 @test isapprox(ind.output[end], 9.648128; atol=ATOL)
                 @test length(ind.output) == 9
             end
+
+            @testset_skip "CHOP - help wanted" begin
+                ind = CHOP{Missing, Float64, Float64}(period=14)
+                append!(ind, V_OHLCV)
+                @test isapprox(ind.output[end - 2], 49.835100; atol=ATOL)
+                @test isapprox(ind.output[end - 1], 50.001477; atol=ATOL)
+                @test isapprox(ind.output[end], 49.289273; atol=ATOL)
+                @test length(ind.output) == 14
+            end
             
         end
 

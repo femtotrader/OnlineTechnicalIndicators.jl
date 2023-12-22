@@ -1,7 +1,7 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tprice}(; period=ATR_PERIOD)
+    ATR{Ttime, Tprice, Tvol}(; period=ATR_PERIOD)
 
 The ATR type implements an Average True Range indicator.
 """
