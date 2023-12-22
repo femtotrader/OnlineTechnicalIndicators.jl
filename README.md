@@ -2,9 +2,9 @@
 
 [![Build Status](https://github.com/femtotrader/IncTA.jl/actions/workflows/CI.yml/badge.svg?branch=master)](https://github.com/femtotrader/IncTA.jl/actions/workflows/CI.yml?query=branch%3Amaster)
 
-This project implements some Technical Analysis Indicators in Julia.
+This project implements some Technical Analysis Indicators in Julia in an incremental approach.
 
-It's inspired by Python project [talipp](https://github.com/nardew/talipp)
+It's inspired by Python project [talipp](https://github.com/nardew/talipp) which is used as "reference implementation" for unit tests.
 
 ## Install
 Open Julia command line interface.
