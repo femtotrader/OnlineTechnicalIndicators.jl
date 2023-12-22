@@ -130,14 +130,16 @@
             @test isapprox(ind.output[end], 10.104067; atol=ATOL)
             @test length(ind.output) == 20
         end
+
     end
 
 
-    
+
     @testset "several output values" begin
         @testset "BB" begin
             ind = BB{Float64}(period=5, std_dev_multiplier=2.0)
             append!(ind, CLOSE_TMPL)
+
             @test isapprox(ind.output[end - 2].lower, 8.186646; atol=ATOL)
             @test isapprox(ind.output[end - 2].central, 9.748000; atol=ATOL)
             @test isapprox(ind.output[end - 2].upper, 11.309353; atol=ATOL)
@@ -149,7 +151,27 @@
             @test isapprox(ind.output[end].lower, 9.863185; atol=ATOL)
             @test isapprox(ind.output[end].central, 10.254000; atol=ATOL)
             @test isapprox(ind.output[end].upper, 10.644814; atol=ATOL)
-        end             
+        end
+
+        @testset "MACD" begin
+            ind = MACD{Float64}(fast_period=12, slow_period=26, signal_period=9)
+            append!(ind, CLOSE_TMPL)
+
+            @test isapprox(ind.output[end - 2].macd, 0.293541; atol=ATOL)
+            @test isapprox(ind.output[end - 2].signal, 0.098639; atol=ATOL)
+            @test isapprox(ind.output[end - 2].histogram, 0.194901; atol=ATOL)
+
+            @test isapprox(ind.output[end - 1].macd, 0.326186; atol=ATOL)
+            @test isapprox(ind.output[end - 1].signal, 0.144149; atol=ATOL)
+            @test isapprox(ind.output[end - 1].histogram, 0.182037; atol=ATOL)
+
+            @test isapprox(ind.output[end].macd, 0.329698; atol=ATOL)
+            @test isapprox(ind.output[end].signal, 0.181259; atol=ATOL)
+            @test isapprox(ind.output[end].histogram, 0.148439; atol=ATOL)         
+            
+            #@test length(ind.output) == 12
+        end
+
     end
     
 end
