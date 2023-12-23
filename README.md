@@ -57,7 +57,7 @@ See [tests](test/)
 | `SFX` | SFX |
 | `SMA` | Simple Moving Average | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :heavy_check_mark:
-| `SOBV` | Smoothed On Balance Volume |
+| `SOBV` | Smoothed On Balance Volume | :heavy_check_mark:
 | `StdDev` | Standard Deviation | :heavy_check_mark:
 | `Stoch` | Stochastic | :christmas_tree: :construction:  [Work in progress](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI |

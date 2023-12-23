@@ -1,43 +1,31 @@
-const SOBV_PERIOD = 3
+const SOBV_PERIOD = 20
 
 """
-    SOBV{Ttime, Tprice, Tvol}(; period = ForceIndex_PERIOD)
+    SOBV{Ttime, Tprice, Tvol}(; period = SOBV_PERIOD)
 
 The SOBV type implements a Smoothed On Balance Volume indicator.
 """
-mutable struct OBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct SOBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     period::Integer
 
-    input::Tuple{
-        Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
-        Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
-    }
+    obv::OBV{Ttime,Tprice,Tvol}
+
     output::CircularBuffer{Union{Tprice,Missing}}
 
-    function OBV{Ttime,Tprice,Tvol}(; period = SOBV_PERIOD) where {Ttime,Tprice,Tvol}
-        input = (missing, missing)
-        output = CircularBuffer{Union{Tprice,Missing}}(memory)
-        new{Ttime,Tprice,Tvol}(memory, input, output)
+    function SOBV{Ttime,Tprice,Tvol}(; period = SOBV_PERIOD) where {Ttime,Tprice,Tvol}
+        obv = OBV{Ttime,Tprice,Tvol}(memory = period)
+        output = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, obv, output)
     end
 end
 
-function Base.push!(ind::OBV, candle::OHLCV)
-    ind.input = (ind.input[end], candle)  # Keep a small window of input values
+function Base.push!(ind::SOBV, candle::OHLCV)
+    push!(ind.obv, candle)
 
-    if sum(ismissing.(ind.input)) >= 1
-        out_val = candle.volume
+    if !has_output_value(ind.obv)
+        out_val = missing
     else
-        value = ind.input[end]
-        prev_value = ind.input[end-1]
-
-        if value.close == prev_value.close
-            out_val = ind.output[end]
-        elseif value.close > prev_value.close
-            out_val = ind.output[end] + value.volume
-        else
-            out_val = ind.output[end] - value.volume
-        end
-
+        out_val = sum(ind.obv.output) / ind.period
     end
 
     push!(ind.output, out_val)

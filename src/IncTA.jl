@@ -27,6 +27,7 @@ export AccuDist
 export BOP
 export ForceIndex
 export OBV
+export SOBV
 export CCI
 export MassIndex
 export CHOP
@@ -80,6 +81,7 @@ include("indicators/AccuDist.jl")
 include("indicators/BOP.jl")
 include("indicators/ForceIndex.jl")
 include("indicators/OBV.jl")
+include("indicators/SOBV.jl")
 include("indicators/CCI.jl")
 include("indicators/MassIndex.jl")
 include("indicators/CHOP.jl")

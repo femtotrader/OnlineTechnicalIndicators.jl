@@ -74,16 +74,14 @@
             @test length(ind.output) == 3
         end
 
-        #=
         @testset "SOBV" begin
-            ind = OBV{Missing,Float64,Float64}(memory = 3)
+            ind = SOBV{Missing,Float64,Float64}(period = 20)
             append!(ind, V_OHLCV)
-            @test isapprox(ind.output[end-2], 665.899999; atol = ATOL)
-            @test isapprox(ind.output[end-1], 617.609999; atol = ATOL)
-            @test isapprox(ind.output[end], 535.949999; atol = ATOL)
-            @test length(ind.output) == 3
+            @test isapprox(ind.output[end-2], 90.868499; atol = ATOL)
+            @test isapprox(ind.output[end-1], 139.166499; atol = ATOL)
+            @test isapprox(ind.output[end], 187.558499; atol = ATOL)
+            @test length(ind.output) == 20
         end
-        =#
 
         @testset "CCI" begin
             ind = CCI{Float64}(period = 20)
