@@ -181,6 +181,19 @@
             @test length(ind.output) == 20
         end
 
+        @testset "CoppockCurve" begin
+            ind = CoppockCurve{Float64}(
+                fast_roc_period = 11,
+                slow_roc_period = 14,
+                wma_period = 10,
+            )
+            append!(ind, CLOSE_TMPL)
+            @test isapprox(ind.output[end-2], 27.309482; atol = ATOL)
+            @test isapprox(ind.output[end-1], 26.109333; atol = ATOL)
+            @test isapprox(ind.output[end], 22.941006; atol = ATOL)
+            @test length(ind.output) == 10
+        end
+
         @testset "ALMA" begin
             ind = ALMA{Float64}(period = 9, offset = 0.85, sigma = 6.0)
             w_expected = [
