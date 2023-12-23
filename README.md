@@ -33,7 +33,7 @@ See [tests](test/)
 | `ChandeKrollStop` | Chande Kroll Stop |
 | `CoppockCurve` | Coppock Curve |
 | `DEMA` | Double Exponential Moving Average | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `DPO` | Detrended Price Oscillator |
+| `DPO` | Detrended Price Oscillator | :heavy_check_mark:
 | `DonchianChannels` | Donchian Channels |
 | `EMA` | Exponential Moving Average | :heavy_check_mark:
 | `EMV` | Ease of Movement | :heavy_check_mark:

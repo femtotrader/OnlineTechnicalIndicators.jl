@@ -15,6 +15,7 @@ export BB
 export KST
 export KAMA
 export HMA
+export DPO
 export MACD
 export DEMA
 export ALMA
@@ -73,6 +74,7 @@ include("indicators/BB.jl")
 include("indicators/KST.jl")
 include("indicators/KAMA.jl")
 include("indicators/HMA.jl")
+include("indicators/DPO.jl")
 include("indicators/MACD.jl")
 include("indicators/DEMA.jl")
 include("indicators/ALMA.jl")

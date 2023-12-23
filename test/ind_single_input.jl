@@ -163,13 +163,21 @@
             @test length(ind.output) == P
         end
 
-
         @testset "HMA" begin
             ind = HMA{Float64}(period = 20)
             append!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.718018; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.940188; atol = ATOL)
             @test isapprox(ind.output[end], 10.104067; atol = ATOL)
+            @test length(ind.output) == 20
+        end
+
+        @testset "DPO" begin
+            ind = DPO{Float64}(period = 20)
+            append!(ind, CLOSE_TMPL)
+            @test isapprox(ind.output[end-2], 0.344499; atol = ATOL)
+            @test isapprox(ind.output[end-1], 0.116999; atol = ATOL)
+            @test isapprox(ind.output[end], 0.011499; atol = ATOL)
             @test length(ind.output) == 20
         end
 
