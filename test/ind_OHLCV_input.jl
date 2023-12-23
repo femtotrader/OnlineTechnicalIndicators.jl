@@ -92,6 +92,15 @@
             @test length(ind.output) == P
         end
 
+        @testset "ChaikinOsc" begin
+            ind = ChaikinOsc{Float64}(fast_period = 5, slow_period = 7)
+            append!(ind, V_OHLCV)
+            @test isapprox(ind.output[end-2], 31.280810; atol = ATOL)
+            @test isapprox(ind.output[end-1], 28.688536; atol = ATOL)
+            @test isapprox(ind.output[end], 24.913310; atol = ATOL)
+            @test length(ind.output) == 5
+        end
+
         @testset_skip "MassIndex - help wanted" begin
             ind = MassIndex{Float64}(
                 ema_period = 9,

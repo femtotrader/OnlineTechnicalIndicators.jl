@@ -29,7 +29,7 @@ See [tests](test/)
 | `BOP` | Balance Of Power | :heavy_check_mark:
 | `CCI` | Commodity Channel Index | :heavy_check_mark:
 | `CHOP` | Choppiness Index | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `ChaikinOsc` | Chaikin Oscillator |
+| `ChaikinOsc` | Chaikin Oscillator | :heavy_check_mark:
 | `ChandeKrollStop` | Chande Kroll Stop |
 | `CoppockCurve` | Coppock Curve |
 | `DEMA` | Double Exponential Moving Average | :heavy_exclamation_mark: Doesn't work as expected - help wanted

@@ -29,6 +29,7 @@ export ForceIndex
 export OBV
 export SOBV
 export CCI
+export ChaikinOsc
 export MassIndex
 export CHOP
 export SuperTrend, Trend
@@ -83,6 +84,7 @@ include("indicators/ForceIndex.jl")
 include("indicators/OBV.jl")
 include("indicators/SOBV.jl")
 include("indicators/CCI.jl")
+include("indicators/ChaikinOsc.jl")
 include("indicators/MassIndex.jl")
 include("indicators/CHOP.jl")
 include("indicators/SuperTrend.jl")
