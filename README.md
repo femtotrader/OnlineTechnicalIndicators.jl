@@ -20,7 +20,7 @@ See [tests](test/)
 | Name | Description | Implementation status |
 | --- | --- | --- |
 | `ADX` | Average Directional Index |
-| `ALMA` | Arnaud Legoux Moving Average |
+| `ALMA` | Arnaud Legoux Moving Average | :heavy_check_mark:
 | `AO` | Awesome Oscillator | :heavy_check_mark:
 | `ATR` | Average True Range | :heavy_check_mark:
 | `AccuDist` | Accumulation and Distribution | :heavy_check_mark:

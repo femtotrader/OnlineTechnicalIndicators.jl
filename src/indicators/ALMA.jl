@@ -24,8 +24,8 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
         w_sum = 0.0
         s = period / sigma
         m = trunc(Int, (period - 1) * offset)
-        for i in 0:(period - 1)
-            w_val = exp(-1 * (i - m) * (i - m) / (2 * s * s))
+        for i in 1:period
+            w_val = exp(-1 * (i - 1 - m) * (i - 1 - m) / (2 * s * s))
             push!(w, w_val)
             w_sum += w_val
         end
@@ -43,8 +43,8 @@ function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
         out_val = missing
     else
         alma = 0
-        for i in 0:(ind.period - 1)
-            alma += ind.input[end - (ind.period - i) + 1] * ind.w[i + 1]
+        for i in 1:ind.period
+            alma += ind.input[end - (ind.period - i)] * ind.w[i]
         end
         out_val = alma / ind.w_sum
     end
