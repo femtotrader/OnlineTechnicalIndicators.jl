@@ -3,7 +3,7 @@ const DEMA_PERIOD = 20
 """
     DEMA{T}(; period=DEMA_PERIOD)
 
-The DEMA type implements a Double Exponential Moving Average.
+The DEMA type implements a Double Exponential Moving Average indicator.
 """
 mutable struct DEMA{Tval} <: AbstractIncTAIndicator
     period::Integer

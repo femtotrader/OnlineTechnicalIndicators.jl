@@ -1,0 +1,54 @@
+const ALMA_PERIOD = 9
+const ALMA_OFFSET = 0.85
+const ALMA_SIGMA = 6.0
+
+
+"""
+    ALMA{T}(; period=ALMA_PERIOD, offset=ALMA_OFFSET, sigma=ALMA_SIGMA)
+
+The ALMA type implements an Arnaud Legoux Moving Average indicator.
+"""
+mutable struct ALMA{Tval} <: AbstractIncTAIndicator
+    period::Integer
+    offset::Tval
+    sigma::Tval
+
+    w::Vector{Tval}
+    w_sum::Tval
+
+    input::CircularBuffer{Tval}
+    output::CircularBuffer{Union{Missing, Tval}}
+
+    function ALMA{Tval}(; period=ALMA_PERIOD, offset=ALMA_OFFSET, sigma=ALMA_SIGMA) where {Tval}
+        w = Tval[]
+        w_sum = 0.0
+        s = period / sigma
+        m = trunc(Int, (period - 1) * offset)
+        for i in 0:(period - 1)
+            w_val = exp(-1 * (i - m) * (i - m) / (2 * s * s))
+            push!(w, w_val)
+            w_sum += w_val
+        end
+        input = CircularBuffer{Tval}(period)
+        output = CircularBuffer{Union{Missing, Tval}}(period)
+        new{Tval}(period, offset, sigma, w, w_sum, input, output)
+    end
+end
+
+
+function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
+    push!(ind.input, val)
+
+    if length(ind.input) < ind.period
+        out_val = missing
+    else
+        alma = 0
+        for i in 0:(ind.period - 1)
+            alma += ind.input[end - (ind.period - i) + 1] * ind.w[i + 1]
+        end
+        out_val = alma / ind.w_sum
+    end
+    
+    push!(ind.output, out_val)
+    return out_val
+end

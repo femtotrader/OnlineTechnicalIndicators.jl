@@ -112,15 +112,6 @@
             @test length(ind.output) == P
         end
 
-        @testset_skip "KAMA (buggy - help wanted)" begin
-            ind = KAMA{Float64}(period=14, fast_ema_constant_period=2, slow_ema_constant_period=30)
-            append!(ind, CLOSE_TMPL)
-            @test isapprox(ind.output[end - 2], 8.884374; atol=ATOL)
-            @test isapprox(ind.output[end - 1], 8.932091; atol=ATOL)
-            @test isapprox(ind.output[end], 8.941810; atol=ATOL)
-            @test length(ind.input) == 14
-            @test length(ind.output) == 14
-        end
 
         @testset "HMA" begin
             ind = HMA{Float64}(period=20)
@@ -131,6 +122,20 @@
             @test length(ind.output) == 20
         end
 
+        @testset "ALMA" begin
+            ind = ALMA{Float64}(period=9, offset=0.85, sigma=6.0)
+            w_expected = [0.000335, 0.003865, 0.028565, 0.135335, 0.411112, 0.800737, 1.0, 0.800737, 0.411112]
+            for (i, w_expected_val) in enumerate(w_expected)
+                @test isapprox(ind.w[i], w_expected_val; atol=ATOL)
+            end
+            @test isapprox(ind.w_sum, 3.591801; atol=ATOL)
+            append!(ind, CLOSE_TMPL)
+            @test isapprox(ind.output[end - 2], 9.795859; atol=ATOL)
+            @test isapprox(ind.output[end - 1], 10.121439; atol=ATOL)
+            @test isapprox(ind.output[end], 10.257038; atol=ATOL)
+            @test length(ind.output) == 9
+        end
+
         @testset_skip "DEMA (buggy - help wanted)" begin
             ind = DEMA{Float64}(period=20)
             append!(ind, CLOSE_TMPL)
@@ -138,6 +143,16 @@
             @test isapprox(ind.output[end - 1], 9.813792; atol=ATOL)
             @test isapprox(ind.output[end], 9.882701; atol=ATOL)
             @test length(ind.output) == 20
+        end
+
+        @testset_skip "KAMA (buggy - help wanted)" begin
+            ind = KAMA{Float64}(period=14, fast_ema_constant_period=2, slow_ema_constant_period=30)
+            append!(ind, CLOSE_TMPL)
+            @test isapprox(ind.output[end - 2], 8.884374; atol=ATOL)
+            @test isapprox(ind.output[end - 1], 8.932091; atol=ATOL)
+            @test isapprox(ind.output[end], 8.941810; atol=ATOL)
+            @test length(ind.input) == 14
+            @test length(ind.output) == 14
         end
 
     end
