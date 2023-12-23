@@ -22,6 +22,7 @@ mutable struct MassIndex{Tval} <: AbstractIncTAIndicator
         ema_ema_period = MassIndex_EMA_EMA_PERIOD,
         ema_ratio_period = MassIndex_EMA_RATIO_PERIOD,
     ) where {Tval}
+        @warn "WIP - buggy"
         ema = EMA{Tval}(period = ema_period)
         ema_ema = EMA{Tval}(period = ema_ema_period)
         ema_ratio = CircularBuffer{Tval}(ema_ratio_period)

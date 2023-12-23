@@ -23,6 +23,8 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
         fast_ema_constant_period = FAST_EMA_CONSTANT_PERIOD,
         slow_ema_constant_period = SLOW_EMA_CONSTANT_PERIOD,
     ) where {Tval}
+        @warn "WIP - buggy"
+
         fast_smoothing_constant = 2.0 / (fast_ema_constant_period + 1)
         slow_smoothing_constant = 2.0 / (slow_ema_constant_period + 1)
 

@@ -25,6 +25,8 @@ mutable struct MACD{Tval} <: AbstractIncTAIndicator
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
     ) where {Tval}
+        @warn "WIP - buggy"
+
         ema_fast = EMA{Tval}(period = fast_period)
         ema_slow = EMA{Tval}(period = slow_period)
         signal_line = EMA{Tval}(period = signal_period)

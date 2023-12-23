@@ -12,6 +12,7 @@ export StdDev
 export ROC
 export WMA
 export BB
+export KST
 export KAMA
 export HMA
 export MACD
@@ -69,6 +70,7 @@ include("indicators/StdDev.jl")
 include("indicators/ROC.jl")
 include("indicators/WMA.jl")
 include("indicators/BB.jl")
+include("indicators/KST.jl")
 include("indicators/KAMA.jl")
 include("indicators/HMA.jl")
 include("indicators/MACD.jl")

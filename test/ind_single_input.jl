@@ -261,6 +261,31 @@
             #@test length(ind.output) == 12
         end
 
+        @testset_skip "KST (buggy - help wanted)" begin
+            ind = KST{Float64}(
+                roc1_period = 5,
+                roc1_ma_period = 5,
+                roc2_period = 10,
+                roc2_ma_period = 5,
+                roc3_period = 15,
+                roc3_ma_period = 5,
+                roc4_period = 25,
+                roc4_ma_period = 10,
+                signal_period = 9,
+            )
+            append!(ind, CLOSE_TMPL)
+
+            @test isapprox(ind.output[end-2].kst, 136.602283; atol = ATOL)
+            @test isapprox(ind.output[end-2].signal, 103.707431; atol = ATOL)
+
+            @test isapprox(ind.output[end-1].kst, 158.252762; atol = ATOL)
+            @test isapprox(ind.output[end-1].signal, 113.964023; atol = ATOL)
+
+            @test isapprox(ind.output[end].kst, 155.407034; atol = ATOL)
+            @test isapprox(ind.output[end].signal, 122.246497; atol = ATOL)
+
+        end
+
     end
 
 end

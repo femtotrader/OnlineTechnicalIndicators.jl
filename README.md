@@ -42,7 +42,7 @@ See [tests](test/)
 | `HMA` | Hull Moving Average | :heavy_check_mark:
 | `Ichimoku` | Ichimoku Clouds |
 | `KAMA` | Kaufman's Adaptive Moving Average | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `KST` | Know Sure Thing |
+| `KST` | Know Sure Thing | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KVO` | Klinger Volume Oscillator |
 | `KeltnerChannels` | Keltner Channels |
 | `MACD` | Moving Average Convergence Divergence | :heavy_exclamation_mark: Doesn't work as expected - help wanted
@@ -62,7 +62,7 @@ See [tests](test/)
 | `Stoch` | Stochastic | :christmas_tree: :construction:  [Work in progress](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI |
 | `SuperTrend` | Super Trend | :heavy_check_mark:
-| `TEMA` | Triple Exponential Moving Average | :construction: This should probably be tackle after DEMA
+| `TEMA` | Triple Exponential Moving Average | :construction: This should probably be tackled after DEMA
 | `TRIX` | TRIX | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TSI` | True Strength Index | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TTM` | TTM Squeeze |

@@ -1,7 +1,7 @@
 const AccuDist_MEMORY = 3
 
 """
-    AccuDist{T}(; memory=AccuDist_MEMORY)
+    AccuDist{T}(; memory = AccuDist_MEMORY)
 
 The AccuDist type implements an Accumulation and Distribution indicator.
 """

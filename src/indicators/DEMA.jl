@@ -14,6 +14,7 @@ mutable struct DEMA{Tval} <: AbstractIncTAIndicator
     output::CircularBuffer{Union{Missing,Tval}}
 
     function DEMA{Tval}(; period = DEMA_PERIOD) where {Tval}
+        @warn "WIP - buggy"
         ema = EMA{Tval}(period = period)
         ema_ema = EMA{Tval}(period = period)
 
