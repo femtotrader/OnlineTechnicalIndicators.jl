@@ -83,6 +83,15 @@
             @test length(ind.output) == 20
         end
 
+        @testset "EMV" begin
+            ind = EMV{Missing,Float64,Float64}(period = 14, volume_div = 10000)
+            append!(ind, V_OHLCV)
+            @test isapprox(ind.output[end-2], 5.656780; atol = ATOL)
+            @test isapprox(ind.output[end-1], 5.129971; atol = ATOL)
+            @test isapprox(ind.output[end], -0.192883; atol = ATOL)
+            @test length(ind.output) == 14
+        end
+
         @testset "CCI" begin
             ind = CCI{Float64}(period = 20)
             append!(ind, V_OHLCV)

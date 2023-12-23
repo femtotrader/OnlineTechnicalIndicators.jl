@@ -12,7 +12,7 @@ export StdDev
 export ROC
 export WMA
 export BB
-export KAMA  # ToFix
+export KAMA
 export HMA
 export MACD
 export DEMA
@@ -28,6 +28,7 @@ export BOP
 export ForceIndex
 export OBV
 export SOBV
+export EMV
 export CCI
 export ChaikinOsc
 export MassIndex
@@ -83,6 +84,7 @@ include("indicators/BOP.jl")
 include("indicators/ForceIndex.jl")
 include("indicators/OBV.jl")
 include("indicators/SOBV.jl")
+include("indicators/EMV.jl")
 include("indicators/CCI.jl")
 include("indicators/ChaikinOsc.jl")
 include("indicators/MassIndex.jl")
