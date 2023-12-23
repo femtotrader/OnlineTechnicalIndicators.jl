@@ -12,9 +12,9 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Ttime, Tprice, Tvol}(; period=CHOP_PERIOD)
+    SuperTrend{Ttime, Tprice, Tvol}(; atr_period=SuperTrend_ATR_PERIOD, mult=SuperTrend_MULTIPLIER)
 
-The SuperTrend type implements a Choppiness Index indicator.
+The SuperTrend type implements a Super Trend indicator.
 """
 mutable struct SuperTrend{Ttime, Tprice, Tvol} <: AbstractIncTAIndicator
     atr_period::Integer
