@@ -100,6 +100,31 @@
             @test isapprox(ind.output[end], 49.289273; atol=ATOL)
             @test length(ind.output) == 14
         end
+
     end
-    
+
+    @testset "several output values" begin
+        @testset "SuperTrend" begin
+            ind = SuperTrend{Missing, Float64, Float64}(atr_period=10, mult=3)
+            append!(ind, V_OHLCV)
+            # @test isapprox(ind.output[end - 15].value, 9.711592; atol=ATOL) # pretty old!
+            # @test ind.output[end - 15].trend == Trend.DOWN # pretty old!
+
+            @test isapprox(ind.output[end - 3].value, 8.110029; atol=ATOL)
+            @test ind.output[end - 3].trend == Trend.UP
+
+            @test isapprox(ind.output[end - 2].value, 8.488026; atol=ATOL)
+            @test ind.output[end - 2].trend == Trend.UP
+
+            @test isapprox(ind.output[end - 1].value, 8.488026; atol=ATOL)
+            @test ind.output[end - 1].trend == Trend.UP
+
+            @test isapprox(ind.output[end].value, 8.488026; atol=ATOL)
+            @test ind.output[end].trend == Trend.UP
+
+            @test length(ind.output) == 10
+        end
+
+    end
+
 end

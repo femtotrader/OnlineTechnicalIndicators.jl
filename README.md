@@ -61,7 +61,7 @@ See [tests](test/)
 | `StdDev` | Standard Deviation | :heavy_check_mark:
 | `Stoch` | Stochastic | :christmas_tree: :construction:  [Work in progress](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI |
-| `SuperTrend` | Super Trend |
+| `SuperTrend` | Super Trend | :heavy_check_mark:
 | `TEMA` | Triple Exponential Moving Average |
 | `TRIX` | TRIX |
 | `TSI` | True Strength Index |

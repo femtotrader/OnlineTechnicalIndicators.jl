@@ -29,6 +29,7 @@ module IncTA
     export CCI
     export MassIndex
     export CHOP
+    export SuperTrend, Trend
 
     using DataStructures
     using OnlineStats
@@ -79,5 +80,5 @@ module IncTA
     include("indicators/CCI.jl")
     include("indicators/MassIndex.jl")
     include("indicators/CHOP.jl")
-
+    include("indicators/SuperTrend.jl")
 end
