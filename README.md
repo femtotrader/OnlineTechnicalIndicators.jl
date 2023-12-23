@@ -36,7 +36,7 @@ See [tests](test/)
 | `DPO` | Detrended Price Oscillator |
 | `DonchianChannels` | Donchian Channels |
 | `EMA` | Exponential Moving Average | :heavy_check_mark:
-| `EMV` | Ease of Movement |
+| `EMV` | Ease of Movement | :heavy_check_mark:
 | `FibRetracement` | Fibonacci Retracement |
 | `ForceIndex` | Force Index | :heavy_check_mark:
 | `HMA` | Hull Moving Average | :heavy_check_mark:
