@@ -1,7 +1,7 @@
 const WMA_PERIOD = 3
 
 """
-    WMA{T}(; period=WMA_PERIOD)
+    WMA{T}(; period = WMA_PERIOD)
 
 The WMA type implements a Weighted Moving Average indicator.
 """

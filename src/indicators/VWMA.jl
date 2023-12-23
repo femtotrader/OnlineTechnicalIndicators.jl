@@ -1,7 +1,7 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Ttime, Tprice, Tvol}(; period=VWMA_PERIOD)
+    VWMA{Ttime, Tprice, Tvol}(; period = VWMA_PERIOD)
 
 The VWMA type implements a Volume Weighted Moving Average indicator.
 """

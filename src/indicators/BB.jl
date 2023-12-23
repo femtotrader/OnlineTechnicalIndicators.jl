@@ -8,7 +8,7 @@ struct BBVal{Tval}
 end
 
 """
-    BB{T}(; period=BB_PERIOD, std_dev_multiplier=BB_STD_DEV_MULTIPLIER)
+    BB{T}(; period = BB_PERIOD, std_dev_multiplier = BB_STD_DEV_MULTIPLIER)
 
 The BB type implements Bollinger Bands indicator.
 """

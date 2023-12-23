@@ -1,7 +1,7 @@
 const HMA_PERIOD = 20
 
 """
-    HMA{T}(; period=HMA_PERIOD)
+    HMA{T}(; period = HMA_PERIOD)
 
 The HMA type implements a Hull Moving Average indicator.
 """

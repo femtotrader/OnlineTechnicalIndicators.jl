@@ -1,7 +1,7 @@
 const ForceIndex_PERIOD = 3
 
 """
-    ForceIndex{Ttime, Tprice, Tvol}(; period=ForceIndex_PERIOD)
+    ForceIndex{Ttime, Tprice, Tvol}(; period = ForceIndex_PERIOD)
 
 The ForceIndex type implements a Force Index indicator.
 """

@@ -9,7 +9,7 @@ struct MACDVal{Tval}
 end
 
 """
-    MACD{T}(; fast_period=MACD_FAST_PERIOD, slow_period=MACD_SLOW_PERIOD, signal_period=MACD_SIGNAL_PERIOD)
+    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD)
 
 The MACD type implements Moving Average Convergence Divergence indicator.
 """

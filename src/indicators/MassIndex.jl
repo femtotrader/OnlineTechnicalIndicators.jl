@@ -4,7 +4,7 @@ const MassIndex_EMA_RATIO_PERIOD = 10
 
 
 """
-    MassIndex{T}(; ema_period=MassIndex_EMA_PERIOD, ema_ema_period=MassIndex_EMA_EMA_PERIOD, ema_ratio_period=MassIndex_EMA_RATIO_PERIOD)
+    MassIndex{T}(; ema_period = MassIndex_EMA_PERIOD, ema_ema_period = MassIndex_EMA_EMA_PERIOD, ema_ratio_period = MassIndex_EMA_RATIO_PERIOD)
 
 The MassIndex type implements a Commodity Channel Index.
 """

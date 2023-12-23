@@ -1,7 +1,7 @@
 const BOP_MEMORY = 3
 
 """
-    BOP{T}(; memory=BOP_MEMORY)
+    BOP{T}(; memory = BOP_MEMORY)
 
 The BOP type implements a Balance Of Power indicator.
 """

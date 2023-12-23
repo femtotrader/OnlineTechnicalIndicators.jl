@@ -1,7 +1,7 @@
 const RSI_PERIOD = 3
 
 """
-    RSI{T}(; period=SMA_PERIOD)
+    RSI{T}(; period = SMA_PERIOD)
 
 The RSI type implements a Relative Strength Index indicator.
 """

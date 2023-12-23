@@ -1,7 +1,7 @@
 const MeanDev_PERIOD = 3
 
 """
-    MeanDev{T}(; period=MeanDev_PERIOD)
+    MeanDev{T}(; period = MeanDev_PERIOD)
 
 The MeanDev type implements a Mean Deviation indicator.
 """

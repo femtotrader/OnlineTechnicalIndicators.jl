@@ -1,9 +1,9 @@
-const OBV_MEMORY = 3
+const SOBV_PERIOD = 3
 
 """
-    OBV{Ttime, Tprice, Tvol}(; memory = OBV_MEMORY)
+    SOBV{Ttime, Tprice, Tvol}(; period = ForceIndex_PERIOD)
 
-The OBV type implements On Balance Volume indicator.
+The SOBV type implements a Smoothed On Balance Volume indicator.
 """
 mutable struct OBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     period::Integer
@@ -14,7 +14,7 @@ mutable struct OBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     }
     output::CircularBuffer{Union{Tprice,Missing}}
 
-    function OBV{Ttime,Tprice,Tvol}(; memory = OBV_MEMORY) where {Ttime,Tprice,Tvol}
+    function OBV{Ttime,Tprice,Tvol}(; period = SOBV_PERIOD) where {Ttime,Tprice,Tvol}
         input = (missing, missing)
         output = CircularBuffer{Union{Tprice,Missing}}(memory)
         new{Ttime,Tprice,Tvol}(memory, input, output)

@@ -1,7 +1,7 @@
 const VWAP_MEMORY = 3
 
 """
-    VWAP{Tprice, Tvol}(; memory=VWAP_MEMORY)
+    VWAP{Tprice, Tvol}(; memory = VWAP_MEMORY)
 
 The VWAP type implements a Volume Weighted Moving Average indicator.
 """

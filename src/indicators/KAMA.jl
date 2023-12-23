@@ -3,7 +3,7 @@ const FAST_EMA_CONSTANT_PERIOD = 2
 const SLOW_EMA_CONSTANT_PERIOD = 30
 
 """
-    KAMA{T}(; period=KAMA_PERIOD)
+    KAMA{T}(; period = KAMA_PERIOD)
 
 The KAMA type implements a Kaufman's Adaptive Moving Average indicator.
 """

@@ -2,7 +2,7 @@ const AO_FAST_PERIOD = 3
 const AO_SLOW_PERIOD = 21
 
 """
-    AO{Tprice}(; fast_period=AO_FAST_PERIOD, slow_period=AO_SLOW_PERIOD)
+    AO{Tprice}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD)
 
 The AO type implements an Awesome Oscillator indicator.
 """

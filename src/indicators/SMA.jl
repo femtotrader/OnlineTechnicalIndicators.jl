@@ -1,7 +1,7 @@
 const SMA_PERIOD = 3
 
 """
-    SMA{T}(; period=SMA_PERIOD)
+    SMA{T}(; period = SMA_PERIOD)
 
 The SMA type implements a Simple Moving Average indicator.
 """

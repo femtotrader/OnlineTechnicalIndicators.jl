@@ -1,7 +1,7 @@
 const ROC_PERIOD = 3
 
 """
-    ROC{T}(; period=ROC_PERIOD)
+    ROC{T}(; period = ROC_PERIOD)
 
 The ROC type implements a Rate Of Change indicator.
 """

@@ -12,7 +12,7 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Ttime, Tprice, Tvol}(; atr_period=SuperTrend_ATR_PERIOD, mult=SuperTrend_MULTIPLIER)
+    SuperTrend{Ttime, Tprice, Tvol}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
 
 The SuperTrend type implements a Super Trend indicator.
 """

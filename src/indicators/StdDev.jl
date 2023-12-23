@@ -1,7 +1,7 @@
 const StdDev_PERIOD = 3
 
 """
-    StdDev{T}(; period=StdDev_PERIOD)
+    StdDev{T}(; period = StdDev_PERIOD)
 
 The StdDev type implements a Standard Deviation indicator.
 """
