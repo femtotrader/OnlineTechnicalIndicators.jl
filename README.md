@@ -47,14 +47,14 @@ See [tests](test/)
 | `KeltnerChannels` | Keltner Channels | :candle:  | :m: | input OHLC output several values (same as SuperTrend or DonchianChannels). need subindicators ATR and EMA
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `MassIndex` | Mass Index | :candle: | :1234: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `McGinleyDynamic` | McGinley Dynamic |  |  | should be easy to implement by following reference implementation (but [why are they print statements](https://github.com/nardew/talipp/issues/83)?) :question: tests are also missing in reference implementation
+| `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | should be easy to implement by following reference implementation (but [why are they print statements](https://github.com/nardew/talipp/issues/83)?) :question: tests are also missing in reference implementation
 | `MeanDev` | Mean Deviation | :1234: | :1234: | :heavy_check_mark:
 | `OBV` | On Balance Volume | :candle: | :1234: | :heavy_check_mark:
-| `ParabolicSAR` | Parabolic Stop And Reverse |  |  | input OHLCV output several values
-| `PivotsHL` | High/Low Pivots |  |  | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
+| `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: |
+| `PivotsHL` | High/Low Pivots | :candle: | :m: | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | :heavy_check_mark:
-| `SFX` | SFX |  |  | :construction: This indicator needs value extractor which is not currently implemented
+| `SFX` | SFX | :candle: | :m: | :construction: This indicator needs value extractor which is not currently implemented
 | `SMA` | Simple Moving Average | :1234: | :1234: | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :1234: | :1234: | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume | :candle: | :1234: | :heavy_check_mark:
