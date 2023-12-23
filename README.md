@@ -64,7 +64,7 @@ See [tests](test/)
 | `SuperTrend` | Super Trend | :heavy_check_mark:
 | `TEMA` | Triple Exponential Moving Average |
 | `TRIX` | TRIX |
-| `TSI` | True Strength Index |
+| `TSI` | True Strength Index | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TTM` | TTM Squeeze |
 | `UO` | Ultimate Oscillator |
 | `VTX` | Vortex Indicator |
