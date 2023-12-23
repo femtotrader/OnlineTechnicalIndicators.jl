@@ -51,10 +51,10 @@ See [tests](test/)
 | `MeanDev` | Mean Deviation | :heavy_check_mark:
 | `OBV` | On Balance Volume | :heavy_check_mark:
 | `ParabolicSAR` | Parabolic Stop And Reverse |
-| `PivotsHL` | High/Low Pivots |
+| `PivotsHL` | High/Low Pivots | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :heavy_check_mark:
-| `SFX` | SFX |
+| `SFX` | SFX | :construction: This indicator needs value extractor which is not currently implemented
 | `SMA` | Simple Moving Average | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume | :heavy_check_mark:
@@ -62,8 +62,8 @@ See [tests](test/)
 | `Stoch` | Stochastic | :christmas_tree: :construction:  [Work in progress](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI |
 | `SuperTrend` | Super Trend | :heavy_check_mark:
-| `TEMA` | Triple Exponential Moving Average |
-| `TRIX` | TRIX |
+| `TEMA` | Triple Exponential Moving Average | :construction: This should probably be tackle after DEMA
+| `TRIX` | TRIX | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TSI` | True Strength Index | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TTM` | TTM Squeeze |
 | `UO` | Ultimate Oscillator |
