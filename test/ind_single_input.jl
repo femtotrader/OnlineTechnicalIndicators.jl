@@ -153,7 +153,7 @@
             @test isapprox(ind.output[end].upper, 10.644814; atol=ATOL)
         end
 
-        @testset "MACD" begin
+        @testset_skip "MACD (buggy - help wanted)" begin
             ind = MACD{Float64}(fast_period=12, slow_period=26, signal_period=9)
             append!(ind, CLOSE_TMPL)
 

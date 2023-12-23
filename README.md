@@ -45,7 +45,7 @@ See [tests](test/)
 | `KST` | Know Sure Thing |
 | `KVO` | Klinger Volume Oscillator |
 | `KeltnerChannels` | Keltner Channels |
-| `MACD` | Moving Average Convergence Divergence | :construction: Work in progress
+| `MACD` | Moving Average Convergence Divergence | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `MassIndex` | Mass Index | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `McGinleyDynamic` | McGinley Dynamic |
 | `MeanDev` | Mean Deviation | :heavy_check_mark:
