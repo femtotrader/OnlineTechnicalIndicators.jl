@@ -32,7 +32,7 @@ See [tests](test/)
 | `ChaikinOsc` | Chaikin Oscillator |
 | `ChandeKrollStop` | Chande Kroll Stop |
 | `CoppockCurve` | Coppock Curve |
-| `DEMA` | Double Exponential Moving Average |
+| `DEMA` | Double Exponential Moving Average | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `DPO` | Detrended Price Oscillator |
 | `DonchianChannels` | Donchian Channels |
 | `EMA` | Exponential Moving Average | :heavy_check_mark:

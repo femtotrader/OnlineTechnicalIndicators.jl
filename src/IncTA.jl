@@ -15,7 +15,7 @@ module IncTA
     export KAMA  # ToFix
     export HMA
     export MACD
-
+    export DEMA
 
     # OHLCV indicators
     export VWMA
@@ -68,6 +68,7 @@ module IncTA
     include("indicators/KAMA.jl")
     include("indicators/HMA.jl")
     include("indicators/MACD.jl")
+    include("indicators/DEMA.jl")
 
     include("indicators/VWMA.jl")
     include("indicators/VWAP.jl")

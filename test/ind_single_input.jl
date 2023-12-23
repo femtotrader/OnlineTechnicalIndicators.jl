@@ -131,6 +131,15 @@
             @test length(ind.output) == 20
         end
 
+        @testset_skip "DEMA (buggy - help wanted)" begin
+            ind = DEMA{Float64}(period=20)
+            append!(ind, CLOSE_TMPL)
+            @test isapprox(ind.output[end - 2], 9.683254; atol=ATOL)
+            @test isapprox(ind.output[end - 1], 9.813792; atol=ATOL)
+            @test isapprox(ind.output[end], 9.882701; atol=ATOL)
+            @test length(ind.output) == 20
+        end
+
     end
 
 
