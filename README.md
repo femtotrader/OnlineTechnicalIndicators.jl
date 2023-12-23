@@ -31,7 +31,7 @@ See [tests](test/)
 | `CHOP` | Choppiness Index | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `ChaikinOsc` | Chaikin Oscillator | :heavy_check_mark:
 | `ChandeKrollStop` | Chande Kroll Stop |
-| `CoppockCurve` | Coppock Curve |
+| `CoppockCurve` | Coppock Curve | :heavy_check_mark:
 | `DEMA` | Double Exponential Moving Average | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `DPO` | Detrended Price Oscillator | :heavy_check_mark:
 | `DonchianChannels` | Donchian Channels |
