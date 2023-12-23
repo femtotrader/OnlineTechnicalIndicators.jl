@@ -8,10 +8,10 @@ The BOP type implements a Balance Of Power indicator.
 mutable struct BOP{T} <: AbstractIncTAIndicator
     memory::Integer
 
-    output::CircularBuffer{Union{T, Missing}}
+    output::CircularBuffer{Union{T,Missing}}
 
-    function BOP{T}(; memory=BOP_MEMORY) where {T}
-        output = CircularBuffer{Union{T, Missing}}(memory)
+    function BOP{T}(; memory = BOP_MEMORY) where {T}
+        output = CircularBuffer{Union{T,Missing}}(memory)
         new{T}(memory, output)
     end
 end

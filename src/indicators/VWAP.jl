@@ -5,23 +5,26 @@ const VWAP_MEMORY = 3
 
 The VWAP type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWAP{Tprice, Tvol} <: AbstractIncTAIndicator
+mutable struct VWAP{Tprice,Tvol} <: AbstractIncTAIndicator
     memory::Integer
 
     sum_price_vol::Tprice
     sum_vol::Tvol
 
-    output::CircularBuffer{Union{Tprice, Missing}}
+    output::CircularBuffer{Union{Tprice,Missing}}
 
-    function VWAP{Tprice, Tvol}(; memory=VWAP_MEMORY) where {Tprice, Tvol}
+    function VWAP{Tprice,Tvol}(; memory = VWAP_MEMORY) where {Tprice,Tvol}
         sum_price_vol = zero(Tprice)
         sum_vol = zero(Tvol)
-        output = CircularBuffer{Union{Tprice, Missing}}(memory)
-        new{Tprice, Tvol}(memory, sum_price_vol, sum_vol, output)
+        output = CircularBuffer{Union{Tprice,Missing}}(memory)
+        new{Tprice,Tvol}(memory, sum_price_vol, sum_vol, output)
     end
 end
 
-function Base.push!(ind::VWAP{Tprice}, ohlcv::OHLCV{Ttime, Tprice, Tvol}) where {Ttime, Tprice, Tvol}
+function Base.push!(
+    ind::VWAP{Tprice},
+    ohlcv::OHLCV{Ttime,Tprice,Tvol},
+) where {Ttime,Tprice,Tvol}
     typical_price = (ohlcv.high + ohlcv.low + ohlcv.close) / 3.0
 
     ind.sum_price_vol = ind.sum_price_vol + ohlcv.volume * typical_price

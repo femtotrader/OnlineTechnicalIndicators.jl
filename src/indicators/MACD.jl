@@ -18,14 +18,18 @@ mutable struct MACD{Tval} <: AbstractIncTAIndicator
     ema_slow::EMA{Tval}
     signal_line::EMA{Tval}
 
-    output::CircularBuffer{Union{Missing, MACDVal{Tval}}}
+    output::CircularBuffer{Union{Missing,MACDVal{Tval}}}
 
-    function MACD{Tval}(; fast_period=MACD_FAST_PERIOD, slow_period=MACD_SLOW_PERIOD, signal_period=MACD_SIGNAL_PERIOD) where {Tval}
-        ema_fast = EMA{Tval}(period=fast_period)
-        ema_slow = EMA{Tval}(period=slow_period)
-        signal_line = EMA{Tval}(period=signal_period)
-    
-        output = CircularBuffer{Union{Missing, MACDVal{Tval}}}(fast_period)
+    function MACD{Tval}(;
+        fast_period = MACD_FAST_PERIOD,
+        slow_period = MACD_SLOW_PERIOD,
+        signal_period = MACD_SIGNAL_PERIOD,
+    ) where {Tval}
+        ema_fast = EMA{Tval}(period = fast_period)
+        ema_slow = EMA{Tval}(period = slow_period)
+        signal_line = EMA{Tval}(period = signal_period)
+
+        output = CircularBuffer{Union{Missing,MACDVal{Tval}}}(fast_period)
         new{Tval}(ema_fast, ema_slow, signal_line, output)
     end
 end

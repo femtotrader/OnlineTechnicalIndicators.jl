@@ -7,17 +7,17 @@ The EMA type implements an Exponential Moving Average indicator.
 """
 struct EMA{Tval<:Number} <: AbstractIncTAIndicator
     period::Integer
-    
+
     input::CircularBuffer{Tval}
     output::CircularBuffer{Tval}
-    
-    function EMA{Tval}(; period=EMA_PERIOD) where {Tval}
+
+    function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         output = CircularBuffer{Tval}(period)
         new{Tval}(period, input, output)
     end
 end
-    
+
 function Base.push!(ind::EMA{Tval}, val) where {Tval}
     push!(ind.input, val)
     if isfull(ind.output)  # length(ind.output) == capacity(ind.output)
@@ -38,5 +38,5 @@ function output(ind::EMA)
         if isa(e, BoundsError)
             return missing
         end
-    end    
+    end
 end

@@ -9,14 +9,14 @@ mutable struct MeanDev{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval, Missing}}
+    output::CircularBuffer{Union{Tval,Missing}}
 
     sma::SMA{Tval}
 
-    function MeanDev{Tval}(; period=MeanDev_PERIOD) where {Tval}
+    function MeanDev{Tval}(; period = MeanDev_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Tval, Missing}}(period)
-        sma = SMA{Tval}(period=period)
+        output = CircularBuffer{Union{Tval,Missing}}(period)
+        sma = SMA{Tval}(period = period)
         new{Tval}(period, input, output, sma)
     end
 end

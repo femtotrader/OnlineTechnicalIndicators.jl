@@ -16,18 +16,29 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
     volatilities::CircularBuffer{Tval}
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Missing, Tval}}
+    output::CircularBuffer{Union{Missing,Tval}}
 
-    function KAMA{Tval}(; period=KAMA_PERIOD, fast_ema_constant_period=FAST_EMA_CONSTANT_PERIOD, slow_ema_constant_period=SLOW_EMA_CONSTANT_PERIOD) where {Tval}
+    function KAMA{Tval}(;
+        period = KAMA_PERIOD,
+        fast_ema_constant_period = FAST_EMA_CONSTANT_PERIOD,
+        slow_ema_constant_period = SLOW_EMA_CONSTANT_PERIOD,
+    ) where {Tval}
         fast_smoothing_constant = 2.0 / (fast_ema_constant_period + 1)
         slow_smoothing_constant = 2.0 / (slow_ema_constant_period + 1)
 
         volatilities = CircularBuffer{Tval}(period)
 
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Missing, Tval}}(period)
+        output = CircularBuffer{Union{Missing,Tval}}(period)
 
-        new{Tval}(period, fast_smoothing_constant, slow_smoothing_constant, volatilities, input, output)
+        new{Tval}(
+            period,
+            fast_smoothing_constant,
+            slow_smoothing_constant,
+            volatilities,
+            input,
+            output,
+        )
     end
 end
 
@@ -41,7 +52,7 @@ function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
         return out_val
     end
 
-    push!(ind.volatilities, abs(ind.input[end] - ind.input[end - 1]))
+    push!(ind.volatilities, abs(ind.input[end] - ind.input[end-1]))
 
     if length(ind.volatilities) < ind.period
         out_val = missing
@@ -58,11 +69,15 @@ function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
         efficiency_ratio = 0
     end
 
-    smoothing_constant = (efficiency_ratio * (ind.fast_smoothing_constant - ind.slow_smoothing_constant) + ind.slow_smoothing_constant) ^ 2
+    smoothing_constant =
+        (
+            efficiency_ratio * (ind.fast_smoothing_constant - ind.slow_smoothing_constant) +
+            ind.slow_smoothing_constant
+        )^2
 
     # if !has_output_value(ind)  # tofix!!!!
     if length(ind.output) == 0  # tofix!!!!
-        prev_kama = ind.input[end - 1]
+        prev_kama = ind.input[end-1]
     else
         prev_kama = ind.output[end]
     end

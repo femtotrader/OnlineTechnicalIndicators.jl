@@ -15,13 +15,17 @@ mutable struct MassIndex{Tval} <: AbstractIncTAIndicator
     ema_ema::EMA{Tval}
     ema_ratio::CircularBuffer{Tval}
 
-    output::CircularBuffer{Union{Tval, Missing}}
+    output::CircularBuffer{Union{Tval,Missing}}
 
-    function MassIndex{Tval}(; ema_period=MassIndex_EMA_PERIOD, ema_ema_period=MassIndex_EMA_EMA_PERIOD, ema_ratio_period=MassIndex_EMA_RATIO_PERIOD) where {Tval}
-        ema = EMA{Tval}(period=ema_period)
-        ema_ema = EMA{Tval}(period=ema_ema_period)
+    function MassIndex{Tval}(;
+        ema_period = MassIndex_EMA_PERIOD,
+        ema_ema_period = MassIndex_EMA_EMA_PERIOD,
+        ema_ratio_period = MassIndex_EMA_RATIO_PERIOD,
+    ) where {Tval}
+        ema = EMA{Tval}(period = ema_period)
+        ema_ema = EMA{Tval}(period = ema_ema_period)
         ema_ratio = CircularBuffer{Tval}(ema_ratio_period)
-        output = CircularBuffer{Union{Tval, Missing}}(ema_period)
+        output = CircularBuffer{Union{Tval,Missing}}(ema_period)
         new{Tval}(ema_ratio_period, ema, ema_ema, ema_ratio, output)
     end
 end

@@ -9,11 +9,11 @@ mutable struct StdDev{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval, Missing}}
+    output::CircularBuffer{Union{Tval,Missing}}
 
-    function StdDev{Tval}(; period=StdDev_PERIOD) where {Tval}
+    function StdDev{Tval}(; period = StdDev_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Tval, Missing}}(period)
+        output = CircularBuffer{Union{Tval,Missing}}(period)
         new{Tval}(period, input, output)
     end
 end

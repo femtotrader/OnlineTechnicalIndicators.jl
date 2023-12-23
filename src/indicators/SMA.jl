@@ -9,11 +9,11 @@ mutable struct SMA{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     sum::Tval
-    
+
     input::CircularBuffer{Tval}
     output::CircularBuffer{Tval}
 
-    function SMA{Tval}(; period=SMA_PERIOD) where {Tval}
+    function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         output = CircularBuffer{Tval}(period)
         sum = zero(Tval)
@@ -56,14 +56,14 @@ mutable struct SMA_v2{Tval} <: AbstractIncTAIndicator
     input::CircularBuffer{Tval}
     output::CircularBuffer{Tval}
 
-    function SMA_v2{Tval}(; period=SMA_PERIOD) where {Tval}
+    function SMA_v2{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         output = CircularBuffer{Tval}(period)
         new{Tval}(period, input, output)
     end
 end
 
-function Base.push!(ind::SMA_v2{Tval}, val::Tval) where Tval
+function Base.push!(ind::SMA_v2{Tval}, val::Tval) where {Tval}
     push!(ind.input, val)
     push!(ind.output, sum(ind.input) / ind.period)
     out_val = output(ind)
@@ -92,7 +92,7 @@ mutable struct SMA_v3{Tval} <: AbstractIncTAIndicator
     input::MovingWindow{Tval}
     output::MovingWindow{Tval}
 
-    function SMA_v3{Tval}(; period=SMA_PERIOD) where {Tval}
+    function SMA_v3{Tval}(; period = SMA_PERIOD) where {Tval}
         input = MovingWindow(period, Tval)
         output = MovingWindow(period, Tval)
 
@@ -114,5 +114,5 @@ function output(ind::SMA_v3)
         if isa(e, BoundsError)
             return missing
         end
-    end    
+    end
 end

@@ -11,11 +11,11 @@ mutable struct WMA{Tval} <: AbstractIncTAIndicator
     total::Tval
     numerator::Tval
     denominator::Tval
-    
+
     input::CircularBuffer{Tval}
     output::CircularBuffer{Tval}
 
-    function WMA{Tval}(; period=WMA_PERIOD) where {Tval}
+    function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         output = CircularBuffer{Tval}(period)
         total = zero(Tval)

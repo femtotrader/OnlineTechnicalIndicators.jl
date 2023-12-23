@@ -10,13 +10,16 @@ mutable struct AO{Tprice} <: AbstractIncTAIndicator
     sma_fast::SMA{Tprice}
     sma_slow::SMA{Tprice}
 
-    output::CircularBuffer{Union{Tprice, Missing}}
+    output::CircularBuffer{Union{Tprice,Missing}}
 
-    function AO{Tprice}(; fast_period=AO_FAST_PERIOD, slow_period=AO_SLOW_PERIOD) where {Tprice}
+    function AO{Tprice}(;
+        fast_period = AO_FAST_PERIOD,
+        slow_period = AO_SLOW_PERIOD,
+    ) where {Tprice}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
-        sma_fast = SMA{Tprice}(period=fast_period)
-        sma_slow = SMA{Tprice}(period=slow_period)
-        output = CircularBuffer{Union{Tprice, Missing}}(slow_period)
+        sma_fast = SMA{Tprice}(period = fast_period)
+        sma_slow = SMA{Tprice}(period = slow_period)
+        output = CircularBuffer{Union{Tprice,Missing}}(slow_period)
         new{Tprice}(sma_fast, sma_slow, output)
     end
 end

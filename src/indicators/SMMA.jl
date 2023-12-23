@@ -9,13 +9,13 @@ mutable struct SMMA{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval, Missing}}
+    output::CircularBuffer{Union{Tval,Missing}}
 
     rolling::Bool
 
-    function SMMA{Tval}(; period=SMMA_PERIOD) where {Tval}
+    function SMMA{Tval}(; period = SMMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Tval, Missing}}(period)
+        output = CircularBuffer{Union{Tval,Missing}}(period)
         rolling = false
         new{Tval}(period, input, output, rolling)
     end
@@ -24,7 +24,7 @@ end
 function Base.push!(ind::SMMA{Tval}, val::Tval) where {Tval}
     push!(ind.input, val)
     N = length(ind.input)
-    
+
     if N < ind.period
         out_val = missing
     else
@@ -46,5 +46,5 @@ function output(ind::SMMA)
         if isa(e, BoundsError)
             return missing
         end
-    end    
+    end
 end
