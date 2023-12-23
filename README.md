@@ -59,7 +59,7 @@ See [tests](test/)
 | `SMMA` | Smoothed Moving Average | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume |
 | `StdDev` | Standard Deviation | :heavy_check_mark:
-| `Stoch` | Stochastic |
+| `Stoch` | Stochastic | :christmas_tree: :construction:  [Work in progress](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI |
 | `SuperTrend` | Super Trend |
 | `TEMA` | Triple Exponential Moving Average |
