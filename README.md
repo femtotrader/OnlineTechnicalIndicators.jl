@@ -73,7 +73,9 @@ See [tests](test/)
 | `WMA` | Weighted Moving Average | :1234: | :1234: | :heavy_check_mark:
 
 
-:1234: : single number (input or ouput)
+### Legend
+
+:1234: single number (input or ouput)
 
 :m: multiple numbers (output)
 
