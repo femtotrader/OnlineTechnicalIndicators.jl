@@ -3,6 +3,8 @@ module IncTA
 export OHLCV, OHLCVFactory
 export fit!
 
+export SampleData
+
 # simple indicators
 export SMA, SMA_v02  # , SMA_v03
 export EMA
@@ -46,6 +48,7 @@ using OnlineStats
 abstract type AbstractIncTAIndicator end
 
 include("ohlcv.jl")
+include("sample_data.jl")
 
 function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
     if length(ind.value) == 0
