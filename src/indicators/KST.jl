@@ -77,7 +77,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
             roc2_ma,
             roc3_ma,
             roc4_ma,
-            signal_line
+            signal_line,
         )
     end
 end

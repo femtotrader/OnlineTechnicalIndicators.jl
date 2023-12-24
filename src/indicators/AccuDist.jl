@@ -7,7 +7,7 @@ The AccuDist type implements an Accumulation and Distribution indicator.
 """
 mutable struct AccuDist{T} <: AbstractIncTAIndicator
     value::CircularBuffer{Union{T,Missing}}
-    
+
     memory::Integer
 
     function AccuDist{T}(; memory = AccuDist_MEMORY) where {T}

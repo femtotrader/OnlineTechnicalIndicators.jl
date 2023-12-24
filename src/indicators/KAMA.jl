@@ -40,7 +40,7 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
             fast_smoothing_constant,
             slow_smoothing_constant,
             volatilities,
-            input
+            input,
         )
     end
 end
