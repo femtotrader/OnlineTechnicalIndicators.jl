@@ -9,13 +9,13 @@ const MassIndex_EMA_RATIO_PERIOD = 10
 The MassIndex type implements a Commodity Channel Index.
 """
 mutable struct MassIndex{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tval,Missing}}
+
     ema_ratio_period::Integer
 
     ema::EMA{Tval}
     ema_ema::EMA{Tval}
     ema_ratio::CircularBuffer{Tval}
-
-    value::CircularBuffer{Union{Tval,Missing}}
 
     function MassIndex{Tval}(;
         ema_period = MassIndex_EMA_PERIOD,
@@ -27,7 +27,7 @@ mutable struct MassIndex{Tval} <: AbstractIncTAIndicator
         ema_ema = EMA{Tval}(period = ema_ema_period)
         ema_ratio = CircularBuffer{Tval}(ema_ratio_period)
         value = CircularBuffer{Union{Tval,Missing}}(ema_period)
-        new{Tval}(ema_ratio_period, ema, ema_ema, ema_ratio, value)
+        new{Tval}(value, ema_ratio_period, ema, ema_ema, ema_ratio)
     end
 end
 

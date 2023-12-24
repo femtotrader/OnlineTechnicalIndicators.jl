@@ -7,13 +7,14 @@ const EMV_VOLUME_DIV = 10000
 The EMV type implements a Ease of Movement indicator.
 """
 mutable struct EMV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     period::Integer
     volume_div::Integer
 
     emv_sma::SMA{Tprice}
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function EMV{Ttime,Tprice,Tvol}(;
         period = EMV_PERIOD,
@@ -23,7 +24,7 @@ mutable struct EMV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
 
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, volume_div, emv_sma, input, value)
+        new{Ttime,Tprice,Tvol}(value, period, volume_div, emv_sma, input)
     end
 end
 

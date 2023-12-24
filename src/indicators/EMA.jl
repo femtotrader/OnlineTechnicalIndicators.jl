@@ -6,15 +6,16 @@ const EMA_PERIOD = 3
 The EMA type implements an Exponential Moving Average indicator.
 """
 struct EMA{Tval<:Number} <: AbstractIncTAIndicator
+    value::CircularBuffer{Tval}
+
     period::Integer
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Tval}
 
     function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Tval}(period)
-        new{Tval}(period, input, value)
+        new{Tval}(value, period, input)
     end
 end
 

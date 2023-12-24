@@ -6,18 +6,19 @@ const SMMA_PERIOD = 3
 The SMMA type implements a SMoothed Moving Average indicator.
 """
 mutable struct SMMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tval,Missing}}
+
     period::Integer
 
     rolling::Bool
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Union{Tval,Missing}}
 
     function SMMA{Tval}(; period = SMMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Union{Tval,Missing}}(period)
         rolling = false
-        new{Tval}(period, rolling, input, value)
+        new{Tval}(value, period, rolling, input)
     end
 end
 

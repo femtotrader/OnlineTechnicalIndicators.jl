@@ -6,18 +6,19 @@ const OBV_MEMORY = 3
 The OBV type implements On Balance Volume indicator.
 """
 mutable struct OBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     period::Integer
 
     input::Tuple{
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
     }
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function OBV{Ttime,Tprice,Tvol}(; memory = OBV_MEMORY) where {Ttime,Tprice,Tvol}
         input = (missing, missing)
         value = CircularBuffer{Union{Tprice,Missing}}(memory)
-        new{Ttime,Tprice,Tvol}(memory, input, value)
+        new{Ttime,Tprice,Tvol}(value, memory, input)
     end
 end
 

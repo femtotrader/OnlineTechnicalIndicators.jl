@@ -29,6 +29,8 @@ end
 The KST type implements Know Sure Thing indicator.
 """
 mutable struct KST{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,KSTVal{Tval}}}
+
     roc1::SMA{Tval}
     roc2::SMA{Tval}
     roc3::SMA{Tval}
@@ -40,8 +42,6 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
     roc4_ma::SMA{Tval}
 
     signal_line::SMA{Tval}
-
-    value::CircularBuffer{Union{Missing,KSTVal{Tval}}}
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,
@@ -68,6 +68,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
 
         value = CircularBuffer{Union{Missing,KSTVal{Tval}}}(roc1_period)
         new{Tval}(
+            value,
             roc1,
             roc2,
             roc3,
@@ -76,8 +77,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
             roc2_ma,
             roc3_ma,
             roc4_ma,
-            signal_line,
-            value
+            signal_line
         )
     end
 end

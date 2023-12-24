@@ -9,6 +9,8 @@ const ALMA_SIGMA = 6.0
 The ALMA type implements an Arnaud Legoux Moving Average indicator.
 """
 mutable struct ALMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     period::Integer
     offset::Tval
     sigma::Tval
@@ -17,7 +19,6 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
     w_sum::Tval
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
@@ -35,7 +36,7 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
         end
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Union{Missing,Tval}}(period)
-        new{Tval}(period, offset, sigma, w, w_sum, input, value)
+        new{Tval}(value, period, offset, sigma, w, w_sum, input)
     end
 end
 

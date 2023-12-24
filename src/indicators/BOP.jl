@@ -6,19 +6,19 @@ const BOP_MEMORY = 3
 The BOP type implements a Balance Of Power indicator.
 """
 mutable struct BOP{T} <: AbstractIncTAIndicator
-    memory::Integer
-
     value::CircularBuffer{Union{T,Missing}}
+
+    memory::Integer
 
     function BOP{T}(; memory = BOP_MEMORY) where {T}
         value = CircularBuffer{Union{T,Missing}}(memory)
-        new{T}(memory, value)
+        new{T}(value, memory)
     end
 end
 
-function Base.push!(ind::BOP, value::OHLCV)
-    if value.high != value.low
-        out_val = (value.close - value.open) / (value.high - value.low)
+function Base.push!(ind::BOP, candle::OHLCV)
+    if candle.high != candle.low
+        out_val = (candle.close - candle.open) / (candle.high - candle.low)
     else
         if length(ind.value) > 0
             out_val = ind.value[end]

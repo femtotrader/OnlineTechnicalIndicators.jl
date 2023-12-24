@@ -14,11 +14,11 @@ end
 The MACD type implements Moving Average Convergence Divergence indicator.
 """
 mutable struct MACD{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,MACDVal{Tval}}}
+
     ema_fast::EMA{Tval}
     ema_slow::EMA{Tval}
     signal_line::EMA{Tval}
-
-    value::CircularBuffer{Union{Missing,MACDVal{Tval}}}
 
     function MACD{Tval}(;
         fast_period = MACD_FAST_PERIOD,
@@ -32,7 +32,7 @@ mutable struct MACD{Tval} <: AbstractIncTAIndicator
         signal_line = EMA{Tval}(period = signal_period)
 
         value = CircularBuffer{Union{Missing,MACDVal{Tval}}}(fast_period)
-        new{Tval}(ema_fast, ema_slow, signal_line, value)
+        new{Tval}(value, ema_fast, ema_slow, signal_line)
     end
 end
 
@@ -41,11 +41,11 @@ function Base.push!(ind::MACD{Tval}, val::Tval) where {Tval}
     push!(ind.ema_slow, val)
 
     if length(ind.ema_fast.value) > 0 && length(ind.ema_slow.value) > 0
-        macd = ind.ema_fast.output[end] - ind.ema_slow.output[end]
+        macd = ind.ema_fast.value[end] - ind.ema_slow.value[end]
         push!(ind.signal_line, macd)
 
         if length(ind.signal_line.value) > 0
-            signal = ind.signal_line.output[end]
+            signal = ind.signal_line.value[end]
         else
             signal = missing
         end

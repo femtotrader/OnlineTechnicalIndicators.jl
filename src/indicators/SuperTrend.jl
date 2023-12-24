@@ -17,6 +17,8 @@ end
 The SuperTrend type implements a Super Trend indicator.
 """
 mutable struct SuperTrend{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{SuperTrendVal,Missing}}
+
     atr_period::Integer
     mult::Integer
 
@@ -25,7 +27,6 @@ mutable struct SuperTrend{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     flb::CircularBuffer{Tprice}  # final lower band
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    value::CircularBuffer{Union{SuperTrendVal,Missing}}
 
     function SuperTrend{Ttime,Tprice,Tvol}(;
         atr_period = SuperTrend_ATR_PERIOD,
@@ -37,7 +38,7 @@ mutable struct SuperTrend{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
 
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(atr_period)
         value = CircularBuffer{Union{SuperTrendVal,Missing}}(atr_period)
-        new{Ttime,Tprice,Tvol}(atr_period, mult, atr, fub, flb, input, value)
+        new{Ttime,Tprice,Tvol}(value, atr_period, mult, atr, fub, flb, input)
     end
 end
 

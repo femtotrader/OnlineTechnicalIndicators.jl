@@ -8,11 +8,11 @@ const CoppockCurve_WMA_PERIOD = 10
 The CoppockCurve type implements a Coppock Curve indicator.
 """
 mutable struct CoppockCurve{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     fast_roc::ROC{Tval}
     slow_roc::ROC{Tval}
     wma::WMA{Tval}
-
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function CoppockCurve{Tval}(;
         fast_roc_period = CoppockCurve_FAST_ROC_PERIOD,
@@ -23,7 +23,7 @@ mutable struct CoppockCurve{Tval} <: AbstractIncTAIndicator
         slow_roc = ROC{Tval}(period = slow_roc_period)
         wma = WMA{Tval}(period = wma_period)
         value = CircularBuffer{Union{Missing,Tval}}(wma_period)
-        new{Tval}(fast_roc, slow_roc, wma, value)
+        new{Tval}(value, fast_roc, slow_roc, wma)
     end
 end
 

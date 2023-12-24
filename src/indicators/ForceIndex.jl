@@ -6,6 +6,8 @@ const ForceIndex_PERIOD = 3
 The ForceIndex type implements a Force Index indicator.
 """
 mutable struct ForceIndex{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     period::Integer
 
     ema::EMA{Tprice}
@@ -14,7 +16,6 @@ mutable struct ForceIndex{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
     }
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function ForceIndex{Ttime,Tprice,Tvol}(;
         period = ForceIndex_PERIOD,
@@ -22,7 +23,7 @@ mutable struct ForceIndex{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         ema = EMA{Tprice}(period = period)
         input = (missing, missing)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, ema, input, value)
+        new{Ttime,Tprice,Tvol}(value, period, ema, input)
     end
 end
 

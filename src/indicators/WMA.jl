@@ -6,6 +6,8 @@ const WMA_PERIOD = 3
 The WMA type implements a Weighted Moving Average indicator.
 """
 mutable struct WMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Tval}
+
     period::Integer
 
     total::Tval
@@ -13,7 +15,6 @@ mutable struct WMA{Tval} <: AbstractIncTAIndicator
     denominator::Tval
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Tval}
 
     function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
@@ -21,7 +22,7 @@ mutable struct WMA{Tval} <: AbstractIncTAIndicator
         total = zero(Tval)
         numerator = zero(Tval)
         denominator = period * (period + 1) / 2.0
-        new{Tval}(period, total, numerator, denominator, input, value)
+        new{Tval}(value, period, total, numerator, denominator, input)
     end
 end
 

@@ -7,19 +7,20 @@ const CHOP_PERIOD = 14
 The CHOP type implements a Choppiness Index indicator.
 """
 mutable struct CHOP{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     period::Integer
 
     atr::ATR{Ttime,Tprice,Tvol}
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function CHOP{Ttime,Tprice,Tvol}(; period = CHOP_PERIOD) where {Ttime,Tprice,Tvol}
         @warn "WIP - buggy"
         atr = ATR{Ttime,Tprice,Tvol}(period = 1)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, atr, input, value)
+        new{Ttime,Tprice,Tvol}(value, period, atr, input)
     end
 end
 

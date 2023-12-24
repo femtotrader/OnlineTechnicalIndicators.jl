@@ -6,16 +6,16 @@ const CCI_PERIOD = 3
 The CCI type implements a Commodity Channel Index.
 """
 mutable struct CCI{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tval,Missing}}
+
     period::Integer
 
     mean_dev::MeanDev{Tval}
 
-    value::CircularBuffer{Union{Tval,Missing}}
-
     function CCI{Tval}(; period = CCI_PERIOD) where {Tval}
         mean_dev = MeanDev{Tval}(period = period)
         value = CircularBuffer{Union{Tval,Missing}}(period)
-        new{Tval}(period, mean_dev, value)
+        new{Tval}(value, period, mean_dev)
     end
 end
 

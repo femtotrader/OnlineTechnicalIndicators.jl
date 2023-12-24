@@ -6,19 +6,20 @@ const ATR_PERIOD = 3
 The ATR type implements an Average True Range indicator.
 """
 mutable struct ATR{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     period::Number
 
     tr::CircularBuffer{Tprice}
     rolling::Bool
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}  # seems a bit overkilled just to get ind.input[end - 1].close (maybe use simply a Tuple with current and previous value - see ForceIndex)
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function ATR{Ttime,Tprice,Tvol}(; period = ATR_PERIOD) where {Ttime,Tprice,Tvol}
         tr = CircularBuffer{Tprice}(period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, tr, false, input, value)
+        new{Ttime,Tprice,Tvol}(value, period, tr, false, input)
     end
 end
 

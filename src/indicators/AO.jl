@@ -7,10 +7,10 @@ const AO_SLOW_PERIOD = 21
 The AO type implements an Awesome Oscillator indicator.
 """
 mutable struct AO{Tprice} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tprice,Missing}}
+
     sma_fast::SMA{Tprice}
     sma_slow::SMA{Tprice}
-
-    value::CircularBuffer{Union{Tprice,Missing}}
 
     function AO{Tprice}(;
         fast_period = AO_FAST_PERIOD,
@@ -20,7 +20,7 @@ mutable struct AO{Tprice} <: AbstractIncTAIndicator
         sma_fast = SMA{Tprice}(period = fast_period)
         sma_slow = SMA{Tprice}(period = slow_period)
         value = CircularBuffer{Union{Tprice,Missing}}(slow_period)
-        new{Tprice}(sma_fast, sma_slow, value)
+        new{Tprice}(value, sma_fast, sma_slow)
     end
 end
 

@@ -6,18 +6,19 @@ const SMA_PERIOD = 3
 The SMA type implements a Simple Moving Average indicator.
 """
 mutable struct SMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Tval}
+
     period::Integer
 
     sum::Tval
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Tval}
 
     function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Tval}(period)
         sum = zero(Tval)
-        new{Tval}(period, sum, input, value)
+        new{Tval}(value, period, sum, input)
     end
 end
 
@@ -51,15 +52,16 @@ The SMA_v02 type implements a Simple Moving Average indicator.
 This is just an other implementation.
 """
 mutable struct SMA_v02{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Tval}
+
     period::Integer
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Tval}
 
     function SMA_v02{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Tval}(period)
-        new{Tval}(period, input, value)
+        new{Tval}(value, period, input)
     end
 end
 
@@ -89,14 +91,14 @@ The SMA_v03 type implements a Simple Moving Average indicator.
 This is just an other implementation.
 """
 mutable struct SMA_v03{Tval} <: AbstractIncTAIndicator
-    input::MovingWindow{Tval}
     value::MovingWindow{Tval}
+    input::MovingWindow{Tval}
 
     function SMA_v03{Tval}(; period = SMA_PERIOD) where {Tval}
         input = MovingWindow(period, Tval)
         output = MovingWindow(period, Tval)
 
-        new{Tval}(input, value)
+        new{Tval}(value, input)
     end
 end
 

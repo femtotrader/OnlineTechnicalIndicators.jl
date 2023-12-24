@@ -6,12 +6,12 @@ const DEMA_PERIOD = 20
 The DEMA type implements a Double Exponential Moving Average indicator.
 """
 mutable struct DEMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     period::Integer
 
     ema::EMA{Tval}
     ema_ema::EMA{Tval}
-
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function DEMA{Tval}(; period = DEMA_PERIOD) where {Tval}
         @warn "WIP - buggy"
@@ -19,7 +19,7 @@ mutable struct DEMA{Tval} <: AbstractIncTAIndicator
         ema_ema = EMA{Tval}(period = period)
 
         value = CircularBuffer{Union{Missing,Tval}}(period)
-        new{Tval}(period, ema, ema_ema, value)
+        new{Tval}(value, period, ema, ema_ema)
     end
 end
 

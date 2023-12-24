@@ -6,15 +6,16 @@ const ROC_PERIOD = 3
 The ROC type implements a Rate Of Change indicator.
 """
 mutable struct ROC{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Tval,Missing}}
+
     period::Integer
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Union{Tval,Missing}}
 
     function ROC{Tval}(; period = ROC_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period + 1)
         value = CircularBuffer{Union{Tval,Missing}}(period + 1)
-        new{Tval}(period, input, value)
+        new{Tval}(value, period, input)
     end
 end
 

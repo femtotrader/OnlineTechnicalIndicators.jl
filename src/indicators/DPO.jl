@@ -6,12 +6,13 @@ const DPO_PERIOD = 20
 The DPO type implements a Detrended Price Oscillator indicator.
 """
 mutable struct DPO{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     period::Integer
 
     sma::SMA{Tval}
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function DPO{Tval}(; period = DPO_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
@@ -19,7 +20,7 @@ mutable struct DPO{Tval} <: AbstractIncTAIndicator
 
         sma = SMA{Tval}(period = period)
 
-        new{Tval}(period, sma, input, value)
+        new{Tval}(value, period, sma, input)
     end
 end
 

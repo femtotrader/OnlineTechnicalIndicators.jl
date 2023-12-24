@@ -8,6 +8,8 @@ const SLOW_EMA_CONSTANT_PERIOD = 30
 The KAMA type implements a Kaufman's Adaptive Moving Average indicator.
 """
 mutable struct KAMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     period::Integer
 
     fast_smoothing_constant::Tval
@@ -16,7 +18,6 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
     volatilities::CircularBuffer{Tval}
 
     input::CircularBuffer{Tval}
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function KAMA{Tval}(;
         period = KAMA_PERIOD,
@@ -34,12 +35,12 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
         value = CircularBuffer{Union{Missing,Tval}}(period)
 
         new{Tval}(
+            value,
             period,
             fast_smoothing_constant,
             slow_smoothing_constant,
             volatilities,
-            input,
-            value
+            input
         )
     end
 end

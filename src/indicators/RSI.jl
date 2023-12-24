@@ -6,20 +6,21 @@ const RSI_PERIOD = 3
 The RSI type implements a Relative Strength Index indicator.
 """
 mutable struct RSI{Tval} <: AbstractIncTAIndicator
-    period::Integer
-
-    input::CircularBuffer{Tval}
     value::CircularBuffer{Union{Tval,Missing}}
+
+    period::Integer
 
     gains::SMMA{Tval}
     losses::SMMA{Tval}
+
+    input::CircularBuffer{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         value = CircularBuffer{Union{Tval,Missing}}(period)
         gains = SMMA{Tval}(period = period)
         losses = SMMA{Tval}(period = period)
-        new{Tval}(period, input, value, gains, losses)
+        new{Tval}(value, period, gains, losses, input)
     end
 end
 

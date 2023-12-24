@@ -6,13 +6,13 @@ const HMA_PERIOD = 20
 The HMA type implements a Hull Moving Average indicator.
 """
 mutable struct HMA{Tval} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,Tval}}
+
     period::Integer
 
     wma::WMA{Tval}
     wma2::WMA{Tval}
     hma::WMA{Tval}
-
-    value::CircularBuffer{Union{Missing,Tval}}
 
     function HMA{Tval}(; period = HMA_PERIOD) where {Tval}
 
@@ -22,7 +22,7 @@ mutable struct HMA{Tval} <: AbstractIncTAIndicator
         wma2 = WMA{Tval}(period = floor(Int, period / 2))
         hma = WMA{Tval}(period = floor(Int, sqrt(period)))
 
-        new{Tval}(period, wma, wma2, hma, value)
+        new{Tval}(value, period, wma, wma2, hma)
     end
 end
 
