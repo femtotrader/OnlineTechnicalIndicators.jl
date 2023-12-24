@@ -393,11 +393,11 @@ end
 
 
 @testset "IncTA.jl" begin
-    include("ohlcv.jl")
+    include("test_ohlcv.jl")
 
     @testset "indicators" begin
-        include("ind_single_input.jl")
-        include("ind_OHLCV_input.jl")
+        include("test_ind_single_input.jl")
+        include("test_ind_OHLCV_input.jl")
     end
 
 end

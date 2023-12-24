@@ -1,9 +1,10 @@
 module IncTA
 
 export OHLCV, OHLCVFactory
+export fit!
 
 # simple indicators
-export SMA, SMA_v2, SMA_v3
+export SMA, SMA_v02  # , SMA_v03
 export EMA
 export SMMA
 export RSI
@@ -57,7 +58,7 @@ function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
     end
 end
 
-function Base.append!(ind::T, values::Vector) where {T<:AbstractIncTAIndicator}
+function fit!(ind::T, values::Vector) where {T<:AbstractIncTAIndicator}
     for value in values
         push!(ind, value)
     end

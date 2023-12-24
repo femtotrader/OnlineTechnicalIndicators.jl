@@ -3,7 +3,7 @@
     @testset "single output values" begin
         @testset "SMA" begin
             ind = SMA{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.075500; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.183000; atol = ATOL)
             @test isapprox(ind.output[end], 9.308500; atol = ATOL)
@@ -11,9 +11,9 @@
             @test length(ind.output) == P
         end
 
-        @testset "SMA_v2" begin
-            ind = SMA_v2{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+        @testset "SMA_v02" begin
+            ind = SMA_v02{Float64}(period = P)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.075500; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.183000; atol = ATOL)
             @test isapprox(ind.output[end], 9.308500; atol = ATOL)
@@ -21,19 +21,21 @@
             @test length(ind.output) == P
         end
 
+        #=
         @testset "SMA_v3" begin
             ind = SMA_v3{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.075500; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.183000; atol = ATOL)
             @test isapprox(ind.output[end], 9.308500; atol = ATOL)
             # @test length(ind.input) == P  #  no method matching length(::OnlineStats.MovingWindow{...})
             # @test length(ind.output) == P  #  no method matching length(::OnlineStats.MovingWindow{...})
         end
+        =#
 
         @testset "EMA" begin
             ind = EMA{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.319374; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.406100; atol = ATOL)
             @test isapprox(ind.output[end], 9.462662; atol = ATOL)
@@ -44,7 +46,7 @@
         @testset "SMMA" begin
             @testset "last 3 values" begin
                 ind = SMMA{Float64}(period = P)
-                append!(ind, CLOSE_TMPL)
+                fit!(ind, CLOSE_TMPL)
                 @test ind.rolling
                 @test isapprox(ind.output[end-2], 9.149589; atol = ATOL)
                 @test isapprox(ind.output[end-1], 9.203610; atol = ATOL)
@@ -115,7 +117,7 @@
 
         @testset "RSI" begin
             ind = RSI{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 57.880437; atol = ATOL)
             @test isapprox(ind.output[end-1], 55.153392; atol = ATOL)
             @test isapprox(ind.output[end], 53.459494; atol = ATOL)
@@ -125,7 +127,7 @@
 
         @testset "MeanDev" begin
             ind = MeanDev{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 0.608949; atol = ATOL)
             @test isapprox(ind.output[end-1], 0.595400; atol = ATOL)
             @test isapprox(ind.output[end], 0.535500; atol = ATOL)
@@ -135,7 +137,7 @@
 
         @testset "StdDev" begin
             ind = StdDev{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 0.800377; atol = ATOL)
             @test isapprox(ind.output[end-1], 0.803828; atol = ATOL)
             @test isapprox(ind.output[end], 0.721424; atol = ATOL)
@@ -145,7 +147,7 @@
 
         @testset "ROC" begin
             ind = ROC{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 30.740740; atol = ATOL)
             @test isapprox(ind.output[end-1], 26.608910; atol = ATOL)
             @test isapprox(ind.output[end], 33.511348; atol = ATOL)
@@ -155,7 +157,7 @@
 
         @testset "WMA" begin
             ind = WMA{Float64}(period = P)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.417523; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.527476; atol = ATOL)
             @test isapprox(ind.output[end], 9.605285; atol = ATOL)
@@ -165,7 +167,7 @@
 
         @testset "HMA" begin
             ind = HMA{Float64}(period = 20)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.718018; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.940188; atol = ATOL)
             @test isapprox(ind.output[end], 10.104067; atol = ATOL)
@@ -174,7 +176,7 @@
 
         @testset "DPO" begin
             ind = DPO{Float64}(period = 20)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 0.344499; atol = ATOL)
             @test isapprox(ind.output[end-1], 0.116999; atol = ATOL)
             @test isapprox(ind.output[end], 0.011499; atol = ATOL)
@@ -187,7 +189,7 @@
                 slow_roc_period = 14,
                 wma_period = 10,
             )
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 27.309482; atol = ATOL)
             @test isapprox(ind.output[end-1], 26.109333; atol = ATOL)
             @test isapprox(ind.output[end], 22.941006; atol = ATOL)
@@ -211,7 +213,7 @@
                 @test isapprox(ind.w[i], w_expected_val; atol = ATOL)
             end
             @test isapprox(ind.w_sum, 3.591801; atol = ATOL)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.795859; atol = ATOL)
             @test isapprox(ind.output[end-1], 10.121439; atol = ATOL)
             @test isapprox(ind.output[end], 10.257038; atol = ATOL)
@@ -220,7 +222,7 @@
 
         @testset_skip "DEMA (buggy - help wanted)" begin
             ind = DEMA{Float64}(period = 20)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 9.683254; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.813792; atol = ATOL)
             @test isapprox(ind.output[end], 9.882701; atol = ATOL)
@@ -233,7 +235,7 @@
                 fast_ema_constant_period = 2,
                 slow_ema_constant_period = 30,
             )
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
             @test isapprox(ind.output[end-2], 8.884374; atol = ATOL)
             @test isapprox(ind.output[end-1], 8.932091; atol = ATOL)
             @test isapprox(ind.output[end], 8.941810; atol = ATOL)
@@ -248,7 +250,7 @@
     @testset "several output values" begin
         @testset "BB" begin
             ind = BB{Float64}(period = 5, std_dev_multiplier = 2.0)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
 
             @test isapprox(ind.output[end-2].lower, 8.186646; atol = ATOL)
             @test isapprox(ind.output[end-2].central, 9.748000; atol = ATOL)
@@ -265,7 +267,7 @@
 
         @testset_skip "MACD (buggy - help wanted)" begin
             ind = MACD{Float64}(fast_period = 12, slow_period = 26, signal_period = 9)
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
 
             @test isapprox(ind.output[end-2].macd, 0.293541; atol = ATOL)
             @test isapprox(ind.output[end-2].signal, 0.098639; atol = ATOL)
@@ -294,7 +296,7 @@
                 roc4_ma_period = 10,
                 signal_period = 9,
             )
-            append!(ind, CLOSE_TMPL)
+            fit!(ind, CLOSE_TMPL)
 
             @test isapprox(ind.output[end-2].kst, 136.602283; atol = ATOL)
             @test isapprox(ind.output[end-2].signal, 103.707431; atol = ATOL)

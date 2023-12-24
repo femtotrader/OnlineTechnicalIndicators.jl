@@ -45,32 +45,32 @@ end
 # ===
 
 """
-    SMA_v2{T}(; period=SMA_PERIOD)
+    SMA_v02{T}(; period=SMA_PERIOD)
 
-The SMA_v2 type implements a Simple Moving Average indicator.
+The SMA_v02 type implements a Simple Moving Average indicator.
 This is just an other implementation.
 """
-mutable struct SMA_v2{Tval} <: AbstractIncTAIndicator
+mutable struct SMA_v02{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
     output::CircularBuffer{Tval}
 
-    function SMA_v2{Tval}(; period = SMA_PERIOD) where {Tval}
+    function SMA_v02{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
         output = CircularBuffer{Tval}(period)
         new{Tval}(period, input, output)
     end
 end
 
-function Base.push!(ind::SMA_v2{Tval}, val::Tval) where {Tval}
+function Base.push!(ind::SMA_v02{Tval}, val::Tval) where {Tval}
     push!(ind.input, val)
     push!(ind.output, sum(ind.input) / ind.period)
     out_val = output(ind)
     return out_val
 end
 
-function output(ind::SMA_v2)
+function output(ind::SMA_v02)
     try
         return ind.output[ind.period]
     catch e
@@ -80,19 +80,19 @@ function output(ind::SMA_v2)
     end
 end
 
-# ===
+#=
 
 """
-    SMA_v3{T}(; period=SMA_PERIOD)
+    SMA_v03{T}(; period=SMA_PERIOD)
 
-The SMA_v3 type implements a Simple Moving Average indicator.
+The SMA_v03 type implements a Simple Moving Average indicator.
 This is just an other implementation.
 """
-mutable struct SMA_v3{Tval} <: AbstractIncTAIndicator
+mutable struct SMA_v03{Tval} <: AbstractIncTAIndicator
     input::MovingWindow{Tval}
     output::MovingWindow{Tval}
 
-    function SMA_v3{Tval}(; period = SMA_PERIOD) where {Tval}
+    function SMA_v03{Tval}(; period = SMA_PERIOD) where {Tval}
         input = MovingWindow(period, Tval)
         output = MovingWindow(period, Tval)
 
@@ -100,14 +100,14 @@ mutable struct SMA_v3{Tval} <: AbstractIncTAIndicator
     end
 end
 
-function Base.push!(ind::SMA_v3{Tval}, val::Tval) where {Tval}
+function Base.push!(ind::SMA_v03{Tval}, val::Tval) where {Tval}
     fit!(ind.input, val)
     out_val = mean(value(ind.input))
     fit!(ind.output, out_val)
     return out_val
 end
 
-function output(ind::SMA_v3)
+function output(ind::SMA_v03)
     try
         return ind.output[ind.period]
     catch e
@@ -116,3 +116,5 @@ function output(ind::SMA_v3)
         end
     end
 end
+
+=#

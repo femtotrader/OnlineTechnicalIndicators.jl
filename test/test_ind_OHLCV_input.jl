@@ -2,7 +2,7 @@
     @testset "single output values" begin
         @testset "VWMA" begin
             ind = VWMA{Missing,Float64,Float64}(period = P)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 9.320203; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.352602; atol = ATOL)
             @test isapprox(ind.output[end], 9.457708; atol = ATOL)
@@ -12,7 +12,7 @@
 
         @testset "VWAP" begin
             ind = VWAP{Float64,Float64}(memory = MEMORY)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[1], 10.47333; atol = ATOL)
             @test isapprox(ind.output[2], 10.21883; atol = ATOL)
             @test isapprox(ind.output[3], 10.20899; atol = ATOL)
@@ -23,7 +23,7 @@
 
         @testset "AO" begin
             ind = AO{Float64}(fast_period = 5, slow_period = 7)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 0.117142; atol = ATOL)
             @test isapprox(ind.output[end-1], 0.257142; atol = ATOL)
             @test isapprox(ind.output[end], 0.373285; atol = ATOL)
@@ -32,7 +32,7 @@
 
         @testset "ATR" begin
             ind = ATR{Missing,Float64,Float64}(period = 5)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 0.676426; atol = ATOL)
             @test isapprox(ind.output[end-1], 0.665141, ; atol = ATOL)
             @test isapprox(ind.output[end], 0.686113; atol = ATOL)
@@ -40,7 +40,7 @@
 
         @testset "AccuDist" begin
             ind = AccuDist{Float64}(memory = 3)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], -689.203568; atol = ATOL)
             @test isapprox(ind.output[end-1], -725.031632; atol = ATOL)
             @test isapprox(ind.output[end], -726.092152; atol = ATOL)
@@ -49,7 +49,7 @@
 
         @testset "BOP" begin
             ind = BOP{Float64}(memory = P)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 0.447761; atol = ATOL)
             @test isapprox(ind.output[end-1], -0.870967; atol = ATOL)
             @test isapprox(ind.output[end], -0.363636; atol = ATOL)
@@ -58,7 +58,7 @@
 
         @testset "ForceIndex" begin
             ind = ForceIndex{Missing,Float64,Float64}(period = 20)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 24.015092; atol = ATOL)
             @test isapprox(ind.output[end-1], 20.072283; atol = ATOL)
             @test isapprox(ind.output[end], 16.371894; atol = ATOL)
@@ -67,7 +67,7 @@
 
         @testset "OBV" begin
             ind = OBV{Missing,Float64,Float64}(memory = 3)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 665.899999; atol = ATOL)
             @test isapprox(ind.output[end-1], 617.609999; atol = ATOL)
             @test isapprox(ind.output[end], 535.949999; atol = ATOL)
@@ -76,7 +76,7 @@
 
         @testset "SOBV" begin
             ind = SOBV{Missing,Float64,Float64}(period = 20)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 90.868499; atol = ATOL)
             @test isapprox(ind.output[end-1], 139.166499; atol = ATOL)
             @test isapprox(ind.output[end], 187.558499; atol = ATOL)
@@ -85,7 +85,7 @@
 
         @testset "EMV" begin
             ind = EMV{Missing,Float64,Float64}(period = 14, volume_div = 10000)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 5.656780; atol = ATOL)
             @test isapprox(ind.output[end-1], 5.129971; atol = ATOL)
             @test isapprox(ind.output[end], -0.192883; atol = ATOL)
@@ -94,7 +94,7 @@
 
         @testset "CCI" begin
             ind = CCI{Float64}(period = 20)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 179.169127; atol = ATOL)
             @test isapprox(ind.output[end-1], 141.667617; atol = ATOL)
             @test isapprox(ind.output[end], 89.601438; atol = ATOL)
@@ -103,7 +103,7 @@
 
         @testset "ChaikinOsc" begin
             ind = ChaikinOsc{Float64}(fast_period = 5, slow_period = 7)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 31.280810; atol = ATOL)
             @test isapprox(ind.output[end-1], 28.688536; atol = ATOL)
             @test isapprox(ind.output[end], 24.913310; atol = ATOL)
@@ -116,7 +116,7 @@
                 ema_ema_period = 9,
                 ema_ratio_period = 10,
             )
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 9.498975; atol = ATOL)
             @test isapprox(ind.output[end-1], 9.537927; atol = ATOL)
             @test isapprox(ind.output[end], 9.648128; atol = ATOL)
@@ -125,7 +125,7 @@
 
         @testset_skip "CHOP - help wanted" begin
             ind = CHOP{Missing,Float64,Float64}(period = 14)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             @test isapprox(ind.output[end-2], 49.835100; atol = ATOL)
             @test isapprox(ind.output[end-1], 50.001477; atol = ATOL)
             @test isapprox(ind.output[end], 49.289273; atol = ATOL)
@@ -137,7 +137,7 @@
     @testset "several output values" begin
         @testset "SuperTrend" begin
             ind = SuperTrend{Missing,Float64,Float64}(atr_period = 10, mult = 3)
-            append!(ind, V_OHLCV)
+            fit!(ind, V_OHLCV)
             # @test isapprox(ind.output[end - 15].value, 9.711592; atol=ATOL) # pretty old!
             # @test ind.output[end - 15].trend == Trend.DOWN # pretty old!
 
