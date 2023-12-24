@@ -11,13 +11,13 @@ mutable struct VWAP{Tprice,Tvol} <: AbstractIncTAIndicator
     sum_price_vol::Tprice
     sum_vol::Tvol
 
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function VWAP{Tprice,Tvol}(; memory = VWAP_MEMORY) where {Tprice,Tvol}
         sum_price_vol = zero(Tprice)
         sum_vol = zero(Tvol)
-        output = CircularBuffer{Union{Tprice,Missing}}(memory)
-        new{Tprice,Tvol}(memory, sum_price_vol, sum_vol, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(memory)
+        new{Tprice,Tvol}(memory, sum_price_vol, sum_vol, value)
     end
 end
 
@@ -36,6 +36,6 @@ function Base.push!(
         out_val = missing
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

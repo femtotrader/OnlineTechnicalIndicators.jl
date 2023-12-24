@@ -11,15 +11,15 @@ mutable struct DPO{Tval} <: AbstractIncTAIndicator
     sma::SMA{Tval}
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Missing,Tval}}
+    value::CircularBuffer{Union{Missing,Tval}}
 
     function DPO{Tval}(; period = DPO_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Missing,Tval}}(period)
+        value = CircularBuffer{Union{Missing,Tval}}(period)
 
         sma = SMA{Tval}(period = period)
 
-        new{Tval}(period, sma, input, output)
+        new{Tval}(period, sma, input, value)
     end
 end
 
@@ -29,12 +29,12 @@ function Base.push!(ind::DPO{Tval}, val::Tval) where {Tval}
     push!(ind.sma, val)
 
     semi_period = floor(Int, ind.period / 2)
-    if length(ind.input) < semi_period + 2 || length(ind.sma.output) < 1
+    if length(ind.input) < semi_period + 2 || length(ind.sma.value) < 1
         out_val = missing
     else
-        out_val = ind.input[end-semi_period-1] - ind.sma.output[end]
+        out_val = ind.input[end-semi_period-1] - ind.sma.value[end]
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

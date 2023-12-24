@@ -19,7 +19,7 @@ mutable struct BB{Tval} <: AbstractIncTAIndicator
     central_band::SMA{Tval}
     std_dev::StdDev{Tval}
 
-    output::CircularBuffer{Union{Missing,BBVal{Tval}}}
+    value::CircularBuffer{Union{Missing,BBVal{Tval}}}
 
     function BB{Tval}(;
         period = BB_PERIOD,
@@ -28,8 +28,8 @@ mutable struct BB{Tval} <: AbstractIncTAIndicator
         central_band = SMA{Tval}(period = period)
         std_dev = StdDev{Tval}(period = period)
 
-        output = CircularBuffer{Union{Missing,BBVal{Tval}}}(period)
-        new{Tval}(period, std_dev_multiplier, central_band, std_dev, output)
+        value = CircularBuffer{Union{Missing,BBVal{Tval}}}(period)
+        new{Tval}(period, std_dev_multiplier, central_band, std_dev, value)
     end
 end
 
@@ -40,12 +40,12 @@ function Base.push!(ind::BB{Tval}, val::Tval) where {Tval}
         out_val = missing
     else
         lower =
-            ind.central_band.output[end] - ind.std_dev_multiplier * ind.std_dev.output[end]
-        central = ind.central_band.output[end]
+            ind.central_band.value[end] - ind.std_dev_multiplier * ind.std_dev.value[end]
+        central = ind.central_band.value[end]
         upper =
-            ind.central_band.output[end] + ind.std_dev_multiplier * ind.std_dev.output[end]
+            ind.central_band.value[end] + ind.std_dev_multiplier * ind.std_dev.value[end]
         out_val = BBVal{Tval}(lower, central, upper)
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

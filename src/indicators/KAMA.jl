@@ -16,7 +16,7 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
     volatilities::CircularBuffer{Tval}
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Missing,Tval}}
+    value::CircularBuffer{Union{Missing,Tval}}
 
     function KAMA{Tval}(;
         period = KAMA_PERIOD,
@@ -31,7 +31,7 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
         volatilities = CircularBuffer{Tval}(period)
 
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Missing,Tval}}(period)
+        value = CircularBuffer{Union{Missing,Tval}}(period)
 
         new{Tval}(
             period,
@@ -39,7 +39,7 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
             slow_smoothing_constant,
             volatilities,
             input,
-            output,
+            value
         )
     end
 end
@@ -50,7 +50,7 @@ function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
 
     if length(ind.input) < 2
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
@@ -58,7 +58,7 @@ function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
 
     if length(ind.volatilities) < ind.period
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
@@ -78,15 +78,15 @@ function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
         )^2
 
     # if !has_output_value(ind)  # tofix!!!!
-    if length(ind.output) == 0  # tofix!!!!
+    if length(ind.value) == 0  # tofix!!!!
         prev_kama = ind.input[end-1]
     else
-        prev_kama = ind.output[end]
+        prev_kama = ind.value[end]
     end
 
     println(prev_kama)
 
     out_val = prev_kama + smoothing_constant * (ind.input[end] - prev_kama)
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

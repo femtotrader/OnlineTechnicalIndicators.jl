@@ -10,12 +10,12 @@ mutable struct CCI{Tval} <: AbstractIncTAIndicator
 
     mean_dev::MeanDev{Tval}
 
-    output::CircularBuffer{Union{Tval,Missing}}
+    value::CircularBuffer{Union{Tval,Missing}}
 
     function CCI{Tval}(; period = CCI_PERIOD) where {Tval}
         mean_dev = MeanDev{Tval}(period = period)
-        output = CircularBuffer{Union{Tval,Missing}}(period)
-        new{Tval}(period, mean_dev, output)
+        value = CircularBuffer{Union{Tval,Missing}}(period)
+        new{Tval}(period, mean_dev, value)
     end
 end
 
@@ -26,9 +26,9 @@ function Base.push!(ind::CCI, candle::OHLCV)
         out_val = missing
     else
         out_val =
-            (typical_price - ind.mean_dev.sma.output[end]) /
-            (0.015 * ind.mean_dev.output[end])
+            (typical_price - ind.mean_dev.sma.value[end]) /
+            (0.015 * ind.mean_dev.value[end])
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

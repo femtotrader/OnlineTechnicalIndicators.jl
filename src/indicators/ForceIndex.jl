@@ -14,15 +14,15 @@ mutable struct ForceIndex{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
     }
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function ForceIndex{Ttime,Tprice,Tvol}(;
         period = ForceIndex_PERIOD,
     ) where {Ttime,Tprice,Tvol}
         ema = EMA{Tprice}(period = period)
         input = (missing, missing)
-        output = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, ema, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, ema, input, value)
     end
 end
 
@@ -31,7 +31,7 @@ function Base.push!(ind::ForceIndex, candle::OHLCV)
 
     if any(ismissing.(ind.input))  #if ismissing(ind.input[end]) || ismissing(ind.input[end - 1])
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
@@ -40,8 +40,8 @@ function Base.push!(ind::ForceIndex, candle::OHLCV)
     if !has_output_value(ind.ema)
         out_val = missing
     else
-        out_val = ind.ema.output[end]
+        out_val = ind.ema.value[end]
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

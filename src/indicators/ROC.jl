@@ -9,12 +9,12 @@ mutable struct ROC{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval,Missing}}
+    value::CircularBuffer{Union{Tval,Missing}}
 
     function ROC{Tval}(; period = ROC_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period + 1)
-        output = CircularBuffer{Union{Tval,Missing}}(period + 1)
-        new{Tval}(period, input, output)
+        value = CircularBuffer{Union{Tval,Missing}}(period + 1)
+        new{Tval}(period, input, value)
     end
 end
 
@@ -26,10 +26,10 @@ function Base.push!(ind::ROC{Tval}, val::Tval) where {Tval}
         out_val =
             100.0 * (ind.input[end] - ind.input[end-ind.period]) / ind.input[end-ind.period]
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end
 
 function output(ind::ROC)
-    return ind.output[end]
+    return ind.value[end]
 end

@@ -25,7 +25,7 @@ mutable struct SuperTrend{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     flb::CircularBuffer{Tprice}  # final lower band
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    output::CircularBuffer{Union{SuperTrendVal,Missing}}
+    value::CircularBuffer{Union{SuperTrendVal,Missing}}
 
     function SuperTrend{Ttime,Tprice,Tvol}(;
         atr_period = SuperTrend_ATR_PERIOD,
@@ -36,8 +36,8 @@ mutable struct SuperTrend{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         flb = CircularBuffer{Tprice}(atr_period)
 
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(atr_period)
-        output = CircularBuffer{Union{SuperTrendVal,Missing}}(atr_period)
-        new{Ttime,Tprice,Tvol}(atr_period, mult, atr, fub, flb, input, output)
+        value = CircularBuffer{Union{SuperTrendVal,Missing}}(atr_period)
+        new{Ttime,Tprice,Tvol}(atr_period, mult, atr, fub, flb, input, value)
     end
 end
 
@@ -47,7 +47,7 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
 
     if !has_output_value(ind.atr)
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
@@ -57,8 +57,8 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
     =#
 
     hla = (candle.high + candle.low) / 2.0
-    bub = hla + ind.mult * ind.atr.output[end]
-    blb = hla - ind.mult * ind.atr.output[end]
+    bub = hla + ind.mult * ind.atr.value[end]
+    blb = hla - ind.mult * ind.atr.value[end]
 
     #=
     IF C.BUB < P.FUB OR P.CLOSE > P.FUB: C.FUB = C.BUB
@@ -99,13 +99,13 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
 
     if !has_output_value(ind)
         supertrend = 0
-    elseif ind.output[end].value == ind.fub[end-1] && ind.input[end].close <= ind.fub[end]
+    elseif ind.value[end].value == ind.fub[end-1] && ind.input[end].close <= ind.fub[end]
         supertrend = ind.fub[end]
-    elseif ind.output[end].value == ind.fub[end-1] && ind.input[end].close > ind.fub[end]
+    elseif ind.value[end].value == ind.fub[end-1] && ind.input[end].close > ind.fub[end]
         supertrend = ind.flb[end]
-    elseif ind.output[end].value == ind.flb[end-1] && ind.input[end].close >= ind.flb[end]
+    elseif ind.value[end].value == ind.flb[end-1] && ind.input[end].close >= ind.flb[end]
         supertrend = ind.flb[end]
-    elseif ind.output[end].value == ind.flb[end-1] && ind.input[end].close < ind.flb[end]
+    elseif ind.value[end].value == ind.flb[end-1] && ind.input[end].close < ind.flb[end]
         supertrend = ind.fub[end]
     end
 
@@ -113,6 +113,6 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
 
     out_val = SuperTrendVal(supertrend, trend_dir)
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

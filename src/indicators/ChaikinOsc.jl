@@ -11,7 +11,7 @@ mutable struct ChaikinOsc{Tval} <: AbstractIncTAIndicator
     fast_ema::EMA{Tval}
     slow_ema::EMA{Tval}
 
-    output::CircularBuffer{Union{Tval,Missing}}
+    value::CircularBuffer{Union{Tval,Missing}}
 
     function ChaikinOsc{Tval}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
@@ -20,8 +20,8 @@ mutable struct ChaikinOsc{Tval} <: AbstractIncTAIndicator
         accu_dist = AccuDist{Tval}(memory = fast_period)
         fast_ema = EMA{Tval}(period = fast_period)
         slow_ema = EMA{Tval}(period = slow_period)
-        output = CircularBuffer{Union{Tval,Missing}}(fast_period)
-        new{Tval}(accu_dist, fast_ema, slow_ema, output)
+        value = CircularBuffer{Union{Tval,Missing}}(fast_period)
+        new{Tval}(accu_dist, fast_ema, slow_ema, value)
     end
 end
 
@@ -30,21 +30,21 @@ function Base.push!(ind::ChaikinOsc, candle::OHLCV)
 
     if !has_output_value(ind.accu_dist)
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
-    val = ind.accu_dist.output[end]
+    val = ind.accu_dist.value[end]
     push!(ind.fast_ema, val)
     push!(ind.slow_ema, val)
 
     if !has_output_value(ind.fast_ema) || !has_output_value(ind.slow_ema)
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
-    out_val = ind.fast_ema.output[end] - ind.slow_ema.output[end]
-    push!(ind.output, out_val)
+    out_val = ind.fast_ema.value[end] - ind.slow_ema.value[end]
+    push!(ind.value, out_val)
     return out_val
 end

@@ -12,12 +12,12 @@ mutable struct OBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
         Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
     }
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function OBV{Ttime,Tprice,Tvol}(; memory = OBV_MEMORY) where {Ttime,Tprice,Tvol}
         input = (missing, missing)
-        output = CircularBuffer{Union{Tprice,Missing}}(memory)
-        new{Ttime,Tprice,Tvol}(memory, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(memory)
+        new{Ttime,Tprice,Tvol}(memory, input, value)
     end
 end
 
@@ -31,15 +31,15 @@ function Base.push!(ind::OBV, candle::OHLCV)
         prev_value = ind.input[end-1]
 
         if value.close == prev_value.close
-            out_val = ind.output[end]
+            out_val = ind.value[end]
         elseif value.close > prev_value.close
-            out_val = ind.output[end] + value.volume
+            out_val = ind.value[end] + value.volume
         else
-            out_val = ind.output[end] - value.volume
+            out_val = ind.value[end] - value.volume
         end
 
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

@@ -8,16 +8,16 @@ The MeanDev type implements a Mean Deviation indicator.
 mutable struct MeanDev{Tval} <: AbstractIncTAIndicator
     period::Integer
 
-    input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval,Missing}}
-
     sma::SMA{Tval}
+
+    input::CircularBuffer{Tval}
+    value::CircularBuffer{Union{Tval,Missing}}
 
     function MeanDev{Tval}(; period = MeanDev_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Tval,Missing}}(period)
+        value = CircularBuffer{Union{Tval,Missing}}(period)
         sma = SMA{Tval}(period = period)
-        new{Tval}(period, input, output, sma)
+        new{Tval}(period, sma, input, value)
     end
 end
 
@@ -26,10 +26,10 @@ function Base.push!(ind::MeanDev{Tval}, data::Tval) where {Tval}
     push!(ind.sma, data)
     _sma = output(ind.sma)
     out_val = sum(abs.(ind.input .- _sma)) / ind.period
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end
 
 function output(ind::MeanDev)
-    return ind.output[end]
+    return ind.value[end]
 end

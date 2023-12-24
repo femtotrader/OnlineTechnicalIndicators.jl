@@ -12,14 +12,14 @@ mutable struct CHOP{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     atr::ATR{Ttime,Tprice,Tvol}
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function CHOP{Ttime,Tprice,Tvol}(; period = CHOP_PERIOD) where {Ttime,Tprice,Tvol}
         @warn "WIP - buggy"
         atr = ATR{Ttime,Tprice,Tvol}(period = 1)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        output = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, atr, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, atr, input, value)
     end
 end
 
@@ -29,7 +29,7 @@ function Base.push!(ind::CHOP, candle::OHLCV)
 
     if (!has_output_value(ind.atr)) || (!isfull(ind.input))
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         println(out_val)
         return out_val
     end
@@ -39,16 +39,16 @@ function Base.push!(ind::CHOP, candle::OHLCV)
 
     if max_high != min_low
         out_val =
-            100.0 * log10(sum(ind.atr.output) / (max_high - min_low)) / log10(ind.period)
+            100.0 * log10(sum(ind.atr.value) / (max_high - min_low)) / log10(ind.period)
     else
-        if length(ind.output) > 0
-            out_val = ind.output[end]
+        if length(ind.value) > 0
+            out_val = ind.value[end]
         else
             out_val = missing
         end
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     println(out_val)
     return out_val
 end

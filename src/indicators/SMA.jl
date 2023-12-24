@@ -11,13 +11,13 @@ mutable struct SMA{Tval} <: AbstractIncTAIndicator
     sum::Tval
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Tval}
+    value::CircularBuffer{Tval}
 
     function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Tval}(period)
+        value = CircularBuffer{Tval}(period)
         sum = zero(Tval)
-        new{Tval}(period, sum, input, output)
+        new{Tval}(period, sum, input, value)
     end
 end
 
@@ -30,7 +30,7 @@ function Base.push!(ind::SMA{Tval}, val::Tval) where {Tval}
     ind.sum = ind.sum - losing + val
     push!(ind.input, val)
     out_val = output(ind)
-    push!(ind.output, ind.sum / ind.period)
+    push!(ind.value, ind.sum / ind.period)
     return out_val
 end
 
@@ -54,25 +54,25 @@ mutable struct SMA_v02{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Tval}
+    value::CircularBuffer{Tval}
 
     function SMA_v02{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Tval}(period)
-        new{Tval}(period, input, output)
+        value = CircularBuffer{Tval}(period)
+        new{Tval}(period, input, value)
     end
 end
 
 function Base.push!(ind::SMA_v02{Tval}, val::Tval) where {Tval}
     push!(ind.input, val)
-    push!(ind.output, sum(ind.input) / ind.period)
+    push!(ind.value, sum(ind.input) / ind.period)
     out_val = output(ind)
     return out_val
 end
 
 function output(ind::SMA_v02)
     try
-        return ind.output[ind.period]
+        return ind.value[ind.period]
     catch e
         if isa(e, BoundsError)
             return missing
@@ -90,26 +90,26 @@ This is just an other implementation.
 """
 mutable struct SMA_v03{Tval} <: AbstractIncTAIndicator
     input::MovingWindow{Tval}
-    output::MovingWindow{Tval}
+    value::MovingWindow{Tval}
 
     function SMA_v03{Tval}(; period = SMA_PERIOD) where {Tval}
         input = MovingWindow(period, Tval)
         output = MovingWindow(period, Tval)
 
-        new{Tval}(input, output)
+        new{Tval}(input, value)
     end
 end
 
 function Base.push!(ind::SMA_v03{Tval}, val::Tval) where {Tval}
     fit!(ind.input, val)
     out_val = mean(value(ind.input))
-    fit!(ind.output, out_val)
+    fit!(ind.value, out_val)
     return out_val
 end
 
 function output(ind::SMA_v03)
     try
-        return ind.output[ind.period]
+        return ind.value[ind.period]
     catch e
         if isa(e, BoundsError)
             return missing

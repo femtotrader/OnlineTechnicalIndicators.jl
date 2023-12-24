@@ -13,7 +13,7 @@ mutable struct EMV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     emv_sma::SMA{Tprice}
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function EMV{Ttime,Tprice,Tvol}(;
         period = EMV_PERIOD,
@@ -22,8 +22,8 @@ mutable struct EMV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         emv_sma = SMA{Tprice}(period = period)
 
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        output = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, volume_div, emv_sma, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, volume_div, emv_sma, input, value)
     end
 end
 
@@ -32,7 +32,7 @@ function Base.push!(ind::EMV, candle::OHLCV)
 
     if length(ind.input) < 2
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
@@ -49,12 +49,12 @@ function Base.push!(ind::EMV, candle::OHLCV)
 
     push!(ind.emv_sma, emv)
 
-    if length(ind.emv_sma.output) < 1
+    if length(ind.emv_sma.value) < 1
         out_val = missing
     else
-        out_val = ind.emv_sma.output[end]
+        out_val = ind.emv_sma.value[end]
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

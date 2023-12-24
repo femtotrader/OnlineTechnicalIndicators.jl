@@ -17,7 +17,7 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
     w_sum::Tval
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Missing,Tval}}
+    value::CircularBuffer{Union{Missing,Tval}}
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
@@ -34,8 +34,8 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
             w_sum += w_val
         end
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Missing,Tval}}(period)
-        new{Tval}(period, offset, sigma, w, w_sum, input, output)
+        value = CircularBuffer{Union{Missing,Tval}}(period)
+        new{Tval}(period, offset, sigma, w, w_sum, input, value)
     end
 end
 
@@ -53,6 +53,6 @@ function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
         out_val = alma / ind.w_sum
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

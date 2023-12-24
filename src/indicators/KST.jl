@@ -41,7 +41,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
 
     signal_line::SMA{Tval}
 
-    output::CircularBuffer{Union{Missing,KSTVal{Tval}}}
+    value::CircularBuffer{Union{Missing,KSTVal{Tval}}}
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,
@@ -66,7 +66,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
 
         signal_line = SMA{Tval}(period = signal_period)
 
-        output = CircularBuffer{Union{Missing,KSTVal{Tval}}}(roc1_period)
+        value = CircularBuffer{Union{Missing,KSTVal{Tval}}}(roc1_period)
         new{Tval}(
             roc1,
             roc2,
@@ -77,7 +77,7 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
             roc3_ma,
             roc4_ma,
             signal_line,
-            output,
+            value
         )
     end
 end
@@ -89,19 +89,19 @@ function Base.push!(ind::KST{Tval}, val::Tval) where {Tval}
     push!(ind.roc4, val)
 
     if has_output_value(ind.roc1)
-        push!(ind.roc1_ma, ind.roc1.output[end])
+        push!(ind.roc1_ma, ind.roc1.value[end])
     end
 
     if has_output_value(ind.roc2)
-        push!(ind.roc2_ma, ind.roc2.output[end])
+        push!(ind.roc2_ma, ind.roc2.value[end])
     end
 
     if has_output_value(ind.roc3)
-        push!(ind.roc3_ma, ind.roc3.output[end])
+        push!(ind.roc3_ma, ind.roc3.value[end])
     end
 
     if has_output_value(ind.roc4)
-        push!(ind.roc4_ma, ind.roc4.output[end])
+        push!(ind.roc4_ma, ind.roc4.value[end])
     end
 
     if !has_output_value(ind.roc1) ||
@@ -109,24 +109,24 @@ function Base.push!(ind::KST{Tval}, val::Tval) where {Tval}
        !has_output_value(ind.roc3) ||
        !has_output_value(ind.roc4)
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         return out_val
     end
 
     kst =
-        1.0 * ind.roc1_ma.output[end] +
-        2.0 * ind.roc2_ma.output[end] +
-        3.0 * ind.roc3_ma.output[end] +
-        4.0 * ind.roc4_ma.output[end]
+        1.0 * ind.roc1_ma.value[end] +
+        2.0 * ind.roc2_ma.value[end] +
+        3.0 * ind.roc3_ma.value[end] +
+        4.0 * ind.roc4_ma.value[end]
     push!(ind.signal_line, kst)
 
-    if length(ind.signal_line.output) > 0
-        signal_value = ind.signal_line.output[end]
+    if length(ind.signal_line.value) > 0
+        signal_value = ind.signal_line.value[end]
     else
         signal_value = missing
     end
 
     out_val = KSTVal(kst, signal_value)
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

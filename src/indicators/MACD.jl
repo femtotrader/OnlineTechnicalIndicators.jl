@@ -18,7 +18,7 @@ mutable struct MACD{Tval} <: AbstractIncTAIndicator
     ema_slow::EMA{Tval}
     signal_line::EMA{Tval}
 
-    output::CircularBuffer{Union{Missing,MACDVal{Tval}}}
+    value::CircularBuffer{Union{Missing,MACDVal{Tval}}}
 
     function MACD{Tval}(;
         fast_period = MACD_FAST_PERIOD,
@@ -31,8 +31,8 @@ mutable struct MACD{Tval} <: AbstractIncTAIndicator
         ema_slow = EMA{Tval}(period = slow_period)
         signal_line = EMA{Tval}(period = signal_period)
 
-        output = CircularBuffer{Union{Missing,MACDVal{Tval}}}(fast_period)
-        new{Tval}(ema_fast, ema_slow, signal_line, output)
+        value = CircularBuffer{Union{Missing,MACDVal{Tval}}}(fast_period)
+        new{Tval}(ema_fast, ema_slow, signal_line, value)
     end
 end
 
@@ -40,11 +40,11 @@ function Base.push!(ind::MACD{Tval}, val::Tval) where {Tval}
     push!(ind.ema_fast, val)
     push!(ind.ema_slow, val)
 
-    if length(ind.ema_fast.output) > 0 && length(ind.ema_slow.output) > 0
+    if length(ind.ema_fast.value) > 0 && length(ind.ema_slow.value) > 0
         macd = ind.ema_fast.output[end] - ind.ema_slow.output[end]
         push!(ind.signal_line, macd)
 
-        if length(ind.signal_line.output) > 0
+        if length(ind.signal_line.value) > 0
             signal = ind.signal_line.output[end]
         else
             signal = missing
@@ -57,12 +57,12 @@ function Base.push!(ind::MACD{Tval}, val::Tval) where {Tval}
 
         # macd, signal, histogram = 0.0, 0.0, 0.0
         out_val = MACDVal{Tval}(macd, signal, histogram)
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         println(out_val)
         return out_val
     else
         out_val = missing
-        push!(ind.output, out_val)
+        push!(ind.value, out_val)
         println(out_val)
         return out_val
     end

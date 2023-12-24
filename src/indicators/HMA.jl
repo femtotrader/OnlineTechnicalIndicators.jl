@@ -12,17 +12,17 @@ mutable struct HMA{Tval} <: AbstractIncTAIndicator
     wma2::WMA{Tval}
     hma::WMA{Tval}
 
-    output::CircularBuffer{Union{Missing,Tval}}
+    value::CircularBuffer{Union{Missing,Tval}}
 
     function HMA{Tval}(; period = HMA_PERIOD) where {Tval}
 
-        output = CircularBuffer{Union{Missing,Tval}}(period)
+        value = CircularBuffer{Union{Missing,Tval}}(period)
 
         wma = WMA{Tval}(period = period)
         wma2 = WMA{Tval}(period = floor(Int, period / 2))
         hma = WMA{Tval}(period = floor(Int, sqrt(period)))
 
-        new{Tval}(period, wma, wma2, hma, output)
+        new{Tval}(period, wma, wma2, hma, value)
     end
 end
 
@@ -34,15 +34,15 @@ function Base.push!(ind::HMA{Tval}, val::Tval) where {Tval}
     if !has_output_value(ind.wma)
         out_val = missing
     else
-        push!(ind.hma, 2.0 * ind.wma2.output[end] - ind.wma.output[end])
+        push!(ind.hma, 2.0 * ind.wma2.value[end] - ind.wma.value[end])
 
         if !has_output_value(ind.hma)
             out_val = missing
         else
-            out_val = ind.hma.output[end]
+            out_val = ind.hma.value[end]
         end
     end
 
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

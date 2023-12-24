@@ -47,10 +47,10 @@ abstract type AbstractIncTAIndicator end
 include("ohlcv.jl")
 
 function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
-    if length(ind.output) == 0
+    if length(ind.value) == 0
         return false
     else
-        if ismissing(ind.output[end])
+        if ismissing(ind.value[end])
             return false
         else
             return true

@@ -12,13 +12,13 @@ mutable struct ATR{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     rolling::Bool
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}  # seems a bit overkilled just to get ind.input[end - 1].close (maybe use simply a Tuple with current and previous value - see ForceIndex)
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function ATR{Ttime,Tprice,Tvol}(; period = ATR_PERIOD) where {Ttime,Tprice,Tvol}
         tr = CircularBuffer{Tprice}(period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        output = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, tr, false, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, tr, false, input, value)
     end
 end
 
@@ -39,9 +39,9 @@ function Base.push!(ind::ATR, ohlcv::OHLCV)
             out_val = sum(ind.tr) / ind.period
             ind.rolling = true
         else
-            out_val = (ind.output[end] * (ind.period - 1) + ind.tr[end]) / ind.period
+            out_val = (ind.value[end] * (ind.period - 1) + ind.tr[end]) / ind.period
         end
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end

@@ -9,17 +9,17 @@ mutable struct RSI{Tval} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Union{Tval,Missing}}
+    value::CircularBuffer{Union{Tval,Missing}}
 
     gains::SMMA{Tval}
     losses::SMMA{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Union{Tval,Missing}}(period)
+        value = CircularBuffer{Union{Tval,Missing}}(period)
         gains = SMMA{Tval}(period = period)
         losses = SMMA{Tval}(period = period)
-        new{Tval}(period, input, output, gains, losses)
+        new{Tval}(period, input, value, gains, losses)
     end
 end
 
@@ -28,7 +28,7 @@ function Base.push!(ind::RSI{Tval}, val::Tval) where {Tval}
 
     if length(ind.input) < 2
         rsi = missing
-        push!(ind.output, rsi)
+        push!(ind.value, rsi)
         return rsi
     end
 
@@ -43,7 +43,7 @@ function Base.push!(ind::RSI{Tval}, val::Tval) where {Tval}
     _losses = output(ind.losses)
     if ismissing(_losses)
         rsi = missing
-        push!(ind.output, rsi)
+        push!(ind.value, rsi)
         return rsi
     end
 
@@ -53,13 +53,13 @@ function Base.push!(ind::RSI{Tval}, val::Tval) where {Tval}
         rs = output(ind.gains) / _losses
         rsi = Tval(100) - Tval(100) / (Tval(1) + rs)
     end
-    push!(ind.output, rsi)
+    push!(ind.value, rsi)
     return rsi
 end
 
 function output(ind::RSI)
     try
-        return ind.output[ind.period]
+        return ind.value[ind.period]
     catch e
         if isa(e, BoundsError)
             return missing

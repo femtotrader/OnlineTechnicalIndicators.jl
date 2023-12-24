@@ -13,15 +13,15 @@ mutable struct WMA{Tval} <: AbstractIncTAIndicator
     denominator::Tval
 
     input::CircularBuffer{Tval}
-    output::CircularBuffer{Tval}
+    value::CircularBuffer{Tval}
 
     function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
         input = CircularBuffer{Tval}(period)
-        output = CircularBuffer{Tval}(period)
+        value = CircularBuffer{Tval}(period)
         total = zero(Tval)
         numerator = zero(Tval)
         denominator = period * (period + 1) / 2.0
-        new{Tval}(period, total, numerator, denominator, input, output)
+        new{Tval}(period, total, numerator, denominator, input, value)
     end
 end
 
@@ -36,7 +36,7 @@ function Base.push!(ind::WMA{Tval}, val::Tval) where {Tval}
     ind.numerator = ind.numerator + ind.period * val - ind.total
     ind.total = ind.total + val - losing
     out_val = ind.numerator / ind.denominator
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end
 

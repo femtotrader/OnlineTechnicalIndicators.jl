@@ -9,12 +9,12 @@ mutable struct VWMA{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     period::Integer
 
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    output::CircularBuffer{Union{Tprice,Missing}}
+    value::CircularBuffer{Union{Tprice,Missing}}
 
     function VWMA{Ttime,Tprice,Tvol}(; period = VWMA_PERIOD) where {Ttime,Tprice,Tvol}
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        output = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(period, input, output)
+        value = CircularBuffer{Union{Tprice,Missing}}(period)
+        new{Ttime,Tprice,Tvol}(period, input, value)
     end
 end
 
@@ -34,6 +34,6 @@ function Base.push!(
         end
         out_val = s / v
     end
-    push!(ind.output, out_val)
+    push!(ind.value, out_val)
     return out_val
 end
