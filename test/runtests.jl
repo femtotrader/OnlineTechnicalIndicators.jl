@@ -396,10 +396,10 @@ end
     include("test_ohlcv.jl")
 
     @testset "indicators" begin
-        include("ind_single_input/test_ind_single_input_single_output.jl")
-        include("ind_single_input/test_ind_single_input_several_outputs.jl")
-        include("ind_OHLC_input/test_ind_OHLCV_input_single_output.jl")
-        include("ind_OHLC_input/test_ind_OHLCV_input_several_outputs.jl")
+        include("test_ind_single_input_single_output.jl")
+        include("test_ind_single_input_several_outputs.jl")
+        include("test_ind_OHLCV_input_single_output.jl")
+        include("test_ind_OHLCV_input_several_outputs.jl")
     end
 
 end
