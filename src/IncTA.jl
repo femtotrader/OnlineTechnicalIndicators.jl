@@ -38,6 +38,7 @@ export ChaikinOsc
 export MassIndex
 export CHOP
 export SuperTrend, Trend
+export Stoch
 
 using DataStructures
 using OnlineStats
@@ -97,4 +98,5 @@ include("indicators/ChaikinOsc.jl")
 include("indicators/MassIndex.jl")
 include("indicators/CHOP.jl")
 include("indicators/SuperTrend.jl")
+include("indicators/Stoch.jl")
 end
