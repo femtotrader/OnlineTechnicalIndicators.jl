@@ -346,6 +346,6 @@ const CLOSE_EQUAL_VALUES_TMPL = [
 using IncTA: OHLCVFactory
 const OHLCV_FACTORY =
     OHLCVFactory(OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL; volume = VOLUME_TMPL)  # time is missing here
-V_OHLCV = collect(OHLCV_FACTORY)
+const V_OHLCV = collect(OHLCV_FACTORY)
 
 end
