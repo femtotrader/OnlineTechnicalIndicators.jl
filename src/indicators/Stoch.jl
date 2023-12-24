@@ -21,10 +21,10 @@ mutable struct Stoch{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
 
     function Stoch{Ttime,Tprice,Tvol}(;
-        period=STOCH_PERIOD,
-        smoothing_period=STOCH_SMOOTHING_PERIOD
+        period = STOCH_PERIOD,
+        smoothing_period = STOCH_SMOOTHING_PERIOD,
     ) where {Ttime,Tprice,Tvol}
-        values_d = SMA{Tprice}(; period=smoothing_period)
+        values_d = SMA{Tprice}(; period = smoothing_period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Missing,StochVal{Tprice}}}(period)
         new{Ttime,Tprice,Tvol}(value, period, smoothing_period, values_d, input)
