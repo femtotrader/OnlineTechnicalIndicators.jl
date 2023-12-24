@@ -134,14 +134,14 @@
 
         @testset "Stoch" begin
             ind = Stoch{Missing,Float64,Float64}(period=14, smoothing_period=3)
-            append!(ind, V_OHLCV)
-            @test isapprox(ind.output[end-2].k, 88.934426; atol=ATOL)
-            @test isapprox(ind.output[end-2].d, 88.344442; atol=ATOL)
-            @test isapprox(ind.output[end-1].k, 74.180327; atol=ATOL)
-            @test isapprox(ind.output[end-1].d, 84.499789; atol=ATOL)
-            @test isapprox(ind.output[end].k, 64.754098; atol=ATOL)
-            @test isapprox(ind.output[end].d, 75.956284; atol=ATOL)
-            @test length(ind.output) == 14
+            fit!(ind, V_OHLCV)
+            @test isapprox(ind.value[end-2].k, 88.934426; atol=ATOL)
+            @test isapprox(ind.value[end-2].d, 88.344442; atol=ATOL)
+            @test isapprox(ind.value[end-1].k, 74.180327; atol=ATOL)
+            @test isapprox(ind.value[end-1].d, 84.499789; atol=ATOL)
+            @test isapprox(ind.value[end].k, 64.754098; atol=ATOL)
+            @test isapprox(ind.value[end].d, 75.956284; atol=ATOL)
+            @test length(ind.value) == 14
         end
     end
 

@@ -12,12 +12,13 @@ end
 The Stoch type implements the Stochastic indicator.
 """
 mutable struct Stoch{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+    value::CircularBuffer{Union{Missing,StochVal{Tprice}}}
+
     period::Integer
     smoothing_period::Integer
 
     values_d::SMA{Tprice}
     input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
-    output::CircularBuffer{Union{Missing,StochVal{Tprice}}}
 
     function Stoch{Ttime,Tprice,Tvol}(;
         period=STOCH_PERIOD,
@@ -25,8 +26,8 @@ mutable struct Stoch{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     ) where {Ttime,Tprice,Tvol}
         values_d = SMA{Tprice}(; period=smoothing_period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        output = CircularBuffer{Union{Missing,StochVal{Tprice}}}(period)
-        new{Ttime,Tprice,Tvol}(period, smoothing_period, values_d, input, output)
+        value = CircularBuffer{Union{Missing,StochVal{Tprice}}}(period)
+        new{Ttime,Tprice,Tvol}(value, period, smoothing_period, values_d, input)
     end
 end
 
@@ -45,16 +46,13 @@ function Base.push!(ind::Stoch, ohlcv::OHLCV)
     end
     # calculate d
     push!(ind.values_d, k)
-    if length(ind.values_d.output) > 0
-        d = ind.values_d.output[end]
+    if length(ind.values_d.value) > 0
+        d = ind.values_d.value[end]
     else
         d = missing
     end
 
     kd = StochVal(k, d)
-    push!(ind.output, kd)
+    push!(ind.value, kd)
     return kd
 end
-
-# I was surprised to see how much variety there was when it came to calculating the Stochastic indicator.
-# TradingView, talipp, and talib all have their own take on it.

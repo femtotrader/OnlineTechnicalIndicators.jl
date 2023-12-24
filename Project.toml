@@ -1,11 +1,12 @@
 name = "IncTA"
 uuid = "dc2d07fb-478f-4566-8417-81bb3e5a7af1"
 authors = ["FemtoTrader"]
-version = "1.0.0-DEV"
+version = "0.1.0-DEV"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 OnlineStats = "a15396b6-48d5-5d58-9928-6d29437db91e"
+OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
 
 [compat]
 julia = "1"
