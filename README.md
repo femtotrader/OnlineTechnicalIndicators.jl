@@ -6,6 +6,8 @@ This project implements some Technical Analysis Indicators in Julia in an increm
 
 It's inspired by Python project [talipp](https://github.com/nardew/talipp) which is used as "reference implementation" for unit tests.
 
+:construction: This software is under construction. API can have breaking changes.
+
 ## Install
 Open Julia command line interface.
 
