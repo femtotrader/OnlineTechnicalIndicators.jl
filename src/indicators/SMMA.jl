@@ -24,10 +24,10 @@ mutable struct SMMA{Tval} <: OnlineStat{Tval}
 end
 
 
-function OnlineStatsBase._fit!(ind::SMMA, val)
-    fit!(ind.input, val)
+function OnlineStatsBase._fit!(ind::SMMA, data)
+    fit!(ind.input, data)
     if ind.rolling  # CircBuff is full and rolling
-        ind.value = (ind.value * (ind.period - 1) + val) / ind.period
+        ind.value = (ind.value * (ind.period - 1) + data) / ind.period
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
@@ -39,57 +39,3 @@ function OnlineStatsBase._fit!(ind::SMMA, val)
         end
     end
 end
-
-
-#=
-function OnlineStatsBase._fit!(ind::SMMA, val)
-    fit!(ind.input, val)
-    if ind.rolling  # CircBuff is full and rolling
-        out_val = 2.0
-
-    else
-        if ind.n + 1 == ind.period  # CircBuff is full but not rolling
-            ind.rolling = true
-            out_val = 1.0
-
-        else  # CircBuff is filling up
-            ind.n += 1
-            out_val = missing
-        end
-    end
-    ind.value = out_val
-    return out_val
-end
-=#
-
-#=
-function Base.push!(ind::SMMA{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
-    N = length(ind.input)
-
-    if N < ind.period
-        out_val = missing
-    else
-        if !ind.rolling
-            ind.rolling = true
-            out_val = sum(ind.input) / ind.period
-        else
-            out_val = (ind.value[end] * (ind.period - 1) + val) / ind.period
-        end
-    end
-    push!(ind.value, out_val)
-    return out_val
-end
-=#
-
-#=
-function output(ind::SMMA)
-    try
-        return ind.value[ind.period]
-    catch e
-        if isa(e, BoundsError)
-            return missing
-        end
-    end
-end
-=#

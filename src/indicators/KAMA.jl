@@ -71,12 +71,13 @@ function OnlineStatsBase._fit!(ind::KAMA, data)
 
         smoothing_constant =
             (
-                efficiency_ratio * (ind.fast_smoothing_constant - ind.slow_smoothing_constant) +
+                efficiency_ratio *
+                (ind.fast_smoothing_constant - ind.slow_smoothing_constant) +
                 ind.slow_smoothing_constant
             )^2
 
         if !has_output_value(ind)  # tofix!!!!
-        #if length(ind.value) == 0  # tofix!!!!
+            #if length(ind.value) == 0  # tofix!!!!
             prev_kama = ind.input[end-1]
         else
             prev_kama = ind.value[end]
