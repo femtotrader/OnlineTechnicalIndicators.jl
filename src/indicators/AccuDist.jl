@@ -1,56 +1,45 @@
-const AccuDist_MEMORY = 3
-
 """
-    AccuDist{T}(; memory = AccuDist_MEMORY)
+    AccuDist{Tohlcv}()
 
 The AccuDist type implements an Accumulation and Distribution indicator.
 """
-mutable struct AccuDist{T} <: OnlineStat{T}
-    value::T
+mutable struct AccuDist{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}
     n::Int
 
-    memory::Integer
-
-    function AccuDist{T}(; memory = AccuDist_MEMORY) where {T}
-        value = CircularBuffer{Union{T,Missing}}(memory)
-        new{T}(value, 0, memory)
+    function AccuDist{Tohlcv}() where {Tohlcv}
+        new{Tohlcv}(missing, 0)
     end
 end
 
-function has_output_value(ind::AccuDist)
-    if length(ind.value) == 0
-        return false
-    else
-        if ismissing(ind.value[end])
-            return false
-        else
-            return true
-        end
+#= 
+# I'd like value type be defined more generally (ie not Float64) 
+mutable struct AccuDist{T, S} <: OnlineStat{T, S}
+    value::Union{Missing, S}
+    n::Int
+
+    function AccuDist{T, S}() where {T, S}
+        new{T, S}(missing, 0)
     end
 end
+=#
 
-function Base.push!(ind::AccuDist, value::OHLCV)
-    if value.high != value.low
+function OnlineStatsBase._fit!(ind::AccuDist, candle::OHLCV)
+    ind.n += 1
+    if candle.high != candle.low
         # Calculate MFI and MFV
         mfi =
-            ((value.close - value.low) - (value.high - value.close)) /
-            (value.high - value.low)
-        mfv = mfi * value.volume
+            ((candle.close - candle.low) - (candle.high - candle.close)) /
+            (candle.high - candle.low)
+        mfv = mfi * candle.volume
     else
-        # In case high and low are equal (division by zero), return previous value if exists, otherwise return None
-        if has_output_value(ind)
-            out_val = ind.value[end]
-        else
-            out_val = missing
-        end
+        # In case high and low are equal (division by zero), return previous value if exists, otherwise return missing
+        ind.value = value(ind)
+        return
     end
-
     if !has_output_value(ind)
-        out_val = mfv
+        ind.value = mfv
     else
-        out_val = ind.value[end] + mfv
+        ind.value = value(ind) + mfv
     end
-
-    push!(ind.value, out_val)
-    return out_val
 end

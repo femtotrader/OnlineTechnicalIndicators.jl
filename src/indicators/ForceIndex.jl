@@ -1,49 +1,44 @@
 const ForceIndex_PERIOD = 3
 
 """
-    ForceIndex{Ttime, Tprice, Tvol}(; period = ForceIndex_PERIOD)
+    ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD)
 
 The ForceIndex type implements a Force Index indicator.
 """
-mutable struct ForceIndex{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
-    value::CircularBuffer{Union{Tprice,Missing}}
+mutable struct ForceIndex{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}  # Tprice
     n::Int
 
     period::Integer
 
-    ema::EMA{Tprice}
+    ema::EMA{Float64}  # Tprice
 
     input::Tuple{
-        Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
-        Union{Missing,OHLCV{Ttime,Tprice,Tvol}},
+        Union{Missing,Tohlcv},
+        Union{Missing,Tohlcv},
     }
 
-    function ForceIndex{Ttime,Tprice,Tvol}(;
+    function ForceIndex{Tohlcv}(;
         period = ForceIndex_PERIOD,
-    ) where {Ttime,Tprice,Tvol}
+    ) where {Tohlcv}
+        Tprice = Float64
         ema = EMA{Tprice}(period = period)
         input = (missing, missing)
-        value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, 0, period, ema, input)
+        new{Tohlcv}(missing, 0, period, ema, input)
     end
 end
 
-function Base.push!(ind::ForceIndex, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::ForceIndex, candle::OHLCV)
     ind.input = (ind.input[end], candle)  # Keep a small window of input values
-
-    if any(ismissing.(ind.input))  #if ismissing(ind.input[end]) || ismissing(ind.input[end - 1])
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
-    end
-
-    push!(ind.ema, (ind.input[end].close - ind.input[end-1].close) * ind.input[end].volume)
-
-    if !has_output_value(ind.ema)
-        out_val = missing
+    ind.n += 1
+    if ind.n >= 2
+        fit!(ind.ema, (ind.input[end].close - ind.input[end-1].close) * ind.input[end].volume)
+        if has_output_value(ind.ema)
+            ind.value = value(ind.ema)
+        else
+            ind.value = missing
+        end    
     else
-        out_val = ind.ema.value[end]
+        ind.value = missing
     end
-    push!(ind.value, out_val)
-    return out_val
 end

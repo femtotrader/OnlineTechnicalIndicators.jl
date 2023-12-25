@@ -1,34 +1,33 @@
 const SOBV_PERIOD = 20
 
 """
-    SOBV{Ttime, Tprice, Tvol}(; period = SOBV_PERIOD)
+    SOBV{Tohlcv}(; period = SOBV_PERIOD)
 
 The SOBV type implements a Smoothed On Balance Volume indicator.
 """
-mutable struct SOBV{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
-    value::CircularBuffer{Union{Tprice,Missing}}
+mutable struct SOBV{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}  # Tprice
     n::Int
 
     period::Integer
 
-    obv::OBV{Ttime,Tprice,Tvol}
+    obv::OBV
+    sma_obv::SMA
 
-    function SOBV{Ttime,Tprice,Tvol}(; period = SOBV_PERIOD) where {Ttime,Tprice,Tvol}
-        obv = OBV{Ttime,Tprice,Tvol}(memory = period)
-        value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, 0, period, obv)
+    function SOBV{Tohlcv}(; period = SOBV_PERIOD) where {Tohlcv}
+        obv = OBV{Tohlcv}()
+        sma_obv = SMA{Float64}(period = period)
+        new{Tohlcv}(missing, 0, period, obv, sma_obv)
     end
 end
 
-function Base.push!(ind::SOBV, candle::OHLCV)
-    push!(ind.obv, candle)
-
-    if !has_output_value(ind.obv)
-        out_val = missing
+function OnlineStatsBase._fit!(ind::SOBV, candle::OHLCV)
+    fit!(ind.obv, candle)
+    fit!(ind.sma_obv, value(ind.obv))
+    ind.n += 1
+    if has_output_value(ind.obv)
+        ind.value = value(ind.sma_obv)
     else
-        out_val = sum(ind.obv.value) / ind.period
+        ind.value = missing
     end
-
-    push!(ind.value, out_val)
-    return out_val
 end

@@ -2,50 +2,42 @@ const ChaikinOsc_FAST_PERIOD = 5
 const ChaikinOsc_SLOW_PERIOD = 7
 
 """
-    ChaikinOsc{T}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD)
+    ChaikinOsc{Tohlcv}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD)
 
 The ChaikinOsc type implements a Chaikin Oscillator.
 """
-mutable struct ChaikinOsc{Tval} <: OnlineStat{Tval}
-    value::Union{Missing,Tval}
+mutable struct ChaikinOsc{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}  # Tprice?
     n::Int
 
-    accu_dist::AccuDist{Tval}
-    fast_ema::EMA{Tval}
-    slow_ema::EMA{Tval}
+    accu_dist::AccuDist{Tohlcv}
+    fast_ema::EMA{Float64}  # Tprice?
+    slow_ema::EMA{Float64}  # Tprice?
 
-    function ChaikinOsc{Tval}(;
+    function ChaikinOsc{Tohlcv}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
         slow_period = ChaikinOsc_SLOW_PERIOD,
-    ) where {Tval}
-        accu_dist = AccuDist{Tval}(memory = fast_period)
-        fast_ema = EMA{Tval}(period = fast_period)
-        slow_ema = EMA{Tval}(period = slow_period)
-        value = CircularBuffer{Union{Tval,Missing}}(fast_period)
-        new{Tval}(value, 0, accu_dist, fast_ema, slow_ema)
+    ) where {Tohlcv}
+        accu_dist = AccuDist{Tohlcv}()
+        fast_ema = EMA{Float64}(period = fast_period)
+        slow_ema = EMA{Float64}(period = slow_period)
+        new{Tohlcv}(missing, 0, accu_dist, fast_ema, slow_ema)
     end
 end
 
-function Base.push!(ind::ChaikinOsc, candle::OHLCV)
-    push!(ind.accu_dist, candle)
-
-    if !has_output_value(ind.accu_dist)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
+function OnlineStatsBase._fit!(ind::ChaikinOsc, candle::OHLCV)
+    fit!(ind.accu_dist, candle)
+    ind.n += 1
+    if has_output_value(ind.accu_dist)
+        accu_dist_value = value(ind.accu_dist)
+        fit!(ind.fast_ema, accu_dist_value)
+        fit!(ind.slow_ema, accu_dist_value)
+        if has_output_value(ind.fast_ema) && has_output_value(ind.slow_ema)
+            ind.value = value(ind.fast_ema) - value(ind.slow_ema)
+        else
+            ind.value = missing
+        end
+    else
+        ind.value = missing
     end
-
-    val = ind.accu_dist.value[end]
-    push!(ind.fast_ema, val)
-    push!(ind.slow_ema, val)
-
-    if !has_output_value(ind.fast_ema) || !has_output_value(ind.slow_ema)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
-    end
-
-    out_val = ind.fast_ema.value[end] - ind.slow_ema.value[end]
-    push!(ind.value, out_val)
-    return out_val
 end

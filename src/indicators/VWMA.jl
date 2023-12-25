@@ -1,23 +1,40 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Ttime, Tprice, Tvol}(; period = VWMA_PERIOD)
+    VWMA{Tohlcv}(; period = VWMA_PERIOD)
 
 The VWMA type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWMA{Ttime,Tprice,Tvol} <: OnlineStat{Tprice}
-    value::CircularBuffer{Union{Tprice,Missing}}
+mutable struct VWMA{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}
+    n::Int
 
     period::Integer
 
-    input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
+    input::CircBuff
 
-    function VWMA{Ttime,Tprice,Tvol}(; period = VWMA_PERIOD) where {Ttime,Tprice,Tvol}
-        input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, 0, period, input)
+    function VWMA{Tohlcv}(; period = VWMA_PERIOD) where {Tohlcv}
+        input = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv}(missing, 0, period, input)
     end
 end
+
+function OnlineStatsBase._fit!(ind::VWMA, candle::OHLCV)
+    fit!(ind.input, candle)
+    ind.n += 1
+    if ind.n >= ind.period
+        s = 0
+        v = 0
+        for candle_prev in value(ind.input)
+            s += candle_prev.close * candle_prev.volume
+            v += candle_prev.volume
+        end
+        ind.value = s / v
+    else
+        ind.value = missing
+    end
+end
+#=
 
 function Base.push!(
     ind::VWMA{Ttime,Tprice,Tvol},
@@ -38,3 +55,4 @@ function Base.push!(
     push!(ind.value, out_val)
     return out_val
 end
+=#

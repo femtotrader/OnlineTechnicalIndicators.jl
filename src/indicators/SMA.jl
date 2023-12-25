@@ -19,7 +19,7 @@ mutable struct SMA{Tval} <: OnlineStat{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::SMA, data)
-    if ind.n < length(ind.input.value)
+    if ind.n < length(value(ind.input))
         ind.n += 1
     end
     fit!(ind.input, data)

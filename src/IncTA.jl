@@ -5,9 +5,8 @@ export fit!
 
 export SampleData
 
-export Memory
-
-# simple indicators
+# simple indicators (single input)
+## single output => SISO
 export SMA
 export EMA
 export SMMA
@@ -16,33 +15,39 @@ export MeanDev
 export StdDev
 export ROC
 export WMA
-export BB
-export KST
-export KAMA
 export HMA
 export DPO
 export CoppockCurve
-export MACD
 export DEMA
+export KAMA
 export ALMA
+# simple indicators (single input)
+## multiple output => SIMO
+export BB
+export MACD
+export KST
 
-# OHLCV indicators
-# export VWMA
-# export VWAP
-# export AO
-# export ATR
-# export AccuDist
-# export BOP
-# export ForceIndex
-# export OBV
-# export SOBV
-# export EMV
-# export CCI
-# export ChaikinOsc
-# export MassIndex
-# export CHOP
-# export SuperTrend, Trend
-# export Stoch
+# OHLCV indicators (multiple input)
+## single output => MISO
+export VWMA
+export VWAP
+export AO
+export ATR
+export AccuDist
+export BOP
+export ForceIndex
+export OBV
+export SOBV
+export EMV
+export CCI
+export ChaikinOsc
+export MassIndex
+export CHOP
+export Stoch
+
+# OHLCV indicators (multiple input)
+## multiple output => MIMO
+export SuperTrend, Trend
 
 using DataStructures
 using OnlineStatsBase
@@ -56,7 +61,7 @@ function has_output_value(ind::T) where {T<:OnlineStat}
     return !ismissing(value(ind))
 end
 
-
+# SISO
 include("indicators/SMA.jl")
 include("indicators/EMA.jl")
 include("indicators/SMMA.jl")
@@ -65,6 +70,8 @@ include("indicators/MeanDev.jl")
 include("indicators/StdDev.jl")
 include("indicators/ROC.jl")
 include("indicators/WMA.jl")
+
+# SIMO
 include("indicators/BB.jl")
 include("indicators/KST.jl")
 include("indicators/KAMA.jl")
@@ -75,20 +82,24 @@ include("indicators/MACD.jl")
 include("indicators/DEMA.jl")
 include("indicators/ALMA.jl")
 
-# include("indicators/VWMA.jl")
-# include("indicators/VWAP.jl")
-# include("indicators/AO.jl")
-# include("indicators/ATR.jl")
-# include("indicators/AccuDist.jl")
-# include("indicators/BOP.jl")
-# include("indicators/ForceIndex.jl")
-# include("indicators/OBV.jl")
-# include("indicators/SOBV.jl")
-# include("indicators/EMV.jl")
-# include("indicators/CCI.jl")
-# include("indicators/ChaikinOsc.jl")
+# MISO
+include("indicators/AccuDist.jl")
+include("indicators/BOP.jl")
+include("indicators/CCI.jl")
+include("indicators/ChaikinOsc.jl")
+include("indicators/VWMA.jl")
+include("indicators/VWAP.jl")
+include("indicators/AO.jl")
+include("indicators/ATR.jl")
+include("indicators/ForceIndex.jl")
+include("indicators/OBV.jl")
+include("indicators/SOBV.jl")
+include("indicators/EMV.jl")
 # include("indicators/MassIndex.jl")
 # include("indicators/CHOP.jl")
-# include("indicators/SuperTrend.jl")
 # include("indicators/Stoch.jl")
+
+# MIMO
+# include("indicators/SuperTrend.jl")
+
 end
