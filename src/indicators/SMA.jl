@@ -5,6 +5,28 @@ const SMA_PERIOD = 3
 
 The SMA type implements a Simple Moving Average indicator.
 """
+mutable struct SMA{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
+    period::Int
+    input::CircBuff
+
+    function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
+        input = CircBuff(Tval, period, rev=false)
+        new{Tval}(missing, 0, period, input)
+    end
+end
+
+function OnlineStatsBase._fit!(ind::SMA, val)
+    if ind.n <= length(ind.input.value)
+        ind.n += 1
+    end
+    fit!(ind.input, val)
+    values = value(ind.input)
+    ind.value = sum(values) / length(values)  # mean(values)
+end
+
+#=
 mutable struct SMA{Tval} <: AbstractIncTAIndicator
     value::CircularBuffer{Tval}
 
@@ -21,7 +43,9 @@ mutable struct SMA{Tval} <: AbstractIncTAIndicator
         new{Tval}(value, period, sum, input)
     end
 end
+=#
 
+#=
 function Base.push!(ind::SMA{Tval}, val::Tval) where {Tval}
     if length(ind.input) < ind.period
         losing = zero(Tval)
@@ -42,9 +66,11 @@ function output(ind::SMA)
         return ind.sum / ind.period
     end
 end
+=#
 
 # ===
 
+#=
 """
     SMA_v02{T}(; period=SMA_PERIOD)
 
@@ -81,6 +107,7 @@ function output(ind::SMA_v02)
         end
     end
 end
+=#
 
 #=
 

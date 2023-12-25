@@ -5,8 +5,10 @@ export fit!
 
 export SampleData
 
+export Memory
+
 # simple indicators
-export SMA, SMA_v02  # , SMA_v03
+export SMA
 export EMA
 export SMMA
 export RSI
@@ -43,14 +45,12 @@ export SuperTrend, Trend
 export Stoch
 
 using DataStructures
-using OnlineStats
 using OnlineStatsBase
 
 abstract type AbstractIncTAIndicator end
 
 include("ohlcv.jl")
 include("sample_data.jl")
-include("memory.jl")
 
 function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
     if length(ind.value) == 0
@@ -64,11 +64,13 @@ function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
     end
 end
 
+#=
 function fit!(ind::T, values::Vector) where {T<:AbstractIncTAIndicator}
     for value in values
         push!(ind, value)
     end
 end
+=#
 
 include("indicators/SMA.jl")
 include("indicators/EMA.jl")
