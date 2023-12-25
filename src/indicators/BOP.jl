@@ -1,31 +1,26 @@
-const BOP_MEMORY = 3
-
 """
-    BOP{T}(; memory = BOP_MEMORY)
+    BOP{Tohlcv}()
 
 The BOP type implements a Balance Of Power indicator.
 """
-mutable struct BOP{T} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{T,Missing}}
+mutable struct BOP{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}
+    n::Int
 
-    memory::Integer
-
-    function BOP{T}(; memory = BOP_MEMORY) where {T}
-        value = CircularBuffer{Union{T,Missing}}(memory)
-        new{T}(value, memory)
+    function BOP{Tohlcv}() where {Tohlcv}
+        new{Tohlcv}(missing, 0)
     end
 end
 
-function Base.push!(ind::BOP, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::BOP, candle::OHLCV)
+    ind.n += 1
     if candle.high != candle.low
-        out_val = (candle.close - candle.open) / (candle.high - candle.low)
+        ind.value = (candle.close - candle.open) / (candle.high - candle.low)
     else
-        if length(ind.value) > 0
-            out_val = ind.value[end]
+        if ind.n > 0
+            ind.value = value(ind)
         else
-            out_val = missing
+            ind.value = missing
         end
     end
-    push!(ind.value, out_val)
-    return out_val
 end

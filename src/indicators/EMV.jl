@@ -2,60 +2,54 @@ const EMV_PERIOD = 20
 const EMV_VOLUME_DIV = 10000
 
 """
-    EMV{Ttime, Tprice, Tvol}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV)
+    EMV{Tohlcv}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV)
 
 The EMV type implements a Ease of Movement indicator.
 """
-mutable struct EMV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Tprice,Missing}}
+mutable struct EMV{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,Float64}  # Tprice
+    n::Int
 
     period::Integer
     volume_div::Integer
 
-    emv_sma::SMA{Tprice}
+    emv_sma::SMA{Float64}  # Tprice
 
-    input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
+    input::CircBuff{Tohlcv}
 
-    function EMV{Ttime,Tprice,Tvol}(;
+    function EMV{Tohlcv}(;
         period = EMV_PERIOD,
         volume_div = EMV_VOLUME_DIV,
-    ) where {Ttime,Tprice,Tvol}
+    ) where {Tohlcv}
+        Tprice = Float64
         emv_sma = SMA{Tprice}(period = period)
-
-        input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, period, volume_div, emv_sma, input)
+        input = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv}(missing, 0, period, volume_div, emv_sma, input)
     end
 end
 
-function Base.push!(ind::EMV, candle::OHLCV)
-    push!(ind.input, candle)
-
-    if length(ind.input) < 2
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
-    end
-
-    value = ind.input[end]
-    value2 = ind.input[end-1]
-
-    if value.high ≠ value.low
-        distance = ((value.high + value.low) / 2) - ((value2.high + value2.low) / 2)
-        box_ratio = (value.volume / ind.volume_div / (value.high - value.low))
-        emv = distance / box_ratio
+function OnlineStatsBase._fit!(ind::EMV, candle::OHLCV)
+    fit!(ind.input, candle)
+    ind.n += 1
+    if ind.n >= 2
+        #candle = ind.input[end]
+        candle_prev = ind.input[end-1]
+        if candle.high != candle.low
+            distance = ((candle.high + candle.low) / 2) - ((candle_prev.high + candle_prev.low) / 2)
+            box_ratio = (candle.volume / ind.volume_div / (candle.high - candle.low))
+            emv = distance / box_ratio
+        else
+            emv = 0.0
+        end
+    
+        fit!(ind.emv_sma, emv)
+    
+        if length(ind.emv_sma.value) >= 1
+            ind.value = value(ind.emv_sma)
+        else
+            ind.value = missing
+        end            
     else
-        emv = 0.0
+        ind.value = missing
     end
-
-    push!(ind.emv_sma, emv)
-
-    if length(ind.emv_sma.value) < 1
-        out_val = missing
-    else
-        out_val = ind.emv_sma.value[end]
-    end
-
-    push!(ind.value, out_val)
-    return out_val
 end

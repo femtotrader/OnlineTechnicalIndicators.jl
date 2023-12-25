@@ -28,8 +28,9 @@ end
 
 The KST type implements Know Sure Thing indicator.
 """
-mutable struct KST{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Missing,KSTVal{Tval}}}
+mutable struct KST{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,KSTVal{Tval}}
+    n::Int
 
     roc1::SMA{Tval}
     roc2::SMA{Tval}
@@ -66,9 +67,9 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
 
         signal_line = SMA{Tval}(period = signal_period)
 
-        value = CircularBuffer{Union{Missing,KSTVal{Tval}}}(roc1_period)
         new{Tval}(
-            value,
+            missing,
+            0,
             roc1,
             roc2,
             roc3,
@@ -82,35 +83,36 @@ mutable struct KST{Tval} <: AbstractIncTAIndicator
     end
 end
 
-function Base.push!(ind::KST{Tval}, val::Tval) where {Tval}
-    push!(ind.roc1, val)
-    push!(ind.roc2, val)
-    push!(ind.roc3, val)
-    push!(ind.roc4, val)
+function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
+    fit!(ind.roc1, data)
+    fit!(ind.roc2, data)
+    fit!(ind.roc3, data)
+    fit!(ind.roc4, data)
+
+    ind.n += 1
 
     if has_output_value(ind.roc1)
-        push!(ind.roc1_ma, ind.roc1.value[end])
+        fit!(ind.roc1_ma, ind.roc1.value[end])
     end
 
     if has_output_value(ind.roc2)
-        push!(ind.roc2_ma, ind.roc2.value[end])
+        fit!(ind.roc2_ma, ind.roc2.value[end])
     end
 
     if has_output_value(ind.roc3)
-        push!(ind.roc3_ma, ind.roc3.value[end])
+        fit!(ind.roc3_ma, ind.roc3.value[end])
     end
 
     if has_output_value(ind.roc4)
-        push!(ind.roc4_ma, ind.roc4.value[end])
+        fit!(ind.roc4_ma, ind.roc4.value[end])
     end
 
     if !has_output_value(ind.roc1) ||
        !has_output_value(ind.roc2) ||
        !has_output_value(ind.roc3) ||
        !has_output_value(ind.roc4)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
+        ind.value = missing
+        return
     end
 
     kst =
@@ -118,7 +120,7 @@ function Base.push!(ind::KST{Tval}, val::Tval) where {Tval}
         2.0 * ind.roc2_ma.value[end] +
         3.0 * ind.roc3_ma.value[end] +
         4.0 * ind.roc4_ma.value[end]
-    push!(ind.signal_line, kst)
+    fit!(ind.signal_line, kst)
 
     if length(ind.signal_line.value) > 0
         signal_value = ind.signal_line.value[end]
@@ -126,7 +128,5 @@ function Base.push!(ind::KST{Tval}, val::Tval) where {Tval}
         signal_value = missing
     end
 
-    out_val = KSTVal(kst, signal_value)
-    push!(ind.value, out_val)
-    return out_val
+    ind.value = KSTVal(kst, signal_value)
 end

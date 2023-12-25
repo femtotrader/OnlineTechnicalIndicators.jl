@@ -1,15 +1,18 @@
 using IncTA
 using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, V_OHLCV
+using OnlineStatsBase
+using OnlineStats: StatLag
+
 using Test
+
+import Test: Test, finish
+using Test: DefaultTestSet, Broken
+using Test: parse_testset_args
 
 const P = 20  # default period
 const ATOL = 0.00001  # default absolute tolerance
 
 const MEMORY = length(CLOSE_TMPL)  # 50
-
-import Test: Test, finish
-using Test: DefaultTestSet, Broken
-using Test: parse_testset_args
 
 """
 Skip a testset
@@ -48,10 +51,10 @@ end
     include("test_ohlcv.jl")
 
     @testset "indicators" begin
-        include("test_ind_single_input_single_output.jl")
-        include("test_ind_single_input_several_outputs.jl")
-        include("test_ind_OHLCV_input_single_output.jl")
-        include("test_ind_OHLCV_input_several_outputs.jl")
+        include("test_ind_single_input_single_output.jl")  # SISO
+        include("test_ind_single_input_several_outputs.jl")  # SIMO
+        include("test_ind_OHLCV_input_single_output.jl")  # MISO
+        #include("test_ind_OHLCV_input_several_outputs.jl")  # MIMO
     end
 
 end

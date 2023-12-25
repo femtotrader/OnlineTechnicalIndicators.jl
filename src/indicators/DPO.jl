@@ -5,37 +5,34 @@ const DPO_PERIOD = 20
 
 The DPO type implements a Detrended Price Oscillator indicator.
 """
-mutable struct DPO{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Missing,Tval}}
+mutable struct DPO{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
 
     sma::SMA{Tval}
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function DPO{Tval}(; period = DPO_PERIOD) where {Tval}
-        input = CircularBuffer{Tval}(period)
-        value = CircularBuffer{Union{Missing,Tval}}(period)
-
+        input = CircBuff(Tval, period, rev = false)
         sma = SMA{Tval}(period = period)
-
-        new{Tval}(value, period, sma, input)
+        new{Tval}(missing, 0, period, sma, input)
     end
 end
 
-
-function Base.push!(ind::DPO{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
-    push!(ind.sma, val)
-
-    semi_period = floor(Int, ind.period / 2)
-    if length(ind.input) < semi_period + 2 || length(ind.sma.value) < 1
-        out_val = missing
-    else
-        out_val = ind.input[end-semi_period-1] - ind.sma.value[end]
+function OnlineStatsBase._fit!(ind::DPO, data)
+    fit!(ind.input, data)
+    fit!(ind.sma, data)
+    if ind.n != ind.period
+        ind.n += 1
     end
-
-    push!(ind.value, out_val)
-    return out_val
+    semi_period = floor(Int, ind.period / 2)
+    if length(ind.input) >= semi_period + 2 && length(ind.sma.value) >= 1
+        ind.value = ind.input[end-semi_period-1] - ind.sma.value[end]
+    else
+        ind.value = missing
+    end
+    return ind.value
 end

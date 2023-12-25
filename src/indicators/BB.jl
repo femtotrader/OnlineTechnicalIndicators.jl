@@ -12,8 +12,9 @@ end
 
 The BB type implements Bollinger Bands indicator.
 """
-mutable struct BB{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Missing,BBVal{Tval}}}
+mutable struct BB{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,BBVal{Tval}}
+    n::Int
 
     period::Integer
     std_dev_multiplier::Tval
@@ -27,25 +28,22 @@ mutable struct BB{Tval} <: AbstractIncTAIndicator
     ) where {Tval}
         central_band = SMA{Tval}(period = period)
         std_dev = StdDev{Tval}(period = period)
-
-        value = CircularBuffer{Union{Missing,BBVal{Tval}}}(period)
-        new{Tval}(value, period, std_dev_multiplier, central_band, std_dev)
+        new{Tval}(missing, 0, period, std_dev_multiplier, central_band, std_dev)
     end
 end
 
-function Base.push!(ind::BB{Tval}, val::Tval) where {Tval}
-    push!(ind.central_band, val)
-    push!(ind.std_dev, val)
-    if !has_output_value(ind.central_band)
-        out_val = missing
-    else
-        lower =
-            ind.central_band.value[end] - ind.std_dev_multiplier * ind.std_dev.value[end]
-        central = ind.central_band.value[end]
-        upper =
-            ind.central_band.value[end] + ind.std_dev_multiplier * ind.std_dev.value[end]
-        out_val = BBVal{Tval}(lower, central, upper)
+function OnlineStatsBase._fit!(ind::BB{Tval}, data::Tval) where {Tval}
+    fit!(ind.central_band, data)
+    fit!(ind.std_dev, data)
+    if ind.n != ind.period
+        ind.n += 1
     end
-    push!(ind.value, out_val)
-    return out_val
+    if !has_output_value(ind.central_band)
+        ind.value = missing
+    else
+        lower = value(ind.central_band) - ind.std_dev_multiplier * value(ind.std_dev)
+        central = value(ind.central_band)
+        upper = value(ind.central_band) + ind.std_dev_multiplier * value(ind.std_dev)
+        ind.value = BBVal{Tval}(lower, central, upper)
+    end
 end

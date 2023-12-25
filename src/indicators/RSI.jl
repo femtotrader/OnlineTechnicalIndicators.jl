@@ -5,32 +5,35 @@ const RSI_PERIOD = 3
 
 The RSI type implements a Relative Strength Index indicator.
 """
-mutable struct RSI{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Tval,Missing}}
+mutable struct RSI{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
 
     gains::SMMA{Tval}
     losses::SMMA{Tval}
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
-        input = CircularBuffer{Tval}(period)
-        value = CircularBuffer{Union{Tval,Missing}}(period)
+        input = CircBuff(Tval, 2, rev = false)
+        value = missing
         gains = SMMA{Tval}(period = period)
         losses = SMMA{Tval}(period = period)
-        new{Tval}(value, period, gains, losses, input)
+        new{Tval}(value, 0, period, gains, losses, input)
     end
 end
 
-function Base.push!(ind::RSI{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
+function OnlineStatsBase._fit!(ind::RSI, val)
+    fit!(ind.input, val)
+    if ind.n < ind.period
+        ind.n += 1
+    end
 
     if length(ind.input) < 2
-        rsi = missing
-        push!(ind.value, rsi)
-        return rsi
+        ind.value = missing
+        return ind.value
     end
 
     change = ind.input[end] - ind.input[end-1]
@@ -38,32 +41,22 @@ function Base.push!(ind::RSI{Tval}, val::Tval) where {Tval}
     gain = change > 0 ? change : 0.0
     loss = change < 0 ? -change : 0.0
 
-    push!(ind.gains, gain)
-    push!(ind.losses, loss)
+    fit!(ind.gains, gain)
+    fit!(ind.losses, loss)
 
-    _losses = output(ind.losses)
+    _losses = value(ind.losses)
     if ismissing(_losses)
-        rsi = missing
-        push!(ind.value, rsi)
-        return rsi
+        ind.value = missing
+        return ind.value
     end
 
     if _losses == 0
-        rsi = Tval(100)
+        rsi = 100.0
     else
-        rs = output(ind.gains) / _losses
-        rsi = Tval(100) - Tval(100) / (Tval(1) + rs)
+        rs = value(ind.gains) / _losses
+        rsi = 100.0 - 100.0 / (1.0 + rs)
     end
-    push!(ind.value, rsi)
-    return rsi
-end
+    ind.value = rsi
+    return ind.value
 
-function output(ind::RSI)
-    try
-        return ind.value[ind.period]
-    catch e
-        if isa(e, BoundsError)
-            return missing
-        end
-    end
 end

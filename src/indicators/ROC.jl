@@ -5,32 +5,28 @@ const ROC_PERIOD = 3
 
 The ROC type implements a Rate Of Change indicator.
 """
-mutable struct ROC{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Tval,Missing}}
+mutable struct ROC{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function ROC{Tval}(; period = ROC_PERIOD) where {Tval}
-        input = CircularBuffer{Tval}(period + 1)
-        value = CircularBuffer{Union{Tval,Missing}}(period + 1)
-        new{Tval}(value, period, input)
+        input = CircBuff(Tval, period + 1, rev = false)
+        new{Tval}(missing, 0, period, input)
     end
 end
 
-function Base.push!(ind::ROC{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
-    if length(ind.input) - ind.period < 1
-        out_val = missing
-    else
-        out_val =
+function OnlineStatsBase._fit!(ind::ROC, data)
+    fit!(ind.input, data)
+    if ind.n == ind.period
+        ind.value =
             100.0 * (ind.input[end] - ind.input[end-ind.period]) / ind.input[end-ind.period]
+    else
+        ind.n += 1
+        ind.value = missing
     end
-    push!(ind.value, out_val)
-    return out_val
-end
-
-function output(ind::ROC)
-    return ind.value[end]
+    return ind.value
 end
