@@ -15,7 +15,7 @@ mutable struct RSI{Tval} <: OnlineStat{Tval}
     losses::SMMA{Tval}
 
     rolling::Bool
-    input::CircBuff
+    input::CircBuff{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
         input = CircBuff(Tval, 2, rev=false)

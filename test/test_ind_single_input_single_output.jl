@@ -103,8 +103,6 @@
         @test isapprox(value(ind), 53.459494; atol = ATOL)
     end
 
-    #=
-
     @testset "MeanDev" begin
         ind = MeanDev{Float64}(period = P)
         ind = StatLag(ind, 3)
@@ -112,10 +110,9 @@
         @test isapprox(value(ind.lag[end-2]), 0.608949; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 0.595400; atol = ATOL)
         @test isapprox(value(ind), 0.535500; atol = ATOL)
-        @test length(ind.input) == P
-        @test length(ind.value) == P
     end
 
+    #=
     @testset "StdDev" begin
         ind = StdDev{Float64}(period = P)
         ind = StatLag(ind, 3)

@@ -9,7 +9,7 @@ mutable struct SMA{Tval} <: OnlineStat{Tval}
     value::Union{Missing,Tval}
     n::Int
     period::Int
-    input::CircBuff
+    input::CircBuff{Tval}
 
     function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input = CircBuff(Tval, period, rev=false)

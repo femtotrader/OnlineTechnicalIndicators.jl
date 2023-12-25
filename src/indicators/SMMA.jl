@@ -13,7 +13,7 @@ mutable struct SMMA{Tval} <: OnlineStat{Tval}
 
     rolling::Bool
 
-    input::CircBuff
+    input::CircBuff{Tval}
 
     function SMMA{Tval}(; period = SMMA_PERIOD) where {Tval}
         value = missing

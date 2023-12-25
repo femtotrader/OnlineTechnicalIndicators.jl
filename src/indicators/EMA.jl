@@ -12,7 +12,7 @@ mutable struct EMA{Tval} <: OnlineStat{Tval}
     period::Int
 
     rolling::Bool
-    input::CircBuff
+    input::CircBuff{Tval}
 
     function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
         input = CircBuff(Tval, period, rev=false)
