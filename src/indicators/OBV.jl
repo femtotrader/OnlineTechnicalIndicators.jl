@@ -9,10 +9,7 @@ mutable struct OBV{Tohlcv} <: OnlineStat{Tohlcv}
     value::Union{Missing,Float64}  # Tprice
     n::Int
 
-    input::Tuple{
-        Union{Missing,Tohlcv},
-        Union{Missing,Tohlcv},
-    }
+    input::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
 
     function OBV{Tohlcv}() where {Tohlcv}
         input = (missing, missing)

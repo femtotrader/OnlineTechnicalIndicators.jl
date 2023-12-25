@@ -13,14 +13,9 @@ mutable struct ForceIndex{Tohlcv} <: OnlineStat{Tohlcv}
 
     ema::EMA{Float64}  # Tprice
 
-    input::Tuple{
-        Union{Missing,Tohlcv},
-        Union{Missing,Tohlcv},
-    }
+    input::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
 
-    function ForceIndex{Tohlcv}(;
-        period = ForceIndex_PERIOD,
-    ) where {Tohlcv}
+    function ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD) where {Tohlcv}
         Tprice = Float64
         ema = EMA{Tprice}(period = period)
         input = (missing, missing)
@@ -32,12 +27,15 @@ function OnlineStatsBase._fit!(ind::ForceIndex, candle::OHLCV)
     ind.input = (ind.input[end], candle)  # Keep a small window of input values
     ind.n += 1
     if ind.n >= 2
-        fit!(ind.ema, (ind.input[end].close - ind.input[end-1].close) * ind.input[end].volume)
+        fit!(
+            ind.ema,
+            (ind.input[end].close - ind.input[end-1].close) * ind.input[end].volume,
+        )
         if has_output_value(ind.ema)
             ind.value = value(ind.ema)
         else
             ind.value = missing
-        end    
+        end
     else
         ind.value = missing
     end
