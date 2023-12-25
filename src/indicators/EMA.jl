@@ -9,13 +9,14 @@ The EMA type implements an Exponential Moving Average indicator.
 mutable struct EMA{Tval} <: OnlineStat{Tval}
     value::Union{Missing,Tval}
     n::Int
+
     period::Int
 
     rolling::Bool
     input::CircBuff{Tval}
 
     function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
-        input = CircBuff(Tval, period, rev=false)
+        input = CircBuff(Tval, period, rev = false)
         new{Tval}(missing, 0, period, false, input)
     end
 end
@@ -28,6 +29,7 @@ function OnlineStatsBase._fit!(ind::EMA, val)
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
+            ind.n += 1
             out_val = sum(ind.input.value) / ind.period
         else  # CircBuff is filling up
             ind.n += 1

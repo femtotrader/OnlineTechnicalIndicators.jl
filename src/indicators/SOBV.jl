@@ -5,8 +5,9 @@ const SOBV_PERIOD = 20
 
 The SOBV type implements a Smoothed On Balance Volume indicator.
 """
-mutable struct SOBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct SOBV{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
     value::CircularBuffer{Union{Tprice,Missing}}
+    n::Int
 
     period::Integer
 
@@ -15,7 +16,7 @@ mutable struct SOBV{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     function SOBV{Ttime,Tprice,Tvol}(; period = SOBV_PERIOD) where {Ttime,Tprice,Tvol}
         obv = OBV{Ttime,Tprice,Tvol}(memory = period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, period, obv)
+        new{Ttime,Tprice,Tvol}(value, 0, period, obv)
     end
 end
 

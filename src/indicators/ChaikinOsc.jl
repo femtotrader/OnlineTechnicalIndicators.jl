@@ -6,8 +6,9 @@ const ChaikinOsc_SLOW_PERIOD = 7
 
 The ChaikinOsc type implements a Chaikin Oscillator.
 """
-mutable struct ChaikinOsc{Tval} <: AbstractIncTAIndicator
+mutable struct ChaikinOsc{Tval} <: OnlineStat{Tval}
     value::Union{Missing,Tval}
+    n::Int
 
     accu_dist::AccuDist{Tval}
     fast_ema::EMA{Tval}
@@ -21,7 +22,7 @@ mutable struct ChaikinOsc{Tval} <: AbstractIncTAIndicator
         fast_ema = EMA{Tval}(period = fast_period)
         slow_ema = EMA{Tval}(period = slow_period)
         value = CircularBuffer{Union{Tval,Missing}}(fast_period)
-        new{Tval}(value, accu_dist, fast_ema, slow_ema)
+        new{Tval}(value, 0, accu_dist, fast_ema, slow_ema)
     end
 end
 

@@ -7,17 +7,18 @@ const SLOW_EMA_CONSTANT_PERIOD = 30
 
 The KAMA type implements a Kaufman's Adaptive Moving Average indicator.
 """
-mutable struct KAMA{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Missing,Tval}}
+mutable struct KAMA{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
 
     fast_smoothing_constant::Tval
     slow_smoothing_constant::Tval
 
-    volatilities::CircularBuffer{Tval}
+    volatilities::CircBuff{Tval}
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function KAMA{Tval}(;
         period = KAMA_PERIOD,
@@ -29,13 +30,13 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
         fast_smoothing_constant = 2.0 / (fast_ema_constant_period + 1)
         slow_smoothing_constant = 2.0 / (slow_ema_constant_period + 1)
 
-        volatilities = CircularBuffer{Tval}(period)
+        volatilities = CircBuff(Tval, period, rev = false)
 
-        input = CircularBuffer{Tval}(period)
-        value = CircularBuffer{Union{Missing,Tval}}(period)
+        input = CircBuff(Tval, period, rev = false)
 
         new{Tval}(
-            value,
+            missing,
+            0,
             period,
             fast_smoothing_constant,
             slow_smoothing_constant,
@@ -45,49 +46,43 @@ mutable struct KAMA{Tval} <: AbstractIncTAIndicator
     end
 end
 
-
-function Base.push!(ind::KAMA{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
-
-    if length(ind.input) < 2
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
+function OnlineStatsBase._fit!(ind::KAMA, data)
+    fit!(ind.input, data)
+    if ind.n != ind.period
+        ind.n += 1
     end
 
-    push!(ind.volatilities, abs(ind.input[end] - ind.input[end-1]))
+    if ind.n >= 2
+        fit!(ind.volatilities, abs(ind.input[end] - ind.input[end-1]))
 
-    if length(ind.volatilities) < ind.period
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
+        if length(ind.volatilities) < ind.period
+            ind.value = missing
+            return
+        end
+
+        volatility = sum(value(ind.volatilities))
+        change = abs(ind.input[end] - ind.input[1])
+
+        if volatility != 0
+            efficiency_ratio = change / volatility
+        else
+            efficiency_ratio = 0
+        end
+
+        smoothing_constant =
+            (
+                efficiency_ratio * (ind.fast_smoothing_constant - ind.slow_smoothing_constant) +
+                ind.slow_smoothing_constant
+            )^2
+
+        if !has_output_value(ind)  # tofix!!!!
+        #if length(ind.value) == 0  # tofix!!!!
+            prev_kama = ind.input[end-1]
+        else
+            prev_kama = ind.value[end]
+        end
+
+        ind.value = prev_kama + smoothing_constant * (ind.input[end] - prev_kama)
     end
 
-    volatility = sum(ind.volatilities)
-    change = abs(ind.input[end] - ind.input[1])
-
-    if volatility != 0
-        efficiency_ratio = change / volatility
-    else
-        efficiency_ratio = 0
-    end
-
-    smoothing_constant =
-        (
-            efficiency_ratio * (ind.fast_smoothing_constant - ind.slow_smoothing_constant) +
-            ind.slow_smoothing_constant
-        )^2
-
-    # if !has_output_value(ind)  # tofix!!!!
-    if length(ind.value) == 0  # tofix!!!!
-        prev_kama = ind.input[end-1]
-    else
-        prev_kama = ind.value[end]
-    end
-
-    println(prev_kama)
-
-    out_val = prev_kama + smoothing_constant * (ind.input[end] - prev_kama)
-    push!(ind.value, out_val)
-    return out_val
 end

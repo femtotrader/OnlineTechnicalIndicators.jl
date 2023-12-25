@@ -5,14 +5,15 @@ const AccuDist_MEMORY = 3
 
 The AccuDist type implements an Accumulation and Distribution indicator.
 """
-mutable struct AccuDist{T} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{T,Missing}}
+mutable struct AccuDist{T} <: OnlineStat{T}
+    value::T
+    n::Int
 
     memory::Integer
 
     function AccuDist{T}(; memory = AccuDist_MEMORY) where {T}
         value = CircularBuffer{Union{T,Missing}}(memory)
-        new{T}(value, memory)
+        new{T}(value, 0, memory)
     end
 end
 

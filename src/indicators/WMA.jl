@@ -5,8 +5,9 @@ const WMA_PERIOD = 3
 
 The WMA type implements a Weighted Moving Average indicator.
 """
-mutable struct WMA{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Tval}
+mutable struct WMA{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
 
@@ -14,39 +15,28 @@ mutable struct WMA{Tval} <: AbstractIncTAIndicator
     numerator::Tval
     denominator::Tval
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
-        input = CircularBuffer{Tval}(period)
-        value = CircularBuffer{Tval}(period)
+        input = CircBuff(Tval, period, rev = false)
         total = zero(Tval)
         numerator = zero(Tval)
         denominator = period * (period + 1) / 2.0
-        new{Tval}(value, period, total, numerator, denominator, input)
+        new{Tval}(missing, 0, period, total, numerator, denominator, input)
     end
 end
 
-function Base.push!(ind::WMA{Tval}, val::Tval) where {Tval}
-    if length(ind.input) < ind.period
-        losing = zero(Tval)
-    else
+function OnlineStatsBase._fit!(ind::WMA{Tval}, data::Tval) where {Tval}
+    if ind.n == ind.period
         losing = ind.input[1]
-    end
-    push!(ind.input, val)
-    # See https://en.wikipedia.org/wiki/Moving_average#Weighted_moving_average
-    ind.numerator = ind.numerator + ind.period * val - ind.total
-    ind.total = ind.total + val - losing
-    out_val = ind.numerator / ind.denominator
-    push!(ind.value, out_val)
-    return out_val
-end
-
-#=
-function output(ind::WMA)
-    if length(ind.input) < ind.period
-        missing
     else
-        return ind.sum / ind.period
+        losing = zero(Tval)
+        ind.n += 1
     end
+    fit!(ind.input, data)
+    # See https://en.wikipedia.org/wiki/Moving_average#Weighted_moving_average
+    ind.numerator = ind.numerator + ind.period * data - ind.total
+    ind.total = ind.total + data - losing
+    ind.value = ind.numerator / ind.denominator
+    return ind.value
 end
-=#

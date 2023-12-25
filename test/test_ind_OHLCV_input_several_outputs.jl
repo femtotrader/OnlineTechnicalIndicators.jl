@@ -2,6 +2,7 @@
 
     @testset "SuperTrend" begin
         ind = SuperTrend{Missing,Float64,Float64}(atr_period = 10, mult = 3)
+        @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
         # @test isapprox(ind[end-15].value, 9.711592; atol=ATOL) # pretty old!
         # @test ind[end-15].trend == Trend.DOWN # pretty old!

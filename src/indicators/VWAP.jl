@@ -5,8 +5,9 @@ const VWAP_MEMORY = 3
 
 The VWAP type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWAP{Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct VWAP{Tprice,Tvol} <: OnlineStat{Tval}
     value::CircularBuffer{Union{Tprice,Missing}}
+    n::Int
 
     memory::Integer
 
@@ -17,7 +18,7 @@ mutable struct VWAP{Tprice,Tvol} <: AbstractIncTAIndicator
         sum_price_vol = zero(Tprice)
         sum_vol = zero(Tvol)
         value = CircularBuffer{Union{Tprice,Missing}}(memory)
-        new{Tprice,Tvol}(value, memory, sum_price_vol, sum_vol)
+        new{Tprice,Tvol}(value, 0, memory, sum_price_vol, sum_vol)
     end
 end
 

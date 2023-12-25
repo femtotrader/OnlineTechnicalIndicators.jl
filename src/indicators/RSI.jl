@@ -7,40 +7,33 @@ The RSI type implements a Relative Strength Index indicator.
 """
 mutable struct RSI{Tval} <: OnlineStat{Tval}
     value::Union{Missing,Tval}
-    n::Integer
+    n::Int
 
     period::Integer
 
     gains::SMMA{Tval}
     losses::SMMA{Tval}
 
-    rolling::Bool
     input::CircBuff{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
-        input = CircBuff(Tval, 2, rev=false)
+        input = CircBuff(Tval, 2, rev = false)
         value = missing
         gains = SMMA{Tval}(period = period)
         losses = SMMA{Tval}(period = period)
-        new{Tval}(value, 0, period, gains, losses, false, input)
+        new{Tval}(value, 0, period, gains, losses, input)
     end
 end
 
-function OnlineStatsBase._fit!(ind::RSI, val::Tval) where {Tval <: Number}
+function OnlineStatsBase._fit!(ind::RSI, val)
     fit!(ind.input, val)
+    if ind.n < ind.period
+        ind.n += 1
+    end
 
     if length(ind.input) < 2
         ind.value = missing
         return ind.value
-    end
-
-    if ind.n + 1 == 2 # CircBuff is full but not rolling
-        ind.rolling = true
-        out_val = 1.0
-
-    else  # CircBuff is filling up
-        ind.n += 1
-        out_val = missing
     end
 
     change = ind.input[end] - ind.input[end-1]
@@ -58,12 +51,12 @@ function OnlineStatsBase._fit!(ind::RSI, val::Tval) where {Tval <: Number}
     end
 
     if _losses == 0
-        rsi = Tval(100)
+        rsi = 100.0
     else
         rs = value(ind.gains) / _losses
-        rsi = Tval(100) - Tval(100) / (Tval(1) + rs)
+        rsi = 100.0 - 100.0 / (1.0 + rs)
     end
     ind.value = rsi
     return ind.value
-    
+
 end

@@ -12,8 +12,9 @@ end
 
 The BB type implements Bollinger Bands indicator.
 """
-mutable struct BB{Tval} <: AbstractIncTAIndicator
+mutable struct BB{Tval} <: OnlineStat{Tval}
     value::CircularBuffer{Union{Missing,BBVal{Tval}}}
+    n::Int
 
     period::Integer
     std_dev_multiplier::Tval
@@ -29,7 +30,7 @@ mutable struct BB{Tval} <: AbstractIncTAIndicator
         std_dev = StdDev{Tval}(period = period)
 
         value = CircularBuffer{Union{Missing,BBVal{Tval}}}(period)
-        new{Tval}(value, period, std_dev_multiplier, central_band, std_dev)
+        new{Tval}(value, 0, period, std_dev_multiplier, central_band, std_dev)
     end
 end
 

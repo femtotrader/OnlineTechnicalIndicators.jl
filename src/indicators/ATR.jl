@@ -5,8 +5,9 @@ const ATR_PERIOD = 3
 
 The ATR type implements an Average True Range indicator.
 """
-mutable struct ATR{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct ATR{Ttime,Tprice,Tvol} <: OnlineStat{Tprice}
     value::CircularBuffer{Union{Tprice,Missing}}
+    n::Int
 
     period::Number
 
@@ -19,7 +20,7 @@ mutable struct ATR{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         tr = CircularBuffer{Tprice}(period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, period, tr, false, input)
+        new{Ttime,Tprice,Tvol}(value, 0, period, tr, false, input)
     end
 end
 

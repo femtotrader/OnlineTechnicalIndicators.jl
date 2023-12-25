@@ -11,8 +11,9 @@ end
 
 The Stoch type implements the Stochastic indicator.
 """
-mutable struct Stoch{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct Stoch{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
     value::CircularBuffer{Union{Missing,StochVal{Tprice}}}
+    n::Int
 
     period::Integer
     smoothing_period::Integer
@@ -27,7 +28,7 @@ mutable struct Stoch{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
         values_d = SMA{Tprice}(; period = smoothing_period)
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Missing,StochVal{Tprice}}}(period)
-        new{Ttime,Tprice,Tvol}(value, period, smoothing_period, values_d, input)
+        new{Ttime,Tprice,Tvol}(value, 0, period, smoothing_period, values_d, input)
     end
 end
 

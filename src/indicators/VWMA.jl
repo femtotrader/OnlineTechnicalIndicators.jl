@@ -5,7 +5,7 @@ const VWMA_PERIOD = 3
 
 The VWMA type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWMA{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
+mutable struct VWMA{Ttime,Tprice,Tvol} <: OnlineStat{Tprice}
     value::CircularBuffer{Union{Tprice,Missing}}
 
     period::Integer
@@ -15,7 +15,7 @@ mutable struct VWMA{Ttime,Tprice,Tvol} <: AbstractIncTAIndicator
     function VWMA{Ttime,Tprice,Tvol}(; period = VWMA_PERIOD) where {Ttime,Tprice,Tvol}
         input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
         value = CircularBuffer{Union{Tprice,Missing}}(period)
-        new{Ttime,Tprice,Tvol}(value, period, input)
+        new{Ttime,Tprice,Tvol}(value, 0, period, input)
     end
 end
 

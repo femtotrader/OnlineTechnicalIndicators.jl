@@ -8,8 +8,9 @@ const ALMA_SIGMA = 6.0
 
 The ALMA type implements an Arnaud Legoux Moving Average indicator.
 """
-mutable struct ALMA{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Missing,Tval}}
+mutable struct ALMA{Tval} <: OnlineStat{Tval}
+    value::Union{Missing,Tval}
+    n::Int
 
     period::Integer
     offset::Tval
@@ -18,7 +19,7 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
     w::Vector{Tval}
     w_sum::Tval
 
-    input::CircularBuffer{Tval}
+    input::CircBuff{Tval}
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
@@ -34,12 +35,26 @@ mutable struct ALMA{Tval} <: AbstractIncTAIndicator
             push!(w, w_val)
             w_sum += w_val
         end
-        input = CircularBuffer{Tval}(period)
-        value = CircularBuffer{Union{Missing,Tval}}(period)
-        new{Tval}(value, period, offset, sigma, w, w_sum, input)
+        input = CircBuff(Tval, period, rev = false)
+        new{Tval}(missing, 0, period, offset, sigma, w, w_sum, input)
     end
 end
 
+function OnlineStatsBase._fit!(ind::ALMA, data)
+    fit!(ind.input, data)
+    if ind.n == ind.period
+        alma = 0
+        for i = 1:ind.period
+            alma += ind.input[end-(ind.period-i)] * ind.w[i]
+        end
+        ind.value = alma / ind.w_sum
+    else
+        ind.n += 1
+        ind.value = missing
+    end
+end
+
+#=
 
 function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
     push!(ind.input, val)
@@ -57,3 +72,4 @@ function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
     push!(ind.value, out_val)
     return out_val
 end
+=#

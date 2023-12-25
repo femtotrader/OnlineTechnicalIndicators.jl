@@ -5,14 +5,15 @@ const BOP_MEMORY = 3
 
 The BOP type implements a Balance Of Power indicator.
 """
-mutable struct BOP{T} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{T,Missing}}
+mutable struct BOP{T} <: OnlineStat{Tval}
+    value::T
+    n::Int
 
     memory::Integer
 
     function BOP{T}(; memory = BOP_MEMORY) where {T}
         value = CircularBuffer{Union{T,Missing}}(memory)
-        new{T}(value, memory)
+        new{T}(value, 0, memory)
     end
 end
 

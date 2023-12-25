@@ -18,7 +18,7 @@ mutable struct SMMA{Tval} <: OnlineStat{Tval}
     function SMMA{Tval}(; period = SMMA_PERIOD) where {Tval}
         value = missing
         rolling = false
-        input = CircBuff(Tval, period, rev=false)
+        input = CircBuff(Tval, period, rev = false)
         new{Tval}(value, 0, period, rolling, input)
     end
 end
@@ -27,18 +27,17 @@ end
 function OnlineStatsBase._fit!(ind::SMMA, val)
     fit!(ind.input, val)
     if ind.rolling  # CircBuff is full and rolling
-        out_val = (ind.value * (ind.period - 1) + val) / ind.period
+        ind.value = (ind.value * (ind.period - 1) + val) / ind.period
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
-            out_val = sum(ind.input.value) / ind.period
+            ind.n += 1
+            ind.value = sum(ind.input.value) / ind.period
         else  # CircBuff is filling up
             ind.n += 1
-            out_val = missing
+            ind.value = missing
         end
     end
-    ind.value = out_val
-    return out_val
 end
 
 
