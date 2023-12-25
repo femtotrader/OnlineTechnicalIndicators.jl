@@ -6,7 +6,7 @@ const StdDev_PERIOD = 3
 The StdDev type implements a Standard Deviation indicator.
 """
 mutable struct StdDev{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Tval,Missing}}
+    value::Union{Missing,Tval}
 
     period::Integer
 

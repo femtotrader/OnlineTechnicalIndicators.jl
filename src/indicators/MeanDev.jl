@@ -6,7 +6,7 @@ const MeanDev_PERIOD = 3
 The MeanDev type implements a Mean Deviation indicator.
 """
 mutable struct MeanDev{Tval} <: AbstractIncTAIndicator
-    value::CircularBuffer{Union{Tval,Missing}}
+    value::Union{Missing,Tval}
 
     period::Integer
     sma::SMA{Tval}
