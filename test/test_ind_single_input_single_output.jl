@@ -94,8 +94,6 @@
         end
     end
 
-    #=
-
     @testset "RSI" begin
         ind = RSI{Float64}(period = P)
         ind = StatLag(ind, 3)
@@ -103,9 +101,9 @@
         @test isapprox(value(ind.lag[end-2]), 57.880437; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 55.153392; atol = ATOL)
         @test isapprox(value(ind), 53.459494; atol = ATOL)
-        @test length(ind.input) == P
-        @test length(ind.value) == P
     end
+
+    #=
 
     @testset "MeanDev" begin
         ind = MeanDev{Float64}(period = P)

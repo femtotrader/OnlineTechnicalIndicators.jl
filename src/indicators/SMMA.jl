@@ -49,7 +49,7 @@ function OnlineStatsBase._fit!(ind::SMMA, val)
         out_val = 2.0
 
     else
-        if ind.n == ind.period - 1 # CircBuff is full but not rolling
+        if ind.n + 1 == ind.period  # CircBuff is full but not rolling
             ind.rolling = true
             out_val = 1.0
 
