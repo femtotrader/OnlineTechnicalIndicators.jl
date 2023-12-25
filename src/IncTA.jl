@@ -44,11 +44,13 @@ export Stoch
 
 using DataStructures
 using OnlineStats
+using OnlineStatsBase
 
 abstract type AbstractIncTAIndicator end
 
 include("ohlcv.jl")
 include("sample_data.jl")
+include("memory.jl")
 
 function has_output_value(ind::T) where {T<:AbstractIncTAIndicator}
     if length(ind.value) == 0
