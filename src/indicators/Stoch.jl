@@ -7,38 +7,39 @@ struct StochVal{Tprice}
 end
 
 """
-    Stoch{Ttime,Tprice,Tvol}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD)
+    Stoch{Tohlcv}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD)
 
 The Stoch type implements the Stochastic indicator.
 """
-mutable struct Stoch{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
-    value::CircularBuffer{Union{Missing,StochVal{Tprice}}}
+mutable struct Stoch{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,StochVal{Float64}}  # Tprice
     n::Int
 
     period::Integer
     smoothing_period::Integer
 
-    values_d::SMA{Tprice}
-    input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
+    values_d::SMA{Float64}  # Tprice
+    input::CircBuff{Tohlcv}
 
-    function Stoch{Ttime,Tprice,Tvol}(;
+    function Stoch{Tohlcv}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
-    ) where {Ttime,Tprice,Tvol}
+    ) where {Tohlcv}
+        Tprice = Float64
         values_d = SMA{Tprice}(; period = smoothing_period)
-        input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(period)
-        value = CircularBuffer{Union{Missing,StochVal{Tprice}}}(period)
-        new{Ttime,Tprice,Tvol}(value, 0, period, smoothing_period, values_d, input)
+        input = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv}(missing, 0, period, smoothing_period, values_d, input)
     end
 end
 
-function Base.push!(ind::Stoch, ohlcv::OHLCV)
+function OnlineStatsBase._fit!(ind::Stoch, candle::OHLCV)
     # load candles until i have enough data
-    push!(ind.input, ohlcv)
-    # get max high
-    # get min low
-    max_high = max([cdl.high for cdl in ind.input]...)
-    min_low = min([cdl.low for cdl in ind.input]...)
+    fit!(ind.input, candle)
+    # increment ind.n
+    ind.n += 1
+    # get max high and min low
+    max_high = max([cdl.high for cdl in value(ind.input)]...)
+    min_low = min([cdl.low for cdl in value(ind.input)]...)
     # calculate k
     if max_high == min_low
         k = 100.0
@@ -46,14 +47,11 @@ function Base.push!(ind::Stoch, ohlcv::OHLCV)
         k = 100.0 * (ind.input[end].close - min_low) / (max_high - min_low)
     end
     # calculate d
-    push!(ind.values_d, k)
+    fit!(ind.values_d, k)
     if length(ind.values_d.value) > 0
-        d = ind.values_d.value[end]
+        d = value(ind.values_d)
     else
         d = missing
     end
-
-    kd = StochVal(k, d)
-    push!(ind.value, kd)
-    return kd
+    ind.value = StochVal(k, d)
 end

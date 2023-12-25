@@ -95,9 +95,9 @@ include("indicators/ForceIndex.jl")
 include("indicators/OBV.jl")
 include("indicators/SOBV.jl")
 include("indicators/EMV.jl")
+include("indicators/Stoch.jl")
 # include("indicators/MassIndex.jl")
 # include("indicators/CHOP.jl")
-# include("indicators/Stoch.jl")
 
 # MIMO
 # include("indicators/SuperTrend.jl")
