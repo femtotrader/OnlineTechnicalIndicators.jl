@@ -231,6 +231,17 @@
         @test isapprox(value(ind), 9.882701; atol = ATOL)
     end
 
+    @testset "TEMA" begin
+        ind = TEMA{Float64}(period = 10)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == 10
+        @test isapprox(value(ind.lag[end-2]), 10.330217; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 10.399910; atol = ATOL)
+        @test isapprox(value(ind), 10.323950; atol = ATOL)
+    end
+
     @testset_skip "KAMA (buggy - help wanted)" begin
         ind = KAMA{Float64}(
             period = 14,

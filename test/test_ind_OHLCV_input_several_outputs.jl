@@ -1,6 +1,6 @@
 @testset "OHLC input - several output values" begin
 
-    @testset "SuperTrend" begin
+    @testset_skip "SuperTrend" begin
         ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)

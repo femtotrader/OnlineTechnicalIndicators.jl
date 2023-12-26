@@ -19,6 +19,7 @@ export HMA
 export DPO
 export CoppockCurve
 export DEMA
+export TEMA
 export KAMA
 export ALMA
 # simple indicators (single input)
@@ -70,17 +71,18 @@ include("indicators/MeanDev.jl")
 include("indicators/StdDev.jl")
 include("indicators/ROC.jl")
 include("indicators/WMA.jl")
-
-# SIMO
-include("indicators/BB.jl")
-include("indicators/KST.jl")
 include("indicators/KAMA.jl")
 include("indicators/HMA.jl")
 include("indicators/DPO.jl")
 include("indicators/CoppockCurve.jl")
-include("indicators/MACD.jl")
 include("indicators/DEMA.jl")
+include("indicators/TEMA.jl")
 include("indicators/ALMA.jl")
+
+# SIMO
+include("indicators/BB.jl")
+include("indicators/MACD.jl")
+include("indicators/KST.jl")
 
 # MISO
 include("indicators/AccuDist.jl")
