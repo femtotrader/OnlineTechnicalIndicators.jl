@@ -49,6 +49,7 @@ export Stoch
 # OHLCV indicators (multiple input)
 ## multiple output => MIMO
 export SuperTrend, Trend
+export VTX
 
 using DataStructures
 using OnlineStatsBase
@@ -103,5 +104,6 @@ include("indicators/Stoch.jl")
 
 # MIMO
 include("indicators/SuperTrend.jl")
+include("indicators/VTX.jl")
 
 end

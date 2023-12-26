@@ -33,7 +33,9 @@ function OnlineStatsBase._fit!(ind::TEMA, data)
         if has_output_value(ind.ema_ema)
             fit!(ind.ema_ema_ema, ind.ema_ema.value[end])
             if has_output_value(ind.ema_ema_ema)
-                ind.value = 3.0 * ind.ema.value[end] - 3.0 * ind.ema_ema.value[end] + ind.ema_ema_ema.value[end]
+                ind.value =
+                    3.0 * ind.ema.value[end] - 3.0 * ind.ema_ema.value[end] +
+                    ind.ema_ema_ema.value[end]
             else
                 ind.value = missing
             end

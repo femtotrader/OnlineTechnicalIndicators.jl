@@ -69,7 +69,7 @@ See [tests](test/)
 | `TSI` | True Strength Index | :1234: | :1234: | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TTM` | TTM Squeeze | :candle: | :m: | This indicator needs value extractor which is not currently implemented. This indicator needs SMA and BB (implemented) but also DonchianChannels and KeltnerChannels (not implemented currently)
 | `UO` | Ultimate Oscillator | :candle: | :1234: | 2 "managed sequences"
-| `VTX` | Vortex Indicator | :candle: | :m: | 1 sub indicator (ATR) and 2 managed sequences
+| `VTX` | Vortex Indicator | :candle: | :m: | :construction: Work In Progress 1 sub indicator (ATR) and 2 managed sequences
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | :heavy_check_mark:
 | `VWMA` | Volume Weighted Moving Average | :candle: | :1234: | :heavy_check_mark:
 | `WMA` | Weighted Moving Average | :1234: | :1234: | :heavy_check_mark:

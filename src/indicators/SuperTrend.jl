@@ -102,7 +102,15 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle::OHLCV)
     else
         _val = value(ind)
         supertrend = 99999999
-        println(_val.value, " ", ind.fub.value[end-1], " ", candle.close, " ", ind.fub.value[end])
+        println(
+            _val.value,
+            " ",
+            ind.fub.value[end-1],
+            " ",
+            candle.close,
+            " ",
+            ind.fub.value[end],
+        )
         if _val.value == ind.fub.value[end-1] && candle.close <= ind.fub.value[end]
             supertrend = ind.fub.value[end]
             supertrend = 100000
