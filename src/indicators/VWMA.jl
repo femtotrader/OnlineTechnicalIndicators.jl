@@ -1,21 +1,21 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Tohlcv}(; period = VWMA_PERIOD)
+    VWMA{Tohlcv,S}(; period = VWMA_PERIOD)
 
 The VWMA type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWMA{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct VWMA{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Integer
 
     input::CircBuff
 
-    function VWMA{Tohlcv}(; period = VWMA_PERIOD) where {Tohlcv}
+    function VWMA{Tohlcv,S}(; period = VWMA_PERIOD) where {Tohlcv,S}
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv}(missing, 0, period, input)
+        new{Tohlcv,S}(missing, 0, period, input)
     end
 end
 

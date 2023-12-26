@@ -1,22 +1,21 @@
 const VWAP_MEMORY = 3
 
 """
-    VWAP{Tohlcv}()
+    VWAP{Tohlcv,S}()
 
 The VWAP type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWAP{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct VWAP{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
-    sum_price_vol::Float64
-    sum_vol::Float64
+    sum_price_vol::S
+    sum_vol::S
 
-    function VWAP{Tohlcv}() where {Tohlcv}
-        Tprice, Tvol = Float64, Float64
-        sum_price_vol = zero(Tprice)
-        sum_vol = zero(Tvol)
-        new{Tohlcv}(missing, 0, sum_price_vol, sum_vol)
+    function VWAP{Tohlcv,S}() where {Tohlcv,S}
+        sum_price_vol = zero(S)
+        sum_vol = zero(S)
+        new{Tohlcv,S}(missing, 0, sum_price_vol, sum_vol)
     end
 end
 

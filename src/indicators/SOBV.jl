@@ -1,12 +1,12 @@
 const SOBV_PERIOD = 20
 
 """
-    SOBV{Tohlcv}(; period = SOBV_PERIOD)
+    SOBV{Tohlcv,S}(; period = SOBV_PERIOD)
 
 The SOBV type implements a Smoothed On Balance Volume indicator.
 """
-mutable struct SOBV{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}  # Tprice
+mutable struct SOBV{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Integer
@@ -14,10 +14,10 @@ mutable struct SOBV{Tohlcv} <: OnlineStat{Tohlcv}
     obv::OBV
     sma_obv::SMA
 
-    function SOBV{Tohlcv}(; period = SOBV_PERIOD) where {Tohlcv}
-        obv = OBV{Tohlcv}()
-        sma_obv = SMA{Float64}(period = period)
-        new{Tohlcv}(missing, 0, period, obv, sma_obv)
+    function SOBV{Tohlcv,S}(; period = SOBV_PERIOD) where {Tohlcv,S}
+        obv = OBV{Tohlcv,S}()
+        sma_obv = SMA{S}(period = period)
+        new{Tohlcv,S}(missing, 0, period, obv, sma_obv)
     end
 end
 

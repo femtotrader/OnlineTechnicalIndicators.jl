@@ -6,22 +6,21 @@ const AO_SLOW_PERIOD = 21
 
 The AO type implements an Awesome Oscillator indicator.
 """
-mutable struct AO{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct AO{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
-    sma_fast::SMA{Float64}
-    sma_slow::SMA{Float64}
+    sma_fast::SMA{S}
+    sma_slow::SMA{S}
 
-    function AO{Tohlcv}(;
+    function AO{Tohlcv,S}(;
         fast_period = AO_FAST_PERIOD,
         slow_period = AO_SLOW_PERIOD,
-    ) where {Tohlcv}
+    ) where {Tohlcv,S}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
-        Tprice = Float64
-        sma_fast = SMA{Tprice}(period = fast_period)
-        sma_slow = SMA{Tprice}(period = slow_period)
-        new{Tohlcv}(missing, 0, sma_fast, sma_slow)
+        sma_fast = SMA{S}(period = fast_period)
+        sma_slow = SMA{S}(period = slow_period)
+        new{Tohlcv,S}(missing, 0, sma_fast, sma_slow)
     end
 end
 

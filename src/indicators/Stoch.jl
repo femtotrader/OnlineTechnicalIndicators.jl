@@ -7,28 +7,27 @@ struct StochVal{Tprice}
 end
 
 """
-    Stoch{Tohlcv}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD)
+    Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD)
 
 The Stoch type implements the Stochastic indicator.
 """
-mutable struct Stoch{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,StochVal{Float64}}  # Tprice
+mutable struct Stoch{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,StochVal{S}}  # Tprice
     n::Int
 
     period::Integer
     smoothing_period::Integer
 
-    values_d::SMA{Float64}  # Tprice
+    values_d::SMA{S}
     input::CircBuff{Tohlcv}
 
-    function Stoch{Tohlcv}(;
+    function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
-    ) where {Tohlcv}
-        Tprice = Float64
-        values_d = SMA{Tprice}(; period = smoothing_period)
+    ) where {Tohlcv,S}
+        values_d = SMA{S}(; period = smoothing_period)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv}(missing, 0, period, smoothing_period, values_d, input)
+        new{Tohlcv,S}(missing, 0, period, smoothing_period, values_d, input)
     end
 end
 

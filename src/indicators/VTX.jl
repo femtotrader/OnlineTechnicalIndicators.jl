@@ -6,17 +6,17 @@ struct VTXVal{Tval}
 end
 
 """
-    VTC{Tohlcv}(; period = VTX_PERIOD)
+    VTC{Tohlcv,S}(; period = VTX_PERIOD)
 
 The VTX type implements a Vortex Indicator.
 """
-mutable struct VTX{Tohlcv} <: OnlineStat{Tohlcv}
+mutable struct VTX{Tohlcv,S} <: OnlineStat{Tohlcv}
     value::Union{Missing,VTXVal}
     n::Int
 
     period::Integer
 
-    atr::ATR  # Tohlcv
+    atr::ATR
     atr_values::CircBuff
 
     plus_vm::CircBuff
@@ -24,15 +24,14 @@ mutable struct VTX{Tohlcv} <: OnlineStat{Tohlcv}
 
     input::CircBuff
 
-    function VTX{Tohlcv}(; period = VTX_PERIOD) where {Tohlcv}
+    function VTX{Tohlcv,S}(; period = VTX_PERIOD) where {Tohlcv,S}
         @warn "WIP - buggy"
-        atr = ATR{Tohlcv}(period = 1)
-        Tprice = Float64
-        atr_values = CircBuff(Union{Missing,Tprice}, period, rev = false)
-        plus_vm = CircBuff(Tprice, period, rev = false)
-        minus_vm = CircBuff(Tprice, period, rev = false)
+        atr = ATR{Tohlcv,S}(period = 1)
+        atr_values = CircBuff(Union{Missing,S}, period, rev = false)
+        plus_vm = CircBuff(S, period, rev = false)
+        minus_vm = CircBuff(S, period, rev = false)
         input = CircBuff(Tohlcv, 2, rev = false)
-        new{Tohlcv}(missing, 0, period, atr, atr_values, plus_vm, minus_vm, input)
+        new{Tohlcv,S}(missing, 0, period, atr, atr_values, plus_vm, minus_vm, input)
     end
 end
 

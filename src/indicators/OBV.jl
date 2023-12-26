@@ -1,19 +1,19 @@
 const OBV_MEMORY = 3
 
 """
-    OBV{Tohlcv}()
+    OBV{Tohlcv,S}()
 
 The OBV type implements On Balance Volume indicator.
 """
-mutable struct OBV{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}  # Tprice
+mutable struct OBV{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     input::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
 
-    function OBV{Tohlcv}() where {Tohlcv}
+    function OBV{Tohlcv,S}() where {Tohlcv,S}
         input = (missing, missing)
-        new{Tohlcv}(missing, 0, input)
+        new{Tohlcv,S}(missing, 0, input)
     end
 end
 

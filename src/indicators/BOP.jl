@@ -3,12 +3,12 @@
 
 The BOP type implements a Balance Of Power indicator.
 """
-mutable struct BOP{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct BOP{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
-    function BOP{Tohlcv}() where {Tohlcv}
-        new{Tohlcv}(missing, 0)
+    function BOP{Tohlcv,S}() where {Tohlcv,S}
+        new{Tohlcv,S}(missing, 0)
     end
 end
 

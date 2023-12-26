@@ -1,21 +1,21 @@
 const CCI_PERIOD = 3
 
 """
-    CCI{Tohlcv}(; period=CCI_PERIOD)
+    CCI{Tohlcv,S}(; period=CCI_PERIOD)
 
 The CCI type implements a Commodity Channel Index.
 """
-mutable struct CCI{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct CCI{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Integer
 
-    mean_dev::MeanDev{Float64}
+    mean_dev::MeanDev{S}
 
-    function CCI{Tohlcv}(; period = CCI_PERIOD) where {Tohlcv}
-        mean_dev = MeanDev{Float64}(period = period)
-        new{Tohlcv}(missing, 0, period, mean_dev)
+    function CCI{Tohlcv,S}(; period = CCI_PERIOD) where {Tohlcv,S}
+        mean_dev = MeanDev{S}(period = period)
+        new{Tohlcv,S}(missing, 0, period, mean_dev)
     end
 end
 

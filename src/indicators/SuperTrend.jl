@@ -12,11 +12,11 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
+    SuperTrend{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
 
 The SuperTrend type implements a Super Trend indicator.
 """
-mutable struct SuperTrend{Tohlcv} <: OnlineStat{Tohlcv}
+mutable struct SuperTrend{Tohlcv,S} <: OnlineStat{Tohlcv}
     value::Union{Missing,SuperTrendVal}
     n::Int
 
@@ -29,16 +29,15 @@ mutable struct SuperTrend{Tohlcv} <: OnlineStat{Tohlcv}
 
     input::CircBuff{Tohlcv}
 
-    function SuperTrend{Tohlcv}(;
+    function SuperTrend{Tohlcv,S}(;
         atr_period = SuperTrend_ATR_PERIOD,
         mult = SuperTrend_MULTIPLIER,
-    ) where {Tohlcv}
-        atr = ATR{Tohlcv}(period = atr_period)
-        Tprice = Float64
-        fub = CircBuff(Tprice, atr_period, rev = false)  # capacity 2 may be enougth
-        flb = CircBuff(Tprice, atr_period, rev = false)
+    ) where {Tohlcv,S}
+        atr = ATR{Tohlcv,S}(period = atr_period)
+        fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
+        flb = CircBuff(S, atr_period, rev = false)
         input = CircBuff(Tohlcv, atr_period, rev = false)
-        new{Tohlcv}(missing, 0, atr_period, mult, atr, fub, flb, input)
+        new{Tohlcv,S}(missing, 0, atr_period, mult, atr, fub, flb, input)
     end
 end
 

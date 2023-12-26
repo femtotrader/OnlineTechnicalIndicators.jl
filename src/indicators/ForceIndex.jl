@@ -1,25 +1,24 @@
 const ForceIndex_PERIOD = 3
 
 """
-    ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD)
+    ForceIndex{Tohlcv,S}(; period = ForceIndex_PERIOD)
 
 The ForceIndex type implements a Force Index indicator.
 """
-mutable struct ForceIndex{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}  # Tprice
+mutable struct ForceIndex{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Integer
 
-    ema::EMA{Float64}  # Tprice
+    ema::EMA{S}
 
     input::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
 
-    function ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD) where {Tohlcv}
-        Tprice = Float64
-        ema = EMA{Tprice}(period = period)
+    function ForceIndex{Tohlcv,S}(; period = ForceIndex_PERIOD) where {Tohlcv,S}
+        ema = EMA{S}(period = period)
         input = (missing, missing)
-        new{Tohlcv}(missing, 0, period, ema, input)
+        new{Tohlcv,S}(missing, 0, period, ema, input)
     end
 end
 

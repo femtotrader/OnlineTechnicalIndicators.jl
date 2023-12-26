@@ -2,26 +2,25 @@ const EMV_PERIOD = 20
 const EMV_VOLUME_DIV = 10000
 
 """
-    EMV{Tohlcv}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV)
+    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV)
 
 The EMV type implements a Ease of Movement indicator.
 """
-mutable struct EMV{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}  # Tprice
+mutable struct EMV{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Integer
     volume_div::Integer
 
-    emv_sma::SMA{Float64}  # Tprice
+    emv_sma::SMA{S}
 
     input::CircBuff{Tohlcv}
 
-    function EMV{Tohlcv}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV) where {Tohlcv}
-        Tprice = Float64
-        emv_sma = SMA{Tprice}(period = period)
+    function EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV) where {Tohlcv,S}
+        emv_sma = SMA{S}(period = period)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv}(missing, 0, period, volume_div, emv_sma, input)
+        new{Tohlcv,S}(missing, 0, period, volume_div, emv_sma, input)
     end
 end
 

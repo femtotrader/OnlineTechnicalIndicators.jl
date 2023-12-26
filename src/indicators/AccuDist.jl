@@ -1,28 +1,16 @@
 """
-    AccuDist{Tohlcv}()
+    AccuDist{Tohlcv,S}()
 
 The AccuDist type implements an Accumulation and Distribution indicator.
 """
-mutable struct AccuDist{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct AccuDist{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
-    function AccuDist{Tohlcv}() where {Tohlcv}
-        new{Tohlcv}(missing, 0)
+    function AccuDist{Tohlcv,S}() where {Tohlcv,S}
+        new{Tohlcv,S}(missing, 0)
     end
 end
-
-#= 
-# I'd like value type be defined more generally (ie not Float64) 
-mutable struct AccuDist{T, S} <: OnlineStat{T, S}
-    value::Union{Missing, S}
-    n::Int
-
-    function AccuDist{T, S}() where {T, S}
-        new{T, S}(missing, 0)
-    end
-end
-=#
 
 function OnlineStatsBase._fit!(ind::AccuDist, candle::OHLCV)
     ind.n += 1

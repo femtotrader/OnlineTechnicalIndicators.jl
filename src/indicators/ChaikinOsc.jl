@@ -2,26 +2,26 @@ const ChaikinOsc_FAST_PERIOD = 5
 const ChaikinOsc_SLOW_PERIOD = 7
 
 """
-    ChaikinOsc{Tohlcv}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD)
+    ChaikinOsc{Tohlcv,S}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD)
 
 The ChaikinOsc type implements a Chaikin Oscillator.
 """
-mutable struct ChaikinOsc{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}  # Tprice?
+mutable struct ChaikinOsc{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     accu_dist::AccuDist{Tohlcv}
-    fast_ema::EMA{Float64}  # Tprice?
-    slow_ema::EMA{Float64}  # Tprice?
+    fast_ema::EMA{S}
+    slow_ema::EMA{S}
 
-    function ChaikinOsc{Tohlcv}(;
+    function ChaikinOsc{Tohlcv,S}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
         slow_period = ChaikinOsc_SLOW_PERIOD,
-    ) where {Tohlcv}
-        accu_dist = AccuDist{Tohlcv}()
-        fast_ema = EMA{Float64}(period = fast_period)
-        slow_ema = EMA{Float64}(period = slow_period)
-        new{Tohlcv}(missing, 0, accu_dist, fast_ema, slow_ema)
+    ) where {Tohlcv,S}
+        accu_dist = AccuDist{Tohlcv,S}()
+        fast_ema = EMA{S}(period = fast_period)
+        slow_ema = EMA{S}(period = slow_period)
+        new{Tohlcv,S}(missing, 0, accu_dist, fast_ema, slow_ema)
     end
 end
 

@@ -1,26 +1,25 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tohlcv}(; period = ATR_PERIOD)
+    ATR{Tohlcv,S}(; period = ATR_PERIOD)
 
 The ATR type implements an Average True Range indicator.
 """
-mutable struct ATR{Tohlcv} <: OnlineStat{Tohlcv}
-    value::Union{Missing,Float64}
+mutable struct ATR{Tohlcv,S} <: OnlineStat{Tohlcv}
+    value::Union{Missing,S}
     n::Int
 
     period::Number
 
-    tr::CircBuff{Float64}
+    tr::CircBuff{S}
     rolling::Bool
 
     input::CircBuff{Tohlcv}  # seems a bit overkilled just to get ind.input[end - 1].close (maybe use simply a Tuple with current and previous value - see ForceIndex)
 
-    function ATR{Tohlcv}(; period = ATR_PERIOD) where {Tohlcv}
-        Tprice = Float64
-        tr = CircBuff(Tprice, period, rev = false)
+    function ATR{Tohlcv,S}(; period = ATR_PERIOD) where {Tohlcv,S}
+        tr = CircBuff(S, period, rev = false)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv}(missing, 0, period, tr, false, input)
+        new{Tohlcv,S}(missing, 0, period, tr, false, input)
     end
 end
 
