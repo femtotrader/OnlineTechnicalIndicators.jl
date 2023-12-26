@@ -12,45 +12,43 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Ttime, Tprice, Tvol}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
+    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
 
 The SuperTrend type implements a Super Trend indicator.
 """
-mutable struct SuperTrend{Ttime,Tprice,Tvol} <: OnlineStat{Tval}
-    value::CircularBuffer{Union{SuperTrendVal,Missing}}
+mutable struct SuperTrend{Tohlcv} <: OnlineStat{Tohlcv}
+    value::Union{Missing,SuperTrendVal}
     n::Int
 
     atr_period::Integer
     mult::Integer
 
-    atr::ATR{Ttime,Tprice,Tvol}
-    fub::CircularBuffer{Tprice}  # final upper band
-    flb::CircularBuffer{Tprice}  # final lower band
+    atr::ATR  # Tohlcv
+    fub::CircBuff  # final upper band
+    flb::CircBuff  # Tprice  # final lower band
 
-    input::CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}
+    input::CircBuff{Tohlcv}
 
-    function SuperTrend{Ttime,Tprice,Tvol}(;
+    function SuperTrend{Tohlcv}(;
         atr_period = SuperTrend_ATR_PERIOD,
         mult = SuperTrend_MULTIPLIER,
-    ) where {Ttime,Tprice,Tvol}
-        atr = ATR{Ttime,Tprice,Tvol}(period = atr_period)
-        fub = CircularBuffer{Tprice}(atr_period)  # capacity 2 may be enougth
-        flb = CircularBuffer{Tprice}(atr_period)
-
-        input = CircularBuffer{OHLCV{Ttime,Tprice,Tvol}}(atr_period)
-        value = CircularBuffer{Union{SuperTrendVal,Missing}}(atr_period)
-        new{Ttime,Tprice,Tvol}(value, 0, atr_period, mult, atr, fub, flb, input)
+    ) where {Tohlcv}
+        atr = ATR{Tohlcv}(period = atr_period)
+        Tprice = Float64
+        fub = CircBuff(Tprice, atr_period, rev = false)  # capacity 2 may be enougth
+        flb = CircBuff(Tprice, atr_period, rev = false)
+        input = CircBuff(Tohlcv, atr_period, rev = false)
+        new{Tohlcv}(missing, 0, atr_period, mult, atr, fub, flb, input)
     end
 end
 
-function Base.push!(ind::SuperTrend, candle::OHLCV)
-    push!(ind.input, candle)
-    push!(ind.atr, candle)
+function OnlineStatsBase._fit!(ind::SuperTrend, candle::OHLCV)
+    fit!(ind.input, candle)
+    fit!(ind.atr, candle)
 
     if !has_output_value(ind.atr)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
+        ind.value = missing
+        return
     end
 
     #=
@@ -59,8 +57,8 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
     =#
 
     hla = (candle.high + candle.low) / 2.0
-    bub = hla + ind.mult * ind.atr.value[end]
-    blb = hla - ind.mult * ind.atr.value[end]
+    bub = hla + ind.mult * value(ind.atr)
+    blb = hla - ind.mult * value(ind.atr)
 
     #=
     IF C.BUB < P.FUB OR P.CLOSE > P.FUB: C.FUB = C.BUB
@@ -68,15 +66,15 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
     =#
 
     if length(ind.fub) == 0
-        fub = 0
+        fub = 0.0
     else
-        if bub < ind.fub[end] || ind.input[end-1].close > ind.fub[end]
+        if bub < ind.fub.value[end] || ind.input.value[end-1].close > ind.fub.value[end]
             fub = bub
         else
-            fub = ind.fub[end]
+            fub = ind.fub.value[end]
         end
     end
-    push!(ind.fub, fub)
+    fit!(ind.fub, fub)
 
     #=
     IF C.BLB > P.FLB OR P.CLOSE < P.FLB: C.FLB = C.BLB
@@ -84,13 +82,13 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
     =#
 
     if length(ind.flb) == 0
-        flb = 0
-    elseif blb > ind.flb[end] || ind.input[end-1].close < ind.flb[end]
+        flb = 0.0
+    elseif blb > ind.flb.value[end] || ind.input.value[end-1].close < ind.flb.value[end]
         flb = blb
     else
-        flb = ind.flb[end]
+        flb = ind.flb.value[end]
     end
-    push!(ind.flb, flb)
+    fit!(ind.flb, flb)
 
     #=
     IF P.ST == P.FUB AND C.CLOSE < C.FUB: C.ST = C.FUB
@@ -101,20 +99,27 @@ function Base.push!(ind::SuperTrend, candle::OHLCV)
 
     if !has_output_value(ind)
         supertrend = 0
-    elseif ind.value[end].value == ind.fub[end-1] && ind.input[end].close <= ind.fub[end]
-        supertrend = ind.fub[end]
-    elseif ind.value[end].value == ind.fub[end-1] && ind.input[end].close > ind.fub[end]
-        supertrend = ind.flb[end]
-    elseif ind.value[end].value == ind.flb[end-1] && ind.input[end].close >= ind.flb[end]
-        supertrend = ind.flb[end]
-    elseif ind.value[end].value == ind.flb[end-1] && ind.input[end].close < ind.flb[end]
-        supertrend = ind.fub[end]
+    else
+        _val = value(ind)
+        supertrend = 99999999
+        println(_val.value, " ", ind.fub.value[end-1], " ", candle.close, " ", ind.fub.value[end])
+        if _val.value == ind.fub.value[end-1] && candle.close <= ind.fub.value[end]
+            supertrend = ind.fub.value[end]
+            supertrend = 100000
+        elseif _val.value == ind.fub.value[end-1] && candle.close > ind.fub.value[end]
+            supertrend = ind.fub.value[end]
+            supertrend = 200000
+        elseif _val.value == ind.flb.value[end-1] && candle.close >= ind.flb.value[end]
+            supertrend = ind.fub.value[end]
+            supertrend = 300000
+        elseif _val.value == ind.flb.value[end-1] && candle.close < ind.flb.value[end]
+            supertrend = ind.fub.value[end]
+            supertrend = 400000
+        end
+        println(supertrend)
     end
 
-    trend_dir = ind.input[end].close > supertrend ? Trend.UP : Trend.DOWN
+    trend_dir = candle.close > supertrend ? Trend.UP : Trend.DOWN
 
-    out_val = SuperTrendVal(supertrend, trend_dir)
-
-    push!(ind.value, out_val)
-    return out_val
+    ind.value = SuperTrendVal(supertrend, trend_dir)
 end

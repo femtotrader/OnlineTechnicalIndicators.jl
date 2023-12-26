@@ -100,6 +100,6 @@ include("indicators/Stoch.jl")
 # include("indicators/CHOP.jl")
 
 # MIMO
-# include("indicators/SuperTrend.jl")
+include("indicators/SuperTrend.jl")
 
 end

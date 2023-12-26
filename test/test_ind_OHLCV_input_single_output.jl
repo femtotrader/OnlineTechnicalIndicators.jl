@@ -152,6 +152,8 @@
 
     #=
 
+    # ToDo : fix this
+
     @testset_skip "MassIndex - help wanted" begin
         ind = MassIndex{OHLCV{Missing,Float64,Float64}}(ema_period = 9, ema_ema_period = 9, ema_ratio_period = 10)
         @test nobs(ind) == 0
