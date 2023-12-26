@@ -26,15 +26,15 @@
     @testset "VTX" begin
         ind = VTX{OHLCV{Missing,Float64,Float64}}(period = 14)
         @test nobs(ind) == 0
-        #ind = StatLag(ind, 3)
+        ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
         @test nobs(ind) == 14
 
-        #@test isapprox(value(ind.lag[end-2]).plus_vtx, 1.133113; atol = ATOL)
-        #@test isapprox(value(ind.lag[end-2]).minus_vtx, 0.818481; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).plus_vtx, 1.133113; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).minus_vtx, 0.818481; atol = ATOL)
 
-        #@test isapprox(value(ind.lag[end-1]).plus_vtx, 1.141292; atol = ATOL)
-        #@test isapprox(value(ind.lag[end-1]).minus_vtx, 0.834611; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).plus_vtx, 1.141292; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).minus_vtx, 0.834611; atol = ATOL)
 
         @test isapprox(value(ind).plus_vtx, 1.030133; atol = ATOL)
         @test isapprox(value(ind).minus_vtx, 0.968750; atol = ATOL)

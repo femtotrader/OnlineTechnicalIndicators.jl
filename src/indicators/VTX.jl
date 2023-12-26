@@ -26,7 +26,7 @@ mutable struct VTX{Tohlcv} <: OnlineStat{Tohlcv}
 
     function VTX{Tohlcv}(; period = VTX_PERIOD) where {Tohlcv}
         @warn "WIP - buggy"
-        atr = ATR{Tohlcv}(period = period)
+        atr = ATR{Tohlcv}(period = 1)
         Tprice = Float64
         atr_values = CircBuff(Union{Missing,Tprice}, period, rev = false)
         plus_vm = CircBuff(Tprice, period, rev = false)
