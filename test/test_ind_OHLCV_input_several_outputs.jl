@@ -40,4 +40,26 @@
         @test isapprox(value(ind).minus_vtx, 0.968750; atol = ATOL)
     end
 
+    @testset "DonchianChannels" begin
+        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},DonchianChannelsVal{Float64}}(
+            period = 5,
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).lower, 8.420000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).central, 9.640000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).upper, 10.860000; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).lower, 8.420000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).central, 9.640000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).upper, 10.860000; atol = ATOL)
+
+        @test isapprox(value(ind).lower, 9.260000; atol = ATOL)
+        @test isapprox(value(ind).central, 10.059999; atol = ATOL)
+        @test isapprox(value(ind).upper, 10.860000; atol = ATOL)
+    end
+
 end

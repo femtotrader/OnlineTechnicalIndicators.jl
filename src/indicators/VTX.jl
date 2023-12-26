@@ -54,11 +54,14 @@ function OnlineStatsBase._fit!(ind::VTX, candle::OHLCV)
     fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
     fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
 
-    if length(ind.atr_values) < ind.period || length(ind.plus_vm) < ind.period || length(ind.minus_vm) < ind.period
+    if length(ind.atr_values) < ind.period ||
+       length(ind.plus_vm) < ind.period ||
+       length(ind.minus_vm) < ind.period
         ind.value = missing
         return
     end
     atr_sum = sum(value(ind.atr_values))
-    ind.value = VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
+    ind.value =
+        VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
 
 end

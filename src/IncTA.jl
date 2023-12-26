@@ -50,6 +50,7 @@ export Stoch
 ## multiple output => MIMO
 export SuperTrend, Trend
 export VTX
+export DonchianChannels, DonchianChannelsVal
 
 using DataStructures
 using OnlineStatsBase
@@ -105,5 +106,6 @@ include("indicators/Stoch.jl")
 # MIMO
 include("indicators/SuperTrend.jl")
 include("indicators/VTX.jl")
+include("indicators/DonchianChannels.jl")
 
 end

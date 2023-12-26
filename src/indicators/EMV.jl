@@ -17,7 +17,10 @@ mutable struct EMV{Tohlcv,S} <: OnlineStat{Tohlcv}
 
     input::CircBuff{Tohlcv}
 
-    function EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV) where {Tohlcv,S}
+    function EMV{Tohlcv,S}(;
+        period = EMV_PERIOD,
+        volume_div = EMV_VOLUME_DIV,
+    ) where {Tohlcv,S}
         emv_sma = SMA{S}(period = period)
         input = CircBuff(Tohlcv, period, rev = false)
         new{Tohlcv,S}(missing, 0, period, volume_div, emv_sma, input)

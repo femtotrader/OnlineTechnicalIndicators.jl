@@ -34,7 +34,10 @@
     end
 
     @testset "ChaikinOsc" begin
-        ind = ChaikinOsc{OHLCV{Missing,Float64,Float64},Float64}(fast_period = 5, slow_period = 7)
+        ind = ChaikinOsc{OHLCV{Missing,Float64,Float64},Float64}(
+            fast_period = 5,
+            slow_period = 7,
+        )
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -136,7 +139,8 @@
     end
 
     @testset "Stoch" begin
-        ind = Stoch{OHLCV{Missing,Float64,Float64},Float64}(period = 14, smoothing_period = 3)
+        ind =
+            Stoch{OHLCV{Missing,Float64,Float64},Float64}(period = 14, smoothing_period = 3)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)

@@ -36,7 +36,7 @@ See [tests](test/)
 | `CoppockCurve` | Coppock Curve | :1234: | :1234: | :heavy_check_mark:
 | `DEMA` | Double Exponential Moving Average | :1234: | :1234: | :heavy_check_mark:
 | `DPO` | Detrended Price Oscillator | :1234: | :1234: | :heavy_check_mark:
-| `DonchianChannels` | Donchian Channels | :candle: | :m: | this one should be easy (take OHLCV as input and output several values) - implementation should looks similar to SuperTrend
+| `DonchianChannels` | Donchian Channels | :candle: | :m: | :heavy_check_mark:
 | `EMA` | Exponential Moving Average | :1234: | :1234: | :heavy_check_mark:
 | `EMV` | Ease of Movement | :candle: | :1234: | :heavy_check_mark:
 | `FibRetracement` | Fibonacci Retracement | :question: | :question: | doesn't look an indicator just a simple class with 236 382 5 618 786 values
