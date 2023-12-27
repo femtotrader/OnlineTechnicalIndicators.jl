@@ -1,3 +1,7 @@
-function MAFactory(::Type{MA}, T::Type, period) where {MA}
-    return MA{T}(period=period)
+struct MAFactory
+    T::Type
+end
+
+function (f::MAFactory)(ma::Type{MA}, period) where {MA <: OnlineStat}
+    return ma{f.T}(period=period)
 end

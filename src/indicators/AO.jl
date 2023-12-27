@@ -20,10 +20,8 @@ mutable struct AO{Tohlcv,S} <: OnlineStat{Tohlcv}
         ma_slow = SMA
     ) where {Tohlcv,S}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
-        #_ma_fast = ma_fast{S}(period = fast_period)
-        #_ma_slow = ma_slow{S}(period = slow_period)
-        _ma_fast = MAFactory(ma_fast, S, fast_period)
-        _ma_slow = MAFactory(ma_slow, S, slow_period)
+        _ma_fast = MAFactory(S)(ma_fast, fast_period)
+        _ma_slow = MAFactory(S)(ma_slow, slow_period)
         new{Tohlcv,S}(missing, 0, _ma_fast, _ma_slow)
     end
 end
