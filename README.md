@@ -56,6 +56,7 @@ See [tests](test/)
 | `PivotsHL` | High/Low Pivots | :candle: | :m: | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | :heavy_check_mark:
+| `STC` | Schaff Trend Cycle | :1234: | :1234: | :heavy_exclamation_mark: Need MACD and Stoch
 | `SFX` | SFX | :candle: | :m: | :construction: This indicator needs value extractor which is not currently implemented
 | `SMA` | Simple Moving Average | :1234: | :1234: | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :1234: | :1234: | :heavy_check_mark:
