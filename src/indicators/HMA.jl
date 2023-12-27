@@ -30,9 +30,9 @@ function OnlineStatsBase._fit!(ind::HMA, data)
         ind.n += 1
     end
     if has_output_value(ind.wma)
-        fit!(ind.hma, 2.0 * ind.wma2.value[end] - ind.wma.value[end])
+        fit!(ind.hma, 2.0 * value(ind.wma2) - value(ind.wma))
         if has_output_value(ind.hma)
-            ind.value = ind.hma.value[end]
+            ind.value = value(ind.hma)
         else
             ind.value = missing
         end

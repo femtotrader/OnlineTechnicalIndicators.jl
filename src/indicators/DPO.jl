@@ -30,7 +30,7 @@ function OnlineStatsBase._fit!(ind::DPO, data)
     end
     semi_period = floor(Int, ind.period / 2)
     if length(ind.input) >= semi_period + 2 && length(ind.ma.value) >= 1
-        ind.value = ind.input[end-semi_period-1] - ind.ma.value[end]
+        ind.value = ind.input[end-semi_period-1] - value(ind.ma)
     else
         ind.value = missing
     end
