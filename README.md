@@ -6,6 +6,8 @@ This project implements some Technical Analysis Indicators in Julia in an increm
 
 It's inspired by Python project [talipp](https://github.com/nardew/talipp) which is used as "reference implementation" for unit tests.
 
+It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineStatsBase.jl) and [OnlineStats.jl](https://github.com/joshday/OnlineStatsBase.jl).
+
 :construction: This software is under construction. API can have breaking changes.
 
 ## Install
@@ -21,7 +23,7 @@ See [tests](test/)
 
 | Name | Description | Input | Output | Dependencies | Implementation status |
 | --- | --- | --- | --- | --- | --- |
-| `AccuDist` | Accumulation and Distribution | :candle: | :1234: |  | :heavy_check_mark:
+| `AccuDist` | Accumulation and Distribution | :candle: | :1234: | - | :heavy_check_mark:
 | `ADX` | Average Directional Index | :1234: | :m: |  | 1 sub indicator (ATR) and several managed sequences
 | `ALMA` | Arnaud Legoux Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `AO` | Awesome Oscillator | :candle: | :1234: | `SMA` | :heavy_check_mark:
