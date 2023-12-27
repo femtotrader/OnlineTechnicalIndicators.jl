@@ -7,7 +7,7 @@ struct StochVal{Tprice}
 end
 
 """
-    Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD)
+    Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD, ma = SMA)
 
 The Stoch type implements the Stochastic indicator.
 """
@@ -24,8 +24,10 @@ mutable struct Stoch{Tohlcv,S} <: OnlineStat{Tohlcv}
     function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
+        ma = SMA
     ) where {Tohlcv,S}
-        values_d = SMA{S}(; period = smoothing_period)
+        # values_d = SMA{S}(; period = smoothing_period)
+        values_d = MAFactory(S)(ma, smoothing_period)
         input = CircBuff(Tohlcv, period, rev = false)
         new{Tohlcv,S}(missing, 0, period, smoothing_period, values_d, input)
     end
