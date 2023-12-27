@@ -35,7 +35,7 @@ mutable struct VTX{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::VTX, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::VTX, candle)
     fit!(ind.input, candle)
     fit!(ind.atr, candle)
     fit!(ind.atr_values, value(ind.atr))

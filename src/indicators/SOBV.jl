@@ -21,7 +21,7 @@ mutable struct SOBV{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::SOBV, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::SOBV, candle)
     fit!(ind.obv, candle)
     fit!(ind.sma_obv, value(ind.obv))
     ind.n += 1

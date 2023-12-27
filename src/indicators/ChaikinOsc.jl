@@ -25,7 +25,7 @@ mutable struct ChaikinOsc{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ChaikinOsc, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::ChaikinOsc, candle)
     fit!(ind.accu_dist, candle)
     ind.n += 1
     if has_output_value(ind.accu_dist)

@@ -47,7 +47,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
         atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
-        cb = EMA{S}(period=ma_period)
+        cb = EMA{S}(period = ma_period)
         #cb = ValueExtractor{Float64,OnlineStat{Tohlcv},Function}(o, candle -> candle.close)  # CallFun, ValueExtractor
         new{Tohlcv,S}(
             missing,
@@ -62,7 +62,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::KeltnerChannels, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::KeltnerChannels, candle)
     fit!(ind.atr, candle)
     # fit!(ind.cb, candle)  # something like a ValueExtractor should be implemented taking a function like candle->candle.close as argument
     fit!(ind.cb, candle.close)

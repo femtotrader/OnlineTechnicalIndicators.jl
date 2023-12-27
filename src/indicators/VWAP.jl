@@ -19,7 +19,7 @@ mutable struct VWAP{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::VWAP, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::VWAP, candle)
     ind.n += 1
     typical_price = (candle.high + candle.low + candle.close) / 3.0
 

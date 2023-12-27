@@ -19,7 +19,7 @@ mutable struct CCI{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::CCI, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::CCI, candle)
     ind.n += 1
     typical_price = (candle.high + candle.low + candle.close) / 3.0
     fit!(ind.mean_dev, typical_price)

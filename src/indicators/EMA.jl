@@ -25,17 +25,15 @@ function OnlineStatsBase._fit!(ind::EMA, val)
     fit!(ind.input, val)
     if ind.rolling  # CircBuff is full and rolling
         mult = 2.0 / (ind.period + 1.0)
-        out_val = mult * ind.input[end] + (1.0 - mult) * ind.value
+        ind.value = mult * ind.input[end] + (1.0 - mult) * ind.value
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
             ind.n += 1
-            out_val = sum(ind.input.value) / ind.period
+            ind.value = sum(ind.input.value) / ind.period
         else  # CircBuff is filling up
             ind.n += 1
-            out_val = missing
+            ind.value = missing
         end
     end
-    ind.value = out_val
-    return out_val
 end

@@ -101,7 +101,7 @@ include("indicators/SOBV.jl")
 include("indicators/EMV.jl")
 include("indicators/Stoch.jl")
 include("indicators/MassIndex.jl")
-# include("indicators/CHOP.jl")
+include("indicators/CHOP.jl")
 
 # MIMO
 include("indicators/SuperTrend.jl")

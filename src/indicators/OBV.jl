@@ -17,7 +17,7 @@ mutable struct OBV{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::OBV, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::OBV, candle)
     ind.input = (ind.input[end], candle)  # Keep a small window of input values
     ind.n += 1
     if ind.n != 1

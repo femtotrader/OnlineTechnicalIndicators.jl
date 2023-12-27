@@ -24,7 +24,7 @@ mutable struct AO{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::AO, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::AO, candle)
     ind.n += 1
     median = (candle.high + candle.low) / 2.0
     fit!(ind.sma_fast, median)

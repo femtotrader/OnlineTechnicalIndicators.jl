@@ -19,7 +19,7 @@ mutable struct VWMA{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::VWMA, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::VWMA, candle)
     fit!(ind.input, candle)
     ind.n += 1
     if ind.n >= ind.period

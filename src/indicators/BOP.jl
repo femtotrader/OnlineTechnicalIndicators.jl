@@ -1,5 +1,5 @@
 """
-    BOP{Tohlcv}()
+    BOP{Tohlcv,S}()
 
 The BOP type implements a Balance Of Power indicator.
 """
@@ -12,7 +12,7 @@ mutable struct BOP{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::BOP, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::BOP, candle)
     ind.n += 1
     if candle.high != candle.low
         ind.value = (candle.close - candle.open) / (candle.high - candle.low)

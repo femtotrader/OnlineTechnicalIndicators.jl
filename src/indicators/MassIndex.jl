@@ -30,7 +30,7 @@ mutable struct MassIndex{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::MassIndex, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::MassIndex, candle)
     fit!(ind.ema, candle.high - candle.low)
     ind.n += 1
 

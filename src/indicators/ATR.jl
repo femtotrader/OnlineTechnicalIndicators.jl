@@ -23,7 +23,7 @@ mutable struct ATR{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ATR, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::ATR, candle)
     fit!(ind.input, candle)
     ind.n += 1
     true_range = candle.high - candle.low

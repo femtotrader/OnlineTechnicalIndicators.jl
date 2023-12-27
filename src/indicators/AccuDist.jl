@@ -12,7 +12,7 @@ mutable struct AccuDist{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::AccuDist, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::AccuDist, candle)
     ind.n += 1
     if candle.high != candle.low
         # Calculate MFI and MFV

@@ -31,7 +31,7 @@ mutable struct Stoch{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::Stoch, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::Stoch, candle)
     # load candles until i have enough data
     fit!(ind.input, candle)
     # increment ind.n

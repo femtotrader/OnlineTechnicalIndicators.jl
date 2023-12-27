@@ -154,7 +154,11 @@
     end
 
     @testset "MassIndex" begin
-        ind = MassIndex{OHLCV{Missing,Float64,Float64},Float64}(ema_period = 9, ema_ema_period = 9, ema_ratio_period = 10)
+        ind = MassIndex{OHLCV{Missing,Float64,Float64},Float64}(
+            ema_period = 9,
+            ema_ema_period = 9,
+            ema_ratio_period = 10,
+        )
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -163,8 +167,6 @@
         @test isapprox(value(ind.lag[end-1]), 9.537927; atol = ATOL)
         @test isapprox(value(ind), 9.648128; atol = ATOL)
     end
-
-    #=
 
     @testset_skip "CHOP - help wanted" begin
         ind = CHOP{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
@@ -177,5 +179,4 @@
         @test isapprox(value(ind), 49.289273; atol = ATOL)
     end
 
-    =#
 end

@@ -41,7 +41,7 @@ mutable struct SuperTrend{Tohlcv,S} <: OnlineStat{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::SuperTrend, candle::OHLCV)
+function OnlineStatsBase._fit!(ind::SuperTrend, candle)
     fit!(ind.input, candle)
     fit!(ind.atr, candle)
 
