@@ -52,6 +52,7 @@ export SuperTrend, Trend
 export VTX
 export DonchianChannels
 export KeltnerChannels
+export ADX
 
 using OnlineStatsBase
 
@@ -102,6 +103,7 @@ include("indicators/EMV.jl")
 include("indicators/Stoch.jl")
 include("indicators/MassIndex.jl")
 include("indicators/CHOP.jl")
+include("indicators/ADX.jl")
 
 # MIMO
 include("indicators/SuperTrend.jl")

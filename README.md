@@ -24,7 +24,7 @@ See [tests](test/)
 | Name | Description | Input | Output | Dependencies | Implementation status |
 | --- | --- | --- | --- | --- | --- |
 | `AccuDist` | Accumulation and Distribution | :candle: | :1234: | - | :heavy_check_mark:
-| `ADX` | Average Directional Index | :candle: | :m: |  | 1 sub indicator (ATR) and several managed sequences
+| `ADX` | Average Directional Index | :candle: | :m: | `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `ALMA` | Arnaud Legoux Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `AO` | Awesome Oscillator | :candle: | :1234: | `SMA` | :heavy_check_mark:
 | `Aroon` | Aroon Up/Down | :candle: | :m: |  | might be quite easy except the (need to search in reversed list in order to get the right-most index)

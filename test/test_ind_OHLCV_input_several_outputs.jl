@@ -87,4 +87,24 @@
 
     end
 
+    @testset_skip "ADX" begin
+        ind = ADX{OHLCV{Missing,Float64,Float64},Float64}(di_period = 14, adx_period = 14)
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).adx, 15.734865; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).plus_di, 33.236743; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).minus_di, 17.415377; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).adx, 16.761395; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).plus_di, 31.116720; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).minus_di, 16.716048; atol = ATOL)
+
+        @test isapprox(value(ind).adx, 16.698475; atol = ATOL)
+        @test isapprox(value(ind).plus_di, 28.670782; atol = ATOL)
+        @test isapprox(value(ind).minus_di, 20.812570; atol = ATOL)
+    end
+
 end
