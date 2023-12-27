@@ -12,7 +12,7 @@ end
 The DonchianChannels type implements a Donchian Channels indicator.
 """
 mutable struct DonchianChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
-    value::Union{Missing,S}
+    value::Union{Missing,DonchianChannelsVal{S}}
     n::Int
 
     period::Integer

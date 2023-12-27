@@ -41,7 +41,7 @@
     end
 
     @testset "DonchianChannels" begin
-        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},DonchianChannelsVal{Float64}}(
+        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},Float64}(
             period = 5,
         )
         @test nobs(ind) == 0
