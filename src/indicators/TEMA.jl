@@ -32,13 +32,13 @@ function OnlineStatsBase._fit!(ind::TEMA, data)
         ind.n += 1
     end
     if has_output_value(ind.ma)
-        fit!(ind.ma_ma, ind.ma.value[end])
+        fit!(ind.ma_ma, value(ind.ma))
         if has_output_value(ind.ma_ma)
-            fit!(ind.ma_ma_ma, ind.ma_ma.value[end])
+            fit!(ind.ma_ma_ma, value(ind.ma_ma))
             if has_output_value(ind.ma_ma_ma)
                 ind.value =
-                    3.0 * ind.ma.value[end] - 3.0 * ind.ma_ma.value[end] +
-                    ind.ma_ma_ma.value[end]
+                    3.0 * value(ind.ma) - 3.0 * value(ind.ma_ma) +
+                    value(ind.ma_ma_ma)
             else
                 ind.value = missing
             end
