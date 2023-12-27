@@ -25,7 +25,7 @@ struct KeltnerChannelsVal{Tval}
 end
 
 """
-    KeltnerChannels{Tohlcv,S}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN)
+    KeltnerChannels{Tohlcv,S}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA)
 
 The KeltnerChannels type implements a Keltner Channels indicator.
 """
@@ -39,7 +39,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
     atr_mult_down::S
 
     atr::ATR
-    cb::EMA
+    cb  # EMA default
     #cb::ValueExtractor  # EMA candle.close (see also CallFun)
 
     function KeltnerChannels{Tohlcv,S}(;
@@ -47,9 +47,11 @@ mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
         atr_period = KeltnerChannels_ATR_PERIOD,
         atr_mult_up = KeltnerChannels_ATR_MULT_UP,
         atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
+        ma = EMA
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
-        cb = EMA{S}(period = ma_period)
+        # cb = EMA{S}(period = ma_period)
+        _cb = MAFactory(S)(ma, ma_period)
         #cb = ValueExtractor{Float64,OnlineStat{Tohlcv},Function}(o, candle -> candle.close)  # CallFun, ValueExtractor
         new{Tohlcv,S}(
             missing,
@@ -59,7 +61,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
             atr_mult_up,
             atr_mult_down,
             atr,
-            cb,
+            _cb,
         )
     end
 end

@@ -2,7 +2,7 @@ const EMV_PERIOD = 20
 const EMV_VOLUME_DIV = 10000
 
 """
-    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV)
+    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA)
 
 The EMV type implements a Ease of Movement indicator.
 """
@@ -13,17 +13,18 @@ mutable struct EMV{Tohlcv,S} <: OnlineStat{Tohlcv}
     period::Integer
     volume_div::Integer
 
-    emv_sma::SMA{S}
+    emv_ma  # SMA
 
     input::CircBuff{Tohlcv}
 
     function EMV{Tohlcv,S}(;
         period = EMV_PERIOD,
         volume_div = EMV_VOLUME_DIV,
+        ma = SMA
     ) where {Tohlcv,S}
-        emv_sma = SMA{S}(period = period)
+        _emv_ma = MAFactory(S)(ma, period)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, volume_div, emv_sma, input)
+        new{Tohlcv,S}(missing, 0, period, volume_div, _emv_ma, input)
     end
 end
 
@@ -43,10 +44,10 @@ function OnlineStatsBase._fit!(ind::EMV, candle::OHLCV)
             emv = 0.0
         end
 
-        fit!(ind.emv_sma, emv)
+        fit!(ind.emv_ma, emv)
 
-        if length(ind.emv_sma.value) >= 1
-            ind.value = value(ind.emv_sma)
+        if length(ind.emv_ma.value) >= 1
+            ind.value = value(ind.emv_ma)
         else
             ind.value = missing
         end

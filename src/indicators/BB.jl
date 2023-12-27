@@ -8,7 +8,7 @@ struct BBVal{Tval}
 end
 
 """
-    BB{T}(; period = BB_PERIOD, std_dev_multiplier = BB_STD_DEV_MULTIPLIER)
+    BB{T}(; period = BB_PERIOD, std_dev_multiplier = BB_STD_DEV_MULTIPLIER, ma = SMA)
 
 The BB type implements Bollinger Bands indicator.
 """
@@ -19,16 +19,17 @@ mutable struct BB{Tval} <: OnlineStat{Tval}
     period::Integer
     std_dev_multiplier::Tval
 
-    central_band::SMA{Tval}
+    central_band  # default SMA
     std_dev::StdDev{Tval}
 
     function BB{Tval}(;
         period = BB_PERIOD,
         std_dev_multiplier = BB_STD_DEV_MULTIPLIER,
+        ma = SMA
     ) where {Tval}
-        central_band = SMA{Tval}(period = period)
+        _central_band = MAFactory(Tval)(ma, period)
         std_dev = StdDev{Tval}(period = period)
-        new{Tval}(missing, 0, period, std_dev_multiplier, central_band, std_dev)
+        new{Tval}(missing, 0, period, std_dev_multiplier, _central_band, std_dev)
     end
 end
 

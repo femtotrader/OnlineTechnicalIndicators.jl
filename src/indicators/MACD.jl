@@ -17,7 +17,7 @@ end
 =#
 
 """
-    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD)
+    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA)
 
 The MACD type implements Moving Average Convergence Divergence indicator.
 """
@@ -25,32 +25,38 @@ mutable struct MACD{Tval} <: OnlineStat{Tval}
     value::Union{Missing,MACDVal{Tval}}
     n::Int
 
-    ema_fast::EMA{Tval}
-    ema_slow::EMA{Tval}
+    fast_ma::EMA{Tval}
+    slow_ma::EMA{Tval}
     signal_line::EMA{Tval}
 
     function MACD{Tval}(;
         fast_period = MACD_FAST_PERIOD,
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
+        ma = EMA
     ) where {Tval}
         @warn "WIP - buggy"
 
-        ema_fast = EMA{Tval}(period = fast_period)
-        ema_slow = EMA{Tval}(period = slow_period)
-        signal_line = EMA{Tval}(period = signal_period)
+        # fast_ma = EMA{Tval}(period = fast_period)
+        # slow_ma = EMA{Tval}(period = slow_period)
 
-        new{Tval}(missing, 0, ema_fast, ema_slow, signal_line)
+        fast_ma = MAFactory(S)(ma, fast_period)
+        slow_ma = MAFactory(S)(ma, slow_period)
+
+        # signal_line = EMA{Tval}(period = signal_period)
+        signal_line = MAFactory(S)(ma, signal_period)
+
+        new{Tval}(missing, 0, fast_ma, slow_ma, signal_line)
     end
 end
 
 function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
-    fit!(ind.ema_fast, data)
-    fit!(ind.ema_slow, data)
+    fit!(ind.fast_ma, data)
+    fit!(ind.slow_ma, data)
     ind.n += 1
     #=
-    if length(ind.ema_fast) > 0 && length(ind.ema_slow) > 0
-        macd = value(ind.ema_fast) - value(ind.ema_slow)
+    if length(ind.fast_ma) > 0 && length(ind.slow_ma) > 0
+        macd = value(ind.fast_ma) - value(ind.slow_ma)
         push!(ind.signal_line, macd)
 
         if length(ind.signal_line.value) > 0

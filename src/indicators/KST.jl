@@ -23,7 +23,8 @@ end
         roc3_ma_period = KST_ROC3_MA_PERIOD,
         roc4_period = KST_ROC4_PERIOD,
         roc4_ma_period = KST_ROC4_MA_PERIOD,
-        signal_period = KST_SIGNAL_PERIOD
+        signal_period = KST_SIGNAL_PERIOD,
+        ma = SMA
     )
 
 The KST type implements Know Sure Thing indicator.
@@ -32,17 +33,17 @@ mutable struct KST{Tval} <: OnlineStat{Tval}
     value::Union{Missing,KSTVal{Tval}}
     n::Int
 
-    roc1::SMA{Tval}
-    roc2::SMA{Tval}
-    roc3::SMA{Tval}
-    roc4::SMA{Tval}
+    roc1  # SMA
+    roc2  # SMA
+    roc3  # SMA
+    roc4  # SMA
 
-    roc1_ma::SMA{Tval}
-    roc2_ma::SMA{Tval}
-    roc3_ma::SMA{Tval}
-    roc4_ma::SMA{Tval}
+    roc1_ma  # SMA
+    roc2_ma  # SMA
+    roc3_ma  # SMA
+    roc4_ma  # SMA
 
-    signal_line::SMA{Tval}
+    signal_line  # SMA
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,
@@ -54,18 +55,30 @@ mutable struct KST{Tval} <: OnlineStat{Tval}
         roc4_period = KST_ROC4_PERIOD,
         roc4_ma_period = KST_ROC4_MA_PERIOD,
         signal_period = KST_SIGNAL_PERIOD,
+        ma = SMA
     ) where {Tval}
-        roc1 = SMA{Tval}(period = roc1_period)
-        roc2 = SMA{Tval}(period = roc2_period)
-        roc3 = SMA{Tval}(period = roc3_period)
-        roc4 = SMA{Tval}(period = roc4_period)
+        # roc1 = SMA{Tval}(period = roc1_period)
+        # roc2 = SMA{Tval}(period = roc2_period)
+        # roc3 = SMA{Tval}(period = roc3_period)
+        # roc4 = SMA{Tval}(period = roc4_period)
 
-        roc1_ma = SMA{Tval}(period = roc1_ma_period)
-        roc2_ma = SMA{Tval}(period = roc2_ma_period)
-        roc3_ma = SMA{Tval}(period = roc3_ma_period)
-        roc4_ma = SMA{Tval}(period = roc4_ma_period)
+        roc1 = MAFactory(Tval)(ma, roc1_period)
+        roc2 = MAFactory(Tval)(ma, roc2_period)
+        roc3 = MAFactory(Tval)(ma, roc3_period)
+        roc4 = MAFactory(Tval)(ma, roc4_period)
 
-        signal_line = SMA{Tval}(period = signal_period)
+        # roc1_ma = SMA{Tval}(period = roc1_ma_period)
+        # roc2_ma = SMA{Tval}(period = roc2_ma_period)
+        # roc3_ma = SMA{Tval}(period = roc3_ma_period)
+        # roc4_ma = SMA{Tval}(period = roc4_ma_period)
+
+        roc1_ma = MAFactory(Tval)(ma, roc1_ma_period)
+        roc2_ma = MAFactory(Tval)(ma, roc2_ma_period)
+        roc3_ma = MAFactory(Tval)(ma, roc3_ma_period)
+        roc4_ma = MAFactory(Tval)(ma, roc4_ma_period)
+
+        # signal_line = SMA{Tval}(period = signal_period)
+        signal_line = MAFactory(Tval)(ma, signal_period)
 
         new{Tval}(
             missing,
@@ -116,10 +129,10 @@ function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
     end
 
     kst =
-        1.0 * ind.roc1_ma.value[end] +
-        2.0 * ind.roc2_ma.value[end] +
-        3.0 * ind.roc3_ma.value[end] +
-        4.0 * ind.roc4_ma.value[end]
+        1.0 * ind.roc1_ma[end] +
+        2.0 * ind.roc2_ma[end] +
+        3.0 * ind.roc3_ma[end] +
+        4.0 * ind.roc4_ma[end]
     fit!(ind.signal_line, kst)
 
     if length(ind.signal_line.value) > 0

@@ -1,5 +1,3 @@
-const OBV_MEMORY = 3
-
 """
     OBV{Tohlcv,S}()
 

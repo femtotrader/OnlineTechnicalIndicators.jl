@@ -11,26 +11,26 @@ mutable struct DPO{Tval} <: OnlineStat{Tval}
 
     period::Integer
 
-    sma::SMA{Tval}
+    ma # SMA
 
     input::CircBuff{Tval}
 
-    function DPO{Tval}(; period = DPO_PERIOD) where {Tval}
+    function DPO{Tval}(; period = DPO_PERIOD, ma = SMA) where {Tval}
         input = CircBuff(Tval, period, rev = false)
-        sma = SMA{Tval}(period = period)
-        new{Tval}(missing, 0, period, sma, input)
+        _ma = MAFactory(Tval)(ma, period)
+        new{Tval}(missing, 0, period, _ma, input)
     end
 end
 
 function OnlineStatsBase._fit!(ind::DPO, data)
     fit!(ind.input, data)
-    fit!(ind.sma, data)
+    fit!(ind.ma, data)
     if ind.n != ind.period
         ind.n += 1
     end
     semi_period = floor(Int, ind.period / 2)
-    if length(ind.input) >= semi_period + 2 && length(ind.sma.value) >= 1
-        ind.value = ind.input[end-semi_period-1] - ind.sma.value[end]
+    if length(ind.input) >= semi_period + 2 && length(ind.ma.value) >= 1
+        ind.value = ind.input[end-semi_period-1] - ind.ma.value[end]
     else
         ind.value = missing
     end

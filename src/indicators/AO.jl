@@ -2,7 +2,7 @@ const AO_FAST_PERIOD = 3
 const AO_SLOW_PERIOD = 21
 
 """
-    AO{Tohlcv,S}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD)
+    AO{Tohlcv,S}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA)
 
 The AO type implements an Awesome Oscillator indicator.
 """
@@ -10,29 +10,29 @@ mutable struct AO{Tohlcv,S} <: OnlineStat{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    ma_fast  # default SMA
-    ma_slow  # default SMA
+    fast_ma  # default SMA
+    slow_ma  # default SMA
 
     function AO{Tohlcv,S}(;
         fast_period = AO_FAST_PERIOD,
         slow_period = AO_SLOW_PERIOD,
-        ma_fast = SMA,
-        ma_slow = SMA
+        fast_ma = SMA,
+        slow_ma = SMA
     ) where {Tohlcv,S}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
-        _ma_fast = MAFactory(S)(ma_fast, fast_period)
-        _ma_slow = MAFactory(S)(ma_slow, slow_period)
-        new{Tohlcv,S}(missing, 0, _ma_fast, _ma_slow)
+        _fast_ma = MAFactory(S)(fast_ma, fast_period)
+        _slow_ma = MAFactory(S)(slow_ma, slow_period)
+        new{Tohlcv,S}(missing, 0, _fast_ma, _slow_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::AO, candle)
     ind.n += 1
     median = (candle.high + candle.low) / 2.0
-    fit!(ind.ma_fast, median)
-    fit!(ind.ma_slow, median)
-    if has_output_value(ind.ma_fast) && has_output_value(ind.ma_slow)
-        ind.value = value(ind.ma_fast) - value(ind.ma_slow)
+    fit!(ind.fast_ma, median)
+    fit!(ind.slow_ma, median)
+    if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
+        ind.value = value(ind.fast_ma) - value(ind.slow_ma)
     else
         ind.value = missing
     end
