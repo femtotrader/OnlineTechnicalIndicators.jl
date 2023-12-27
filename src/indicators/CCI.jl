@@ -25,8 +25,8 @@ function OnlineStatsBase._fit!(ind::CCI, candle)
     fit!(ind.mean_dev, typical_price)
     if has_output_value(ind.mean_dev)
         ind.value =
-            (typical_price - ind.mean_dev.sma.value[end]) /
-            (0.015 * ind.mean_dev.value[end])
+            (typical_price - value(ind.mean_dev.ma)) /
+            (0.015 * value(ind.mean_dev))
     else
         ind.value = missing
     end
