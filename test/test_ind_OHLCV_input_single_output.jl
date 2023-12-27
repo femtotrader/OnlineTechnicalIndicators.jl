@@ -153,12 +153,8 @@
         @test isapprox(value(ind).d, 75.956284; atol = ATOL)
     end
 
-    #=
-
-    # ToDo : fix this
-
-    @testset_skip "MassIndex - help wanted" begin
-        ind = MassIndex{OHLCV{Missing,Float64,Float64}}(ema_period = 9, ema_ema_period = 9, ema_ratio_period = 10)
+    @testset "MassIndex" begin
+        ind = MassIndex{OHLCV{Missing,Float64,Float64},Float64}(ema_period = 9, ema_ema_period = 9, ema_ratio_period = 10)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -168,8 +164,10 @@
         @test isapprox(value(ind), 9.648128; atol = ATOL)
     end
 
+    #=
+
     @testset_skip "CHOP - help wanted" begin
-        ind = CHOP{OHLCV{Missing,Float64,Float64}}(period = 14)
+        ind = CHOP{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)

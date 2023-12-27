@@ -48,7 +48,7 @@ See [tests](test/)
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | need EMA (fast and slow period) and 4 managed sequences
 | `KeltnerChannels` | Keltner Channels | :candle:  | :m: | input OHLC output several values (same as SuperTrend or DonchianChannels). need subindicators ATR and EMA
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `MassIndex` | Mass Index | :candle: | :1234: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
+| `MassIndex` | Mass Index | :candle: | :1234: | :heavy_check_mark:
 | `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | should be easy to implement by following reference implementation (but [why are they print statements](https://github.com/nardew/talipp/issues/83)?) :question: tests are also missing in reference implementation
 | `MeanDev` | Mean Deviation | :1234: | :1234: | :heavy_check_mark:
 | `OBV` | On Balance Volume | :candle: | :1234: | :heavy_check_mark:

@@ -53,9 +53,7 @@ export VTX
 export DonchianChannels
 export KeltnerChannels
 
-using DataStructures
 using OnlineStatsBase
-using OnlineStats: CallFun
 
 abstract type AbstractIncTAIndicator end
 
@@ -102,7 +100,7 @@ include("indicators/OBV.jl")
 include("indicators/SOBV.jl")
 include("indicators/EMV.jl")
 include("indicators/Stoch.jl")
-# include("indicators/MassIndex.jl")
+include("indicators/MassIndex.jl")
 # include("indicators/CHOP.jl")
 
 # MIMO
