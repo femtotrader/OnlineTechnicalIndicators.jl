@@ -6,6 +6,8 @@ const KeltnerChannels_ATR_MULT_DOWN = 3.0
 
 #=
 # See https://github.com/joshday/OnlineStats.jl/issues/271
+# See FilterTransform https://joshday.github.io/OnlineStats.jl/latest/api/#OnlineStatsBase.FilterTransform
+
 struct ValueExtractor{T,O<:OnlineStat{T},F<:Function} <: OnlineStat{T}
     stat::O
     f::F
