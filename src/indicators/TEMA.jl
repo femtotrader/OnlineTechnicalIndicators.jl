@@ -3,7 +3,7 @@ const TEMA_PERIOD = 20
 """
     TEMA{T}(; period = TEMA_PERIOD, ma = EMA)
 
-The TEMA type implements a Double Exponential Moving Average indicator.
+The TEMA type implements a Triple Exponential Moving Average indicator.
 """
 mutable struct TEMA{Tval} <: OnlineStat{Tval}
     value::Union{Missing,Tval}
