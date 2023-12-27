@@ -46,7 +46,7 @@ See [tests](test/)
 | `KAMA` | Kaufman's Adaptive Moving Average | :1234: | :1234: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KST` | Know Sure Thing | :1234: | :m: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | need EMA (fast and slow period) and 4 managed sequences
-| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | :heavy_exclamation_mark:
+| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | :heavy_check_mark:
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `MassIndex` | Mass Index | :candle: | :1234: | :heavy_check_mark:
 | `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | should be easy to implement by following reference implementation (but [why are they print statements](https://github.com/nardew/talipp/issues/83)?) :question: tests are also missing in reference implementation
