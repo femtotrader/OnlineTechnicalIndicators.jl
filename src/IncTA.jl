@@ -50,10 +50,12 @@ export Stoch
 ## multiple output => MIMO
 export SuperTrend, Trend
 export VTX
-export DonchianChannels, DonchianChannelsVal
+export DonchianChannels
+export KeltnerChannels
 
 using DataStructures
 using OnlineStatsBase
+using OnlineStats: CallFun
 
 abstract type AbstractIncTAIndicator end
 
@@ -107,5 +109,6 @@ include("indicators/Stoch.jl")
 include("indicators/SuperTrend.jl")
 include("indicators/VTX.jl")
 include("indicators/DonchianChannels.jl")
+include("indicators/KeltnerChannels.jl")
 
 end

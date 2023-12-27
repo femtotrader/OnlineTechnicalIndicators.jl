@@ -41,9 +41,7 @@
     end
 
     @testset "DonchianChannels" begin
-        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},Float64}(
-            period = 5,
-        )
+        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},Float64}(period = 5)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -60,6 +58,33 @@
         @test isapprox(value(ind).lower, 9.260000; atol = ATOL)
         @test isapprox(value(ind).central, 10.059999; atol = ATOL)
         @test isapprox(value(ind).upper, 10.860000; atol = ATOL)
+    end
+
+    @testset "KeltnerChannels" begin
+        ind = KeltnerChannels{OHLCV{Missing,Float64,Float64},Float64}(
+            ma_period = 10,
+            atr_period = 10,
+            atr_mult_up = 2,
+            atr_mult_down = 3,
+        )
+
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).lower, 7.606912; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).central, 9.643885; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).upper, 11.001867; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).lower, 7.731176; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).central, 9.750451; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).upper, 11.096635; atol = ATOL)
+
+        @test isapprox(value(ind).lower, 7.747476; atol = ATOL)
+        @test isapprox(value(ind).central, 9.795824; atol = ATOL)
+        @test isapprox(value(ind).upper, 11.161389; atol = ATOL)
+
     end
 
 end

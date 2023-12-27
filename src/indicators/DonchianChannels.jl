@@ -7,7 +7,7 @@ struct DonchianChannelsVal{Tval}
 end
 
 """
-    DonchianChannels{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
+    DonchianChannels{Tohlcv,S}(; period = DonchianChannels_ATR_PERIOD)
 
 The DonchianChannels type implements a Donchian Channels indicator.
 """
@@ -32,10 +32,9 @@ function OnlineStatsBase._fit!(ind::DonchianChannels, candle::OHLCV)
     ind.n += 1
     if ind.n >= ind.period
         max_high = max([k.high for k in value(ind.input)]...)
-        min_low = min([k.low for k in value(ind.input)]...)    
+        min_low = min([k.low for k in value(ind.input)]...)
         ind.value = DonchianChannelsVal(min_low, (max_high + min_low) / 2.0, max_high)
     else
         ind.value = missing
-        return
     end
 end
