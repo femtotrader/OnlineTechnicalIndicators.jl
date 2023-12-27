@@ -1,7 +1,7 @@
 const TEMA_PERIOD = 20
 
 """
-    TEMA{T}(; period = TEMA_PERIOD)
+    TEMA{T}(; period = TEMA_PERIOD, ma = EMA)
 
 The TEMA type implements a Double Exponential Moving Average indicator.
 """
@@ -11,31 +11,34 @@ mutable struct TEMA{Tval} <: OnlineStat{Tval}
 
     period::Integer
 
-    ema::EMA{Tval}
-    ema_ema::EMA{Tval}
-    ema_ema_ema::EMA{Tval}
+    ma  # EMA
+    ma_ma  # EMA
+    ma_ma_ma  # EMA
 
-    function TEMA{Tval}(; period = TEMA_PERIOD) where {Tval}
-        ema = EMA{Tval}(period = period)
-        ema_ema = EMA{Tval}(period = period)
-        ema_ema_ema = EMA{Tval}(period = period)
-        new{Tval}(missing, 0, period, ema, ema_ema, ema_ema_ema)
+    function TEMA{Tval}(; period = TEMA_PERIOD, ma = EMA) where {Tval}
+        # _ma = EMA{Tval}(period = period)
+        _ma = MAFactory(Tval)(ma, period)
+        # _ma_ma = EMA{Tval}(period = period)
+        _ma_ma = MAFactory(Tval)(ma, period)
+        # _ma_ma_ma = EMA{Tval}(period = period)
+        _ma_ma_ma = MAFactory(Tval)(ma, period)
+        new{Tval}(missing, 0, period, _ma, _ma_ma, _ma_ma_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::TEMA, data)
-    fit!(ind.ema, data)
+    fit!(ind.ma, data)
     if ind.n != ind.period
         ind.n += 1
     end
-    if has_output_value(ind.ema)
-        fit!(ind.ema_ema, ind.ema.value[end])
-        if has_output_value(ind.ema_ema)
-            fit!(ind.ema_ema_ema, ind.ema_ema.value[end])
-            if has_output_value(ind.ema_ema_ema)
+    if has_output_value(ind.ma)
+        fit!(ind.ma_ma, ind.ma.value[end])
+        if has_output_value(ind.ma_ma)
+            fit!(ind.ma_ma_ma, ind.ma_ma.value[end])
+            if has_output_value(ind.ma_ma_ma)
                 ind.value =
-                    3.0 * ind.ema.value[end] - 3.0 * ind.ema_ema.value[end] +
-                    ind.ema_ema_ema.value[end]
+                    3.0 * ind.ma.value[end] - 3.0 * ind.ma_ma.value[end] +
+                    ind.ma_ma_ma.value[end]
             else
                 ind.value = missing
             end
