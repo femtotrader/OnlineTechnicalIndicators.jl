@@ -111,4 +111,7 @@ include("indicators/VTX.jl")
 include("indicators/DonchianChannels.jl")
 include("indicators/KeltnerChannels.jl")
 
+# Other stuff
+include("ma.jl")  # Moving Average Factory
+
 end
