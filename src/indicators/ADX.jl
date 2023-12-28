@@ -60,7 +60,7 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             pdi,
             mdi,
             dx,
-            input
+            input,
         )
     end
 end
@@ -76,13 +76,15 @@ function OnlineStatsBase._fit!(ind::ADX, candle)
         current_input = ind.input[end]
         prev_input = ind.input[end-1]
 
-        if current_input.high - prev_input.high > prev_input.low - current_input.low && current_input.high - prev_input.high > 0
+        if current_input.high - prev_input.high > prev_input.low - current_input.low &&
+           current_input.high - prev_input.high > 0
             fit!(ind.pdm, current_input.high - prev_input.high)
         else
             fit!(ind.pdm, 0.0)
         end
 
-        if prev_input.low - current_input.low > current_input.high - prev_input.high && prev_input.low - current_input.low > 0
+        if prev_input.low - current_input.low > current_input.high - prev_input.high &&
+           prev_input.low - current_input.low > 0
             fit!(ind.mdm, prev_input.low - current_input.low)
         else
             fit!(ind.mdm, 0.0)
@@ -95,15 +97,24 @@ function OnlineStatsBase._fit!(ind::ADX, candle)
             fit!(ind.spdm, sum(value(ind.pdm)) / ind.di_period)
             fit!(ind.smdm, sum(value(ind.mdm)) / ind.di_period)
         elseif length(ind.pdm) > ind.di_period
-            fit!(ind.spdm, (ind.spdm[end] * (ind.di_period - 1) + ind.pdm[end]) / ind.di_period)
-            fit!(ind.smdm, (ind.smdm[end] * (ind.di_period - 1) + ind.mdm[end]) / ind.di_period)
+            fit!(
+                ind.spdm,
+                (ind.spdm[end] * (ind.di_period - 1) + ind.pdm[end]) / ind.di_period,
+            )
+            fit!(
+                ind.smdm,
+                (ind.smdm[end] * (ind.di_period - 1) + ind.mdm[end]) / ind.di_period,
+            )
         end
 
 
         fit!(ind.pdi, 100.0 * ind.spdm[end] / value(ind.atr))
         fit!(ind.mdi, 100.0 * ind.smdm[end] / value(ind.atr))
 
-        fit!(ind.dx, 100.0 * (abs(ind.pdi[end]) - ind.mdi[end]) / (ind.pdi[end] + ind.mdi[end]))
+        fit!(
+            ind.dx,
+            100.0 * (abs(ind.pdi[end]) - ind.mdi[end]) / (ind.pdi[end] + ind.mdi[end]),
+        )
 
         adx = missing
         if length(ind.dx) == ind.adx_period

@@ -180,10 +180,7 @@
     end
 
     @testset "KVO" begin
-        ind = KVO{OHLCV{Missing,Float64,Float64},Float64}(
-            fast_period = 5,
-            slow_period = 10,
-        )
+        ind = KVO{OHLCV{Missing,Float64,Float64},Float64}(fast_period = 5, slow_period = 10)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)

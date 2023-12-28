@@ -26,7 +26,7 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
     function BB{Tval}(;
         period = BB_PERIOD,
         std_dev_multiplier = BB_STD_DEV_MULTIPLIER,
-        ma = SMA
+        ma = SMA,
     ) where {Tval}
         _central_band = MAFactory(Tval)(ma, period)
         _std_dev = StdDev{Tval}(period = period)

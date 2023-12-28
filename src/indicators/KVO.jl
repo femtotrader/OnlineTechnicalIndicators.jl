@@ -10,8 +10,8 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    fast_ma  # EMA by default
-    slow_ma  # EMA by default
+    fast_ma::Any  # EMA by default
+    slow_ma::Any  # EMA by default
 
     trend::CircBuff
     cumulative_measurement::CircBuff
@@ -21,7 +21,7 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function KVO{Tohlcv,S}(;
         fast_period = KVO_FAST_PERIOD,
         slow_period = KVO_SLOW_PERIOD,
-        ma = EMA
+        ma = EMA,
     ) where {Tohlcv,S}
         _fast_ma = MAFactory(S)(ma, fast_period)
         _slow_ma = MAFactory(S)(ma, slow_period)
@@ -47,7 +47,8 @@ function OnlineStatsBase._fit!(ind::KVO, candle)
     if length(ind.trend) < 1
         fit!(ind.trend, 0.0)
     else
-        if (value1.high + value1.low + value1.close) > (value2.high + value2.low + value2.close)
+        if (value1.high + value1.low + value1.close) >
+           (value2.high + value2.low + value2.close)
             fit!(ind.trend, 1.0)
         else
             fit!(ind.trend, -1.0)
@@ -77,7 +78,11 @@ function OnlineStatsBase._fit!(ind::KVO, candle)
     if ind.cumulative_measurement[end] == 0
         volume_force = 0.0
     else
-        volume_force = value1.volume * abs(2 * (dm1 / ind.cumulative_measurement[end] - 1)) * ind.trend[end] * 100
+        volume_force =
+            value1.volume *
+            abs(2 * (dm1 / ind.cumulative_measurement[end] - 1)) *
+            ind.trend[end] *
+            100
     end
 
     fit!(ind.fast_ma, volume_force)

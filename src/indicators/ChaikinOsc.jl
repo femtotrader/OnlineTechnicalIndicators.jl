@@ -13,14 +13,14 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     sub_indicators::Series
     # accu_dist::AccuDist{Tohlcv}
 
-    fast_ma  # EMA by default
-    slow_ma  # EMA by default
+    fast_ma::Any  # EMA by default
+    slow_ma::Any  # EMA by default
 
     function ChaikinOsc{Tohlcv,S}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
         slow_period = ChaikinOsc_SLOW_PERIOD,
         fast_ma = EMA,
-        slow_ma = EMA
+        slow_ma = EMA,
     ) where {Tohlcv,S}
         accu_dist = AccuDist{Tohlcv,S}()
         sub_indicators = Series(accu_dist)

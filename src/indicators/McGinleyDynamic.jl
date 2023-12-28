@@ -24,7 +24,7 @@ end
 function OnlineStatsBase._fit!(ind::McGinleyDynamic, val)
     fit!(ind.input, val)
     if ind.rolling  # CircBuff is full and rolling
-        ind.value = value(ind) + (val - value(ind)) / (ind.period * (val / value(ind)) ^ 4)
+        ind.value = value(ind) + (val - value(ind)) / (ind.period * (val / value(ind))^4)
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true

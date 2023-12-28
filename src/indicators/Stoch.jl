@@ -24,7 +24,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
-        ma = SMA
+        ma = SMA,
     ) where {Tohlcv,S}
         # values_d = SMA{S}(; period = smoothing_period)
         values_d = MAFactory(S)(ma, smoothing_period)

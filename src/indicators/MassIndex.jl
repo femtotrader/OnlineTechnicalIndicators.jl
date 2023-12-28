@@ -16,14 +16,14 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     sub_indicators::Series
     #ma  # EMA
-    ma_ma  # EMA
+    ma_ma::Any  # EMA
     ma_ratio::CircBuff{S}
 
     function MassIndex{Tohlcv,S}(;
         ma_period = MassIndex_MA_PERIOD,
         ma_ma_period = MassIndex_MA_MA_PERIOD,
         ma_ratio_period = MassIndex_MA_RATIO_PERIOD,
-        ma = EMA
+        ma = EMA,
     ) where {Tohlcv,S}
         # ma = EMA{S}(period = ma_period)
         _ma = MAFactory(S)(ma, ma_period)

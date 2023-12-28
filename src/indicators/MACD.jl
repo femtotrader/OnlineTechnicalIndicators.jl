@@ -35,7 +35,7 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         fast_period = MACD_FAST_PERIOD,
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
-        ma = EMA
+        ma = EMA,
     ) where {Tval}
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)

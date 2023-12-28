@@ -33,7 +33,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr_period = KeltnerChannels_ATR_PERIOD,
         atr_mult_up = KeltnerChannels_ATR_MULT_UP,
         atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
-        ma = EMA
+        ma = EMA,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
         # cb = EMA{S}(period = ma_period)

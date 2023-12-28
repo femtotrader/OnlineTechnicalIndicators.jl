@@ -13,14 +13,14 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
     volume_div::Integer
 
-    emv_ma  # SMA
+    emv_ma::Any  # SMA
 
     input::CircBuff{Tohlcv}
 
     function EMV{Tohlcv,S}(;
         period = EMV_PERIOD,
         volume_div = EMV_VOLUME_DIV,
-        ma = SMA
+        ma = SMA,
     ) where {Tohlcv,S}
         _emv_ma = MAFactory(S)(ma, period)
         input = CircBuff(Tohlcv, period, rev = false)
