@@ -58,7 +58,7 @@ See [tests](test/)
 | `PivotsHL` | High/Low Pivots | :candle: | :m: | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | `CircBuff`, `SMMA` | :heavy_check_mark:
-| `SFX` | SFX | :candle: | :m: |  | :construction: This indicator needs value extractor which is not currently implemented
+| `SFX` | SFX | :candle: | :m: | `ATR`, `StdDev`, `SMA`, `FilterTransform` (to extract `close`) |
 | `SMA` | Simple Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume | :candle: | :1234: | `OBV`, `SMA` | :heavy_check_mark:
