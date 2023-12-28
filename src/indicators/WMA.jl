@@ -3,7 +3,7 @@ const WMA_PERIOD = 3
 """
     WMA{T}(; period = WMA_PERIOD)
 
-The WMA type implements a Weighted Moving Average indicator.
+The `WMA` type implements a Weighted Moving Average indicator.
 """
 mutable struct WMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

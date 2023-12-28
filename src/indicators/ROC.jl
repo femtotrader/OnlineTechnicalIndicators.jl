@@ -3,7 +3,7 @@ const ROC_PERIOD = 3
 """
     ROC{T}(; period = ROC_PERIOD)
 
-The ROC type implements a Rate Of Change indicator.
+The `ROC` type implements a Rate Of Change indicator.
 """
 mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}

@@ -14,7 +14,7 @@ end
 """
     SuperTrend{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
 
-The SuperTrend type implements a Super Trend indicator.
+The `SuperTrend` type implements a Super Trend indicator.
 """
 mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,SuperTrendVal}

@@ -4,7 +4,7 @@ const EMA_PERIOD = 3
 """
     EMA{T}(; period=EMA_PERIOD)
 
-The EMA type implements an Exponential Moving Average indicator.
+The `EMA` type implements an Exponential Moving Average indicator.
 """
 mutable struct EMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

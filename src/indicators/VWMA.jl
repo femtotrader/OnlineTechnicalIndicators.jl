@@ -3,7 +3,7 @@ const VWMA_PERIOD = 3
 """
     VWMA{Tohlcv,S}(; period = VWMA_PERIOD)
 
-The VWMA type implements a Volume Weighted Moving Average indicator.
+The `VWMA` type implements a Volume Weighted Moving Average indicator.
 """
 mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
     value::Union{Missing,S}

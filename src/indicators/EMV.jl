@@ -4,7 +4,7 @@ const EMV_VOLUME_DIV = 10000
 """
     EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA)
 
-The EMV type implements a Ease of Movement indicator.
+The `EMV` type implements a Ease of Movement indicator.
 """
 mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

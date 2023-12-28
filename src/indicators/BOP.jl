@@ -1,7 +1,7 @@
 """
     BOP{Tohlcv,S}()
 
-The BOP type implements a Balance Of Power indicator.
+The `BOP` type implements a Balance Of Power indicator.
 """
 mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

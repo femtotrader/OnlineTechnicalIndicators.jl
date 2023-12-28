@@ -10,7 +10,7 @@ end
 """
     ADX{Tohlcv,S}(; di_period = 14, adx_period = 14)
 
-The ADX type implements an Average Directional Index indicator.
+The `ADX` type implements an Average Directional Index indicator.
 """
 mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ADXVal{S}}

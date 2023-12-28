@@ -4,7 +4,7 @@ const KVO_SLOW_PERIOD = 10
 """
     KVO{Tohlcv,S}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA)
 
-The KVO type implements a Klinger Volume Oscillator.
+The `KVO` type implements a Klinger Volume Oscillator.
 """
 mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

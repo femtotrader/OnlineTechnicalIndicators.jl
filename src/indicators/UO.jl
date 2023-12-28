@@ -5,7 +5,7 @@ const UO_SLOW_PERIOD = 7
 """
     UO{Tohlcv,S}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD)
 
-The UO type implements an Ultimate Oscillator.
+The `UO` type implements an Ultimate Oscillator.
 """
 mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

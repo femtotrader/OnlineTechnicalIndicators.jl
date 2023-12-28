@@ -8,18 +8,10 @@ struct MACDVal{Tval}
     histogram::Union{Missing,Tval}
 end
 
-#=
-struct MACDVal{Tval}
-    macd::Tval
-    signal::Tval
-    histogram::Tval
-end
-=#
-
 """
     MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA)
 
-The MACD type implements Moving Average Convergence Divergence indicator.
+The `MACD` type implements Moving Average Convergence Divergence indicator.
 """
 mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,MACDVal{Tval}}

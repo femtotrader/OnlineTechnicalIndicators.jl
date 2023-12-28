@@ -10,7 +10,7 @@ end
 """
     ChandeKrollStop{Tohlcv,S}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD)
 
-The ChandeKrollStop type implements a ChandeKrollStop indicator.
+The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 """
 mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal{S}}

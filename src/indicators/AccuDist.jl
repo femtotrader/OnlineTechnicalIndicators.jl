@@ -1,7 +1,7 @@
 """
     AccuDist{Tohlcv,S}()
 
-The AccuDist type implements an Accumulation and Distribution indicator.
+The `AccuDist` type implements an Accumulation and Distribution indicator.
 """
 mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

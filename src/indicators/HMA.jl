@@ -3,7 +3,7 @@ const HMA_PERIOD = 20
 """
     HMA{T}(; period = HMA_PERIOD)
 
-The HMA type implements a Hull Moving Average indicator.
+The `HMA` type implements a Hull Moving Average indicator.
 """
 mutable struct HMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

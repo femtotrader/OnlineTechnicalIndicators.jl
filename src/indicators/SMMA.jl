@@ -3,7 +3,7 @@ const SMMA_PERIOD = 3
 """
     SMMA{T}(; period = SMA_PERIOD)
 
-The SMMA type implements a SMoothed Moving Average indicator.
+The `SMMA` type implements a SMoothed Moving Average indicator.
 """
 mutable struct SMMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

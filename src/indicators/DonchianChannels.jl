@@ -9,7 +9,7 @@ end
 """
     DonchianChannels{Tohlcv,S}(; period = DonchianChannels_ATR_PERIOD)
 
-The DonchianChannels type implements a Donchian Channels indicator.
+The `DonchianChannels` type implements a Donchian Channels indicator.
 """
 mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,DonchianChannelsVal{S}}

@@ -3,7 +3,7 @@ const MeanDev_PERIOD = 3
 """
     MeanDev{T}(; period = MeanDev_PERIOD, ma = SMA)
 
-The MeanDev type implements a Mean Deviation indicator.
+The `MeanDev` type implements a Mean Deviation indicator.
 """
 mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}

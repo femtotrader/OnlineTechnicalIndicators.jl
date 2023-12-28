@@ -4,7 +4,7 @@ const AO_SLOW_PERIOD = 21
 """
     AO{Tohlcv,S}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA)
 
-The AO type implements an Awesome Oscillator indicator.
+The `AO` type implements an Awesome Oscillator indicator.
 """
 mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

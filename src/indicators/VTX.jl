@@ -8,7 +8,7 @@ end
 """
     VTC{Tohlcv,S}(; period = VTX_PERIOD)
 
-The VTX type implements a Vortex Indicator.
+The `VTX` type implements a Vortex Indicator.
 """
 mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,VTXVal}

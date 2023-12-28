@@ -3,7 +3,7 @@ const SOBV_PERIOD = 20
 """
     SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA)
 
-The SOBV type implements a Smoothed On Balance Volume indicator.
+The `SOBV` type implements a Smoothed On Balance Volume indicator.
 """
 mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

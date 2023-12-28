@@ -3,7 +3,7 @@ const ATR_PERIOD = 3
 """
     ATR{Tohlcv,S}(; period = ATR_PERIOD)
 
-The ATR type implements an Average True Range indicator.
+The `ATR` type implements an Average True Range indicator.
 """
 mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

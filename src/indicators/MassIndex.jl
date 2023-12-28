@@ -6,7 +6,7 @@ const MassIndex_MA_RATIO_PERIOD = 10
 """
     MassIndex{T,S}(; ma_period = MassIndex_MA_PERIOD, ma_ma_period = MassIndex_MA_MA_PERIOD, ma_ratio_period = MassIndex_MA_RATIO_PERIOD, ma = EMA)
 
-The MassIndex type implements a Commodity Channel Index.
+The `MassIndex` type implements a Commodity Channel Index.
 """
 mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

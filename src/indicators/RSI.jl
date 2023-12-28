@@ -3,7 +3,7 @@ const RSI_PERIOD = 3
 """
     RSI{T}(; period = SMA_PERIOD)
 
-The RSI type implements a Relative Strength Index indicator.
+The `RSI` type implements a Relative Strength Index indicator.
 """
 mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}

@@ -3,7 +3,7 @@ const CCI_PERIOD = 3
 """
     CCI{Tohlcv,S}(; period=CCI_PERIOD)
 
-The CCI type implements a Commodity Channel Index.
+The `CCI` type implements a Commodity Channel Index.
 """
 mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

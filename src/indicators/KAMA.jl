@@ -5,7 +5,7 @@ const SLOW_EMA_CONSTANT_PERIOD = 30
 """
     KAMA{T}(; period = KAMA_PERIOD)
 
-The KAMA type implements a Kaufman's Adaptive Moving Average indicator.
+The `KAMA` type implements a Kaufman's Adaptive Moving Average indicator.
 """
 mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

@@ -27,7 +27,7 @@ end
         ma = SMA
     )
 
-The KST type implements Know Sure Thing indicator.
+The `KST` type implements Know Sure Thing indicator.
 """
 mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,KSTVal{Tval}}

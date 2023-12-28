@@ -6,7 +6,7 @@ const ALMA_SIGMA = 6.0
 """
     ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA)
 
-The ALMA type implements an Arnaud Legoux Moving Average indicator.
+The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
 """
 mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}

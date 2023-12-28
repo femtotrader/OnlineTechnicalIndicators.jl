@@ -8,7 +8,7 @@ end
 """
     Aroon{Tohlcv,S}(; period = Aroon_PERIOD)
 
-The Aroon type implements an Aroon indicator.
+The `Aroon` type implements an Aroon indicator.
 """
 mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,AroonVal{S}}

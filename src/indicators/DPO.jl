@@ -3,7 +3,7 @@ const DPO_PERIOD = 20
 """
     DPO{T}(; period = DPO_PERIOD)
 
-The DPO type implements a Detrended Price Oscillator indicator.
+The `DPO` type implements a Detrended Price Oscillator indicator.
 """
 mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}

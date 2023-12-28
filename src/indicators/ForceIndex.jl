@@ -3,7 +3,7 @@ const ForceIndex_PERIOD = 3
 """
     ForceIndex{Tohlcv,S}(; period = ForceIndex_PERIOD, ma = EMA)
 
-The ForceIndex type implements a Force Index indicator.
+The `ForceIndex` type implements a Force Index indicator.
 """
 mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}

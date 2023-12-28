@@ -18,7 +18,7 @@ end
 """
     ParabolicSAR{Tohlcv,S}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULTIPLIER)
 
-The ParabolicSAR type implements a Super Trend indicator.
+The `ParabolicSAR` type implements a Super Trend indicator.
 """
 mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ParabolicSARVal}

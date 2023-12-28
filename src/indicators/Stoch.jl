@@ -9,7 +9,7 @@ end
 """
     Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD, ma = SMA)
 
-The Stoch type implements the Stochastic indicator.
+The `Stoch` type implements the Stochastic indicator.
 """
 mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,StochVal{S}}  # Tprice
