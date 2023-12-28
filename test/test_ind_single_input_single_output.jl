@@ -257,4 +257,15 @@
         @test isapprox(value(ind), 8.941810; atol = ATOL)
     end
 
+    @testset "McGinleyDynamic" begin
+        ind = McGinleyDynamic{Float64}(period = 14)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == 14
+        @test isapprox(value(ind.lag[end-2]), 8.839868; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 8.895229; atol = ATOL)
+        @test isapprox(value(ind), 8.944634; atol = ATOL)
+    end
+
 end

@@ -51,7 +51,7 @@ See [tests](test/)
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | `EMA` | need EMA (fast and slow period) and 4 managed sequences
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | `EMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `MassIndex` | Mass Index | :candle: | :1234: | `EMA`, `CircBuff` | :heavy_check_mark:
-| `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: |  | should be easy to implement by following reference implementation :question: [tests](https://github.com/nardew/talipp/issues/88) are also missing in reference implementation
+| `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `MeanDev` | Mean Deviation | :1234: | :1234: | `CircBuff`, `SMA` | :heavy_check_mark:
 | `OBV` | On Balance Volume | :candle: | :1234: | prev input val | :heavy_check_mark:
 | `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: |  | 

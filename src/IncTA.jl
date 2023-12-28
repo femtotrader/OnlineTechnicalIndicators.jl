@@ -22,6 +22,7 @@ export DEMA
 export TEMA
 export KAMA
 export ALMA
+export McGinleyDynamic
 # simple indicators (single input)
 ## multiple output => SIMO
 export BB
@@ -82,6 +83,7 @@ include("indicators/CoppockCurve.jl")
 include("indicators/DEMA.jl")
 include("indicators/TEMA.jl")
 include("indicators/ALMA.jl")
+include("indicators/McGinleyDynamic.jl")
 
 # SIMO
 include("indicators/BB.jl")
