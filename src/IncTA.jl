@@ -57,6 +57,7 @@ export KeltnerChannels
 export ADX
 export Aroon
 export ChandeKrollStop
+export ParabolicSAR, SARTrend
 
 using OnlineStatsBase
 
@@ -119,6 +120,7 @@ include("indicators/DonchianChannels.jl")
 include("indicators/KeltnerChannels.jl")
 include("indicators/Aroon.jl")
 include("indicators/ChandeKrollStop.jl")
+include("indicators/ParabolicSAR.jl")
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory

@@ -141,4 +141,27 @@
         @test isapprox(value(ind).long_stop, 9.750282; atol = ATOL)
     end
 
+    @testset "ParabolicSAR" begin
+        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64},Float64}(init_accel_factor = 0.02, accel_factor_inc = 0.02, max_accel_factor = 0.2)
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).value, 8.075630; atol = ATOL)
+        @test value(ind.lag[end-2]).trend == SARTrend.UP
+        @test isapprox(value(ind.lag[end-2]).ep, 10.860000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).accel_factor, 0.060000; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).value, 8.242693; atol = ATOL)
+        @test value(ind.lag[end-1]).trend == SARTrend.UP
+        @test isapprox(value(ind.lag[end-1]).ep, 10.860000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).accel_factor, 0.060000; atol = ATOL)
+
+        @test isapprox(value(ind).value, 8.399731; atol = ATOL)
+        @test value(ind).trend == SARTrend.UP
+        @test isapprox(value(ind).ep, 10.860000; atol = ATOL)
+        @test isapprox(value(ind).accel_factor, 0.060000; atol = ATOL)
+    end
+
 end
