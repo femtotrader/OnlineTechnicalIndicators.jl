@@ -54,8 +54,8 @@ See [tests](test/)
 | `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `MeanDev` | Mean Deviation | :1234: | :1234: | `CircBuff`, `SMA` | :heavy_check_mark:
 | `OBV` | On Balance Volume | :candle: | :1234: | prev input val | :heavy_check_mark:
-| `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: |  | 
-| `PivotsHL` | High/Low Pivots | :candle: | :m: |  | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
+| `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: | `CirBuff` | 
+| `PivotsHL` | High/Low Pivots | :candle: | :m: | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | `CircBuff`, `SMMA` | :heavy_check_mark:
 | `SFX` | SFX | :candle: | :m: |  | :construction: This indicator needs value extractor which is not currently implemented
@@ -68,10 +68,10 @@ See [tests](test/)
 | `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
 | `SuperTrend` | Super Trend | :candle: | :m: | `CircBuff`, `ATR` | :construction: Work In Progress (currently broken)
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
-| `TRIX` | TRIX | :candle: | :m: |  | :construction: This indicator needs indicator chaining to be implemented which is currently not done
-| `TSI` | True Strength Index | :1234: | :1234: |  | :construction: This indicator needs indicator chaining to be implemented which is currently not done
+| `TRIX` | TRIX | :candle: | :m: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
+| `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` | This indicator needs value extractor which is not currently implemented.
-| `UO` | Ultimate Oscillator | :candle: | :1234: |  | 2 "managed sequences"
+| `UO` | Ultimate Oscillator | :candle: | :1234: | `CircBuff` | 2 "managed sequences"
 | `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :construction: Work In Progress 1 sub indicator (ATR) and 2 managed sequences
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
 | `VWMA` | Volume Weighted Moving Average | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
