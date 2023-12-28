@@ -12,7 +12,7 @@ end
 
 The ADX type implements an Average Directional Index indicator.
 """
-mutable struct ADX{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ADXVal{S}}
     n::Int
 

@@ -6,7 +6,7 @@ const EMV_VOLUME_DIV = 10000
 
 The EMV type implements a Ease of Movement indicator.
 """
-mutable struct EMV{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

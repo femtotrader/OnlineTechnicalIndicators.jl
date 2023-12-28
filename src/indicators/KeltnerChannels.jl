@@ -29,7 +29,7 @@ end
 
 The KeltnerChannels type implements a Keltner Channels indicator.
 """
-mutable struct KeltnerChannels{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,KeltnerChannelsVal{S}}
     n::Int
 

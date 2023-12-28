@@ -21,7 +21,7 @@ end
 
 The MACD type implements Moving Average Convergence Divergence indicator.
 """
-mutable struct MACD{Tval} <: OnlineStat{Tval}
+mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,MACDVal{Tval}}
     n::Int
 

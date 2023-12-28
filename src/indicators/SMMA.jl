@@ -5,7 +5,7 @@ const SMMA_PERIOD = 3
 
 The SMMA type implements a SMoothed Moving Average indicator.
 """
-mutable struct SMMA{Tval} <: OnlineStat{Tval}
+mutable struct SMMA{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

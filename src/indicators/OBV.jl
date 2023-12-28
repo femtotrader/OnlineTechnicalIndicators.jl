@@ -3,7 +3,7 @@
 
 The OBV type implements On Balance Volume indicator.
 """
-mutable struct OBV{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

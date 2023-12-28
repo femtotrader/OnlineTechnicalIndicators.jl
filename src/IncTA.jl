@@ -56,7 +56,7 @@ export ADX
 
 using OnlineStatsBase
 
-abstract type AbstractIncTAIndicator end
+abstract type TechnicalIndicator{T} <: OnlineStat{T} end
 
 include("ohlcv.jl")
 include("sample_data.jl")

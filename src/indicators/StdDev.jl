@@ -5,7 +5,7 @@ const StdDev_PERIOD = 3
 
 The StdDev type implements a Standard Deviation indicator.
 """
-mutable struct StdDev{Tval} <: OnlineStat{Tval}
+mutable struct StdDev{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

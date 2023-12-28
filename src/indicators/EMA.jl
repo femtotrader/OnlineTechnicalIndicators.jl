@@ -6,7 +6,7 @@ const EMA_PERIOD = 3
 
 The EMA type implements an Exponential Moving Average indicator.
 """
-mutable struct EMA{Tval} <: OnlineStat{Tval}
+mutable struct EMA{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

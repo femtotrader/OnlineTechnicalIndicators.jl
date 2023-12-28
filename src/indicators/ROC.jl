@@ -5,7 +5,7 @@ const ROC_PERIOD = 3
 
 The ROC type implements a Rate Of Change indicator.
 """
-mutable struct ROC{Tval} <: OnlineStat{Tval}
+mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

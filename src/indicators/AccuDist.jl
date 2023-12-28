@@ -3,7 +3,7 @@
 
 The AccuDist type implements an Accumulation and Distribution indicator.
 """
-mutable struct AccuDist{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

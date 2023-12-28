@@ -6,7 +6,7 @@ const ChaikinOsc_SLOW_PERIOD = 7
 
 The ChaikinOsc type implements a Chaikin Oscillator.
 """
-mutable struct ChaikinOsc{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

@@ -5,7 +5,7 @@ const RSI_PERIOD = 3
 
 The RSI type implements a Relative Strength Index indicator.
 """
-mutable struct RSI{Tval} <: OnlineStat{Tval}
+mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

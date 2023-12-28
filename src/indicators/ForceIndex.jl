@@ -5,7 +5,7 @@ const ForceIndex_PERIOD = 3
 
 The ForceIndex type implements a Force Index indicator.
 """
-mutable struct ForceIndex{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

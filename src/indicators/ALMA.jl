@@ -8,7 +8,7 @@ const ALMA_SIGMA = 6.0
 
 The ALMA type implements an Arnaud Legoux Moving Average indicator.
 """
-mutable struct ALMA{Tval} <: OnlineStat{Tval}
+mutable struct ALMA{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

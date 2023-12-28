@@ -5,7 +5,7 @@ const VWMA_PERIOD = 3
 
 The VWMA type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWMA{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct VWMA{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

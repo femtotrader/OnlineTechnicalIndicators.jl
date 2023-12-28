@@ -5,7 +5,7 @@ const MeanDev_PERIOD = 3
 
 The MeanDev type implements a Mean Deviation indicator.
 """
-mutable struct MeanDev{Tval} <: OnlineStat{Tval}
+mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

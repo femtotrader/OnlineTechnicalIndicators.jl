@@ -11,7 +11,7 @@ end
 
 The Stoch type implements the Stochastic indicator.
 """
-mutable struct Stoch{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,StochVal{S}}  # Tprice
     n::Int
 

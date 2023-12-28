@@ -29,7 +29,7 @@ end
 
 The KST type implements Know Sure Thing indicator.
 """
-mutable struct KST{Tval} <: OnlineStat{Tval}
+mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,KSTVal{Tval}}
     n::Int
 

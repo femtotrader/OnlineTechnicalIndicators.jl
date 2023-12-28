@@ -10,7 +10,7 @@ end
 
 The VTX type implements a Vortex Indicator.
 """
-mutable struct VTX{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,VTXVal}
     n::Int
 

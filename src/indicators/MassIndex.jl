@@ -8,7 +8,7 @@ const MassIndex_MA_RATIO_PERIOD = 10
 
 The MassIndex type implements a Commodity Channel Index.
 """
-mutable struct MassIndex{Tohlcv,S} <: OnlineStat{Tohlcv}
+mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 

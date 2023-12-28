@@ -5,7 +5,7 @@ const HMA_PERIOD = 20
 
 The HMA type implements a Hull Moving Average indicator.
 """
-mutable struct HMA{Tval} <: OnlineStat{Tval}
+mutable struct HMA{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
