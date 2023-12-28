@@ -62,7 +62,7 @@ See [tests](test/)
 | `SMA` | Simple Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume | :candle: | :1234: | `OBV`, `SMA` | :heavy_check_mark:
-| `STC` | Schaff Trend Cycle | :1234: | :1234: |  | :heavy_exclamation_mark: Need MACD and Stoch
+| `STC` | Schaff Trend Cycle | :1234: | :1234: | `MACD`, `Stoch` |
 | `StdDev` | Standard Deviation | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `Stoch` | Stochastic | :candle: | :m: | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
