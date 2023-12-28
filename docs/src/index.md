@@ -12,6 +12,11 @@ It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineS
 ## Package Features
 - Calculate new value of some technical analysis indicators when new incoming are received
 
+## Install
+Open Julia command line interface.
+
+Type `] dev https://github.com/femtotrader/IncTA.jl/`
+
 ## Function Documentation (alphabetically ordered)
 ```@docs
 IncTA.ADX
