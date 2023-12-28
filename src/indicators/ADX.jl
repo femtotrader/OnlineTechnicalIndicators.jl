@@ -94,8 +94,8 @@ function OnlineStatsBase._fit!(ind::ADX, candle)
             ind.value = missing
             return
         elseif length(ind.pdm) == ind.di_period
-            fit!(ind.spdm, sum(value(ind.pdm)) / ind.di_period)
-            fit!(ind.smdm, sum(value(ind.mdm)) / ind.di_period)
+            fit!(ind.spdm, sum(ind.pdm.value) / ind.di_period)
+            fit!(ind.smdm, sum(ind.mdm.value) / ind.di_period)
         elseif length(ind.pdm) > ind.di_period
             fit!(
                 ind.spdm,

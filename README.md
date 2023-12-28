@@ -27,7 +27,7 @@ See [tests](test/)
 | `ADX` | Average Directional Index | :candle: | :m: | `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `ALMA` | Arnaud Legoux Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `AO` | Awesome Oscillator | :candle: | :1234: | `SMA` | :heavy_check_mark:
-| `Aroon` | Aroon Up/Down | :candle: | :m: | - | might be quite easy except the (need to search in reversed list in order to get the right-most index)
+| `Aroon` | Aroon Up/Down | :candle: | :m: | - | :heavy_exclamation_mark: Doesn't work as expected - help wanted (need to search in reversed list in order to get the right-most index)
 | `ATR` | Average True Range | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `BB` | Bollinger Bands | :1234: | :m: | `SMA`, `StdDev` | :heavy_check_mark:
 | `BOP` | Balance Of Power | :candle: | :1234: | - | :heavy_check_mark:

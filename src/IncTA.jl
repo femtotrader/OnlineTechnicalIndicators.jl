@@ -55,6 +55,7 @@ export VTX
 export DonchianChannels
 export KeltnerChannels
 export ADX
+export Aroon
 
 using OnlineStatsBase
 
@@ -115,6 +116,7 @@ include("indicators/SuperTrend.jl")
 include("indicators/VTX.jl")
 include("indicators/DonchianChannels.jl")
 include("indicators/KeltnerChannels.jl")
+include("indicators/Aroon.jl")
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory

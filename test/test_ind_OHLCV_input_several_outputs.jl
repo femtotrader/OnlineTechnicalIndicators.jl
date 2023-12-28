@@ -107,4 +107,20 @@
         @test isapprox(value(ind).minus_di, 20.812570; atol = ATOL)
     end
 
+    @testset_skip "Aroon" begin
+        ind = Aroon{OHLCV{Missing,Float64,Float64},Float64}(period = 10)
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).up, 100.0; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).down, 70.0; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).up, 90.0; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).down, 60.0; atol = ATOL)
+
+        @test isapprox(value(ind).up, 80.0; atol = ATOL)
+        @test isapprox(value(ind).down, 50.0; atol = ATOL)
+    end
 end
