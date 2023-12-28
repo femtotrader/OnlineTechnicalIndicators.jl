@@ -7,7 +7,7 @@ It's inspired by Python project [talipp](https://github.com/nardew/talipp) which
 
 It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineStatsBase.jl) and [OnlineStats.jl](https://github.com/joshday/OnlineStatsBase.jl).
 
-:construction: This software is under construction. API can have breaking changes.
+🚧 This software is under construction. API can have breaking changes.
 
 ## Package Features
 - Calculate new value of some technical analysis indicators when new incoming are received
