@@ -17,10 +17,6 @@ function OnlineStatsBase._fit!(ind::BOP, candle)
     if candle.high != candle.low
         ind.value = (candle.close - candle.open) / (candle.high - candle.low)
     else
-        if ind.n > 0
-            ind.value = value(ind)
-        else
-            ind.value = missing
-        end
+        ind.value = value(ind)
     end
 end

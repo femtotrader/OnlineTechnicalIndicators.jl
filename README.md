@@ -30,7 +30,7 @@ See [tests](test/)
 | `Aroon` | Aroon Up/Down | :candle: | :m: |  | might be quite easy except the (need to search in reversed list in order to get the right-most index)
 | `ATR` | Average True Range | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `BB` | Bollinger Bands | :1234: | :m: | `SMA`, `StdDev` | :heavy_check_mark:
-| `BOP` | Balance Of Power | :candle: | :1234: |  | :heavy_check_mark:
+| `BOP` | Balance Of Power | :candle: | :1234: | - | :heavy_check_mark:
 | `CCI` | Commodity Channel Index | :candle: | :1234: | `MeanDev` | :heavy_check_mark:
 | `ChaikinOsc` | Chaikin Oscillator | :candle: | :1234: | `AccuDist`, `EMA` | :heavy_check_mark:
 | `CHOP` | Choppiness Index | :candle: | :1234: | `CirBuf`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
