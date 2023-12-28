@@ -11,7 +11,7 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     period::Integer
 
-    ma::Any  # EMA
+    ma::MovingAverageIndicator  # EMA
 
     input::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
 

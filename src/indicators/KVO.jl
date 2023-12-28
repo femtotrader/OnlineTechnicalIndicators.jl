@@ -10,8 +10,8 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    fast_ma::Any  # EMA by default
-    slow_ma::Any  # EMA by default
+    fast_ma::MovingAverageIndicator  # EMA by default
+    slow_ma::MovingAverageIndicator  # EMA by default
 
     trend::CircBuff
     cumulative_measurement::CircBuff

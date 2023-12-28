@@ -16,7 +16,7 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     sub_indicators::Series
     #ma  # EMA
-    ma_ma::Any  # EMA
+    ma_ma::MovingAverageIndicator  # EMA
     ma_ratio::CircBuff{S}
 
     function MassIndex{Tohlcv,S}(;

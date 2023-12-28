@@ -12,7 +12,7 @@ mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
     period::Integer
 
     # sub_indicators::Series  # field ma needs to be available for CCI calculation
-    ma::Any  # SMA
+    ma::MovingAverageIndicator  # SMA
 
     input::CircBuff
 

@@ -13,7 +13,7 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
 
     sub_indicators::Series
     # ma  # EMA
-    ma_ma::Any  # EMA
+    ma_ma::MovingAverageIndicator  # EMA
 
     function DEMA{Tval}(; period = DEMA_PERIOD, ma = EMA) where {Tval}
         # _ma = EMA{Tval}(period = period)

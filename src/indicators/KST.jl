@@ -39,12 +39,12 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     # roc3  # SMA
     # roc4  # SMA
 
-    roc1_ma::Any  # SMA
-    roc2_ma::Any  # SMA
-    roc3_ma::Any  # SMA
-    roc4_ma::Any  # SMA
+    roc1_ma::MovingAverageIndicator  # SMA
+    roc2_ma::MovingAverageIndicator  # SMA
+    roc3_ma::MovingAverageIndicator  # SMA
+    roc4_ma::MovingAverageIndicator  # SMA
 
-    signal_line::Any  # SMA
+    signal_line::MovingAverageIndicator  # SMA
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,

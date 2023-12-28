@@ -13,7 +13,7 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
     volume_div::Integer
 
-    emv_ma::Any  # SMA
+    emv_ma::MovingAverageIndicator  # SMA
 
     input::CircBuff{Tohlcv}
 
