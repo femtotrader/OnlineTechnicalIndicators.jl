@@ -5,7 +5,7 @@ const TEMA_PERIOD = 20
 
 The TEMA type implements a Triple Exponential Moving Average indicator.
 """
-mutable struct TEMA{Tval} <: TechnicalIndicator{Tval}
+mutable struct TEMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

@@ -5,7 +5,7 @@ const DEMA_PERIOD = 20
 
 The DEMA type implements a Double Exponential Moving Average indicator.
 """
-mutable struct DEMA{Tval} <: TechnicalIndicator{Tval}
+mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 

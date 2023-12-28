@@ -5,7 +5,7 @@ const SMA_PERIOD = 3
 
 The SMA type implements a Simple Moving Average indicator.
 """
-mutable struct SMA{Tval} <: TechnicalIndicator{Tval}
+mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
