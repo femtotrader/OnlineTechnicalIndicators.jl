@@ -70,7 +70,7 @@ See [tests](test/)
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `TRIX` | TRIX | :candle: | :m: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
-| `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` | This indicator needs value extractor which is not currently implemented.
+| `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels`, `FilterTransform` to extract `close` value of a candle |
 | `UO` | Ultimate Oscillator | :candle: | :1234: | `CircBuff` | 2 "managed sequences"
 | `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :construction: Work In Progress 1 sub indicator (ATR) and 2 managed sequences
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
