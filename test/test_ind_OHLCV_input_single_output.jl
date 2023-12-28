@@ -190,4 +190,19 @@
         @test isapprox(value(ind), -2470.776132; atol = ATOL)
     end
 
+    @testset "UO" begin
+        ind = UO{OHLCV{Missing,Float64,Float64},Float64}(
+            fast_period = 3,
+            mid_period = 5,
+            slow_period = 7,
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+        @test isapprox(value(ind.lag[end-2]), 67.574669; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 54.423675; atol = ATOL)
+        @test isapprox(value(ind), 47.901125; atol = ATOL)
+    end
+
 end

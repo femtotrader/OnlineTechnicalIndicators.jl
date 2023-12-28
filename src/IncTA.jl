@@ -47,6 +47,7 @@ export MassIndex
 export CHOP
 export Stoch
 export KVO
+export UO
 
 # OHLCV indicators (multiple input)
 ## multiple output => MIMO
@@ -112,6 +113,7 @@ include("indicators/MassIndex.jl")
 include("indicators/CHOP.jl")
 include("indicators/ADX.jl")
 include("indicators/KVO.jl")
+include("indicators/UO.jl")
 
 # MIMO
 include("indicators/SuperTrend.jl")
