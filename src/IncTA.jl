@@ -56,6 +56,7 @@ export DonchianChannels
 export KeltnerChannels
 export ADX
 export Aroon
+export ChandeKrollStop
 
 using OnlineStatsBase
 
@@ -117,6 +118,7 @@ include("indicators/VTX.jl")
 include("indicators/DonchianChannels.jl")
 include("indicators/KeltnerChannels.jl")
 include("indicators/Aroon.jl")
+include("indicators/ChandeKrollStop.jl")
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory

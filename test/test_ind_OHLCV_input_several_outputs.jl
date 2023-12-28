@@ -123,4 +123,22 @@
         @test isapprox(value(ind).up, 80.0; atol = ATOL)
         @test isapprox(value(ind).down, 50.0; atol = ATOL)
     end
+
+    @testset "ChandeKrollStop" begin
+        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64},Float64}(atr_period = 5, atr_mult=2.0, period=3)
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).short_stop, 9.507146; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).long_stop, 9.772853; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).short_stop, 9.529717; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).long_stop, 9.750282; atol = ATOL)
+
+        @test isapprox(value(ind).short_stop, 9.529717; atol = ATOL)
+        @test isapprox(value(ind).long_stop, 9.750282; atol = ATOL)
+    end
+
 end
