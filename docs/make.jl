@@ -8,6 +8,6 @@ makedocs(
          pages=[
                 "Home" => "index.md"
                ])
-#deploydocs(;
-#    repo="github.com/femtotrader/IncTA.jl",
-#)
+deploydocs(;
+    repo="github.com/femtotrader/IncTA.jl",
+)
