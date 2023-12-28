@@ -105,7 +105,5 @@ function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
         end
 
         ind.value = ParabolicSARVal(new_sar_val, new_trend, new_ep, new_accel_factor)
-        println(ind.value)
-
     end
 end
