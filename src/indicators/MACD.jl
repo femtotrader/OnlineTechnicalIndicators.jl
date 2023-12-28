@@ -37,34 +37,27 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         signal_period = MACD_SIGNAL_PERIOD,
         ma = EMA
     ) where {Tval}
-        @warn "WIP - buggy"
-
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)
-
-        fast_ma = MAFactory(S)(ma, fast_period)
-        slow_ma = MAFactory(S)(ma, slow_period)
+        fast_ma = MAFactory(Tval)(ma, fast_period)
+        slow_ma = MAFactory(Tval)(ma, slow_period)
         sub_indicators = Series(fast_ma, slow_ma)
-
         # signal_line = EMA{Tval}(period = signal_period)
-        signal_line = MAFactory(S)(ma, signal_period)
-
+        signal_line = MAFactory(Tval)(ma, signal_period)
         new{Tval}(missing, 0, sub_indicators, signal_line)
     end
 end
 
 function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
     fit!(ind.sub_indicators, data)
-    # fit!(ind.fast_ma, data)
-    # fit!(ind.slow_ma, data)
-    fast_ma, slow_ma = ind.sub_indicators
+    fast_ma, slow_ma = ind.sub_indicators.stats
     ind.n += 1
-    #=
-    if length(fast_ma) > 0 && length(slow_ma) > 0
-        macd = value(fast_ma) - value(slow_ma)
-        fit!(signal_line, macd)
 
-        if length(ind.signal_line.value) > 0
+    if has_output_value(fast_ma) && has_output_value(slow_ma)
+        macd = value(fast_ma) - value(slow_ma)
+        fit!(ind.signal_line, macd)
+
+        if has_output_value(ind.signal_line)
             signal = value(ind.signal_line)
         else
             signal = missing
@@ -80,7 +73,4 @@ function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
     else
         ind.value = missing
     end
-    =#
-    macd, signal, histogram = missing, missing, missing
-    ind.value = MACDVal{Tval}(macd, signal, histogram)
 end

@@ -20,7 +20,7 @@
         @test isapprox(value(ind).upper, 10.644814; atol = ATOL)
     end
 
-    @testset_skip "MACD (buggy - help wanted)" begin
+    @testset "MACD" begin
         ind = MACD{Float64}(fast_period = 12, slow_period = 26, signal_period = 9)
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0

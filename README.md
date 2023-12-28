@@ -49,7 +49,7 @@ See [tests](test/)
 | `KeltnerChannels` | Keltner Channels | :candle:  | :m: | `ATR`, `EMA` wrapped with `FilterTransform` to extract close value of a candle | :heavy_check_mark:
 | `KST` | Know Sure Thing | :1234: | :m: | `SMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | `EMA` | :heavy_check_mark:
-| `MACD` | Moving Average Convergence Divergence | :1234: | :m: | `EMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
+| `MACD` | Moving Average Convergence Divergence | :1234: | :m: | `EMA` | :heavy_check_mark:
 | `MassIndex` | Mass Index | :candle: | :1234: | `EMA`, `CircBuff` | :heavy_check_mark:
 | `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `MeanDev` | Mean Deviation | :1234: | :1234: | `CircBuff`, `SMA` | :heavy_check_mark:
