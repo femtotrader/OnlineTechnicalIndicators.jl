@@ -11,8 +11,10 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
-    fast_roc::ROC{Tval}
-    slow_roc::ROC{Tval}
+    sub_indicators::Series
+    # fast_roc::ROC
+    # slow_roc::ROC
+
     wma::WMA{Tval}
 
     function CoppockCurve{Tval}(;
@@ -22,19 +24,22 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
     ) where {Tval}
         fast_roc = ROC{Tval}(period = fast_roc_period)
         slow_roc = ROC{Tval}(period = slow_roc_period)
+        sub_indicators = Series(fast_roc, slow_roc)
         wma = WMA{Tval}(period = wma_period)
-        new{Tval}(missing, 0, fast_roc, slow_roc, wma)
+        new{Tval}(missing, 0, sub_indicators, wma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::CoppockCurve, data)
-    fit!(ind.slow_roc, data)
-    fit!(ind.fast_roc, data)
-    if ind.n != ind.slow_roc.period
+    fit!(ind.sub_indicators, data)
+    # fit!(ind.slow_roc, data)
+    # fit!(ind.fast_roc, data)
+    fast_roc, slow_roc = ind.sub_indicators.stats
+    if ind.n != slow_roc.period
         ind.n += 1
     end
-    if has_output_value(ind.fast_roc) && has_output_value(ind.slow_roc)
-        fit!(ind.wma, value(ind.slow_roc) + value(ind.fast_roc))
+    if has_output_value(fast_roc) && has_output_value(slow_roc)
+        fit!(ind.wma, value(slow_roc) + value(fast_roc))
         ind.value = value(ind.wma)
         if has_output_value(ind.wma)
             ind.value = value(ind.wma)
@@ -46,28 +51,3 @@ function OnlineStatsBase._fit!(ind::CoppockCurve, data)
     end
     return ind.value
 end
-
-#=
-function Base.push!(ind::CoppockCurve, val)
-    push!(ind.slow_roc, val)
-    push!(ind.fast_roc, val)
-
-    if !has_output_value(ind.fast_roc) || !has_output_value(ind.slow_roc)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
-    end
-
-    push!(ind.wma, ind.slow_roc.value[end] + ind.fast_roc.value[end])
-
-    if !has_output_value(ind.wma)
-        out_val = missing
-        push!(ind.value, out_val)
-        return out_val
-    else
-        out_val = ind.wma.value[end]
-        push!(ind.value, out_val)
-        return out_val
-    end
-end
-=#

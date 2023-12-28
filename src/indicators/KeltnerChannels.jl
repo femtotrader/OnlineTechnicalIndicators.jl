@@ -24,8 +24,9 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     atr_mult_up::S
     atr_mult_down::S
 
-    atr::ATR
-    cb  # EMA default
+    sub_indicators::Series
+    # atr::ATR
+    # cb  # EMA default
 
     function KeltnerChannels{Tohlcv,S}(;
         ma_period = KeltnerChannels_MA_PERIOD,
@@ -38,6 +39,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         # cb = EMA{S}(period = ma_period)
         _cb = MAFactory(S)(ma, ma_period)
         _cb = FilterTransform(_cb, Tohlcv, transform = candle -> candle.close)  # ValueExtractor is reference implementation
+        sub_indicators = Series(atr, _cb)
         new{Tohlcv,S}(
             missing,
             0,
@@ -45,22 +47,23 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_period,
             atr_mult_up,
             atr_mult_down,
-            atr,
-            _cb,
+            sub_indicators,
         )
     end
 end
 
 function OnlineStatsBase._fit!(ind::KeltnerChannels, candle)
-    fit!(ind.atr, candle)
-    fit!(ind.cb, candle)  # FilterTransform ie something like a ValueExtractor should be implemented taking a function like candle->candle.close as argument
+    fit!(ind.sub_indicators, candle)
+    atr, cb = ind.sub_indicators.stats
+    #fit!(ind.atr, candle)
+    #fit!(ind.cb, candle)  # FilterTransform ie something like a ValueExtractor should be implemented taking a function like candle->candle.close as argument
     # fit!(ind.cb, candle.close)
     ind.n += 1
-    if has_output_value(ind.atr) && has_output_value(ind.cb)
+    if has_output_value(atr) && has_output_value(cb)
         ind.value = KeltnerChannelsVal(
-            value(ind.cb) - ind.atr_mult_down * value(ind.atr),
-            value(ind.cb),
-            value(ind.cb) + ind.atr_mult_up * value(ind.atr),
+            value(cb) - ind.atr_mult_down * value(atr),
+            value(cb),
+            value(cb) + ind.atr_mult_up * value(atr),
         )
     else
         ind.value = missing

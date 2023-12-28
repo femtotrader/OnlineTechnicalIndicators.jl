@@ -14,7 +14,8 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     ma_ratio_period::Integer
 
-    ma  # EMA
+    sub_indicators::Series
+    #ma  # EMA
     ma_ma  # EMA
     ma_ratio::CircBuff{S}
 
@@ -26,30 +27,32 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         # ma = EMA{S}(period = ma_period)
         _ma = MAFactory(S)(ma, ma_period)
+        sub_indicators = Series(_ma)
         # ma_ma = EMA{S}(period = ma_ma_period)
         _ma_ma = MAFactory(S)(ma, ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
-        new{Tohlcv,S}(missing, 0, ma_ratio_period, _ma, _ma_ma, _ma_ratio)
+        new{Tohlcv,S}(missing, 0, ma_ratio_period, sub_indicators, _ma_ma, _ma_ratio)
     end
 end
 
 function OnlineStatsBase._fit!(ind::MassIndex, candle)
-    fit!(ind.ma, candle.high - candle.low)
+    ma, = ind.sub_indicators.stats
+    fit!(ma, candle.high - candle.low)
     ind.n += 1
 
-    if !has_output_value(ind.ma)
+    if !has_output_value(ma)
         ind.value = missing
         return
     end
 
-    fit!(ind.ma_ma, value(ind.ma))
+    fit!(ind.ma_ma, value(ma))
 
     if !has_output_value(ind.ma_ma)
         ind.value = missing
         return
     end
 
-    fit!(ind.ma_ratio, value(ind.ma) / value(ind.ma_ma))
+    fit!(ind.ma_ratio, value(ma) / value(ind.ma_ma))
 
     if length(ind.ma_ratio) < ind.ma_ratio_period
         ind.value = missing

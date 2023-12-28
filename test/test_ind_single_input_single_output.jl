@@ -11,6 +11,15 @@
         @test isapprox(value(ind), 9.308500; atol = ATOL)
     end
 
+    @testset_skip "Indicator chaining (SMA)" begin
+        values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+        ind = SMA{Float64}(period = 3)
+        ind = merge!(ind, SMA{Float64}(period = 3))
+        ind = merge!(ind, SMA{Float64}(period = 3))
+        ind = merge!(ind, SMA{Float64}(period = 3))
+        @test isapprox(value(ind), 6.0; atol = ATOL)
+    end
+
     @testset "EMA" begin
         ind = EMA{Float64}(period = P)
         @test nobs(ind) == 0

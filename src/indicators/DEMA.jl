@@ -11,7 +11,8 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
 
     period::Integer
 
-    ma  # EMA
+    sub_indicators::Series
+    # ma  # EMA
     ma_ma  # EMA
 
     function DEMA{Tval}(; period = DEMA_PERIOD, ma = EMA) where {Tval}
@@ -19,19 +20,21 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
         _ma = MAFactory(Tval)(ma, period)
         # _ma_ma = EMA{Tval}(period = period)
         _ma_ma = MAFactory(Tval)(ma, period)
-        new{Tval}(missing, 0, period, _ma, _ma_ma)
+        sub_indicators = Series(_ma)
+        new{Tval}(missing, 0, period, sub_indicators, _ma_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::DEMA, data)
-    fit!(ind.ma, data)
+    fit!(ind.sub_indicators, data)
+    ma, = ind.sub_indicators.stats
     if ind.n != ind.period
         ind.n += 1
     end
-    if has_output_value(ind.ma)
-        fit!(ind.ma_ma, value(ind.ma))
+    if has_output_value(ma)
+        fit!(ind.ma_ma, value(ma))
         if has_output_value(ind.ma_ma)
-            ind.value = 2.0 * value(ind.ma) - value(ind.ma_ma)
+            ind.value = 2.0 * value(ma) - value(ind.ma_ma)
         else
             ind.value = missing
         end

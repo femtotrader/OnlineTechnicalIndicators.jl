@@ -33,10 +33,11 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,KSTVal{Tval}}
     n::Int
 
-    roc1  # SMA
-    roc2  # SMA
-    roc3  # SMA
-    roc4  # SMA
+    sub_indicators::Series
+    # roc1  # SMA
+    # roc2  # SMA
+    # roc3  # SMA
+    # roc4  # SMA
 
     roc1_ma  # SMA
     roc2_ma  # SMA
@@ -66,6 +67,7 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         roc2 = MAFactory(Tval)(ma, roc2_period)
         roc3 = MAFactory(Tval)(ma, roc3_period)
         roc4 = MAFactory(Tval)(ma, roc4_period)
+        sub_indicators = Series(roc1, roc2, roc3, roc4)
 
         # roc1_ma = SMA{Tval}(period = roc1_ma_period)
         # roc2_ma = SMA{Tval}(period = roc2_ma_period)
@@ -83,10 +85,7 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         new{Tval}(
             missing,
             0,
-            roc1,
-            roc2,
-            roc3,
-            roc4,
+            sub_indicators,
             roc1_ma,
             roc2_ma,
             roc3_ma,
@@ -97,10 +96,12 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
-    fit!(ind.roc1, data)
-    fit!(ind.roc2, data)
-    fit!(ind.roc3, data)
-    fit!(ind.roc4, data)
+    fit!(ind.sub_indicators, data)
+    # fit!(ind.roc1, data)
+    # fit!(ind.roc2, data)
+    # fit!(ind.roc3, data)
+    # fit!(ind.roc4, data)
+    roc1, roc2, roc3, roc4 = ind.sub_indicators.stats
 
     ind.n += 1
 

@@ -10,7 +10,9 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    accu_dist::AccuDist{Tohlcv}
+    sub_indicators::Series
+    # accu_dist::AccuDist{Tohlcv}
+
     fast_ma  # EMA by default
     slow_ma  # EMA by default
 
@@ -21,17 +23,19 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_ma = EMA
     ) where {Tohlcv,S}
         accu_dist = AccuDist{Tohlcv,S}()
+        sub_indicators = Series(accu_dist)
         _fast_ma = MAFactory(S)(fast_ma, fast_period)
         _slow_ma = MAFactory(S)(slow_ma, slow_period)
-        new{Tohlcv,S}(missing, 0, accu_dist, _fast_ma, _slow_ma)
+        new{Tohlcv,S}(missing, 0, sub_indicators, _fast_ma, _slow_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::ChaikinOsc, candle)
-    fit!(ind.accu_dist, candle)
+    fit!(ind.sub_indicators, candle)
+    accu_dist, = ind.sub_indicators.stats
     ind.n += 1
-    if has_output_value(ind.accu_dist)
-        accu_dist_value = value(ind.accu_dist)
+    if has_output_value(accu_dist)
+        accu_dist_value = value(accu_dist)
         fit!(ind.fast_ma, accu_dist_value)
         fit!(ind.slow_ma, accu_dist_value)
         if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
