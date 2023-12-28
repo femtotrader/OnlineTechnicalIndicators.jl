@@ -46,7 +46,7 @@ See [tests](test/)
 | `HMA` | Hull Moving Average | :1234: | :1234: | `WMA` | :heavy_check_mark:
 | `Ichimoku` | Ichimoku Clouds | :1234:  | :m: |  | 5 managed sequences :question: unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
 | `KAMA` | Kaufman's Adaptive Moving Average | :1234: | :1234: | `CircBuff` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | `ATR`, `EMA` (+ValueExtractor?) | :heavy_check_mark:
+| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | `ATR`, `EMA` wrapped with `FilterTransform` to extract close value of a candle | :heavy_check_mark:
 | `KST` | Know Sure Thing | :1234: | :m: | `SMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | `EMA` | need EMA (fast and slow period) and 4 managed sequences
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | `EMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
