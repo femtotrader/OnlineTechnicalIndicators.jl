@@ -65,7 +65,7 @@ See [tests](test/)
 | `STC` | Schaff Trend Cycle | :1234: | :1234: |  | :heavy_exclamation_mark: Need MACD and Stoch
 | `StdDev` | Standard Deviation | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `Stoch` | Stochastic | :candle: | :m: | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
-| `StochRSI` | Stochastic RSI | :1234: | :m: |  | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
+| `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
 | `SuperTrend` | Super Trend | :candle: | :m: | `CircBuff`, `ATR` | :construction: Work In Progress (currently broken)
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `TRIX` | TRIX | :candle: | :m: |  | :construction: This indicator needs indicator chaining to be implemented which is currently not done
