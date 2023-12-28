@@ -54,7 +54,7 @@ See [tests](test/)
 | `McGinleyDynamic` | McGinley Dynamic | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `MeanDev` | Mean Deviation | :1234: | :1234: | `CircBuff`, `SMA` | :heavy_check_mark:
 | `OBV` | On Balance Volume | :candle: | :1234: | prev input val | :heavy_check_mark:
-| `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: | `CirBuff` | 
+| `ParabolicSAR` | Parabolic Stop And Reverse | :candle: | :m: | `CirBuff` | :heavy_check_mark:
 | `PivotsHL` | High/Low Pivots | :candle: | :m: | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | `CircBuff`, `SMMA` | :heavy_check_mark:

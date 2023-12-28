@@ -20,12 +20,7 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     function Aroon{Tohlcv,S}(; period = Aroon_PERIOD) where {Tohlcv,S}
         input = CircBuff(Tohlcv, period + 1, rev = false)
-        new{Tohlcv,S}(
-            missing,
-            0,
-            period,
-            input,
-        )
+        new{Tohlcv,S}(missing, 0, period, input)
     end
 end
 
@@ -64,6 +59,8 @@ function OnlineStatsBase._fit!(ind::Aroon, candle)
                                     key = lambda x: ind.input_values[-ind.period - 1:][x].low)
     =#
 
-    ind.value = AroonVal(100.0 * (ind.period - days_high) / ind.period,
-                    100.0 * (ind.period - days_low) / ind.period)
+    ind.value = AroonVal(
+        100.0 * (ind.period - days_high) / ind.period,
+        100.0 * (ind.period - days_low) / ind.period,
+    )
 end

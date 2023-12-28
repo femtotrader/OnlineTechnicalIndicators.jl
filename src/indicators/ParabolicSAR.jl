@@ -36,7 +36,14 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
     ) where {Tohlcv,S}
         input = CircBuff(Tohlcv, SAR_INIT_LEN, rev = false)
-        new{Tohlcv,S}(missing, 0, init_accel_factor, accel_factor_inc, max_accel_factor, input)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            init_accel_factor,
+            accel_factor_inc,
+            max_accel_factor,
+            input,
+        )
     end
 end
 
@@ -48,21 +55,24 @@ function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
         ind.value = missing
     elseif ind.n == SAR_INIT_LEN
         min_low = min([cdl.low for cdl in ind.input.value]...)
-        max_high = max([cdl.high for cdl in ind.input.value]...)    
+        max_high = max([cdl.high for cdl in ind.input.value]...)
         ind.value = ParabolicSARVal(min_low, SARTrend.UP, max_high, ind.init_accel_factor)
     else
 
         prev_sar = value(ind)
 
-        new_sar_val = prev_sar.value + prev_sar.accel_factor * (prev_sar.ep - prev_sar.value)
+        new_sar_val =
+            prev_sar.value + prev_sar.accel_factor * (prev_sar.ep - prev_sar.value)
         new_trend = prev_sar.trend
         new_ep = prev_sar.ep
         new_accel_factor = prev_sar.accel_factor
 
         # if new SAR overlaps last lows/highs (depending on the trend), cut it at that value
-        if (prev_sar.trend == SARTrend.UP) && (new_sar_val > min(ind.input[end-1].low, ind.input[end-2].low))
+        if (prev_sar.trend == SARTrend.UP) &&
+           (new_sar_val > min(ind.input[end-1].low, ind.input[end-2].low))
             new_sar_val = min(ind.input[end-1].low, ind.input[end-2].low)
-        elseif (prev_sar.trend == SARTrend.DOWN) && (new_sar_val < max(ind.input[end-1].high, ind.input[end-2].high))
+        elseif (prev_sar.trend == SARTrend.DOWN) &&
+               (new_sar_val < max(ind.input[end-1].high, ind.input[end-2].high))
             new_sar_val = max(ind.input[end-1].high, ind.input[end-2].high)
         end
 

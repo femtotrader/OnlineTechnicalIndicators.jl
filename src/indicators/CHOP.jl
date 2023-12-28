@@ -45,7 +45,9 @@ function OnlineStatsBase._fit!(ind::CHOP, candle)
     min_low = min([cdl.low for cdl in value(ind.input)]...)
 
     if max_high != min_low
-        ind.value = 100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) / log10(ind.period)
+        ind.value =
+            100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
+            log10(ind.period)
     else
         if length(ind.value) > 0
             ind.value = value(ind)

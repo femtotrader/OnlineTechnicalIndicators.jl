@@ -125,7 +125,11 @@
     end
 
     @testset "ChandeKrollStop" begin
-        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64},Float64}(atr_period = 5, atr_mult=2.0, period=3)
+        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64},Float64}(
+            atr_period = 5,
+            atr_mult = 2.0,
+            period = 3,
+        )
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -142,7 +146,11 @@
     end
 
     @testset "ParabolicSAR" begin
-        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64},Float64}(init_accel_factor = 0.02, accel_factor_inc = 0.02, max_accel_factor = 0.2)
+        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64},Float64}(
+            init_accel_factor = 0.02,
+            accel_factor_inc = 0.02,
+            max_accel_factor = 0.2,
+        )
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
