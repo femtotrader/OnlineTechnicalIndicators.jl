@@ -179,4 +179,18 @@
         @test isapprox(value(ind), 49.289273; atol = ATOL)
     end
 
+    @testset "KVO" begin
+        ind = KVO{OHLCV{Missing,Float64,Float64},Float64}(
+            fast_period = 5,
+            slow_period = 10,
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+        @test isapprox(value(ind.lag[end-2]), 4540.325257; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 535.632479; atol = ATOL)
+        @test isapprox(value(ind), -2470.776132; atol = ATOL)
+    end
+
 end

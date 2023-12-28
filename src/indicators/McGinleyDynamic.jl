@@ -2,7 +2,7 @@ const McGinleyDynamic_PERIOD = 14
 
 
 """
-    McGinleyDynamic{T}(; period=EMA_PERIOD)
+    McGinleyDynamic{T}(; period = McGinleyDynamic_PERIOD)
 
 The McGinleyDynamic type implements a McGinley Dynamic indicator.
 """
