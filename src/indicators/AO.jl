@@ -36,10 +36,10 @@ function OnlineStatsBase._fit!(ind::AO, candle)
     fast_ma, slow_ma = ind.sub_indicators.stats
     # fit!(ind.fast_ma, median)
     # fit!(ind.slow_ma, median)
-    if has_output_value(fast_ma) && has_output_value(slow_ma)
-        ind.value = value(fast_ma) - value(slow_ma)
-    else
-        ind.value = missing
-    end
+    #if has_output_value(fast_ma) && has_output_value(slow_ma)
+    ind.value = value(fast_ma) - value(slow_ma)
+    #else
+    #    ind.value = missing
+    #end
 end
 
