@@ -13,6 +13,7 @@
 
     @testset_skip "Indicator chaining (SMA) - WIP" begin
         values = collect(1.0:10.0)
+        # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
         ind1 = SMA{Float64}(period = 3)
         ind2 = SMA{Float64}(period = 3, input_indicator = ind1)
         ind3 = SMA{Float64}(period = 3, input_indicator = ind2)
@@ -25,6 +26,23 @@
         @test isapprox(value(ind3), 8.0; atol = ATOL)
         @test isapprox(value(ind4), 8.0; atol = ATOL)
     end
+
+    @testset_skip "Indicator chaining (SMA) with output listener - WIP" begin
+        # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
+        values = collect(1.0:10.0)
+        ind4 = SMA{Float64}(period = 3)
+        ind3 = SMA{Float64}(period = 3, output_listeners = Series(ind4))
+        ind2 = SMA{Float64}(period = 3, output_listeners = Series(ind3))
+        ind1 = SMA{Float64}(period = 3, output_listeners = Series(ind2))
+        for val in values
+            fit!(ind1, val)
+        end
+        @test isapprox(value(ind1), 9.0; atol = ATOL)
+        @test isapprox(value(ind2), 8.0; atol = ATOL)
+        @test isapprox(value(ind3), 8.0; atol = ATOL)
+        @test isapprox(value(ind4), 8.0; atol = ATOL)
+    end
+
 
     @testset "EMA" begin
         ind = EMA{Float64}(period = P)
