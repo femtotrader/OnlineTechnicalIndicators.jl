@@ -1,6 +1,6 @@
 const TTM_PERIOD = 20
-const TTM_BB_STD_DEV_MULTIPLIER = 2.0
-const TTM_KC_ATR_MULTIPLIER = 2.0# 1.5
+const TTM_BB_STD_DEV_MULT = 2.0
+const TTM_KC_ATR_MULT = 2.0# 1.5
 
 struct TTMVal{Tval}
     squeeze::Bool  # squeeze is on (=True) or off (=False)
@@ -29,14 +29,14 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     function TTM{Tohlcv,S}(;
         period = TTM_PERIOD,
-        bb_std_dev_multiplier = TTM_BB_STD_DEV_MULTIPLIER,
-        kc_atr_multiplier = TTM_KC_ATR_MULTIPLIER,
+        bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
+        kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
     ) where {Tohlcv,S}
-        _bb = BB{S}(; period = period, std_dev_multiplier = bb_std_dev_multiplier)
+        _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
         _bb = FilterTransform(_bb, Tohlcv, transform = candle -> candle.close)
         _dc = DonchianChannels{Tohlcv,S}(; period=period)
-        _kc = KeltnerChannels{Tohlcv,S}(; ma_period = period, atr_period = period, atr_mult_up = kc_atr_multiplier, atr_mult_down = kc_atr_multiplier)  # ma = EMA by default
+        _kc = KeltnerChannels{Tohlcv,S}(; ma_period = period, atr_period = period, atr_mult_up = kc_atr_mult, atr_mult_down = kc_atr_mult)  # ma = EMA by default
         _ma = MAFactory(S)(ma, period)
         _ma = FilterTransform(_ma, Tohlcv, transform = candle -> candle.close)
         sub_indicators = Series(_bb, _dc, _kc, _ma)

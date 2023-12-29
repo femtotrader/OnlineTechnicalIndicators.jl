@@ -1,5 +1,5 @@
 const SuperTrend_ATR_PERIOD = 10
-const SuperTrend_MULTIPLIER = 3
+const SuperTrend_MULT = 3
 
 module Trend
 export TrendEnum
@@ -12,7 +12,7 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULTIPLIER)
+    SuperTrend{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT)
 
 The `SuperTrend` type implements a Super Trend indicator.
 """
@@ -31,7 +31,7 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     function SuperTrend{Tohlcv,S}(;
         atr_period = SuperTrend_ATR_PERIOD,
-        mult = SuperTrend_MULTIPLIER,
+        mult = SuperTrend_MULT,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
         fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
@@ -51,8 +51,8 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
     end
 
     #=
-    BASIC UPPER BAND = HLA + [ MULTIPLIER * 10-DAY ATR ]
-    BASIC LOWER BAND = HLA - [ MULTIPLIER * 10-DAY ATR ]
+    BASIC UPPER BAND = HLA + [ MULT * 10-DAY ATR ]
+    BASIC LOWER BAND = HLA - [ MULT * 10-DAY ATR ]
     =#
 
     hla = (candle.high + candle.low) / 2.0

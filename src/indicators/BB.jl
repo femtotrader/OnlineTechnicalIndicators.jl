@@ -1,5 +1,5 @@
 const BB_PERIOD = 5
-const BB_STD_DEV_MULTIPLIER = 2.0
+const BB_STD_DEV_MULT = 2.0
 
 struct BBVal{Tval}
     lower::Tval
@@ -8,7 +8,7 @@ struct BBVal{Tval}
 end
 
 """
-    BB{T}(; period = BB_PERIOD, std_dev_multiplier = BB_STD_DEV_MULTIPLIER, ma = SMA)
+    BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA)
 
 The `BB` type implements Bollinger Bands indicator.
 """
@@ -17,7 +17,7 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
     n::Int
 
     period::Integer
-    std_dev_multiplier::Tval
+    std_dev_mult::Tval
 
     sub_indicators::Series
     # central_band  # default SMA
@@ -25,14 +25,14 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
 
     function BB{Tval}(;
         period = BB_PERIOD,
-        std_dev_multiplier = BB_STD_DEV_MULTIPLIER,
+        std_dev_mult = BB_STD_DEV_MULT,
         ma = SMA,
     ) where {Tval}
         _central_band = MAFactory(Tval)(ma, period)
         _std_dev = StdDev{Tval}(period = period)
-        # new{Tval}(missing, 0, period, std_dev_multiplier, _central_band, _std_dev)
+        # new{Tval}(missing, 0, period, std_dev_mult, _central_band, _std_dev)
         sub_indicators = Series(_central_band, _std_dev)
-        new{Tval}(missing, 0, period, std_dev_multiplier, sub_indicators)
+        new{Tval}(missing, 0, period, std_dev_mult, sub_indicators)
     end
 end
 
@@ -47,9 +47,9 @@ function OnlineStatsBase._fit!(ind::BB{Tval}, data::Tval) where {Tval}
     if !has_output_value(central_band)
         ind.value = missing
     else
-        lower = value(central_band) - ind.std_dev_multiplier * value(std_dev)
+        lower = value(central_band) - ind.std_dev_mult * value(std_dev)
         central = value(central_band)
-        upper = value(central_band) + ind.std_dev_multiplier * value(std_dev)
+        upper = value(central_band) + ind.std_dev_mult * value(std_dev)
         ind.value = BBVal{Tval}(lower, central, upper)
     end
 end

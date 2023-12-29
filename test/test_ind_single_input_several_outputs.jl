@@ -1,7 +1,7 @@
 @testset "single input - several output values" begin
 
     @testset "BB" begin
-        ind = BB{Float64}(period = 5, std_dev_multiplier = 2.0)
+        ind = BB{Float64}(period = 5, std_dev_mult = 2.0)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
