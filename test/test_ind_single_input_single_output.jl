@@ -11,13 +11,19 @@
         @test isapprox(value(ind), 9.308500; atol = ATOL)
     end
 
-    @testset_skip "Indicator chaining (SMA)" begin
-        values = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-        ind = SMA{Float64}(period = 3)
-        ind = merge!(ind, SMA{Float64}(period = 3))
-        ind = merge!(ind, SMA{Float64}(period = 3))
-        ind = merge!(ind, SMA{Float64}(period = 3))
-        @test isapprox(value(ind), 6.0; atol = ATOL)
+    @testset_skip "Indicator chaining (SMA) - WIP" begin
+        values = collect(1.0:10.0)
+        ind1 = SMA{Float64}(period = 3)
+        ind2 = SMA{Float64}(period = 3, input_indicator = ind1)
+        ind3 = SMA{Float64}(period = 3, input_indicator = ind2)
+        ind4 = SMA{Float64}(period = 3, input_indicator = ind3)
+        for val in values
+            fit!(ind1, val)
+        end
+        @test isapprox(value(ind1), 9.0; atol = ATOL)
+        @test isapprox(value(ind2), 8.0; atol = ATOL)
+        @test isapprox(value(ind3), 8.0; atol = ATOL)
+        @test isapprox(value(ind4), 8.0; atol = ATOL)
     end
 
     @testset "EMA" begin
