@@ -11,7 +11,7 @@ mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
 
     period::Integer
 
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function ROC{Tval}(; period = ROC_PERIOD) where {Tval}
         input = CircBuff(Tval, period + 1, rev = false)
@@ -20,10 +20,10 @@ mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::ROC, data)
-    fit!(ind.input, data)
+    fit!(ind.input_values, data)
     if ind.n == ind.period
         ind.value =
-            100.0 * (ind.input[end] - ind.input[end-ind.period]) / ind.input[end-ind.period]
+            100.0 * (ind.input_values[end] - ind.input_values[end-ind.period]) / ind.input_values[end-ind.period]
     else
         ind.n += 1
         ind.value = missing

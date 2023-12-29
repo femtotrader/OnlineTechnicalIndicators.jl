@@ -19,7 +19,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     smoothing_period::Integer
 
     values_d::SMA{S}
-    input::CircBuff{Tohlcv}
+    input_values::CircBuff{Tohlcv}
 
     function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
@@ -35,17 +35,17 @@ end
 
 function OnlineStatsBase._fit!(ind::Stoch, candle)
     # load candles until i have enough data
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     # increment ind.n
     ind.n += 1
     # get max high and min low
-    max_high = max([cdl.high for cdl in value(ind.input)]...)
-    min_low = min([cdl.low for cdl in value(ind.input)]...)
+    max_high = max([cdl.high for cdl in value(ind.input_values)]...)
+    min_low = min([cdl.low for cdl in value(ind.input_values)]...)
     # calculate k
     if max_high == min_low
         k = 100.0
     else
-        k = 100.0 * (ind.input[end].close - min_low) / (max_high - min_low)
+        k = 100.0 * (ind.input_values[end].close - min_low) / (max_high - min_low)
     end
     # calculate d
     fit!(ind.values_d, k)

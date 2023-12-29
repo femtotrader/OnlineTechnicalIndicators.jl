@@ -23,7 +23,7 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     plus_vm::CircBuff
     minus_vm::CircBuff
 
-    input::CircBuff
+    input_values::CircBuff
 
     function VTX{Tohlcv,S}(; period = VTX_PERIOD) where {Tohlcv,S}
         @warn "WIP - buggy"
@@ -37,7 +37,7 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::VTX, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     fit!(ind.sub_indicators, candle)
     atr, = ind.sub_indicators.stats
     fit!(ind.atr_values, value(atr))
@@ -50,8 +50,8 @@ function OnlineStatsBase._fit!(ind::VTX, candle)
         return
     end
 
-    # candle = ind.input[end]
-    candle_prev = ind.input[end-1]
+    # candle = ind.input_values[end]
+    candle_prev = ind.input_values[end-1]
 
     fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
     fit!(ind.minus_vm, abs(candle.low - candle_prev.high))

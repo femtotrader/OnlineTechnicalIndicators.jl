@@ -11,7 +11,7 @@ mutable struct StdDev{Tval} <: TechnicalIndicator{Tval}
 
     period::Integer
 
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function StdDev{Tval}(; period = StdDev_PERIOD) where {Tval}
         input = CircBuff(Tval, period, rev = false)
@@ -20,11 +20,11 @@ mutable struct StdDev{Tval} <: TechnicalIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::StdDev, data)
-    fit!(ind.input, data)
+    fit!(ind.input_values, data)
     if ind.n < ind.period
         ind.n += 1
     end
-    _mean = sum(value(ind.input)) / ind.period
-    ind.value = sqrt(sum([(item - _mean)^2 for item in value(ind.input)]) / ind.period)
+    _mean = sum(value(ind.input_values)) / ind.period
+    ind.value = sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)
     return ind.value
 end

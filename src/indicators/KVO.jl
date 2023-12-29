@@ -16,7 +16,7 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     trend::CircBuff
     cumulative_measurement::CircBuff
 
-    input::CircBuff
+    input_values::CircBuff
 
     function KVO{Tohlcv,S}(;
         fast_period = KVO_FAST_PERIOD,
@@ -33,16 +33,16 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::KVO, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     ind.n += 1
 
-    if length(ind.input) < 2
+    if length(ind.input_values) < 2
         ind.value = missing
         return
     end
 
-    value1 = ind.input[end]
-    value2 = ind.input[end-1]
+    value1 = ind.input_values[end]
+    value2 = ind.input_values[end-1]
 
     if length(ind.trend) < 1
         fit!(ind.trend, 0.0)

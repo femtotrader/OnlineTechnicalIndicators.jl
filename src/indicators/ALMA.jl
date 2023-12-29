@@ -19,7 +19,7 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
     w::Vector{Tval}
     w_sum::Tval
 
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
@@ -41,11 +41,11 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::ALMA, data)
-    fit!(ind.input, data)
+    fit!(ind.input_values, data)
     if ind.n == ind.period
         alma = 0
         for i = 1:ind.period
-            alma += ind.input[end-(ind.period-i)] * ind.w[i]
+            alma += ind.input_values[end-(ind.period-i)] * ind.w[i]
         end
         ind.value = alma / ind.w_sum
     else
@@ -57,14 +57,14 @@ end
 #=
 
 function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
-    push!(ind.input, val)
+    push!(ind.input_values, val)
 
-    if length(ind.input) < ind.period
+    if length(ind.input_values) < ind.period
         out_val = missing
     else
         alma = 0
         for i = 1:ind.period
-            alma += ind.input[end-(ind.period-i)] * ind.w[i]
+            alma += ind.input_values[end-(ind.period-i)] * ind.w[i]
         end
         out_val = alma / ind.w_sum
     end

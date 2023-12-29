@@ -16,7 +16,7 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     # atr::ATR
     atr_values::CircBuff
 
-    input::CircBuff
+    input_values::CircBuff
 
     function CHOP{Tohlcv,S}(; period = CHOP_PERIOD) where {Tohlcv,S}
         @warn "WIP - buggy"
@@ -29,20 +29,20 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::CHOP, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     fit!(ind.sub_indicators, candle)
     ind.n += 1
     atr, = ind.sub_indicators.stats
     fit!(ind.atr_values, value(atr))
 
-    if (!has_output_value(atr)) || (length(ind.input) != ind.period)
+    if (!has_output_value(atr)) || (length(ind.input_values) != ind.period)
         ind.value = missing
         return
     end
 
 
-    max_high = max([cdl.high for cdl in value(ind.input)]...)
-    min_low = min([cdl.low for cdl in value(ind.input)]...)
+    max_high = max([cdl.high for cdl in value(ind.input_values)]...)
+    min_low = min([cdl.low for cdl in value(ind.input_values)]...)
 
     if max_high != min_low
         ind.value =

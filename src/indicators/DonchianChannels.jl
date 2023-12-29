@@ -17,7 +17,7 @@ mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     period::Integer
 
-    input::CircBuff{Tohlcv}
+    input_values::CircBuff{Tohlcv}
 
     function DonchianChannels{Tohlcv,S}(;
         period = DonchianChannels_ATR_PERIOD,
@@ -28,11 +28,11 @@ mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::DonchianChannels, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     ind.n += 1
     if ind.n >= ind.period
-        max_high = max([k.high for k in value(ind.input)]...)
-        min_low = min([k.low for k in value(ind.input)]...)
+        max_high = max([k.high for k in value(ind.input_values)]...)
+        min_low = min([k.low for k in value(ind.input_values)]...)
         ind.value = DonchianChannelsVal(min_low, (max_high + min_low) / 2.0, max_high)
     else
         ind.value = missing

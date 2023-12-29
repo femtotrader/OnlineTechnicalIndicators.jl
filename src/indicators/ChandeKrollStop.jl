@@ -26,14 +26,14 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     high_stop_list::CircBuff
     low_stop_list::CircBuff
 
-    input::CircBuff
+    input_values::CircBuff
 
     function ChandeKrollStop{Tohlcv,S}(;
         atr_period = ChandeKrollStop_ATR_PERIOD,
         atr_mult = ChandeKrollStop_ATR_MULT,
         period = ChandeKrollStop_PERIOD,
     ) where {Tohlcv,S}
-        input = CircBuff(Tohlcv, atr_period, rev = false)
+        input_values = CircBuff(Tohlcv, atr_period, rev = false)
         atr = ATR{Tohlcv,S}(period = atr_period)
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)
@@ -46,13 +46,13 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr,
             high_stop_list,
             low_stop_list,
-            input,
+            input_values,
         )
     end
 end
 
 function OnlineStatsBase._fit!(ind::ChandeKrollStop, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     fit!(ind.atr, candle)
     ind.n += 1
     if (ind.n < ind.atr_period) || !has_output_value(ind.atr)
@@ -62,11 +62,11 @@ function OnlineStatsBase._fit!(ind::ChandeKrollStop, candle)
 
     fit!(
         ind.high_stop_list,
-        max([cdl.high for cdl in ind.input.value]...) - value(ind.atr) * ind.atr_mult,
+        max([cdl.high for cdl in ind.input_values.value]...) - value(ind.atr) * ind.atr_mult,
     )
     fit!(
         ind.low_stop_list,
-        min([cdl.low for cdl in ind.input.value]...) + value(ind.atr) * ind.atr_mult,
+        min([cdl.low for cdl in ind.input_values.value]...) + value(ind.atr) * ind.atr_mult,
     )
 
     if ind.n < ind.period

@@ -15,7 +15,7 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     emv_ma::MovingAverageIndicator  # SMA
 
-    input::CircBuff{Tohlcv}
+    input_values::CircBuff{Tohlcv}
 
     function EMV{Tohlcv,S}(;
         period = EMV_PERIOD,
@@ -29,11 +29,11 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::EMV, candle::OHLCV)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     ind.n += 1
     if ind.n >= 2
-        #candle = ind.input[end]
-        candle_prev = ind.input[end-1]
+        #candle = ind.input_values[end]
+        candle_prev = ind.input_values[end-1]
         if candle.high != candle.low
             distance =
                 ((candle.high + candle.low) / 2) -

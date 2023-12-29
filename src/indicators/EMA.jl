@@ -13,7 +13,7 @@ mutable struct EMA{Tval} <: MovingAverageIndicator{Tval}
     period::Int
 
     rolling::Bool
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
         input = CircBuff(Tval, period, rev = false)
@@ -22,15 +22,15 @@ mutable struct EMA{Tval} <: MovingAverageIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::EMA, val)
-    fit!(ind.input, val)
+    fit!(ind.input_values, val)
     if ind.rolling  # CircBuff is full and rolling
         mult = 2.0 / (ind.period + 1.0)
-        ind.value = mult * ind.input[end] + (1.0 - mult) * ind.value
+        ind.value = mult * ind.input_values[end] + (1.0 - mult) * ind.value
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
             ind.n += 1
-            ind.value = sum(ind.input.value) / ind.period
+            ind.value = sum(ind.input_values.value) / ind.period
         else  # CircBuff is filling up
             ind.n += 1
             ind.value = missing

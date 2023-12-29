@@ -14,7 +14,7 @@ mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
     gains::SMMA{Tval}
     losses::SMMA{Tval}
 
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
         input = CircBuff(Tval, 2, rev = false)
@@ -26,17 +26,17 @@ mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
 end
 
 function OnlineStatsBase._fit!(ind::RSI, val)
-    fit!(ind.input, val)
+    fit!(ind.input_values, val)
     if ind.n < ind.period
         ind.n += 1
     end
 
-    if length(ind.input) < 2
+    if length(ind.input_values) < 2
         ind.value = missing
         return ind.value
     end
 
-    change = ind.input[end] - ind.input[end-1]
+    change = ind.input_values[end] - ind.input_values[end-1]
 
     gain = change > 0 ? change : 0.0
     loss = change < 0 ? -change : 0.0

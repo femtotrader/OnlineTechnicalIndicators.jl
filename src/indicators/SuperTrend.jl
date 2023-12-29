@@ -27,7 +27,7 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     fub::CircBuff  # final upper band
     flb::CircBuff  # Tprice  # final lower band
 
-    input::CircBuff{Tohlcv}
+    input_values::CircBuff{Tohlcv}
 
     function SuperTrend{Tohlcv,S}(;
         atr_period = SuperTrend_ATR_PERIOD,
@@ -42,7 +42,7 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::SuperTrend, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     fit!(ind.atr, candle)
 
     if !has_output_value(ind.atr)
@@ -67,7 +67,7 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
     if length(ind.fub) == 0
         fub = 0.0
     else
-        if bub < ind.fub.value[end] || ind.input.value[end-1].close > ind.fub.value[end]
+        if bub < ind.fub.value[end] || ind.input_values.value[end-1].close > ind.fub.value[end]
             fub = bub
         else
             fub = ind.fub.value[end]
@@ -82,7 +82,7 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
 
     if length(ind.flb) == 0
         flb = 0.0
-    elseif blb > ind.flb.value[end] || ind.input.value[end-1].close < ind.flb.value[end]
+    elseif blb > ind.flb.value[end] || ind.input_values.value[end-1].close < ind.flb.value[end]
         flb = blb
     else
         flb = ind.flb.value[end]

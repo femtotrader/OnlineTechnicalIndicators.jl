@@ -18,7 +18,7 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     buy_press::CircBuff
     true_range::CircBuff
 
-    input::CircBuff
+    input_values::CircBuff
 
     function UO{Tohlcv,S}(;
         fast_period = UO_FAST_PERIOD,
@@ -26,7 +26,7 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_period = UO_SLOW_PERIOD,
     ) where {Tohlcv,S}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
-        input = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(Tohlcv, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
         new{Tohlcv,S}(
@@ -37,21 +37,21 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             slow_period,
             buy_press,
             true_range,
-            input,
+            input_values,
         )
     end
 end
 
 function OnlineStatsBase._fit!(ind::UO, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     ind.n += 1
     if ind.n < 2
         ind.value = missing
         return
     end
 
-    # candle = ind.input[end]
-    candle_prev = ind.input[end-1]
+    # candle = ind.input_values[end]
+    candle_prev = ind.input_values[end-1]
 
     fit!(ind.buy_press, candle.close - min(candle.low, candle_prev.close))
     fit!(

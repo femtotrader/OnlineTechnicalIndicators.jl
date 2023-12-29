@@ -33,7 +33,7 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     dx::CircBuff  # directional index
 
-    input::CircBuff
+    input_values::CircBuff
 
     function ADX{Tohlcv,S}(; di_period = 14, adx_period = 14) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = di_period)
@@ -60,21 +60,21 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             pdi,
             mdi,
             dx,
-            input,
+            input_values,
         )
     end
 end
 
 function OnlineStatsBase._fit!(ind::ADX, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     #fit!(ind.sub_indicators, candle)
     fit!(ind.atr, candle)
     ind.n += 1
     #atr, = ind.sub_indicators.stats
     if ind.n >= 2
 
-        current_input = ind.input[end]
-        prev_input = ind.input[end-1]
+        current_input = ind.input_values[end]
+        prev_input = ind.input_values[end-1]
 
         if current_input.high - prev_input.high > prev_input.low - current_input.low &&
            current_input.high - prev_input.high > 0

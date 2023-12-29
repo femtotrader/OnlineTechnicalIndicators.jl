@@ -16,7 +16,7 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     period::Integer
 
-    input::CircBuff
+    input_values::CircBuff
 
     function Aroon{Tohlcv,S}(; period = Aroon_PERIOD) where {Tohlcv,S}
         input = CircBuff(Tohlcv, period + 1, rev = false)
@@ -25,7 +25,7 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function OnlineStatsBase._fit!(ind::Aroon, candle)
-    fit!(ind.input, candle)
+    fit!(ind.input_values, candle)
     ind.n += 1
 
     # search in reversed list in order to get the right-most index
@@ -36,7 +36,7 @@ function OnlineStatsBase._fit!(ind::Aroon, candle)
     rng = (ind.period+1):-1:1
     println(collect(rng))
     for i in rng
-        cdl = ind.input[i]
+        cdl = ind.input_values[i]
         if cdl.high > price_high
             price_high = cdl.high
             day_high = i
@@ -49,14 +49,14 @@ function OnlineStatsBase._fit!(ind::Aroon, candle)
     days_high = ind.period - day_high
     days_low = ind.period - day_low
 
-    #days_high = ind.period - argmax([cdl.high for cdl in reverse(value(ind.input))])
-    #days_low = ind.period - argmin([cdl.low for cdl in reverse(value(ind.input))])
+    #days_high = ind.period - argmax([cdl.high for cdl in reverse(value(ind.input_values))])
+    #days_low = ind.period - argmin([cdl.low for cdl in reverse(value(ind.input_values))])
 
     #=
     days_high = ind.period - max(reversed(range(ind.period + 1)),
-                                    key = lambda x: ind.input[-ind.period - 1:][x].high)
+                                    key = lambda x: ind.input_values[-ind.period - 1:][x].high)
     days_low = ind.period - min(reversed(range(ind.period + 1)),
-                                    key = lambda x: ind.input_values[-ind.period - 1:][x].low)
+                                    key = lambda x: ind.input_values_values[-ind.period - 1:][x].low)
     =#
 
     ind.value = AroonVal(

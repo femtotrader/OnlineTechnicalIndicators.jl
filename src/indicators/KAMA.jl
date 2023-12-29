@@ -18,7 +18,7 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
 
     volatilities::CircBuff{Tval}
 
-    input::CircBuff{Tval}
+    input_values::CircBuff{Tval}
 
     function KAMA{Tval}(;
         period = KAMA_PERIOD,
@@ -41,19 +41,19 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
             fast_smoothing_constant,
             slow_smoothing_constant,
             volatilities,
-            input,
+            input_values,
         )
     end
 end
 
 function OnlineStatsBase._fit!(ind::KAMA, data)
-    fit!(ind.input, data)
+    fit!(ind.input_values, data)
     if ind.n != ind.period
         ind.n += 1
     end
 
     if ind.n >= 2
-        fit!(ind.volatilities, abs(ind.input[end] - ind.input[end-1]))
+        fit!(ind.volatilities, abs(ind.input_values[end] - ind.input_values[end-1]))
 
         if length(ind.volatilities) < ind.period
             ind.value = missing
@@ -61,7 +61,7 @@ function OnlineStatsBase._fit!(ind::KAMA, data)
         end
 
         volatility = sum(value(ind.volatilities))
-        change = abs(ind.input[end] - ind.input[1])
+        change = abs(ind.input_values[end] - ind.input_values[1])
 
         if volatility != 0
             efficiency_ratio = change / volatility
@@ -78,12 +78,12 @@ function OnlineStatsBase._fit!(ind::KAMA, data)
 
         if !has_output_value(ind)  # tofix!!!!
             #if length(ind.value) == 0  # tofix!!!!
-            prev_kama = ind.input[end-1]
+            prev_kama = ind.input_values[end-1]
         else
             prev_kama = ind.value[end]
         end
 
-        ind.value = prev_kama + smoothing_constant * (ind.input[end] - prev_kama)
+        ind.value = prev_kama + smoothing_constant * (ind.input_values[end] - prev_kama)
     end
 
 end
