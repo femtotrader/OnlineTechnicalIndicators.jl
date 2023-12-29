@@ -14,8 +14,8 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
     n::Int
 
     macd::MACD
-    stoch_macd::Stoch
-    stoch_d::Stoch
+    stoch_macd::FilterTransform  # Stoch
+    stoch_d::FilterTransform  # Stoch
 
     function STC{Tval}(;
         fast_macd_period = STC_FAST_MACD_PERIOD,
@@ -36,12 +36,23 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             smoothing_period = stoch_smoothing_period,
             ma = ma,
         )
+        stoch_macd = FilterTransform(
+            stoch_macd,
+            MACDVal,  # type of input
+            transform = macd_val ->
+                OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
+        )
         stoch_d = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
         )
-        # Float64 ->(macd)-> MACDVal -> (macd_to_ohlcv) -> OHLCV -> (stoch_macd) -> stoch_val -> (stoch_d_to_ohlcv) -> OHLCV -> Stoch
+        stoch_d = FilterTransform(
+            stoch_d,
+            StochVal,  # type of input
+            transform = stoch_val ->
+                OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d),
+        )
         new{Tval}(missing, 0, macd, stoch_macd, stoch_d)
     end
 end
@@ -53,14 +64,9 @@ function OnlineStatsBase._fit!(ind::STC, val)
     fit!(ind.macd, val)
     macd_val = value(ind.macd)
     if !ismissing(macd_val)
-        candle = OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd)
-        fit!(ind.stoch_macd, candle)
-        stoch_macd_val = value(ind.stoch_macd)
-        candle =
-            OHLCV(stoch_macd_val.d, stoch_macd_val.d, stoch_macd_val.d, stoch_macd_val.d)
-        fit!(ind.stoch_d, candle)
-        stoch_d_val = value(ind.stoch_d)
-        ind.value = max(min(stoch_d_val.d, 100), 0)
+        fit!(ind.stoch_macd, macd_val)
+        fit!(ind.stoch_d, value(ind.stoch_macd))
+        ind.value = max(min(value(ind.stoch_d).d, 100), 0)
     end
 
 end
