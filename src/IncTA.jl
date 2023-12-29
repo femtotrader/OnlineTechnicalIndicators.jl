@@ -61,6 +61,7 @@ export Aroon
 export ChandeKrollStop
 export ParabolicSAR, SARTrend
 export SFX
+export TTM
 
 using OnlineStatsBase
 
@@ -70,7 +71,7 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
 include("ohlcv.jl")
 include("sample_data.jl")
 
-function has_output_value(ind::T) where {T<:OnlineStat}
+function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end
 
@@ -126,7 +127,7 @@ include("indicators/Aroon.jl")
 include("indicators/ChandeKrollStop.jl")
 include("indicators/ParabolicSAR.jl")
 include("indicators/SFX.jl")
-
+include("indicators/TTM.jl")
 
 # More complex indicators
 ## SISO

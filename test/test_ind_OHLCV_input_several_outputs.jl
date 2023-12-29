@@ -196,4 +196,28 @@
         @test isapprox(value(ind).ma_std_dev, 0.600567; atol = ATOL)
     end
 
+    @testset "TTM" begin
+        ind = TTM{OHLCV{Missing,Float64,Float64},Float64}(
+            period = 20,
+            bb_std_dev_multiplier = 2.0,
+            kc_atr_multiplier = 2.0
+        )
+        ind = StatLag(ind, 12)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test value(ind.lag[end-12+1]).squeeze
+        @test isapprox(value(ind.lag[end-12+1]).histogram, 0.778771; atol = ATOL)
+
+        @test !value(ind.lag[end-2]).squeeze
+        @test isapprox(value(ind.lag[end-2]).histogram, 1.135782; atol = ATOL)
+
+        @test !value(ind.lag[end-1]).squeeze
+        @test isapprox(value(ind.lag[end-1]).histogram, 1.136939; atol = ATOL)
+
+        @test !value(ind).squeeze
+        @test isapprox(value(ind).histogram, 1.036864; atol = ATOL)
+    end
+
 end
