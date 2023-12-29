@@ -172,4 +172,28 @@
         @test isapprox(value(ind).accel_factor, 0.060000; atol = ATOL)
     end
 
+    @testset "SFX" begin
+        ind = SFX{OHLCV{Missing,Float64,Float64},Float64}(
+            atr_period = 12,
+            std_dev_period = 12,
+            std_dev_smoothing_period = 3,
+        )
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        @test isapprox(value(ind.lag[end-2]).atr, 0.689106; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).std_dev, 0.572132; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).ma_std_dev, 0.476715; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).atr, 0.683347; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).std_dev, 0.610239; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).ma_std_dev, 0.551638; atol = ATOL)
+
+        @test isapprox(value(ind).atr, 0.690568; atol = ATOL)
+        @test isapprox(value(ind).std_dev, 0.619332; atol = ATOL)
+        @test isapprox(value(ind).ma_std_dev, 0.600567; atol = ATOL)
+    end
+
 end

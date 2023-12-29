@@ -59,6 +59,7 @@ export ADX
 export Aroon
 export ChandeKrollStop
 export ParabolicSAR, SARTrend
+export SFX
 
 using OnlineStatsBase
 
@@ -123,6 +124,8 @@ include("indicators/KeltnerChannels.jl")
 include("indicators/Aroon.jl")
 include("indicators/ChandeKrollStop.jl")
 include("indicators/ParabolicSAR.jl")
+include("indicators/SFX.jl")
+
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory
