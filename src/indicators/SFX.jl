@@ -34,12 +34,7 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         std_dev = FilterTransform(std_dev, Tohlcv, transform = candle -> candle.close)
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, std_dev_smoothing_period)
-        new{Tohlcv,S}(
-            missing,
-            0,
-            sub_indicators,
-            ma_std_dev,
-        )
+        new{Tohlcv,S}(missing, 0, sub_indicators, ma_std_dev)
     end
 end
 
@@ -55,6 +50,6 @@ function OnlineStatsBase._fit!(ind::SFX, candle)
     _atr = value(atr)
     _std_dev = value(std_dev)
     _ma_std_dev = value(ind.ma_std_dev)
-    
+
     ind.value = SFXVal(_atr, _std_dev, _ma_std_dev)
 end

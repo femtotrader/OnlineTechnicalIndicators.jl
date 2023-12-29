@@ -23,6 +23,7 @@ export TEMA
 export KAMA
 export ALMA
 export McGinleyDynamic
+export STC
 # simple indicators (single input)
 ## multiple output => SIMO
 export BB
@@ -125,6 +126,14 @@ include("indicators/Aroon.jl")
 include("indicators/ChandeKrollStop.jl")
 include("indicators/ParabolicSAR.jl")
 include("indicators/SFX.jl")
+
+
+# More complex indicators
+## SISO
+include("indicators/STC.jl")
+## SIMO
+## MISO
+## MIMO
 
 
 # Other stuff

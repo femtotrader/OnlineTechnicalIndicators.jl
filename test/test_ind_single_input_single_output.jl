@@ -277,4 +277,21 @@
         @test isapprox(value(ind), 8.944634; atol = ATOL)
     end
 
+    @testset "STC" begin
+        ind = STC{Float64}(
+            fast_macd_period = 5,
+            slow_macd_period = 10,
+            stoch_period = 10,
+            stoch_smoothing_period = 3,
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+        @test isapprox(value(ind.lag[end-2]), 55.067364; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 82.248999; atol = ATOL)
+        @test isapprox(value(ind), 94.229147; atol = ATOL)
+    end
+
+
 end
