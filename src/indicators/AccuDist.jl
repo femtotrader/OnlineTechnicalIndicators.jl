@@ -25,9 +25,9 @@ function OnlineStatsBase._fit!(ind::AccuDist, candle)
         ind.value = value(ind)
         return
     end
-    if !has_output_value(ind)
-        ind.value = mfv
-    else
+    if has_output_value(ind)
         ind.value = value(ind) + mfv
+    else
+        ind.value = mfv
     end
 end
