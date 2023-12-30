@@ -20,7 +20,7 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
     std_dev_mult::Tval
 
     sub_indicators::Series
-    central_band::Any  # default SMA
+    central_band::MovingAverageIndicator  # default SMA
     std_dev::StdDev{Tval}
 
     function BB{Tval}(;
@@ -30,26 +30,18 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
     ) where {Tval}
         _central_band = MAFactory(Tval)(ma, period)
         _std_dev = StdDev{Tval}(period = period)
-        # new{Tval}(missing, 0, period, std_dev_mult, _central_band, _std_dev)
         sub_indicators = Series(_central_band, _std_dev)
         new{Tval}(missing, 0, period, std_dev_mult, sub_indicators, _central_band, _std_dev)
     end
 end
 
-function OnlineStatsBase._fit!(ind::BB{Tval}, data::Tval) where {Tval}
-    #fit!(ind.central_band, data)
-    #fit!(ind.std_dev, data)
-    fit!(ind.sub_indicators, data)
-    #central_band, std_dev = ind.sub_indicators.stats
-    if ind.n != ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::BB)
     if !has_output_value(ind.central_band)
         ind.value = missing
     else
         lower = value(ind.central_band) - ind.std_dev_mult * value(ind.std_dev)
         central = value(ind.central_band)
         upper = value(ind.central_band) + ind.std_dev_mult * value(ind.std_dev)
-        ind.value = BBVal{Tval}(lower, central, upper)
+        ind.value = BBVal(lower, central, upper)
     end
 end

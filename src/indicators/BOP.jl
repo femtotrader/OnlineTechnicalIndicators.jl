@@ -12,11 +12,6 @@ mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::BOP, candle)
-    ind.n += 1
-    if candle.high != candle.low
-        ind.value = (candle.close - candle.open) / (candle.high - candle.low)
-    else
-        ind.value = value(ind)
-    end
+function _calculate_new_value_only_from_incoming_data(ind::BOP, candle)
+    return candle.high != candle.low ? (candle.close - candle.open) / (candle.high - candle.low) : value(ind)
 end

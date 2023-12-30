@@ -53,13 +53,9 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ChandeKrollStop, candle)
-    fit!(ind.input_values, candle)
-    fit!(ind.sub_indicators, candle)
-    ind.n += 1
+function _calculate_new_value(ind::ChandeKrollStop)
     if (ind.n < ind.atr_period) || !has_output_value(ind.atr)
-        ind.value = missing
-        return
+        return missing
     end
 
     fit!(
@@ -72,11 +68,10 @@ function OnlineStatsBase._fit!(ind::ChandeKrollStop, candle)
     )
 
     if ind.n < ind.period
-        ind.value = missing
-        return
+        return missing
     end
 
-    ind.value = ChandeKrollStopVal(
+    return ChandeKrollStopVal(
         max(ind.high_stop_list.value...),
         min(ind.low_stop_list.value...),
     )

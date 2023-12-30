@@ -19,13 +19,8 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::CCI, candle)
-    ind.n += 1
+function _calculate_new_value_only_from_incoming_data(ind::CCI, candle)
     typical_price = (candle.high + candle.low + candle.close) / 3.0
     fit!(ind.mean_dev, typical_price)
-    if has_output_value(ind.mean_dev)
-        ind.value = (typical_price - value(ind.mean_dev.ma)) / (0.015 * value(ind.mean_dev))
-    else
-        ind.value = missing
-    end
+    return has_output_value(ind.mean_dev) ? (typical_price - value(ind.mean_dev.ma)) / (0.015 * value(ind.mean_dev)) : missing
 end

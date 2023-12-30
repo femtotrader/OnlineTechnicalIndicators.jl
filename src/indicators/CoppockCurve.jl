@@ -30,24 +30,16 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::CoppockCurve, data)
-    fit!(ind.sub_indicators, data)
-    # fit!(ind.slow_roc, data)
-    # fit!(ind.fast_roc, data)
-    # fast_roc, slow_roc = ind.sub_indicators.stats
-    if ind.n != ind.slow_roc.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::CoppockCurve)
     if has_output_value(ind.fast_roc) && has_output_value(ind.slow_roc)
         fit!(ind.wma, value(ind.slow_roc) + value(ind.fast_roc))
         ind.value = value(ind.wma)
         if has_output_value(ind.wma)
-            ind.value = value(ind.wma)
+            return value(ind.wma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
-    return ind.value
 end

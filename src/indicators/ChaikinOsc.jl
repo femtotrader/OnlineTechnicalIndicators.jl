@@ -30,20 +30,17 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ChaikinOsc, candle)
-    fit!(ind.sub_indicators, candle)
-    #accu_dist, = ind.sub_indicators.stats
-    ind.n += 1
+function _calculate_new_value(ind::ChaikinOsc)
     if has_output_value(ind.accu_dist)
         accu_dist_value = value(ind.accu_dist)
         fit!(ind.fast_ma, accu_dist_value)
         fit!(ind.slow_ma, accu_dist_value)
         if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
-            ind.value = value(ind.fast_ma) - value(ind.slow_ma)
+            return value(ind.fast_ma) - value(ind.slow_ma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
 end

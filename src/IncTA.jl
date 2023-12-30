@@ -76,15 +76,17 @@ include("ohlcv.jl")
 include("sample_data.jl")
 
 function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
-    has_input_values = :input_values in fieldnames(O)
+    _fieldnames = fieldnames(O)
+    has_input_values = :input_values in _fieldnames
     if has_input_values
         fit!(ind.input_values, data)
     end
+    has_sub_indicators = :sub_indicators in _fieldnames && length(ind.sub_indicators.stats) > 0
     if :sub_indicators in fieldnames(O)
         fit!(ind.sub_indicators, data)
     end
     ind.n += 1
-    ind.value = has_input_values ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
+    ind.value = has_input_values || has_sub_indicators ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
     fit_listeners!(ind)
 end
 
