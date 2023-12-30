@@ -2,7 +2,7 @@ const EMA_PERIOD = 3
 
 
 """
-    EMA{T}(; period=EMA_PERIOD)
+    EMA{T}(; period=EMA_PERIOD, output_listeners = Series())
 
 The `EMA` type implements an Exponential Moving Average indicator.
 """
