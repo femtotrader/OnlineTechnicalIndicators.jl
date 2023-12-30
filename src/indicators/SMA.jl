@@ -16,7 +16,7 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
 
     # function SMA{Tval}(; period = SMA_PERIOD, input_indicator = missing) where {Tval}
     function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
-        input = CircBuff(Tval, period, rev = false)
+        input_values = CircBuff(Tval, period, rev = false)
         #=
         if !ismissing(input_indicator)
             sub_indicators = Series(input_indicator)  # and sub_indicators
@@ -25,7 +25,7 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
         end
         new{Tval}(missing, 0, period, sub_indicators, input)
         =#
-        new{Tval}(missing, 0, period, input)
+        new{Tval}(missing, 0, period, input_values)
     end
 end
 

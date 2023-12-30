@@ -14,8 +14,8 @@ mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
     input_values::CircBuff{Tval}
 
     function ROC{Tval}(; period = ROC_PERIOD) where {Tval}
-        input = CircBuff(Tval, period + 1, rev = false)
-        new{Tval}(missing, 0, period, input)
+        input_values = CircBuff(Tval, period + 1, rev = false)
+        new{Tval}(missing, 0, period, input_values)
     end
 end
 

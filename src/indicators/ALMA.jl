@@ -35,8 +35,8 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
             push!(w, w_val)
             w_sum += w_val
         end
-        input = CircBuff(Tval, period, rev = false)
-        new{Tval}(missing, 0, period, offset, sigma, w, w_sum, input)
+        input_values = CircBuff(Tval, period, rev = false)
+        new{Tval}(missing, 0, period, offset, sigma, w, w_sum, input_values)
     end
 end
 

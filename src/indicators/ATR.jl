@@ -18,8 +18,8 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     function ATR{Tohlcv,S}(; period = ATR_PERIOD) where {Tohlcv,S}
         tr = CircBuff(S, period, rev = false)
-        input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, tr, false, input)
+        input_values = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv,S}(missing, 0, period, tr, false, input_values)
     end
 end
 

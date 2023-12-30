@@ -14,8 +14,8 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
     input_values::CircBuff
 
     function VWMA{Tohlcv,S}(; period = VWMA_PERIOD) where {Tohlcv,S}
-        input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, input)
+        input_values = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv,S}(missing, 0, period, input_values)
     end
 end
 

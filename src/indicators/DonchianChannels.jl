@@ -22,8 +22,8 @@ mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function DonchianChannels{Tohlcv,S}(;
         period = DonchianChannels_ATR_PERIOD,
     ) where {Tohlcv,S}
-        input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, input)
+        input_values = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv,S}(missing, 0, period, input_values)
     end
 end
 

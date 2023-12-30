@@ -14,8 +14,8 @@ mutable struct StdDev{Tval} <: TechnicalIndicator{Tval}
     input_values::CircBuff{Tval}
 
     function StdDev{Tval}(; period = StdDev_PERIOD) where {Tval}
-        input = CircBuff(Tval, period, rev = false)
-        new{Tval}(missing, 0, period, input)
+        input_values = CircBuff(Tval, period, rev = false)
+        new{Tval}(missing, 0, period, input_values)
     end
 end
 
