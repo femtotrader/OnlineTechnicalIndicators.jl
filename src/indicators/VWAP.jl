@@ -19,16 +19,16 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::VWAP, candle)
-    ind.n += 1
+
+function _calculate_new_value_only_from_incoming_data(ind::VWAP, candle)
     typical_price = (candle.high + candle.low + candle.close) / 3.0
 
     ind.sum_price_vol = ind.sum_price_vol + candle.volume * typical_price
     ind.sum_vol = ind.sum_vol + candle.volume
 
     if ind.sum_vol != 0
-        ind.value = ind.sum_price_vol / ind.sum_vol
+        return ind.sum_price_vol / ind.sum_vol
     else
-        ind.value = missing
+        return missing
     end
 end

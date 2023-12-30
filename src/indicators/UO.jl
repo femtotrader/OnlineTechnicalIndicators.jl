@@ -42,15 +42,12 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::UO, candle)
-    fit!(ind.input_values, candle)
-    ind.n += 1
+function _calculate_new_value(ind::UO)
     if ind.n < 2
-        ind.value = missing
-        return
+        return missing
     end
 
-    # candle = ind.input_values[end]
+    candle = ind.input_values[end]
     candle_prev = ind.input_values[end-1]
 
     fit!(ind.buy_press, candle.close - min(candle.low, candle_prev.close))
@@ -61,8 +58,7 @@ function OnlineStatsBase._fit!(ind::UO, candle)
 
     # if length(ind.buy_press.value) < ind.slow_period
     if ind.n <= ind.slow_period
-        ind.value = missing
-        return
+        return missing
     end
 
     avg_fast =
@@ -75,6 +71,5 @@ function OnlineStatsBase._fit!(ind::UO, candle)
         sum(value(ind.buy_press)[end-ind.slow_period+1:end]) /
         sum(value(ind.true_range)[end-ind.slow_period+1:end])
 
-    ind.value = 100.0 * (4.0 * avg_fast + 2.0 * avg_mid + avg_slow) / 7.0
-
+    return 100.0 * (4.0 * avg_fast + 2.0 * avg_mid + avg_slow) / 7.0
 end

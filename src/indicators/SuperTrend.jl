@@ -54,13 +54,9 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::SuperTrend, candle)
-    fit!(ind.input_values, candle)
-    fit!(ind.sub_indicators, candle)
-
+function _calculate_new_value(ind::SuperTrend)
     if !has_output_value(ind.atr)
-        ind.value = missing
-        return
+        return missing
     end
 
     #=
@@ -143,5 +139,5 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
 
     trend_dir = candle.close > supertrend ? Trend.UP : Trend.DOWN
 
-    ind.value = SuperTrendVal(supertrend, trend_dir)
+    return SuperTrendVal(supertrend, trend_dir)
 end

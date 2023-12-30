@@ -61,15 +61,13 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-
-function OnlineStatsBase._fit!(ind::STC, val)
-    fit!(ind.sub_indicators, val)
-    ind.n += 1
+function _calculate_new_value(ind::STC)
     macd_val = value(ind.macd)
     if !ismissing(macd_val)
         fit!(ind.stoch_macd, macd_val)
         fit!(ind.stoch_d, value(ind.stoch_macd))
-        ind.value = max(min(value(ind.stoch_d).d, 100), 0)
+        return max(min(value(ind.stoch_d).d, 100), 0)
+    else
+        return missing
     end
-
 end

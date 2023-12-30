@@ -48,21 +48,14 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::VTX, candle)
-    fit!(ind.input_values, candle)
-    fit!(ind.sub_indicators, candle)
-    # atr, = ind.sub_indicators.stats
+function _calculate_new_value(ind::VTX)
     fit!(ind.atr_values, value(ind.atr))
-    if ind.n < ind.period
-        ind.n += 1
-    end
 
     if ind.n < 2
-        ind.value = missing
-        return
+        return missing
     end
 
-    # candle = ind.input_values[end]
+    candle = ind.input_values[end]
     candle_prev = ind.input_values[end-1]
 
     fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
@@ -71,11 +64,8 @@ function OnlineStatsBase._fit!(ind::VTX, candle)
     if length(ind.atr_values) < ind.period ||
        length(ind.plus_vm) < ind.period ||
        length(ind.minus_vm) < ind.period
-        ind.value = missing
-        return
+        return missing
     end
     atr_sum = sum(value(ind.atr_values))
-    ind.value =
-        VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
-
+    return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
 end

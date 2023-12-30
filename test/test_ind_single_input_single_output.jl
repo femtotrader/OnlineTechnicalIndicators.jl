@@ -86,7 +86,7 @@
             @test nobs(ind) == 0
             ind = StatLag(ind, 3)
             fit!(ind, CLOSE_TMPL)
-            @test nobs(ind) == P
+            @test nobs(ind) == length(CLOSE_TMPL)
             @test isapprox(value(ind.lag[end-2]), 9.149589; atol = ATOL)
             @test isapprox(value(ind.lag[end-1]), 9.203610; atol = ATOL)
             @test isapprox(value(ind), 9.243429; atol = ATOL)
@@ -101,7 +101,7 @@
                 v = value(ind)
                 push!(calculated, v)
             end
-            @test nobs(ind) == P
+            @test nobs(ind) == length(CLOSE_TMPL)
             expected = [
                 missing,
                 missing,
@@ -187,7 +187,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 0.800377; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 0.803828; atol = ATOL)
         @test isapprox(value(ind), 0.721424; atol = ATOL)
@@ -294,7 +294,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == 10
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 10.330217; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 10.399910; atol = ATOL)
         @test isapprox(value(ind), 10.323950; atol = ATOL)

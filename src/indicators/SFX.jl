@@ -38,11 +38,7 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::SFX, candle)
-    fit!(ind.sub_indicators, candle)
-    ind.n += 1
-    #atr, std_dev = ind.sub_indicators.stats
-
+function _calculate_new_value(ind::SFX)
     if has_output_value(ind.std_dev)
         fit!(ind.ma_std_dev, value(ind.std_dev))
     end
@@ -51,5 +47,5 @@ function OnlineStatsBase._fit!(ind::SFX, candle)
     _std_dev = value(ind.std_dev)
     _ma_std_dev = value(ind.ma_std_dev)
 
-    ind.value = SFXVal(_atr, _std_dev, _ma_std_dev)
+    return SFXVal(_atr, _std_dev, _ma_std_dev)
 end

@@ -29,25 +29,20 @@ mutable struct TEMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::TEMA, data)
-    fit!(ind.sub_indicators, data)
-    if ind.n != ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::TEMA)
     if has_output_value(ind.ma)
         fit!(ind.ma_ma, value(ind.ma))
         if has_output_value(ind.ma_ma)
             fit!(ind.ma_ma_ma, value(ind.ma_ma))
             if has_output_value(ind.ma_ma_ma)
-                ind.value =
-                    3.0 * value(ind.ma) - 3.0 * value(ind.ma_ma) + value(ind.ma_ma_ma)
+                return 3.0 * value(ind.ma) - 3.0 * value(ind.ma_ma) + value(ind.ma_ma_ma)
             else
-                ind.value = missing
+                return missing
             end
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
 end

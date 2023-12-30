@@ -49,10 +49,3 @@ function _calculate_new_value(ind::ZLEMA)
         return missing
     end
 end
-
-function OnlineStatsBase._fit!(ind::ZLEMA, data)
-    fit!(ind.input_values, data)
-    ind.n += 1
-    ind.value = _calculate_new_value(ind)
-    fit_listeners!(ind)
-end

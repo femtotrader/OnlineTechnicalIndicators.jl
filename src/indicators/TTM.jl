@@ -27,12 +27,15 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     mean_x::S
     denom::S
 
+    input_values::CircBuff
+
     function TTM{Tohlcv,S}(;
         period = TTM_PERIOD,
         bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
         kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
     ) where {Tohlcv,S}
+        input_values = CircBuff(Tohlcv, 1, rev = false)
         _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
         _bb = FilterTransform(_bb, Tohlcv, transform = candle -> candle.close)
         _dc = DonchianChannels{Tohlcv,S}(; period = period)
@@ -63,16 +66,13 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             deltas,
             mean_x,
             denom,
+            input_values,
         )
     end
 end
 
-function OnlineStatsBase._fit!(ind::TTM, candle)
-    fit!(ind.sub_indicators, candle)
-    ind.n += 1
-
-    # bb, dc, kc, ma = ind.sub_indicators.stats
-
+function _calculate_new_value(ind::TTM)
+# function _calculate_new_value_only_from_incoming_data(ind::TTM, candle)
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC
@@ -81,6 +81,7 @@ function OnlineStatsBase._fit!(ind::TTM, candle)
             value(ind.bb).lower > value(ind.kc).lower
 
         if has_output_value(ind.ma) && has_output_value(ind.dc)
+            candle = ind.input_values[end]
             fit!(ind.deltas, candle.close - (value(ind.dc).central + value(ind.ma)) / 2.0)
         end
 
@@ -99,10 +100,10 @@ function OnlineStatsBase._fit!(ind::TTM, candle)
             hist = a * (ind.period - 1) + b
         end
 
-        ind.value = TTMVal(squeeze, hist)
+        return TTMVal(squeeze, hist)
 
     else
-        ind.value = missing
+        return missing
     end
 
 end

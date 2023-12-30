@@ -105,4 +105,3 @@ function _calculate_new_value(ind::T3)
         return missing
     end
 end
-

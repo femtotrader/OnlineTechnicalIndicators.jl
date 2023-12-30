@@ -19,13 +19,7 @@ mutable struct StdDev{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::StdDev, data)
-    fit!(ind.input_values, data)
-    if ind.n < ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::StdDev)
     _mean = sum(value(ind.input_values)) / ind.period
-    ind.value =
-        sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)
-    return ind.value
+    return sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)
 end

@@ -24,11 +24,8 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::SOBV, candle)
-    fit!(ind.sub_indicators, candle)
-    # obv, = ind.sub_indicators.stats
+function _calculate_new_value(ind::SOBV)
     fit!(ind.obv_ma, value(ind.obv))
-    ind.n += 1
     if has_output_value(ind.obv_ma)
         ind.value = value(ind.obv_ma)
     else

@@ -51,8 +51,6 @@ end
 function _calculate_new_value(ind::Stoch)
     # load candles until i have enough data
     candle = ind.input_values[end]
-    # increment ind.n
-    ind.n += 1
     # get max high and min low
     max_high = max([cdl.high for cdl in value(ind.input_values)]...)
     min_low = min([cdl.low for cdl in value(ind.input_values)]...)
@@ -70,10 +68,4 @@ function _calculate_new_value(ind::Stoch)
         d = missing
     end
     return StochVal(k, d)
-end
-
-function OnlineStatsBase._fit!(ind::Stoch, data)
-    fit!(ind.input_values, data)
-    ind.value = _calculate_new_value(ind)
-    fit_listeners!(ind)
 end
