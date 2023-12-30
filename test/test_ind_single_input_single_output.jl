@@ -23,11 +23,11 @@
         end
         @test isapprox(value(ind1), 9.0; atol = ATOL)
         @test isapprox(value(ind2), 8.0; atol = ATOL)
-        @test isapprox(value(ind3), 8.0; atol = ATOL)
-        @test isapprox(value(ind4), 8.0; atol = ATOL)
+        @test isapprox(value(ind3), 7.0; atol = ATOL)
+        @test isapprox(value(ind4), 6.0; atol = ATOL)
     end
 
-    @testset_skip "Indicator chaining (SMA) with output listener - WIP" begin
+    @testset "Indicator chaining (SMA) with output listener - WIP" begin
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
         values = collect(1.0:10.0)
         ind4 = SMA{Float64}(period = 3)
@@ -39,8 +39,8 @@
         end
         @test isapprox(value(ind1), 9.0; atol = ATOL)
         @test isapprox(value(ind2), 8.0; atol = ATOL)
-        @test isapprox(value(ind3), 8.0; atol = ATOL)
-        @test isapprox(value(ind4), 8.0; atol = ATOL)
+        @test isapprox(value(ind3), 7.0; atol = ATOL)
+        @test isapprox(value(ind4), 6.0; atol = ATOL)
     end
 
 
