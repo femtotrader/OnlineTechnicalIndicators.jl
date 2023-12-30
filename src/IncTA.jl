@@ -80,11 +80,13 @@ function has_output_value(ind::O) where {O<:OnlineStat}
 end
 
 function fit_listeners!(ind::O) where {O<:TechnicalIndicator}
-    if length(ind.output_listeners.stats) == 0
-        return
-    end
-    for listener in ind.output_listeners.stats
-        fit!(listener, ind.value)
+    if :output_listeners in fieldnames(typeof(ind))
+        if length(ind.output_listeners.stats) == 0
+            return
+        end
+        for listener in ind.output_listeners.stats
+            fit!(listener, ind.value)
+        end
     end
 end
 
