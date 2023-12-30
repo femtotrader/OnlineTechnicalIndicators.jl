@@ -63,6 +63,8 @@ export ParabolicSAR, SARTrend
 export SFX
 export TTM
 
+export add_input_indicator!
+
 using OnlineStatsBase
 
 abstract type TechnicalIndicator{T} <: OnlineStat{T} end
@@ -76,8 +78,20 @@ function has_output_value(ind::O) where {O<:OnlineStat}
 end
 
 function fit_listeners!(ind::O) where {O <: TechnicalIndicator}
+    if length(ind.output_listeners.stats) == 0
+        return
+    end
     for listener in ind.output_listeners.stats
         fit!(listener, ind.value)
+    end
+end
+
+function add_input_indicator!(ind2::O1, ind1::O2) where {O1 <: TechnicalIndicator, O2 <: TechnicalIndicator}
+    ind2.input_indicator = ind1
+    if length(ind1.output_listeners.stats) > 0
+        ind1.output_listeners = merge(ind1.output_listeners, ind2)
+    else
+        ind1.output_listeners = Series(ind2)
     end
 end
 

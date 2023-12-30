@@ -14,23 +14,16 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
     period::Int
     # sub_indicators::Series
 
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff{Tval}
 
-    function SMA{Tval}(; period = SMA_PERIOD, output_listeners = Series()) where {Tval}
-    # function SMA{Tval}(; period = SMA_PERIOD, input_indicator::Union{Missing,O} = missing) where {Tval, O <: TechnicalIndicator}
+    #function SMA{Tval}(; period = SMA_PERIOD, output_listeners = Series()) where {Tval}
+    function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
     # function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
-        input_values = CircBuff(Tval, period, rev = false)
-        #=
-        if !ismissing(input_indicator)
-            sub_indicators = Series(input_indicator)  # and sub_indicators
-        else
-            sub_indicators = Series()
-        end
-        new{Tval}(missing, 0, period, sub_indicators, input)
-        =#
-        #input_indicator.output_listeners = 
-        #output_listeners = Series()
-        new{Tval}(missing, 0, output_listeners, period, input_values)
+        input_values = CircBuff(Tval, period, rev = false) 
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tval}(missing, 0, output_listeners, period, input_indicator, input_values)
     end
 end
 
@@ -45,6 +38,10 @@ function _calculate_new_value(ind::SMA)
 end
 
 function OnlineStatsBase._fit!(ind::SMA, data)
+    #println(ind, " ", data)
+    #if !ismissing(ind.input_indicator)
+    #    fit!(ind.input_indicator, data)
+    #end
     fit!(ind.input_values, data)
     ind.value = _calculate_new_value(ind)
     fit_listeners!(ind)
