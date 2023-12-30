@@ -23,25 +23,24 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ATR, candle)
-    fit!(ind.input_values, candle)
-    ind.n += 1
+function _calculate_new_value(ind::ATR)
+    candle = ind.input_values[end]
     true_range = candle.high - candle.low
     if ind.n != 1
         close2 = ind.input_values[end-1].close
         fit!(ind.tr, max(true_range, abs(candle.high - close2), abs(candle.low - close2)))
         if ind.n < ind.period
-            ind.value = missing
-            # elseif isfull(ind.input_values)  # length(ind.input_values) == ind.period
+            return missing
         else
             if !ind.rolling
                 ind.rolling = true
-                ind.value = sum(value(ind.tr)) / ind.period
+                return sum(value(ind.tr)) / ind.period
             else
-                ind.value = (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
+                return (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
             end
         end
     else
         fit!(ind.tr, true_range)
+        return missing
     end
 end

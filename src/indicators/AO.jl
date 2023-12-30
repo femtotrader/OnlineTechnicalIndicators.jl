@@ -26,14 +26,9 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::AO, candle)
-    ind.n += 1
+function _calculate_new_value_only_from_incoming_data(ind::AO, candle)
     median = (candle.high + candle.low) / 2.0
     fit!(ind.fast_ma, median)
     fit!(ind.slow_ma, median)
-    #if has_output_value(fast_ma) && has_output_value(slow_ma)
-    ind.value = value(ind.fast_ma) - value(ind.slow_ma)
-    #else
-    #    ind.value = missing
-    #end
+    return value(ind.fast_ma) - value(ind.slow_ma)
 end
