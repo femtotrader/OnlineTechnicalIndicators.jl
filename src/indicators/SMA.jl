@@ -16,7 +16,7 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
 
     input_values::CircBuff{Tval}
 
-    function SMA{Tval}(; period = SMA_PERIOD, output_listeners::O = Series()) where {Tval, O <: OnlineStatsBase.StatCollection}
+    function SMA{Tval}(; period = SMA_PERIOD, output_listeners = Series()) where {Tval}
     # function SMA{Tval}(; period = SMA_PERIOD, input_indicator::Union{Missing,O} = missing) where {Tval, O <: TechnicalIndicator}
     # function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
