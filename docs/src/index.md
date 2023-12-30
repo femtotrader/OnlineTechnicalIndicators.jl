@@ -51,13 +51,16 @@ IncTA.OBV
 IncTA.ParabolicSAR
 IncTA.ROC
 IncTA.RSI
+IncTA.SFX
 IncTA.SMA
 IncTA.SMMA
 IncTA.SOBV
+IncTA.STC
 IncTA.StdDev
 IncTA.Stoch
 IncTA.SuperTrend
 IncTA.TEMA
+IncTA.TTM
 IncTA.UO
 IncTA.VTX
 IncTA.VWAP
