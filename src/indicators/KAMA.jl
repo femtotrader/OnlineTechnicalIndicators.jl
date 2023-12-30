@@ -1,9 +1,9 @@
 const KAMA_PERIOD = 14
-const FAST_EMA_CONSTANT_PERIOD = 2
-const SLOW_EMA_CONSTANT_PERIOD = 30
+const KAMA_FAST_EMA_CONSTANT_PERIOD = 2
+const KAMA_SLOW_EMA_CONSTANT_PERIOD = 30
 
 """
-    KAMA{T}(; period = KAMA_PERIOD)
+    KAMA{T}(; period = KAMA_PERIOD, fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD, slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD)
 
 The `KAMA` type implements a Kaufman's Adaptive Moving Average indicator.
 """
@@ -22,8 +22,8 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
 
     function KAMA{Tval}(;
         period = KAMA_PERIOD,
-        fast_ema_constant_period = FAST_EMA_CONSTANT_PERIOD,
-        slow_ema_constant_period = SLOW_EMA_CONSTANT_PERIOD,
+        fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD,
+        slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD,
     ) where {Tval}
         @warn "WIP - buggy"
 
@@ -32,7 +32,7 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
 
         volatilities = CircBuff(Tval, period, rev = false)
 
-        input = CircBuff(Tval, period, rev = false)
+        input_values = CircBuff(Tval, period, rev = false)
 
         new{Tval}(
             missing,

@@ -18,10 +18,10 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     period::Int
     sub_indicators::Series
-    # bb::BB
-    # dc::DonchianChannels
-    # kc::KeltnerChannels
-    # ma::MovingAverageIndicator (default=SMA)
+    bb::FilterTransform  # BB
+    dc::DonchianChannels
+    kc::KeltnerChannels
+    ma::FilterTransform  # MovingAverageIndicator  # default=SMA
 
     deltas::CircBuff
     mean_x::S
@@ -46,7 +46,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         for x in 0:period-1
             denom += (x - mean_x)^2
         end
-        new{Tohlcv,S}(missing, 0, period, sub_indicators, deltas, mean_x, denom)
+        new{Tohlcv,S}(missing, 0, period, sub_indicators, _bb, _dc, _kc, _ma, deltas, mean_x, denom)
     end
 end
 
@@ -54,15 +54,15 @@ function OnlineStatsBase._fit!(ind::TTM, candle)
     fit!(ind.sub_indicators, candle)
     ind.n += 1
 
-    bb, dc, kc, ma = ind.sub_indicators.stats
+    # bb, dc, kc, ma = ind.sub_indicators.stats
 
-    if has_output_value(bb) && has_output_value(kc)
+    if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC
-        squeeze = value(bb).upper < value(kc).upper && value(bb).lower > value(kc).lower
+        squeeze = value(ind.bb).upper < value(ind.kc).upper && value(ind.bb).lower > value(ind.kc).lower
     
-        if has_output_value(ma) && has_output_value(dc)
-            fit!(ind.deltas, candle.close - (value(dc).central + value(ma)) / 2.0)
+        if has_output_value(ind.ma) && has_output_value(ind.dc)
+            fit!(ind.deltas, candle.close - (value(ind.dc).central + value(ind.ma)) / 2.0)
         end
     
         hist = missing

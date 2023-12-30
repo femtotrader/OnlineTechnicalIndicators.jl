@@ -12,8 +12,8 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
     n::Int
 
     sub_indicators::Series
-    # fast_roc::ROC
-    # slow_roc::ROC
+    fast_roc::ROC
+    slow_roc::ROC
 
     wma::WMA{Tval}
 
@@ -26,7 +26,7 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
         slow_roc = ROC{Tval}(period = slow_roc_period)
         sub_indicators = Series(fast_roc, slow_roc)
         wma = WMA{Tval}(period = wma_period)
-        new{Tval}(missing, 0, sub_indicators, wma)
+        new{Tval}(missing, 0, sub_indicators, fast_roc, slow_roc, wma)
     end
 end
 
@@ -34,12 +34,12 @@ function OnlineStatsBase._fit!(ind::CoppockCurve, data)
     fit!(ind.sub_indicators, data)
     # fit!(ind.slow_roc, data)
     # fit!(ind.fast_roc, data)
-    fast_roc, slow_roc = ind.sub_indicators.stats
-    if ind.n != slow_roc.period
+    # fast_roc, slow_roc = ind.sub_indicators.stats
+    if ind.n != ind.slow_roc.period
         ind.n += 1
     end
-    if has_output_value(fast_roc) && has_output_value(slow_roc)
-        fit!(ind.wma, value(slow_roc) + value(fast_roc))
+    if has_output_value(ind.fast_roc) && has_output_value(ind.slow_roc)
+        fit!(ind.wma, value(ind.slow_roc) + value(ind.fast_roc))
         ind.value = value(ind.wma)
         if has_output_value(ind.wma)
             ind.value = value(ind.wma)

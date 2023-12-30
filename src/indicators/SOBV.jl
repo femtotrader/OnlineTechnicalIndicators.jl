@@ -12,7 +12,7 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
 
     sub_indicators::Series
-    # obv::OBV
+    obv::OBV
     obv_ma::SMA
 
     function SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA) where {Tohlcv,S}
@@ -20,14 +20,14 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         # obv_ma = SMA{S}(period = period)
         obv_ma = MAFactory(S)(ma, period)
         sub_indicators = Series(obv)
-        new{Tohlcv,S}(missing, 0, period, sub_indicators, obv_ma)
+        new{Tohlcv,S}(missing, 0, period, sub_indicators, obv, obv_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::SOBV, candle)
     fit!(ind.sub_indicators, candle)
-    obv, = ind.sub_indicators.stats
-    fit!(ind.obv_ma, value(obv))
+    # obv, = ind.sub_indicators.stats
+    fit!(ind.obv_ma, value(ind.obv))
     ind.n += 1
     if has_output_value(ind.obv_ma)
         ind.value = value(ind.obv_ma)

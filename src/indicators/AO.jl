@@ -10,9 +10,8 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    sub_indicators::Series
-    # fast_ma  # default SMA
-    # slow_ma  # default SMA
+    fast_ma  # default SMA
+    slow_ma  # default SMA
 
     function AO{Tohlcv,S}(;
         fast_period = AO_FAST_PERIOD,
@@ -23,23 +22,18 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         _fast_ma = MAFactory(S)(fast_ma, fast_period)
         _slow_ma = MAFactory(S)(slow_ma, slow_period)
-        sub_indicators = Series(_fast_ma, _slow_ma)
-        # new{Tohlcv,S}(missing, 0, _fast_ma, _slow_ma)
-        new{Tohlcv,S}(missing, 0, sub_indicators)
+        new{Tohlcv,S}(missing, 0, _fast_ma, _slow_ma)
     end
 end
 
 function OnlineStatsBase._fit!(ind::AO, candle)
     ind.n += 1
     median = (candle.high + candle.low) / 2.0
-    fit!(ind.sub_indicators, median)
-    fast_ma, slow_ma = ind.sub_indicators.stats
-    # fit!(ind.fast_ma, median)
-    # fit!(ind.slow_ma, median)
+    fit!(ind.fast_ma, median)
+    fit!(ind.slow_ma, median)
     #if has_output_value(fast_ma) && has_output_value(slow_ma)
-    ind.value = value(fast_ma) - value(slow_ma)
+    ind.value = value(ind.fast_ma) - value(ind.slow_ma)
     #else
     #    ind.value = missing
     #end
 end
-

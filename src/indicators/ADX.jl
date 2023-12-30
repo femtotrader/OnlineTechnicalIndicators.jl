@@ -19,8 +19,8 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     di_period::Integer
     adx_period::Integer
 
+    sub_indicators::Series
     atr::ATR
-    #sub_indicators::Series
 
     pdm::CircBuff   # plus directional movement
     mdm::CircBuff   # minus directional movement
@@ -45,13 +45,13 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         pdi = CircBuff(S, adx_period, rev = false)
         mdi = CircBuff(S, adx_period, rev = false)
         dx = CircBuff(S, adx_period, rev = false)
-        input = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(Tohlcv, 2, rev = false)
         new{Tohlcv,S}(
             missing,
             0,
             di_period,
             adx_period,
-            # atr,
+            atr,
             sub_indicators,
             pdm,
             mdm,
@@ -67,8 +67,8 @@ end
 
 function OnlineStatsBase._fit!(ind::ADX, candle)
     fit!(ind.input_values, candle)
-    #fit!(ind.sub_indicators, candle)
-    fit!(ind.atr, candle)
+    fit!(ind.sub_indicators, candle)
+    #fit!(ind.atr, candle)
     ind.n += 1
     #atr, = ind.sub_indicators.stats
     if ind.n >= 2

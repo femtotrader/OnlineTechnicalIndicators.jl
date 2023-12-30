@@ -18,8 +18,8 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     n::Int
 
     sub_indicators::Series
-    # fast_ma::EMA{Tval}
-    # slow_ma::EMA{Tval}
+    fast_ma::EMA{Tval}
+    slow_ma::EMA{Tval}
 
     signal_line::EMA{Tval}
 
@@ -36,17 +36,17 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         sub_indicators = Series(fast_ma, slow_ma)
         # signal_line = EMA{Tval}(period = signal_period)
         signal_line = MAFactory(Tval)(ma, signal_period)
-        new{Tval}(missing, 0, sub_indicators, signal_line)
+        new{Tval}(missing, 0, sub_indicators, fast_ma, slow_ma, signal_line)
     end
 end
 
 function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
     fit!(ind.sub_indicators, data)
-    fast_ma, slow_ma = ind.sub_indicators.stats
+    # fast_ma, slow_ma = ind.sub_indicators.stats
     ind.n += 1
 
-    if has_output_value(fast_ma) && has_output_value(slow_ma)
-        macd = value(fast_ma) - value(slow_ma)
+    if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
+        macd = value(ind.fast_ma) - value(ind.slow_ma)
         fit!(ind.signal_line, macd)
 
         if has_output_value(ind.signal_line)

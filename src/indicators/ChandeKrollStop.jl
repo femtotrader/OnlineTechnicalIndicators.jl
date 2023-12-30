@@ -20,7 +20,7 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     atr_mult::S
     period::Integer
 
-    # sub_indicators::Series
+    sub_indicators::Series
     atr::ATR
 
     high_stop_list::CircBuff
@@ -35,6 +35,7 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, atr_period, rev = false)
         atr = ATR{Tohlcv,S}(period = atr_period)
+        sub_indicators = Series(atr)
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)
         new{Tohlcv,S}(
@@ -43,6 +44,7 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_period,
             atr_mult,
             period,
+            sub_indicators,
             atr,
             high_stop_list,
             low_stop_list,
@@ -53,7 +55,7 @@ end
 
 function OnlineStatsBase._fit!(ind::ChandeKrollStop, candle)
     fit!(ind.input_values, candle)
-    fit!(ind.atr, candle)
+    fit!(ind.sub_indicators, candle)
     ind.n += 1
     if (ind.n < ind.atr_period) || !has_output_value(ind.atr)
         ind.value = missing

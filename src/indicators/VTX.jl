@@ -17,7 +17,8 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
 
     sub_indicators::Series
-    # atr::ATR
+    atr::ATR
+
     atr_values::CircBuff
 
     plus_vm::CircBuff
@@ -28,19 +29,20 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function VTX{Tohlcv,S}(; period = VTX_PERIOD) where {Tohlcv,S}
         @warn "WIP - buggy"
         atr = ATR{Tohlcv,S}(period = 1)
+        sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
         input = CircBuff(Tohlcv, 2, rev = false)
-        new{Tohlcv,S}(missing, 0, period, Series(atr), atr_values, plus_vm, minus_vm, input)
+        new{Tohlcv,S}(missing, 0, period, sub_indicators, atr, atr_values, plus_vm, minus_vm, input)
     end
 end
 
 function OnlineStatsBase._fit!(ind::VTX, candle)
     fit!(ind.input_values, candle)
     fit!(ind.sub_indicators, candle)
-    atr, = ind.sub_indicators.stats
-    fit!(ind.atr_values, value(atr))
+    # atr, = ind.sub_indicators.stats
+    fit!(ind.atr_values, value(ind.atr))
     if ind.n < ind.period
         ind.n += 1
     end

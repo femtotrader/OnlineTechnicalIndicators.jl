@@ -11,7 +11,7 @@ mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
 
     period::Integer
 
-    # sub_indicators::Series  # field ma needs to be available for CCI calculation
+    sub_indicators::Series  # field ma needs to be available for CCI calculation
     ma::MovingAverageIndicator  # SMA
 
     input_values::CircBuff
@@ -20,13 +20,14 @@ mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
         input = CircBuff(Tval, period, rev = false)
         #ma = SMA{Tval}(period = period)
         _ma = MAFactory(Tval)(ma, period)
-        new{Tval}(missing, 0, period, _ma, input)
+        sub_indicators = Series(_ma)
+        new{Tval}(missing, 0, period, sub_indicators, _ma, input)
     end
 end
 
 function OnlineStatsBase._fit!(ind::MeanDev, data)
     fit!(ind.input_values, data)
-    fit!(ind.ma, data)
+    fit!(ind.sub_indicators, data)
     if ind.n < ind.period
         ind.n += 1
     end

@@ -23,7 +23,9 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     atr_period::Integer
     mult::Integer
 
+    sub_indicators::Series
     atr::ATR  # Tohlcv
+
     fub::CircBuff  # final upper band
     flb::CircBuff  # Tprice  # final lower band
 
@@ -34,16 +36,17 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         mult = SuperTrend_MULT,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
+        sub_indicators = Series(atr)
         fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
         flb = CircBuff(S, atr_period, rev = false)
         input = CircBuff(Tohlcv, atr_period, rev = false)
-        new{Tohlcv,S}(missing, 0, atr_period, mult, atr, fub, flb, input)
+        new{Tohlcv,S}(missing, 0, atr_period, mult, sub_indicators, atr, fub, flb, input)
     end
 end
 
 function OnlineStatsBase._fit!(ind::SuperTrend, candle)
     fit!(ind.input_values, candle)
-    fit!(ind.atr, candle)
+    fit!(ind.sub_indicators, candle)
 
     if !has_output_value(ind.atr)
         ind.value = missing

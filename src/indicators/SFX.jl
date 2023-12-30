@@ -18,8 +18,8 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     n::Int
 
     sub_indicators::Series
-    # atr::ATR
-    # std_dev::StdDev
+    atr::ATR
+    std_dev::FilterTransform  # StdDev
 
     ma_std_dev::MovingAverageIndicator
 
@@ -34,21 +34,21 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         std_dev = FilterTransform(std_dev, Tohlcv, transform = candle -> candle.close)
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, std_dev_smoothing_period)
-        new{Tohlcv,S}(missing, 0, sub_indicators, ma_std_dev)
+        new{Tohlcv,S}(missing, 0, sub_indicators, atr, std_dev, ma_std_dev)
     end
 end
 
 function OnlineStatsBase._fit!(ind::SFX, candle)
     fit!(ind.sub_indicators, candle)
     ind.n += 1
-    atr, std_dev = ind.sub_indicators.stats
+    #atr, std_dev = ind.sub_indicators.stats
 
-    if has_output_value(std_dev)
-        fit!(ind.ma_std_dev, value(std_dev))
+    if has_output_value(ind.std_dev)
+        fit!(ind.ma_std_dev, value(ind.std_dev))
     end
 
-    _atr = value(atr)
-    _std_dev = value(std_dev)
+    _atr = value(ind.atr)
+    _std_dev = value(ind.std_dev)
     _ma_std_dev = value(ind.ma_std_dev)
 
     ind.value = SFXVal(_atr, _std_dev, _ma_std_dev)

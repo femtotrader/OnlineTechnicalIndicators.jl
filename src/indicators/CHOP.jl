@@ -13,7 +13,8 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
 
     sub_indicators::Series
-    # atr::ATR
+    atr::ATR
+
     atr_values::CircBuff
 
     input_values::CircBuff
@@ -24,7 +25,7 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, sub_indicators, atr_values, input)
+        new{Tohlcv,S}(missing, 0, period, sub_indicators, atr, atr_values, input)
     end
 end
 
@@ -32,10 +33,10 @@ function OnlineStatsBase._fit!(ind::CHOP, candle)
     fit!(ind.input_values, candle)
     fit!(ind.sub_indicators, candle)
     ind.n += 1
-    atr, = ind.sub_indicators.stats
-    fit!(ind.atr_values, value(atr))
+    #atr, = ind.sub_indicators.stats
+    fit!(ind.atr_values, value(ind.atr))
 
-    if (!has_output_value(atr)) || (length(ind.input_values) != ind.period)
+    if (!has_output_value(ind.atr)) || (length(ind.input_values) != ind.period)
         ind.value = missing
         return
     end

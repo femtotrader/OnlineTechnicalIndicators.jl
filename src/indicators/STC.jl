@@ -13,7 +13,9 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
+    sub_indicators::Series
     macd::MACD
+
     stoch_macd::FilterTransform  # Stoch
     stoch_d::FilterTransform  # Stoch
 
@@ -31,6 +33,7 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             slow_period = slow_macd_period,
             signal_period = slow_macd_period,
         )
+        sub_indicators = Series(macd)
         stoch_macd = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
@@ -53,15 +56,14 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             transform = stoch_val ->
                 OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d),
         )
-        new{Tval}(missing, 0, macd, stoch_macd, stoch_d)
+        new{Tval}(missing, 0, sub_indicators, macd, stoch_macd, stoch_d)
     end
 end
 
 
 function OnlineStatsBase._fit!(ind::STC, val)
+    fit!(ind.sub_indicators, val)
     ind.n += 1
-
-    fit!(ind.macd, val)
     macd_val = value(ind.macd)
     if !ismissing(macd_val)
         fit!(ind.stoch_macd, macd_val)
