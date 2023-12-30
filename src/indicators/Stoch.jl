@@ -14,12 +14,16 @@ The `Stoch` type implements the Stochastic indicator.
 mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,StochVal{S}}  # Tprice
     n::Int
+    
+    output_listeners::Series
 
     period::Integer
     smoothing_period::Integer
 
     values_d::SMA{S}
     input_values::CircBuff{Tohlcv}
+
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
@@ -29,13 +33,15 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         # values_d = SMA{S}(; period = smoothing_period)
         values_d = MAFactory(S)(ma, smoothing_period)
         input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, smoothing_period, values_d, input)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(missing, 0, output_listeners, period, smoothing_period, values_d, input, input_indicator)
     end
 end
 
-function OnlineStatsBase._fit!(ind::Stoch, candle)
+function _calculate_new_value(ind::Stoch)
     # load candles until i have enough data
-    fit!(ind.input_values, candle)
+    candle = ind.input_values[end]
     # increment ind.n
     ind.n += 1
     # get max high and min low
@@ -45,7 +51,7 @@ function OnlineStatsBase._fit!(ind::Stoch, candle)
     if max_high == min_low
         k = 100.0
     else
-        k = 100.0 * (ind.input_values[end].close - min_low) / (max_high - min_low)
+        k = 100.0 * (candle.close - min_low) / (max_high - min_low)
     end
     # calculate d
     fit!(ind.values_d, k)
@@ -54,5 +60,11 @@ function OnlineStatsBase._fit!(ind::Stoch, candle)
     else
         d = missing
     end
-    ind.value = StochVal(k, d)
+    return StochVal(k, d)
+end
+
+function OnlineStatsBase._fit!(ind::Stoch, data)
+    fit!(ind.input_values, data)
+    ind.value = _calculate_new_value(ind)
+    fit_listeners!(ind)
 end

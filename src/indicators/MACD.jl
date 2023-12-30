@@ -25,12 +25,13 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
 
     signal_line::EMA{Tval}
 
+    input_indicator::Union{Missing,TechnicalIndicator}
+
     function MACD{Tval}(;
         fast_period = MACD_FAST_PERIOD,
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
         ma = EMA,
-        output_listeners = Series(),
     ) where {Tval}
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)
@@ -39,7 +40,9 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         sub_indicators = Series(fast_ma, slow_ma)
         # signal_line = EMA{Tval}(period = signal_period)
         signal_line = MAFactory(Tval)(ma, signal_period)
-        new{Tval}(missing, 0, output_listeners, sub_indicators, fast_ma, slow_ma, signal_line)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tval}(missing, 0, output_listeners, sub_indicators, fast_ma, slow_ma, signal_line, input_indicator)
     end
 end
 

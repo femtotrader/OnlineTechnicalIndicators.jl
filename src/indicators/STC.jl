@@ -32,13 +32,14 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             fast_period = fast_macd_period,
             slow_period = slow_macd_period,
             signal_period = slow_macd_period,
-        ) # output_listeners !!!
+        )
         sub_indicators = Series(macd)
         stoch_macd = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
         )
+        #add_input_indicator!(stoch_macd, macd)  # <---
         stoch_macd = FilterTransform(
             stoch_macd,
             MACDVal,  # type of input
