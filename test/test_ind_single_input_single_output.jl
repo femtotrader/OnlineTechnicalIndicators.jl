@@ -5,7 +5,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.183000; atol = ATOL)
         @test isapprox(value(ind), 9.308500; atol = ATOL)
@@ -74,7 +74,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 9.319374; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.406100; atol = ATOL)
         @test isapprox(value(ind), 9.462662; atol = ATOL)

@@ -34,12 +34,10 @@ function _calculate_new_value(ind::EMA)
     if ind.rolling  # CircBuff is full and rolling
         return ind.mult * ind.input_values[end] + ind.mult_complement * ind.value
     else
-        if ind.n + 1 == ind.period # CircBuff is full but not rolling
+        if ind.n == ind.period # CircBuff is full but not rolling
             ind.rolling = true
-            ind.n += 1
             return sum(ind.input_values.value) / ind.period
         else  # CircBuff is filling up
-            ind.n += 1
             return missing
         end
     end
@@ -47,6 +45,7 @@ end
 
 function OnlineStatsBase._fit!(ind::EMA, data)
     fit!(ind.input_values, data)
+    ind.n += 1
     ind.value = _calculate_new_value(ind)
     fit_listeners!(ind)
 end

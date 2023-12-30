@@ -27,15 +27,13 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
 end
 
 function _calculate_new_value(ind::SMA)
-    if ind.n < ind.period
-        ind.n += 1
-    end
     values = ind.input_values.value
     return sum(values) / length(values)  # mean(values)
 end
 
 function OnlineStatsBase._fit!(ind::SMA, data)
     fit!(ind.input_values, data)
+    ind.n += 1
     ind.value = _calculate_new_value(ind)
     fit_listeners!(ind)
 end

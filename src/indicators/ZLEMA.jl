@@ -30,7 +30,6 @@ mutable struct ZLEMA{Tval} <: MovingAverageIndicator{Tval}
 end
 
 function _calculate_new_value(ind::ZLEMA)
-    ind.n += 1
     if length(ind.input_values) >= ind.lag + 1
         fit!(ind.ema, ind.input_values[end] + (ind.input_values[end] - ind.input_values[end-ind.lag]))
         return value(ind.ema)
@@ -41,6 +40,7 @@ end
 
 function OnlineStatsBase._fit!(ind::ZLEMA, data)
     fit!(ind.input_values, data)
+    ind.n += 1
     ind.value = _calculate_new_value(ind)
     fit_listeners!(ind)
 end
