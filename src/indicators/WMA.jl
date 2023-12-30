@@ -18,7 +18,7 @@ mutable struct WMA{Tval} <: MovingAverageIndicator{Tval}
     input_values::CircBuff{Tval}
 
     function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
-        input_values = CircBuff(Tval, period, rev = false)
+        input_values = CircBuff(Tval, period + 1, rev = false)
         total = zero(Tval)
         numerator = zero(Tval)
         denominator = period * (period + 1) / 2.0
@@ -26,17 +26,15 @@ mutable struct WMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::WMA{Tval}, data::Tval) where {Tval}
-    if ind.n == ind.period
+function _calculate_new_value(ind::WMA)
+    if ind.n > ind.period
         losing = ind.input_values[1]
     else
-        losing = zero(Tval)
-        ind.n += 1
+        losing = 0
     end
-    fit!(ind.input_values, data)
+    data = ind.input_values[end]
     # See https://en.wikipedia.org/wiki/Moving_average#Weighted_moving_average
     ind.numerator = ind.numerator + ind.period * data - ind.total
     ind.total = ind.total + data - losing
-    ind.value = ind.numerator / ind.denominator
-    return ind.value
+    return ind.numerator / ind.denominator
 end

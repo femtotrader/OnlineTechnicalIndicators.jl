@@ -209,7 +209,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 9.417523; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.527476; atol = ATOL)
         @test isapprox(value(ind), 9.605285; atol = ATOL)
