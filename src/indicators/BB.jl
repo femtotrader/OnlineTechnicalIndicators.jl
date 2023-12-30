@@ -20,7 +20,7 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
     std_dev_mult::Tval
 
     sub_indicators::Series
-    central_band  # default SMA
+    central_band::Any  # default SMA
     std_dev::StdDev{Tval}
 
     function BB{Tval}(;

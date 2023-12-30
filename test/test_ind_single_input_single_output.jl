@@ -343,9 +343,7 @@
     end
 
     @testset "ZLEMA" begin
-        ind = ZLEMA{Float64}(
-            period = 20
-        )
+        ind = ZLEMA{Float64}(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -356,10 +354,7 @@
     end
 
     @testset "T3" begin
-        ind = T3{Float64}(
-            period = 5,
-            factor = 0.7
-        )
+        ind = T3{Float64}(period = 5, factor = 0.7)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)

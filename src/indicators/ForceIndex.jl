@@ -28,7 +28,8 @@ function OnlineStatsBase._fit!(ind::ForceIndex, candle::OHLCV)
     if ind.n >= 2
         fit!(
             ind.ma,
-            (ind.input_values[end].close - ind.input_values[end-1].close) * ind.input_values[end].volume,
+            (ind.input_values[end].close - ind.input_values[end-1].close) *
+            ind.input_values[end].volume,
         )
         if has_output_value(ind.ma)
             ind.value = value(ind.ma)

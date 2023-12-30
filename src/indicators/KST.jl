@@ -34,10 +34,10 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     n::Int
 
     sub_indicators::Series
-    roc1  # SMA
-    roc2  # SMA
-    roc3  # SMA
-    roc4  # SMA
+    roc1::Any  # SMA
+    roc2::Any  # SMA
+    roc3::Any  # SMA
+    roc4::Any  # SMA
 
     roc1_ma::MovingAverageIndicator  # SMA
     roc2_ma::MovingAverageIndicator  # SMA

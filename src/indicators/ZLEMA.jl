@@ -25,13 +25,25 @@ mutable struct ZLEMA{Tval} <: MovingAverageIndicator{Tval}
         ema = EMA{Tval}(period = period)
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(missing, 0, output_listeners, period, lag, ema, input_indicator, input_values)
+        new{Tval}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            lag,
+            ema,
+            input_indicator,
+            input_values,
+        )
     end
 end
 
 function _calculate_new_value(ind::ZLEMA)
     if length(ind.input_values) >= ind.lag + 1
-        fit!(ind.ema, ind.input_values[end] + (ind.input_values[end] - ind.input_values[end-ind.lag]))
+        fit!(
+            ind.ema,
+            ind.input_values[end] + (ind.input_values[end] - ind.input_values[end-ind.lag]),
+        )
         return value(ind.ema)
     else
         return missing

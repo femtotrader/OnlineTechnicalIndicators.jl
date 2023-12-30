@@ -26,7 +26,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     sub_indicators::Series
     atr::ATR
-    cb  # EMA default
+    cb::Any  # EMA default
 
     function KeltnerChannels{Tohlcv,S}(;
         ma_period = KeltnerChannels_MA_PERIOD,
@@ -49,7 +49,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_mult_down,
             sub_indicators,
             atr,
-            _cb
+            _cb,
         )
     end
 end

@@ -25,6 +25,7 @@ function OnlineStatsBase._fit!(ind::StdDev, data)
         ind.n += 1
     end
     _mean = sum(value(ind.input_values)) / ind.period
-    ind.value = sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)
+    ind.value =
+        sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)
     return ind.value
 end

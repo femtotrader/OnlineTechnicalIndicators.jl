@@ -26,7 +26,17 @@ mutable struct EMA{Tval} <: MovingAverageIndicator{Tval}
         mult_complement = Tval(1) - mult
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(missing, 0, output_listeners, period, mult, mult_complement, false, input_indicator, input_values)
+        new{Tval}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            mult,
+            mult_complement,
+            false,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

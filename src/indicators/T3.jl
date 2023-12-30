@@ -52,7 +52,25 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
         c4 = 1 + 3 * factor + factor^3 + 3 * factor^2
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(missing, 0, output_listeners, period, sub_indicators, ema1, ema2, ema3, ema4, ema5, ema6, c1, c2, c3, c4, input_indicator, input_values)
+        new{Tval}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            sub_indicators,
+            ema1,
+            ema2,
+            ema3,
+            ema4,
+            ema5,
+            ema6,
+            c1,
+            c2,
+            c3,
+            c4,
+            input_indicator,
+            input_values,
+        )
     end
 end
 
@@ -79,7 +97,10 @@ function _calculate_new_value(ind::T3)
     end
 
     if has_output_value(ind.ema6)
-        return ind.c1 * value(ind.ema6) + ind.c2 * value(ind.ema5) + ind.c3 * value(ind.ema4) + ind.c4 * value(ind.ema3)
+        return ind.c1 * value(ind.ema6) +
+               ind.c2 * value(ind.ema5) +
+               ind.c3 * value(ind.ema4) +
+               ind.c4 * value(ind.ema3)
     else
         return missing
     end

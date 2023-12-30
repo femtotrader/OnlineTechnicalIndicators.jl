@@ -40,7 +40,17 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
         flb = CircBuff(S, atr_period, rev = false)
         input_values = CircBuff(Tohlcv, atr_period, rev = false)
-        new{Tohlcv,S}(missing, 0, atr_period, mult, sub_indicators, atr, fub, flb, input_values)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            atr_period,
+            mult,
+            sub_indicators,
+            atr,
+            fub,
+            flb,
+            input_values,
+        )
     end
 end
 
@@ -70,7 +80,8 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
     if length(ind.fub) == 0
         fub = 0.0
     else
-        if bub < ind.fub.value[end] || ind.input_values.value[end-1].close > ind.fub.value[end]
+        if bub < ind.fub.value[end] ||
+           ind.input_values.value[end-1].close > ind.fub.value[end]
             fub = bub
         else
             fub = ind.fub.value[end]
@@ -85,7 +96,8 @@ function OnlineStatsBase._fit!(ind::SuperTrend, candle)
 
     if length(ind.flb) == 0
         flb = 0.0
-    elseif blb > ind.flb.value[end] || ind.input_values.value[end-1].close < ind.flb.value[end]
+    elseif blb > ind.flb.value[end] ||
+           ind.input_values.value[end-1].close < ind.flb.value[end]
         flb = blb
     else
         flb = ind.flb.value[end]

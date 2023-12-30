@@ -10,8 +10,8 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    fast_ma  # default SMA
-    slow_ma  # default SMA
+    fast_ma::Any  # default SMA
+    slow_ma::Any  # default SMA
 
     function AO{Tohlcv,S}(;
         fast_period = AO_FAST_PERIOD,

@@ -200,7 +200,7 @@
         ind = TTM{OHLCV{Missing,Float64,Float64},Float64}(
             period = 20,
             bb_std_dev_mult = 2.0,
-            kc_atr_mult = 2.0
+            kc_atr_mult = 2.0,
         )
         ind = StatLag(ind, 12)
         @test nobs(ind) == 0

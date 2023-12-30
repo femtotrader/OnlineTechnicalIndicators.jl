@@ -35,18 +35,35 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
         _bb = FilterTransform(_bb, Tohlcv, transform = candle -> candle.close)
-        _dc = DonchianChannels{Tohlcv,S}(; period=period)
-        _kc = KeltnerChannels{Tohlcv,S}(; ma_period = period, atr_period = period, atr_mult_up = kc_atr_mult, atr_mult_down = kc_atr_mult)  # ma = EMA by default
+        _dc = DonchianChannels{Tohlcv,S}(; period = period)
+        _kc = KeltnerChannels{Tohlcv,S}(;
+            ma_period = period,
+            atr_period = period,
+            atr_mult_up = kc_atr_mult,
+            atr_mult_down = kc_atr_mult,
+        )  # ma = EMA by default
         _ma = MAFactory(S)(ma, period)
         _ma = FilterTransform(_ma, Tohlcv, transform = candle -> candle.close)
         sub_indicators = Series(_bb, _dc, _kc, _ma)
         deltas = CircBuff(S, period, rev = false)
         mean_x = sum(1:period-1) / period
         denom = 0
-        for x in 0:period-1
+        for x = 0:period-1
             denom += (x - mean_x)^2
         end
-        new{Tohlcv,S}(missing, 0, period, sub_indicators, _bb, _dc, _kc, _ma, deltas, mean_x, denom)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            period,
+            sub_indicators,
+            _bb,
+            _dc,
+            _kc,
+            _ma,
+            deltas,
+            mean_x,
+            denom,
+        )
     end
 end
 
@@ -59,27 +76,29 @@ function OnlineStatsBase._fit!(ind::TTM, candle)
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC
-        squeeze = value(ind.bb).upper < value(ind.kc).upper && value(ind.bb).lower > value(ind.kc).lower
-    
+        squeeze =
+            value(ind.bb).upper < value(ind.kc).upper &&
+            value(ind.bb).lower > value(ind.kc).lower
+
         if has_output_value(ind.ma) && has_output_value(ind.dc)
             fit!(ind.deltas, candle.close - (value(ind.dc).central + value(ind.ma)) / 2.0)
         end
-    
+
         hist = missing
         if length(ind.deltas) >= ind.period
             # calculate linear regression y = ax + b
             mean_y = sum(ind.deltas.value) / ind.period
-    
+
             numer = 0.0
             for (x, y) in zip(0:ind.period-1, value(ind.deltas))
                 numer += (x - ind.mean_x) * (y - mean_y)
             end
             a = numer / ind.denom
             b = mean_y - (a * ind.mean_x)
-    
+
             hist = a * (ind.period - 1) + b
         end
-    
+
         ind.value = TTMVal(squeeze, hist)
 
     else

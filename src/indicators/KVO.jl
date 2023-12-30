@@ -28,7 +28,15 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         trend = CircBuff(S, 2, rev = false)
         cumulative_measurement = CircBuff(S, 2, rev = false)
         input_values = CircBuff(Tohlcv, 2, rev = false)
-        new{Tohlcv,S}(missing, 0, _fast_ma, _slow_ma, trend, cumulative_measurement, input_values)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            _fast_ma,
+            _slow_ma,
+            trend,
+            cumulative_measurement,
+            input_values,
+        )
     end
 end
 

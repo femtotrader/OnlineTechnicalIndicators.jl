@@ -71,8 +71,9 @@ function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
         if (prev_sar.trend == SARTrend.UP) &&
            (new_sar_val > min(ind.input_values[end-1].low, ind.input_values[end-2].low))
             new_sar_val = min(ind.input_values[end-1].low, ind.input_values[end-2].low)
-        elseif (prev_sar.trend == SARTrend.DOWN) &&
-               (new_sar_val < max(ind.input_values[end-1].high, ind.input_values[end-2].high))
+        elseif (prev_sar.trend == SARTrend.DOWN) && (
+            new_sar_val < max(ind.input_values[end-1].high, ind.input_values[end-2].high)
+        )
             new_sar_val = max(ind.input_values[end-1].high, ind.input_values[end-2].high)
         end
 
