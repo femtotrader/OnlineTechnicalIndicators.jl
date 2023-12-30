@@ -67,7 +67,7 @@ See [tests](test/)
 | `Stoch` | Stochastic | :candle: | :m: | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
 | `SuperTrend` | Super Trend | :candle: | :m: | `CircBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `T3` | T3 Moving Average | :1234: | :1234: |
+| `T3` | T3 Moving Average | :1234: | :1234: | :new: in reference implementation... needs also to be implemented
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `TRIX` | TRIX | :candle: | :m: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
@@ -77,7 +77,7 @@ See [tests](test/)
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
 | `VWMA` | Volume Weighted Moving Average | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `WMA` | Weighted Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
-| `ZLEMA` | Zero Lag Exponential Moving Average | :1234: | :1234: |
+| `ZLEMA` | Zero Lag Exponential Moving Average | :1234: | :1234: | :new: in reference implementation... needs also to be implemented
 
 ### Legend
 
