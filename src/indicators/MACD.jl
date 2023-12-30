@@ -9,13 +9,15 @@ struct MACDVal{Tval}
 end
 
 """
-    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA)
+    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, output_listeners = Series())
 
 The `MACD` type implements Moving Average Convergence Divergence indicator.
 """
 mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,MACDVal{Tval}}
     n::Int
+
+    output_listeners::Series
 
     sub_indicators::Series
     fast_ma::EMA{Tval}
@@ -28,6 +30,7 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
         ma = EMA,
+        output_listeners = Series(),
     ) where {Tval}
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)
@@ -36,12 +39,11 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         sub_indicators = Series(fast_ma, slow_ma)
         # signal_line = EMA{Tval}(period = signal_period)
         signal_line = MAFactory(Tval)(ma, signal_period)
-        new{Tval}(missing, 0, sub_indicators, fast_ma, slow_ma, signal_line)
+        new{Tval}(missing, 0, output_listeners, sub_indicators, fast_ma, slow_ma, signal_line)
     end
 end
 
-function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
-    fit!(ind.sub_indicators, data)
+function _calculate_new_value(ind::MACD)
     # fast_ma, slow_ma = ind.sub_indicators.stats
     ind.n += 1
 
@@ -61,8 +63,15 @@ function OnlineStatsBase._fit!(ind::MACD{Tval}, data::Tval) where {Tval}
         end
 
         # macd, signal, histogram = 0.0, 0.0, 0.0
-        ind.value = MACDVal{Tval}(macd, signal, histogram)
+        return MACDVal(macd, signal, histogram)
     else
-        ind.value = missing
+        return missing
     end
+end
+
+function OnlineStatsBase._fit!(ind::MACD, data)
+    #fit!(ind.input_values, data)
+    fit!(ind.sub_indicators, data)
+    ind.value = _calculate_new_value(ind)
+    fit_listeners!(ind)
 end

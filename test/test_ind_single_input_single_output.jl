@@ -11,6 +11,9 @@
         @test isapprox(value(ind), 9.308500; atol = ATOL)
     end
 
+    #=
+    # This is how talipp works for chaining indicators but I haven't been able to
+    # achieve this with Julia - so I'm using output_listeners parameter instead
     @testset_skip "Indicator chaining (SMA) - WIP" begin
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
@@ -26,6 +29,7 @@
         @test isapprox(value(ind3), 7.0; atol = ATOL)
         @test isapprox(value(ind4), 6.0; atol = ATOL)
     end
+    =#
 
     @testset "Indicator chaining (SMA) with output listener - WIP" begin
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
