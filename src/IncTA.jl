@@ -25,6 +25,7 @@ export ALMA
 export McGinleyDynamic
 export STC
 export ZLEMA
+export T3
 # simple indicators (single input)
 ## multiple output => SIMO
 export BB
@@ -114,6 +115,7 @@ include("indicators/TEMA.jl")
 include("indicators/ALMA.jl")
 include("indicators/McGinleyDynamic.jl")
 include("indicators/ZLEMA.jl")
+include("indicators/T3.jl")
 
 # SIMO
 include("indicators/BB.jl")

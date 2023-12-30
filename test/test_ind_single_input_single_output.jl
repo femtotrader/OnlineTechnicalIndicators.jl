@@ -354,4 +354,19 @@
         @test isapprox(value(ind.lag[end-1]), 9.871744; atol = ATOL)
         @test isapprox(value(ind), 9.975387; atol = ATOL)
     end
+
+    @testset "T3" begin
+        ind = T3{Float64}(
+            period = 5,
+            factor = 0.7
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+        @test isapprox(value(ind.lag[end-2]), 9.718661; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 9.968503; atol = ATOL)
+        @test isapprox(value(ind), 10.124616; atol = ATOL)
+    end
+
 end
