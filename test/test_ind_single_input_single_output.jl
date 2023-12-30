@@ -342,4 +342,16 @@
         @test isapprox(value(ind), 94.229147; atol = ATOL)
     end
 
+    @testset "ZLEMA" begin
+        ind = ZLEMA{Float64}(
+            period = 20
+        )
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+        @test isapprox(value(ind.lag[end-2]), 9.738243; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 9.871744; atol = ATOL)
+        @test isapprox(value(ind), 9.975387; atol = ATOL)
+    end
 end

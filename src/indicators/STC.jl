@@ -39,13 +39,13 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             smoothing_period = stoch_smoothing_period,
             ma = ma,
         )
-        #add_input_indicator!(stoch_macd, macd)  # <---
         stoch_macd = FilterTransform(
             stoch_macd,
             MACDVal,  # type of input
             transform = macd_val ->
                 OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
         )
+        # add_input_indicator!(stoch_macd, macd)  # <---
         stoch_d = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,

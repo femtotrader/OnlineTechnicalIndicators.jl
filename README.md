@@ -77,7 +77,7 @@ See [tests](test/)
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
 | `VWMA` | Volume Weighted Moving Average | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `WMA` | Weighted Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
-| `ZLEMA` | Zero Lag Exponential Moving Average | :1234: | :1234: |  | :new: in reference implementation... needs also to be implemented
+| `ZLEMA` | Zero Lag Exponential Moving Average | :1234: | :1234: |  | :heavy_check_mark:
 
 ### Legend
 
