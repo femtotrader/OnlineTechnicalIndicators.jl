@@ -7,28 +7,26 @@ mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
-    input_values::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
+    input_values::CircBuff
 
     function OBV{Tohlcv,S}() where {Tohlcv,S}
-        input = (missing, missing)
-        new{Tohlcv,S}(missing, 0, input)
+        input_values = CircBuff(Tohlcv, 2, rev = false)
+        new{Tohlcv,S}(missing, 0, input_values)
     end
 end
 
-function OnlineStatsBase._fit!(ind::OBV, candle)
-    ind.input_values = (ind.input_values[end], candle)  # Keep a small window of input values
-    ind.n += 1
+function _calculate_new_value(ind::OBV)
+    candle = ind.input_values[end]
     if ind.n != 1
-        candle = ind.input_values[end]
         candle_prev = ind.input_values[end-1]
         if candle.close == candle_prev.close
-            ind.value = value(ind)
+            return value(ind)
         elseif candle.close > candle_prev.close
-            ind.value = value(ind) + candle.volume
+            return value(ind) + candle.volume
         else
-            ind.value = value(ind) - candle.volume
+            return value(ind) - candle.volume
         end
     else
-        ind.value = candle.volume
+        return candle.volume
     end
 end

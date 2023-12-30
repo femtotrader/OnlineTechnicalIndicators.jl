@@ -47,16 +47,13 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
-    fit!(ind.input_values, candle)
-    ind.n += 1
-
+function _calculate_new_value(ind::ParabolicSAR)
     if ind.n < SAR_INIT_LEN
-        ind.value = missing
+        return missing
     elseif ind.n == SAR_INIT_LEN
         min_low = min([cdl.low for cdl in ind.input_values.value]...)
         max_high = max([cdl.high for cdl in ind.input_values.value]...)
-        ind.value = ParabolicSARVal(min_low, SARTrend.UP, max_high, ind.init_accel_factor)
+        return ParabolicSARVal(min_low, SARTrend.UP, max_high, ind.init_accel_factor)
     else
 
         prev_sar = value(ind)
@@ -67,21 +64,25 @@ function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
         new_ep = prev_sar.ep
         new_accel_factor = prev_sar.accel_factor
 
+        candle = ind.input_values[end]
+        candle_pm1 = ind.input_values[end-1]
+        candle_pm2 = ind.input_values[end-2]
+
         # if new SAR overlaps last lows/highs (depending on the trend), cut it at that value
         if (prev_sar.trend == SARTrend.UP) &&
-           (new_sar_val > min(ind.input_values[end-1].low, ind.input_values[end-2].low))
-            new_sar_val = min(ind.input_values[end-1].low, ind.input_values[end-2].low)
+           (new_sar_val > min(candle_pm1.low, candle_pm2.low))
+            new_sar_val = min(candle_pm1.low, candle_pm2.low)
         elseif (prev_sar.trend == SARTrend.DOWN) && (
-            new_sar_val < max(ind.input_values[end-1].high, ind.input_values[end-2].high)
+            new_sar_val < max(candle_pm1.high, candle_pm2.high)
         )
-            new_sar_val = max(ind.input_values[end-1].high, ind.input_values[end-2].high)
+            new_sar_val = max(candle_pm1.high, candle_pm2.high)
         end
 
         # update extreme point
-        if prev_sar.trend == SARTrend.UP && ind.input_values[end].high > prev_sar.ep
-            new_ep = ind.input_values[end].high
-        elseif prev_sar.trend == SARTrend.DOWN && ind.input_values[end].low < prev_sar.ep
-            new_ep = ind.input_values[end].low
+        if prev_sar.trend == SARTrend.UP && candle.high > prev_sar.ep
+            new_ep = candle.high
+        elseif prev_sar.trend == SARTrend.DOWN && candle.low < prev_sar.ep
+            new_ep = candle.low
         end
 
         # if extreme point was updated, increase acceleration factor
@@ -93,18 +94,18 @@ function OnlineStatsBase._fit!(ind::ParabolicSAR, candle)
         end
 
         # check if trend is reversed and initialize new initial values
-        if prev_sar.trend == SARTrend.UP && new_sar_val > ind.input_values[end].low
-            new_sar_val = max(prev_sar.ep, ind.input_values[end].high)
-            new_ep = ind.input_values[end].low
+        if prev_sar.trend == SARTrend.UP && new_sar_val > candle.low
+            new_sar_val = max(prev_sar.ep, candle.high)
+            new_ep = candle.low
             new_trend = SARTrend.DOWN
             new_accel_factor = ind.init_accel_factor
-        elseif prev_sar.trend == SARTrend.DOWN && new_sar_val < ind.input_values[end].high
-            new_sar_val = min(prev_sar.ep, ind.input_values[end].low)
-            new_ep = ind.input_values[end].high
+        elseif prev_sar.trend == SARTrend.DOWN && new_sar_val < candle.high
+            new_sar_val = min(prev_sar.ep, candle.low)
+            new_ep = candle.high
             new_trend = SARTrend.UP
             new_accel_factor = ind.init_accel_factor
         end
 
-        ind.value = ParabolicSARVal(new_sar_val, new_trend, new_ep, new_accel_factor)
+        return ParabolicSARVal(new_sar_val, new_trend, new_ep, new_accel_factor)
     end
 end

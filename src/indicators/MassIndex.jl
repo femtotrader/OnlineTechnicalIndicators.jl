@@ -33,28 +33,24 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::MassIndex, candle)
+function _calculate_new_value_only_from_incoming_data(ind::MassIndex, candle)
     fit!(ind.ma, candle.high - candle.low)
-    ind.n += 1
 
     if !has_output_value(ind.ma)
-        ind.value = missing
-        return
+        return missing
     end
 
     fit!(ind.ma_ma, value(ind.ma))
 
     if !has_output_value(ind.ma_ma)
-        ind.value = missing
-        return
+        return missing
     end
 
     fit!(ind.ma_ratio, value(ind.ma) / value(ind.ma_ma))
 
     if length(ind.ma_ratio) < ind.ma_ratio_period
-        ind.value = missing
-        return
+        return missing
     end
 
-    ind.value = sum(value(ind.ma_ratio))
+    return sum(value(ind.ma_ratio))
 end

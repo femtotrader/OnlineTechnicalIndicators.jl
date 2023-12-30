@@ -26,23 +26,15 @@ mutable struct HMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::HMA, data)
-    fit!(ind.sub_indicators, data)
-    # fit!(ind.wma, data)
-    # fit!(ind.wma2, data)
-    #wma, wma2 = ind.sub_indicators.stats
-    if ind.n != ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::HMA)
     if has_output_value(ind.wma)
         fit!(ind.hma, 2.0 * value(ind.wma2) - value(ind.wma))
         if has_output_value(ind.hma)
-            ind.value = value(ind.hma)
+            return value(ind.hma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
-    return ind.value
 end

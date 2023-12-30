@@ -13,18 +13,16 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     ma::MovingAverageIndicator  # EMA
 
-    input_values::Tuple{Union{Missing,Tohlcv},Union{Missing,Tohlcv}}
+    input_values::CircBuff
 
     function ForceIndex{Tohlcv,S}(; period = ForceIndex_PERIOD, ma = EMA) where {Tohlcv,S}
         _ma = MAFactory(S)(ma, period)
-        input = (missing, missing)
-        new{Tohlcv,S}(missing, 0, period, _ma, input)
+        input_values = CircBuff(Tohlcv, 2, rev = false)
+        new{Tohlcv,S}(missing, 0, period, _ma, input_values)
     end
 end
 
-function OnlineStatsBase._fit!(ind::ForceIndex, candle::OHLCV)
-    ind.input_values = (ind.input_values[end], candle)  # Keep a small window of input values
-    ind.n += 1
+function _calculate_new_value(ind::ForceIndex)
     if ind.n >= 2
         fit!(
             ind.ma,
@@ -32,11 +30,11 @@ function OnlineStatsBase._fit!(ind::ForceIndex, candle::OHLCV)
             ind.input_values[end].volume,
         )
         if has_output_value(ind.ma)
-            ind.value = value(ind.ma)
+            return value(ind.ma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
 end

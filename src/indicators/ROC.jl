@@ -19,15 +19,10 @@ mutable struct ROC{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ROC, data)
-    fit!(ind.input_values, data)
-    if ind.n == ind.period
-        ind.value =
-            100.0 * (ind.input_values[end] - ind.input_values[end-ind.period]) /
-            ind.input_values[end-ind.period]
+function _calculate_new_value(ind::ROC)
+    if ind.n >= ind.period + 1
+        return 100.0 * (ind.input_values[end] - ind.input_values[end-ind.period]) / ind.input_values[end-ind.period]
     else
-        ind.n += 1
-        ind.value = missing
+        return missing
     end
-    return ind.value
 end

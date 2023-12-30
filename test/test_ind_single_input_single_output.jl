@@ -165,7 +165,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 57.880437; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 55.153392; atol = ATOL)
         @test isapprox(value(ind), 53.459494; atol = ATOL)
@@ -176,7 +176,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 0.608949; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 0.595400; atol = ATOL)
         @test isapprox(value(ind), 0.535500; atol = ATOL)
@@ -198,7 +198,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 30.740740; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 26.608910; atol = ATOL)
         @test isapprox(value(ind), 33.511348; atol = ATOL)
@@ -231,7 +231,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == P
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 9.718018; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.940188; atol = ATOL)
         @test isapprox(value(ind), 10.104067; atol = ATOL)
@@ -320,7 +320,7 @@
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == 14
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 8.839868; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 8.895229; atol = ATOL)
         @test isapprox(value(ind), 8.944634; atol = ATOL)

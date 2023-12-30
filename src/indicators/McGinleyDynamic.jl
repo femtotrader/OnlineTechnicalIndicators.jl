@@ -21,18 +21,16 @@ mutable struct McGinleyDynamic{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::McGinleyDynamic, val)
-    fit!(ind.input_values, val)
+function _calculate_new_value(ind::McGinleyDynamic)
     if ind.rolling  # CircBuff is full and rolling
-        ind.value = value(ind) + (val - value(ind)) / (ind.period * (val / value(ind))^4)
+        val = ind.input_values[end]
+        return value(ind) + (val - value(ind)) / (ind.period * (val / value(ind))^4)
     else
-        if ind.n + 1 == ind.period # CircBuff is full but not rolling
+        if ind.n == ind.period # CircBuff is full but not rolling
             ind.rolling = true
-            ind.n += 1
-            ind.value = sum(ind.input_values.value) / ind.period
+            return sum(ind.input_values.value) / ind.period
         else  # CircBuff is filling up
-            ind.n += 1
-            ind.value = missing
+            return missing
         end
     end
 end

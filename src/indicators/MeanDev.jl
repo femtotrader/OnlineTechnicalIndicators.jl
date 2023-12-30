@@ -18,20 +18,14 @@ mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
 
     function MeanDev{Tval}(; period = MeanDev_PERIOD, ma = SMA) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
-        #ma = SMA{Tval}(period = period)
+        #_ma = SMA{Tval}(period = period)
         _ma = MAFactory(Tval)(ma, period)
         sub_indicators = Series(_ma)
         new{Tval}(missing, 0, period, sub_indicators, _ma, input_values)
     end
 end
 
-function OnlineStatsBase._fit!(ind::MeanDev, data)
-    fit!(ind.input_values, data)
-    fit!(ind.sub_indicators, data)
-    if ind.n < ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::MeanDev)
     _ma = value(ind.ma)
-    ind.value = sum(abs.(value(ind.input_values) .- _ma)) / ind.period
-    return ind.value
+    return sum(abs.(value(ind.input_values) .- _ma)) / ind.period
 end

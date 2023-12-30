@@ -46,18 +46,12 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::KAMA, data)
-    fit!(ind.input_values, data)
-    if ind.n != ind.period
-        ind.n += 1
-    end
-
+function _calculate_new_value(ind::KAMA)
     if ind.n >= 2
         fit!(ind.volatilities, abs(ind.input_values[end] - ind.input_values[end-1]))
 
         if length(ind.volatilities) < ind.period
-            ind.value = missing
-            return
+            return missing
         end
 
         volatility = sum(value(ind.volatilities))
@@ -83,7 +77,7 @@ function OnlineStatsBase._fit!(ind::KAMA, data)
             prev_kama = ind.value[end]
         end
 
-        ind.value = prev_kama + smoothing_constant * (ind.input_values[end] - prev_kama)
+        return prev_kama + smoothing_constant * (ind.input_values[end] - prev_kama)
     end
 
 end

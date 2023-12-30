@@ -25,15 +25,10 @@ mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::RSI, val)
-    fit!(ind.input_values, val)
-    if ind.n < ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::RSI)
 
     if length(ind.input_values) < 2
-        ind.value = missing
-        return ind.value
+        return missing
     end
 
     change = ind.input_values[end] - ind.input_values[end-1]
@@ -46,8 +41,7 @@ function OnlineStatsBase._fit!(ind::RSI, val)
 
     _losses = value(ind.losses)
     if ismissing(_losses)
-        ind.value = missing
-        return ind.value
+        return missing
     end
 
     if _losses == 0
@@ -56,7 +50,6 @@ function OnlineStatsBase._fit!(ind::RSI, val)
         rs = value(ind.gains) / _losses
         rsi = 100.0 - 100.0 / (1.0 + rs)
     end
-    ind.value = rsi
-    return ind.value
+    return rsi
 
 end

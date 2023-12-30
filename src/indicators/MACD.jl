@@ -56,9 +56,6 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
 end
 
 function _calculate_new_value(ind::MACD)
-    # fast_ma, slow_ma = ind.sub_indicators.stats
-    ind.n += 1
-
     if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
         macd = value(ind.fast_ma) - value(ind.slow_ma)
         fit!(ind.signal_line, macd)
@@ -74,16 +71,8 @@ function _calculate_new_value(ind::MACD)
             histogram = macd - signal
         end
 
-        # macd, signal, histogram = 0.0, 0.0, 0.0
         return MACDVal(macd, signal, histogram)
     else
         return missing
     end
-end
-
-function OnlineStatsBase._fit!(ind::MACD, data)
-    #fit!(ind.input_values, data)
-    fit!(ind.sub_indicators, data)
-    ind.value = _calculate_new_value(ind)
-    fit_listeners!(ind)
 end

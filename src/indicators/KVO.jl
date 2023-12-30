@@ -40,13 +40,9 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::KVO, candle)
-    fit!(ind.input_values, candle)
-    ind.n += 1
-
+function _calculate_new_value(ind::KVO)
     if length(ind.input_values) < 2
-        ind.value = missing
-        return
+        return missing
     end
 
     value1 = ind.input_values[end]
@@ -64,8 +60,7 @@ function OnlineStatsBase._fit!(ind::KVO, candle)
     end
 
     if length(ind.trend) < 2
-        ind.value = missing
-        return
+        return missing
     end
 
     dm1 = value1.high - value1.low
@@ -97,9 +92,9 @@ function OnlineStatsBase._fit!(ind::KVO, candle)
     fit!(ind.slow_ma, volume_force)
 
     if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
-        ind.value = value(ind.fast_ma) - value(ind.slow_ma)
+        return value(ind.fast_ma) - value(ind.slow_ma)
     else
-        ind.value = missing
+        return missing
     end
 end
 

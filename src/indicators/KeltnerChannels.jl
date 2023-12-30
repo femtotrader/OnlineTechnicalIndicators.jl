@@ -54,19 +54,14 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::KeltnerChannels, candle)
-    fit!(ind.sub_indicators, candle)
-    #fit!(ind.atr, candle)
-    #fit!(ind.cb, candle)  # FilterTransform ie something like a ValueExtractor should be implemented taking a function like candle->candle.close as argument
-    # fit!(ind.cb, candle.close)
-    ind.n += 1
+function _calculate_new_value(ind::KeltnerChannels)
     if has_output_value(ind.atr) && has_output_value(ind.cb)
-        ind.value = KeltnerChannelsVal(
+        return KeltnerChannelsVal(
             value(ind.cb) - ind.atr_mult_down * value(ind.atr),
             value(ind.cb),
             value(ind.cb) + ind.atr_mult_up * value(ind.atr),
         )
     else
-        ind.value = missing
+        return missing
     end
 end

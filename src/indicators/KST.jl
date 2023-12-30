@@ -99,15 +99,7 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
-    fit!(ind.sub_indicators, data)
-    # fit!(ind.roc1, data)
-    # fit!(ind.roc2, data)
-    # fit!(ind.roc3, data)
-    # fit!(ind.roc4, data)
-    roc1, roc2, roc3, roc4 = ind.sub_indicators.stats
-
-    ind.n += 1
+function _calculate_new_value(ind::KST)
 
     if has_output_value(ind.roc1)
         fit!(ind.roc1_ma, ind.roc1.value[end])
@@ -129,8 +121,7 @@ function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
        !has_output_value(ind.roc2) ||
        !has_output_value(ind.roc3) ||
        !has_output_value(ind.roc4)
-        ind.value = missing
-        return
+        return missing
     end
 
     kst =
@@ -146,5 +137,5 @@ function OnlineStatsBase._fit!(ind::KST{Tval}, data::Tval) where {Tval}
         signal_value = missing
     end
 
-    ind.value = KSTVal(kst, signal_value)
+    return KSTVal(kst, signal_value)
 end
