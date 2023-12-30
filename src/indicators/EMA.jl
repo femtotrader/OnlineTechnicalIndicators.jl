@@ -10,30 +10,40 @@ mutable struct EMA{Tval} <: MovingAverageIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
+    output_listeners::Series
+
     period::Int
+    mult::Tval
+    mult_complement::Tval
 
     rolling::Bool
     input_values::CircBuff{Tval}
 
-    function EMA{Tval}(; period = EMA_PERIOD) where {Tval}
+    function EMA{Tval}(; period = EMA_PERIOD, output_listeners = Series()) where {Tval}
         input = CircBuff(Tval, period, rev = false)
-        new{Tval}(missing, 0, period, false, input)
+        mult = Tval(2) / (period + Tval(1))
+        mult_complement = Tval(1) - mult
+        new{Tval}(missing, 0, output_listeners, period, mult, mult_complement, false, input)
     end
 end
 
-function OnlineStatsBase._fit!(ind::EMA, val)
-    fit!(ind.input_values, val)
+function _calculate_new_value(ind::EMA)
     if ind.rolling  # CircBuff is full and rolling
-        mult = 2.0 / (ind.period + 1.0)
-        ind.value = mult * ind.input_values[end] + (1.0 - mult) * ind.value
+        return ind.mult * ind.input_values[end] + ind.mult_complement * ind.value
     else
         if ind.n + 1 == ind.period # CircBuff is full but not rolling
             ind.rolling = true
             ind.n += 1
-            ind.value = sum(ind.input_values.value) / ind.period
+            return sum(ind.input_values.value) / ind.period
         else  # CircBuff is filling up
             ind.n += 1
-            ind.value = missing
+            return missing
         end
     end
+end
+
+function OnlineStatsBase._fit!(ind::EMA, data)
+    fit!(ind.input_values, data)
+    ind.value = _calculate_new_value(ind)
+    fit_listeners!(ind)
 end

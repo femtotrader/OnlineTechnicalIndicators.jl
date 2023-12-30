@@ -75,6 +75,12 @@ function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end
 
+function fit_listeners!(ind::O) where {O <: TechnicalIndicator}
+    for listener in ind.output_listeners.stats
+        fit!(listener, ind.value)
+    end
+end
+
 # SISO
 include("indicators/SMA.jl")
 include("indicators/EMA.jl")
@@ -131,7 +137,7 @@ include("indicators/TTM.jl")
 
 # More complex indicators
 ## SISO
-include("indicators/STC.jl")
+include("indicators/STC.jl")  # uses MIMO indicator such as Stoch
 ## SIMO
 ## MISO
 ## MIMO
