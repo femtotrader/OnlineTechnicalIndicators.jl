@@ -52,10 +52,3 @@ function _calculate_new_value(ind::EMA)
         end
     end
 end
-
-function OnlineStatsBase._fit!(ind::EMA, data)
-    fit!(ind.input_values, data)
-    ind.n += 1
-    ind.value = _calculate_new_value(ind)
-    fit_listeners!(ind)
-end

@@ -28,11 +28,9 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::EMV, candle::OHLCV)
-    fit!(ind.input_values, candle)
-    ind.n += 1
+function _calculate_new_value(ind::EMV)
     if ind.n >= 2
-        #candle = ind.input_values[end]
+        candle = ind.input_values[end]
         candle_prev = ind.input_values[end-1]
         if candle.high != candle.low
             distance =
@@ -47,11 +45,11 @@ function OnlineStatsBase._fit!(ind::EMV, candle::OHLCV)
         fit!(ind.emv_ma, emv)
 
         if length(ind.emv_ma.value) >= 1
-            ind.value = value(ind.emv_ma)
+            return value(ind.emv_ma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
 end

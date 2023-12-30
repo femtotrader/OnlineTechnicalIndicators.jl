@@ -12,12 +12,10 @@ mutable struct SMA{Tval} <: MovingAverageIndicator{Tval}
     output_listeners::Series
 
     period::Int
-    # sub_indicators::Series
 
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff{Tval}
 
-    #function SMA{Tval}(; period = SMA_PERIOD, output_listeners = Series()) where {Tval}
     function SMA{Tval}(; period = SMA_PERIOD) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
         output_listeners = Series()
@@ -29,11 +27,4 @@ end
 function _calculate_new_value(ind::SMA)
     values = ind.input_values.value
     return sum(values) / length(values)  # mean(values)
-end
-
-function OnlineStatsBase._fit!(ind::SMA, data)
-    fit!(ind.input_values, data)
-    ind.n += 1
-    ind.value = _calculate_new_value(ind)
-    fit_listeners!(ind)
 end

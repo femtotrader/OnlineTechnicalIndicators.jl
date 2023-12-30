@@ -25,20 +25,15 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::DEMA, data)
-    fit!(ind.sub_indicators, data)
-    #ma, = ind.sub_indicators.stats
-    if ind.n != ind.period
-        ind.n += 1
-    end
+function _calculate_new_value(ind::DEMA)
     if has_output_value(ind.ma)
         fit!(ind.ma_ma, value(ind.ma))
         if has_output_value(ind.ma_ma)
-            ind.value = 2.0 * value(ind.ma) - value(ind.ma_ma)
+            return 2.0 * value(ind.ma) - value(ind.ma_ma)
         else
-            ind.value = missing
+            return missing
         end
     else
-        ind.value = missing
+        return missing
     end
 end

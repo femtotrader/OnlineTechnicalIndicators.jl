@@ -9,7 +9,8 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
-    period::Integer
+    period::Int
+    semi_period::Int
 
     sub_indicators::Series
     ma::MovingAverageIndicator # SMA
@@ -20,21 +21,15 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
         input_values = CircBuff(Tval, period, rev = false)
         _ma = MAFactory(Tval)(ma, period)
         sub_indicators = Series(_ma)
-        new{Tval}(missing, 0, period, sub_indicators, _ma, input_values)
+        semi_period = floor(Int, period / 2)
+        new{Tval}(missing, 0, period, semi_period, sub_indicators, _ma, input_values)
     end
 end
 
-function OnlineStatsBase._fit!(ind::DPO, data)
-    fit!(ind.input_values, data)
-    fit!(ind.sub_indicators, data)
-    #ma, = ind.sub_indicators.stats
-    if ind.n != ind.period
-        ind.n += 1
-    end
-    semi_period = floor(Int, ind.period / 2)
-    if length(ind.input_values) >= semi_period + 2 && length(ind.ma.input_values) >= 1
-        ind.value = ind.input_values[end-semi_period-1] - value(ind.ma)
+function _calculate_new_value(ind::DPO)
+    if length(ind.input_values) >= ind.semi_period + 2 && length(ind.ma.input_values) >= 1
+        return ind.input_values[end-ind.semi_period-1] - value(ind.ma)
     else
-        ind.value = missing
+        return missing
     end
 end
