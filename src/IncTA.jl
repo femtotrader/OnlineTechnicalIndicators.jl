@@ -75,6 +75,19 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
 include("ohlcv.jl")
 include("sample_data.jl")
 
+function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
+    has_input_values = :input_values in fieldnames(O)
+    if has_input_values
+        fit!(ind.input_values, data)
+    end
+    if :sub_indicators in fieldnames(O)
+        fit!(ind.sub_indicators, data)
+    end
+    ind.n += 1
+    ind.value = has_input_values ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
+    fit_listeners!(ind)
+end
+
 function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end

@@ -40,36 +40,15 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ALMA, data)
-    fit!(ind.input_values, data)
-    if ind.n == ind.period
+function _calculate_new_value(ind::ALMA)
+    if ind.n >= ind.period
         alma = 0
         for i = 1:ind.period
             alma += ind.input_values[end-(ind.period-i)] * ind.w[i]
         end
-        ind.value = alma / ind.w_sum
+        return alma / ind.w_sum
     else
-        ind.n += 1
-        ind.value = missing
+        return missing
     end
 end
 
-#=
-
-function Base.push!(ind::ALMA{Tval}, val::Tval) where {Tval}
-    push!(ind.input_values, val)
-
-    if length(ind.input_values) < ind.period
-        out_val = missing
-    else
-        alma = 0
-        for i = 1:ind.period
-            alma += ind.input_values[end-(ind.period-i)] * ind.w[i]
-        end
-        out_val = alma / ind.w_sum
-    end
-
-    push!(ind.value, out_val)
-    return out_val
-end
-=#

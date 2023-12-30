@@ -106,16 +106,3 @@ function _calculate_new_value(ind::T3)
     end
 end
 
-function OnlineStatsBase._fit!(ind::T3, data)
-    T = typeof(ind)
-    has_input_values = :input_values in fieldnames(T)
-    if has_input_values
-        fit!(ind.input_values, data)
-    end
-    if :sub_indicators in fieldnames(T)
-        fit!(ind.sub_indicators, data)
-    end
-    ind.n += 1
-    ind.value = has_input_values ? _calculate_new_value(ind) : _calculate_new_value_from_incoming_data(ind, data)
-    fit_listeners!(ind)
-end

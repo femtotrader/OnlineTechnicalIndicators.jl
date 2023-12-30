@@ -11,7 +11,7 @@ mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function _calculate_new_value_from_incoming_data(ind::AccuDist, candle)
+function _calculate_new_value_only_from_incoming_data(ind::AccuDist, candle)
     if candle.high != candle.low
         # Calculate MFI and MFV
         mfi =
@@ -23,18 +23,4 @@ function _calculate_new_value_from_incoming_data(ind::AccuDist, candle)
         return value(ind)
     end
         return has_output_value(ind) ? value(ind) + mfv : mfv
-end
-
-function OnlineStatsBase._fit!(ind::AccuDist, data)
-    T = typeof(ind)
-    has_input_values = :input_values in fieldnames(T)
-    if has_input_values
-        fit!(ind.input_values, data)
-    end
-    if :sub_indicators in fieldnames(T)
-        fit!(ind.sub_indicators, data)
-    end
-    ind.n += 1
-    ind.value = has_input_values ? _calculate_new_value(ind) : _calculate_new_value_from_incoming_data(ind, data)
-    fit_listeners!(ind)
 end
