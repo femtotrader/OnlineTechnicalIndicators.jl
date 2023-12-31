@@ -68,3 +68,12 @@ function Base.collect(factory::OHLCVFactory{Ttime,Tprice,Tvol}) where {Ttime,Tpr
     end
     return v_ohlcv
 end
+
+
+module ValueExtractor
+    extract_open = candle -> candle.open
+    extract_high = candle -> candle.high
+    extract_low = candle -> candle.low
+    extract_close = candle -> candle.close
+    extract_volume = candle -> candle.volume
+end

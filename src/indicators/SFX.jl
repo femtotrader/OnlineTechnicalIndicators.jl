@@ -31,7 +31,7 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
         std_dev = StdDev{Float64}(period = std_dev_period)
-        std_dev = FilterTransform(std_dev, Tohlcv, transform = candle -> candle.close)
+        std_dev = FilterTransform(std_dev, Tohlcv, transform = ValueExtractor.extract_close)
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
         new{Tohlcv,S}(missing, 0, sub_indicators, atr, std_dev, ma_std_dev)

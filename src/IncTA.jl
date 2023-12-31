@@ -1,6 +1,6 @@
 module IncTA
 
-export OHLCV, OHLCVFactory
+export OHLCV, OHLCVFactory, ValueExtractor
 export fit!
 
 export SampleData
