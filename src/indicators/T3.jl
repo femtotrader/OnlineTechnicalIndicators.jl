@@ -35,16 +35,25 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
     function T3{Tval}(; period = T3_PERIOD, factor = T3_FACTOR) where {Tval}
         input_values = CircBuff(Tval, 2, rev = false)
         ema1 = EMA{Tval}(period = period)
+
+        #=
         ema2 = EMA{Tval}(period = period)
         ema3 = EMA{Tval}(period = period)
         ema4 = EMA{Tval}(period = period)
         ema5 = EMA{Tval}(period = period)
         ema6 = EMA{Tval}(period = period)
-        # add_input_indicator!(ema2, ema1)  # <-
-        # add_input_indicator!(ema3, ema2)  # <-
-        # add_input_indicator!(ema4, ema3)  # <-
-        # add_input_indicator!(ema5, ema4)  # <-
-        # add_input_indicator!(ema6, ema5)  # <-
+        =#
+
+        ema2 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        ema3 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        ema4 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        ema5 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        ema6 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        add_input_indicator!(ema2, ema1)  # <-
+        add_input_indicator!(ema3, ema2)  # <-
+        add_input_indicator!(ema4, ema3)  # <-
+        add_input_indicator!(ema5, ema4)  # <-
+        add_input_indicator!(ema6, ema5)  # <-
         sub_indicators = Series(ema1)
         c1 = -(factor^3)
         c2 = 3 * factor^2 + 3 * factor^3
@@ -74,6 +83,19 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
     end
 end
 
+function _calculate_new_value(ind::T3)
+    # much simpler with input_filter and indicator chaining
+    if has_output_value(ind.ema6)
+        return ind.c1 * value(ind.ema6) +
+               ind.c2 * value(ind.ema5) +
+               ind.c3 * value(ind.ema4) +
+               ind.c4 * value(ind.ema3)
+    else
+        return missing
+    end
+end
+
+#=
 function _calculate_new_value(ind::T3)
     _ema1 = value(ind.ema1)
     if !ismissing(_ema1)
@@ -105,3 +127,4 @@ function _calculate_new_value(ind::T3)
         return missing
     end
 end
+=#

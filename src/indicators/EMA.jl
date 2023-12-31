@@ -26,8 +26,8 @@ mutable struct EMA{T1,T2} <: MovingAverageIndicator{T1}
     function EMA{T1}(; period = EMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T1) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        mult = T2(2) / (period + T2(1))
-        mult_complement = T2(1) - mult
+        mult = 2 * one(T2) / (period + one(T2))
+        mult_complement = one(T2) - mult
         output_listeners = Series()
         input_indicator = missing
         new{T1,input_modifier_return_type}(
