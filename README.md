@@ -46,7 +46,7 @@ See [tests](test/)
 | `HMA` | Hull Moving Average | :1234: | :1234: | `WMA` | :heavy_check_mark:
 | `Ichimoku` | Ichimoku Clouds | :1234:  | :m: | `CircBuff` | 5 managed sequences :question: unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
 | `KAMA` | Kaufman's Adaptive Moving Average | :1234: | :1234: | `CircBuff` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
-| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | `ATR`, `EMA` wrapped with `FilterTransform` to extract close value of a candle | :heavy_check_mark:
+| `KeltnerChannels` | Keltner Channels | :candle:  | :m: | `ATR`, `EMA` with `input_modifier` to extract close value of a candle | :heavy_check_mark:
 | `KST` | Know Sure Thing | :1234: | :m: | `SMA` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `KVO` | Klinger Volume Oscillator | :candle: | :1234: | `EMA` | :heavy_check_mark:
 | `MACD` | Moving Average Convergence Divergence | :1234: | :m: | `EMA` | :heavy_check_mark:
@@ -58,11 +58,11 @@ See [tests](test/)
 | `PivotsHL` | High/Low Pivots | :candle: | :m: | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85).
 | `ROC` | Rate Of Change | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `RSI` | Relative Strength Index | :1234: | :1234: | `CircBuff`, `SMMA` | :heavy_check_mark:
-| `SFX` | SFX | :candle: | :m: | `ATR`, `StdDev`, `SMA`, `FilterTransform` (to extract `close`) | :heavy_check_mark:
+| `SFX` | SFX | :candle: | :m: | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | :heavy_check_mark:
 | `SMA` | Simple Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SMMA` | Smoothed Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `SOBV` | Smoothed On Balance Volume | :candle: | :1234: | `OBV`, `SMA` | :heavy_check_mark:
-| `STC` | Schaff Trend Cycle | :1234: | :1234: | `MACD`, `Stoch`, 2 `FilterTransform` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | :heavy_check_mark:
+| `STC` | Schaff Trend Cycle | :1234: | :1234: | `MACD`, `Stoch` with `input_modifier` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | :heavy_check_mark:
 | `StdDev` | Standard Deviation | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `Stoch` | Stochastic | :candle: | :m: | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
@@ -71,7 +71,7 @@ See [tests](test/)
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `TRIX` | TRIX | :candle: | :m: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
 | `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
-| `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels`, `FilterTransform` to extract `close` value of a candle | :heavy_check_mark:
+| `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | :heavy_check_mark:
 | `UO` | Ultimate Oscillator | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
