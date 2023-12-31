@@ -8,30 +8,37 @@ struct BBVal{Tval}
 end
 
 """
-    BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA)
+    BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `BB` type implements Bollinger Bands indicator.
 """
-mutable struct BB{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,BBVal{Tval}}
+mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
+    value::Union{Missing,BBVal}
     n::Int
 
     period::Integer
-    std_dev_mult::Tval
+    std_dev_mult::T2
 
     sub_indicators::Series
     central_band::MovingAverageIndicator  # default SMA
-    std_dev::StdDev{Tval}
+    std_dev::StdDev
 
-    function BB{Tval}(;
+    input_filter::Function
+    input_modifier::Function
+
+    function BB{T1}(;
         period = BB_PERIOD,
         std_dev_mult = BB_STD_DEV_MULT,
         ma = SMA,
-    ) where {Tval}
-        _central_band = MAFactory(Tval)(ma, period = period)
-        _std_dev = StdDev{Tval}(period = period)
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = T1
+    ) where {T1}
+        T2 = input_modifier_return_type
+        _central_band = MAFactory(T2)(ma, period = period)
+        _std_dev = StdDev{T2}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
-        new{Tval}(missing, 0, period, std_dev_mult, sub_indicators, _central_band, _std_dev)
+        new{T1,T2}(missing, 0, period, std_dev_mult, sub_indicators, _central_band, _std_dev, input_filter, input_modifier)
     end
 end
 
