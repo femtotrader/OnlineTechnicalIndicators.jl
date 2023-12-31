@@ -21,7 +21,7 @@ mutable struct WMA{Tval} <: MovingAverageIndicator{Tval}
         input_values = CircBuff(Tval, period + 1, rev = false)
         total = zero(Tval)
         numerator = zero(Tval)
-        denominator = period * (period + 1) / 2.0
+        denominator = period * (period + one(Tval)) / (2 * one(Tval))
         new{Tval}(missing, 0, period, total, numerator, denominator, input_values)
     end
 end
