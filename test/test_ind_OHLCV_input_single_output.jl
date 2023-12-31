@@ -1,5 +1,16 @@
 @testset "OHLC input - single output" begin
 
+    @testset "SMA with input_modifier" begin
+        ind = SMA{OHLCV{Missing,Float64,Float64}}(period = P, input_modifier = candle -> candle.close, modifier_type = Float64)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+        @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 9.183000; atol = ATOL)
+        @test isapprox(value(ind), 9.308500; atol = ATOL)
+    end
+
     @testset "AccuDist" begin
         ind = AccuDist{OHLCV{Missing,Float64,Float64},Float64}()
         @test nobs(ind) == 0

@@ -77,6 +77,11 @@ include("sample_data.jl")
 
 function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
     _fieldnames = fieldnames(O)
+    if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
+        if ind.input_filter(data)
+            data = ind.input_modifier(data)
+        end
+    end
     has_input_values = :input_values in _fieldnames
     if has_input_values
         fit!(ind.input_values, data)
@@ -116,6 +121,8 @@ function add_input_indicator!(
         ind1.output_listeners = Series(ind2)
     end
 end
+
+always_true(x) = true
 
 # SISO
 include("indicators/SMA.jl")
