@@ -70,7 +70,7 @@ See [tests](test/)
 | `T3` | T3 Moving Average | :1234: | :1234: |  | :heavy_check_mark:
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `TRIX` | TRIX | :candle: | :m: | `EMA`, indicator chaining | :heavy_check_mark:
-| `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :construction: This indicator needs indicator chaining to be implemented which is currently not done
+| `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :heavy_check_mark:
 | `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | :heavy_check_mark:
 | `UO` | Ultimate Oscillator | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted

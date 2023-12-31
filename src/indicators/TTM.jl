@@ -35,7 +35,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, 1, rev = false)  # overkilled!
+        input_values = CircBuff(Tohlcv, 1, rev = false)  # (maybe) a bit overkilled! but that's to keep the same interface
         _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult, input_modifier = ValueExtractor.extract_close)
         _dc = DonchianChannels{Tohlcv,S}(; period = period)
         _kc = KeltnerChannels{Tohlcv,S}(;

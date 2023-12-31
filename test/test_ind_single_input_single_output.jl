@@ -375,4 +375,15 @@
         @test isapprox(value(ind), 80.317194; atol = ATOL)
     end
 
+    @testset "TSI" begin
+        ind = TSI{Float64}(fast_period = 14, slow_period = 23)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+        @test isapprox(value(ind.lag[end-2]), 9.159520; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 10.724944; atol = ATOL)
+        @test isapprox(value(ind), 11.181863; atol = ATOL)
+    end
+
 end
