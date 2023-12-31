@@ -16,8 +16,8 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
     sub_indicators::Series
     macd::MACD
 
-    stoch_macd::FilterTransform  # Stoch
-    stoch_d::FilterTransform  # Stoch
+    stoch_macd::Stoch
+    stoch_d::Stoch
 
     function STC{Tval}(;
         fast_macd_period = STC_FAST_MACD_PERIOD,
@@ -34,28 +34,25 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             signal_period = slow_macd_period,
         )
         sub_indicators = Series(macd)
-        stoch_macd = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
+        #stoch_macd = Stoch{Union{Missing,MACDVal},Tval}(
+        stoch_macd = Stoch{MACDVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-        )
-        stoch_macd = FilterTransform(
-            stoch_macd,
-            MACDVal,  # type of input
-            transform = macd_val ->
-                OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
+            #input_filter = !ismissing,
+            input_modifier = macd_val -> OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
+            input_modifier_return_type = OHLCV
         )
         # add_input_indicator!(stoch_macd, macd)  # <---
-        stoch_d = Stoch{OHLCV{Missing,Float64,Missing},Tval}(
+        #stoch_d = Stoch{Union{Missing,StochVal},Tval}(
+        stoch_d = Stoch{StochVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-        )
-        stoch_d = FilterTransform(
-            stoch_d,
-            StochVal,  # type of input
-            transform = stoch_val ->
+            #input_filter = !ismissing,
+            input_modifier = stoch_val ->
                 OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d),
+            input_modifier_return_type = OHLCV,
         )
         new{Tval}(missing, 0, sub_indicators, macd, stoch_macd, stoch_d)
     end
@@ -66,8 +63,23 @@ function _calculate_new_value(ind::STC)
     if !ismissing(macd_val)
         fit!(ind.stoch_macd, macd_val)
         fit!(ind.stoch_d, value(ind.stoch_macd))
-        return max(min(value(ind.stoch_d).d, 100), 0)
+        stoch_d_val = value(ind.stoch_d)
+        return max(min(stoch_d_val.d, 100), 0)
     else
         return missing
     end
 end
+
+#=
+function _calculate_new_value(ind::STC)
+    macd_val = value(ind.macd)
+    fit!(ind.stoch_macd, macd_val)
+    fit!(ind.stoch_d, value(ind.stoch_macd))
+    stoch_d_val = value(ind.stoch_d)
+    if !ismissing(macd_val)
+        return max(min(stoch_d_val.d, 100), 0)
+    else
+        return missing
+    end
+end
+=#

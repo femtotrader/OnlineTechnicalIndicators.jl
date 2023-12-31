@@ -80,6 +80,8 @@ function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
     if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
         if ind.input_filter(data)
             data = ind.input_modifier(data)
+        else
+            return
         end
     end
     has_input_values = :input_values in _fieldnames
