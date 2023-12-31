@@ -31,7 +31,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         ma = SMA,
     ) where {Tohlcv,S}
         # values_d = SMA{S}(; period = smoothing_period)
-        values_d = MAFactory(S)(ma, smoothing_period)
+        values_d = MAFactory(S)(ma, period = smoothing_period)
         input = CircBuff(Tohlcv, period, rev = false)
         output_listeners = Series()
         input_indicator = missing

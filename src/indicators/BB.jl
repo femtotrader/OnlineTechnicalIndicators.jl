@@ -28,7 +28,7 @@ mutable struct BB{Tval} <: TechnicalIndicator{Tval}
         std_dev_mult = BB_STD_DEV_MULT,
         ma = SMA,
     ) where {Tval}
-        _central_band = MAFactory(Tval)(ma, period)
+        _central_band = MAFactory(Tval)(ma, period = period)
         _std_dev = StdDev{Tval}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
         new{Tval}(missing, 0, period, std_dev_mult, sub_indicators, _central_band, _std_dev)

@@ -24,8 +24,8 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         accu_dist = AccuDist{Tohlcv,S}()
         sub_indicators = Series(accu_dist)
-        _fast_ma = MAFactory(S)(fast_ma, fast_period)
-        _slow_ma = MAFactory(S)(slow_ma, slow_period)
+        _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
+        _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
         new{Tohlcv,S}(missing, 0, sub_indicators, accu_dist, _fast_ma, _slow_ma)
     end
 end

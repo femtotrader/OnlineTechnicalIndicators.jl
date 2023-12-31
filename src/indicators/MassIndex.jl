@@ -25,9 +25,9 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         ma = EMA,
     ) where {Tohlcv,S}
         # ma = EMA{S}(period = ma_period)
-        _ma = MAFactory(S)(ma, ma_period)
+        _ma = MAFactory(S)(ma, period = ma_period)
         # ma_ma = EMA{S}(period = ma_ma_period)
-        _ma_ma = MAFactory(S)(ma, ma_ma_period)
+        _ma_ma = MAFactory(S)(ma, period = ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
         new{Tohlcv,S}(missing, 0, ma_ratio_period, _ma, _ma_ma, _ma_ratio)
     end

@@ -63,10 +63,10 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         # roc3 = SMA{Tval}(period = roc3_period)
         # roc4 = SMA{Tval}(period = roc4_period)
 
-        roc1 = MAFactory(Tval)(ma, roc1_period)
-        roc2 = MAFactory(Tval)(ma, roc2_period)
-        roc3 = MAFactory(Tval)(ma, roc3_period)
-        roc4 = MAFactory(Tval)(ma, roc4_period)
+        roc1 = MAFactory(Tval)(ma, period = roc1_period)
+        roc2 = MAFactory(Tval)(ma, period = roc2_period)
+        roc3 = MAFactory(Tval)(ma, period = roc3_period)
+        roc4 = MAFactory(Tval)(ma, period = roc4_period)
         sub_indicators = Series(roc1, roc2, roc3, roc4)
 
         # roc1_ma = SMA{Tval}(period = roc1_ma_period)
@@ -74,13 +74,13 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         # roc3_ma = SMA{Tval}(period = roc3_ma_period)
         # roc4_ma = SMA{Tval}(period = roc4_ma_period)
 
-        roc1_ma = MAFactory(Tval)(ma, roc1_ma_period)
-        roc2_ma = MAFactory(Tval)(ma, roc2_ma_period)
-        roc3_ma = MAFactory(Tval)(ma, roc3_ma_period)
-        roc4_ma = MAFactory(Tval)(ma, roc4_ma_period)
+        roc1_ma = MAFactory(Tval)(ma, period = roc1_ma_period)
+        roc2_ma = MAFactory(Tval)(ma, period = roc2_ma_period)
+        roc3_ma = MAFactory(Tval)(ma, period = roc3_ma_period)
+        roc4_ma = MAFactory(Tval)(ma, period = roc4_ma_period)
 
         # signal_line = SMA{Tval}(period = signal_period)
-        signal_line = MAFactory(Tval)(ma, signal_period)
+        signal_line = MAFactory(Tval)(ma, period = signal_period)
 
         new{Tval}(
             missing,

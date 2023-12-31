@@ -19,7 +19,7 @@ mutable struct MeanDev{Tval} <: TechnicalIndicator{Tval}
     function MeanDev{Tval}(; period = MeanDev_PERIOD, ma = SMA) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
         #_ma = SMA{Tval}(period = period)
-        _ma = MAFactory(Tval)(ma, period)
+        _ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)
         new{Tval}(missing, 0, period, sub_indicators, _ma, input_values)
     end

@@ -35,11 +35,11 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     ) where {Tval}
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)
-        fast_ma = MAFactory(Tval)(ma, fast_period)
-        slow_ma = MAFactory(Tval)(ma, slow_period)
+        fast_ma = MAFactory(Tval)(ma, period = fast_period)
+        slow_ma = MAFactory(Tval)(ma, period = slow_period)
         sub_indicators = Series(fast_ma, slow_ma)
         # signal_line = EMA{Tval}(period = signal_period)
-        signal_line = MAFactory(Tval)(ma, signal_period)
+        signal_line = MAFactory(Tval)(ma, period = signal_period)
         output_listeners = Series()
         input_indicator = missing
         new{Tval}(

@@ -19,12 +19,12 @@ mutable struct TEMA{Tval} <: MovingAverageIndicator{Tval}
 
     function TEMA{Tval}(; period = TEMA_PERIOD, ma = EMA) where {Tval}
         # _ma = EMA{Tval}(period = period)
-        _ma = MAFactory(Tval)(ma, period)
+        _ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)
         # _ma_ma = EMA{Tval}(period = period)
-        _ma_ma = MAFactory(Tval)(ma, period)
+        _ma_ma = MAFactory(Tval)(ma, period = period)
         # _ma_ma_ma = EMA{Tval}(period = period)
-        _ma_ma_ma = MAFactory(Tval)(ma, period)
+        _ma_ma_ma = MAFactory(Tval)(ma, period = period)
         new{Tval}(missing, 0, period, sub_indicators, _ma, _ma_ma, _ma_ma_ma)
     end
 end

@@ -45,7 +45,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_mult_up = kc_atr_mult,
             atr_mult_down = kc_atr_mult,
         )  # ma = EMA by default
-        _ma = MAFactory(S)(ma, period)
+        _ma = MAFactory(S)(ma, period = period)
         _ma = FilterTransform(_ma, Tohlcv, transform = candle -> candle.close)
         sub_indicators = Series(_bb, _dc, _kc, _ma)
         deltas = CircBuff(S, period, rev = false)

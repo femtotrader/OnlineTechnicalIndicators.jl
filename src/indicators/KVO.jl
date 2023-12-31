@@ -23,8 +23,8 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_period = KVO_SLOW_PERIOD,
         ma = EMA,
     ) where {Tohlcv,S}
-        _fast_ma = MAFactory(S)(ma, fast_period)
-        _slow_ma = MAFactory(S)(ma, slow_period)
+        _fast_ma = MAFactory(S)(ma, period = fast_period)
+        _slow_ma = MAFactory(S)(ma, period = slow_period)
         trend = CircBuff(S, 2, rev = false)
         cumulative_measurement = CircBuff(S, 2, rev = false)
         input_values = CircBuff(Tohlcv, 2, rev = false)

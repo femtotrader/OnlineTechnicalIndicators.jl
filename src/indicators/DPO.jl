@@ -19,7 +19,7 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
 
     function DPO{Tval}(; period = DPO_PERIOD, ma = SMA) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
-        _ma = MAFactory(Tval)(ma, period)
+        _ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
         new{Tval}(missing, 0, period, semi_period, sub_indicators, _ma, input_values)

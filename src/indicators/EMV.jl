@@ -22,7 +22,7 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         volume_div = EMV_VOLUME_DIV,
         ma = SMA,
     ) where {Tohlcv,S}
-        _emv_ma = MAFactory(S)(ma, period)
+        _emv_ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(Tohlcv, period, rev = false)
         new{Tohlcv,S}(missing, 0, period, volume_div, _emv_ma, input_values)
     end

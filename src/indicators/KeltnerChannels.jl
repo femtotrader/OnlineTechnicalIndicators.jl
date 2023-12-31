@@ -37,7 +37,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
         # cb = EMA{S}(period = ma_period)
-        _cb = MAFactory(S)(ma, ma_period)
+        _cb = MAFactory(S)(ma, period = ma_period)
         _cb = FilterTransform(_cb, Tohlcv, transform = candle -> candle.close)  # ValueExtractor in reference implementation
         sub_indicators = Series(atr, _cb)
         new{Tohlcv,S}(

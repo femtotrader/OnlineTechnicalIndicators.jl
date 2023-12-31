@@ -4,9 +4,8 @@ end
 
 function (f::MAFactory)(
     ma::Type{MA},
-    period,
     args...;
     kwargs...,
 ) where {MA<:TechnicalIndicator}
-    return ma{f.T}(args..., period = period, kwargs...)
+    return ma{f.T}(args...; kwargs...)
 end

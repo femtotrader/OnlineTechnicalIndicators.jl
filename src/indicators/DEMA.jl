@@ -17,9 +17,9 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
 
     function DEMA{Tval}(; period = DEMA_PERIOD, ma = EMA) where {Tval}
         # _ma = EMA{Tval}(period = period)
-        _ma = MAFactory(Tval)(ma, period)
+        _ma = MAFactory(Tval)(ma, period = period)
         # _ma_ma = EMA{Tval}(period = period)
-        _ma_ma = MAFactory(Tval)(ma, period)
+        _ma_ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)
         new{Tval}(missing, 0, period, sub_indicators, _ma, _ma_ma)
     end

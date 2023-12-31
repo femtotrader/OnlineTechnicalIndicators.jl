@@ -18,7 +18,7 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA) where {Tohlcv,S}
         obv = OBV{Tohlcv,S}()
         # obv_ma = SMA{S}(period = period)
-        obv_ma = MAFactory(S)(ma, period)
+        obv_ma = MAFactory(S)(ma, period = period)
         sub_indicators = Series(obv)
         new{Tohlcv,S}(missing, 0, period, sub_indicators, obv, obv_ma)
     end
