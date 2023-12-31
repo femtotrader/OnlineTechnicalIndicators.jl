@@ -1,7 +1,7 @@
 @testset "OHLC input - single output" begin
 
     @testset "SMA with input_modifier" begin
-        ind = SMA{OHLCV{Missing,Float64,Float64}}(period = P, input_modifier = candle -> candle.close, modifier_type = Float64)
+        ind = SMA{OHLCV{Missing,Float64,Float64}}(period = P, input_modifier = candle -> candle.close, input_modifier_return_type = Float64)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
