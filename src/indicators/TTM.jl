@@ -18,10 +18,10 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     period::Int
     sub_indicators::Series
-    bb::FilterTransform  # BB
+    bb::BB
     dc::DonchianChannels
     kc::KeltnerChannels
-    ma::FilterTransform  # MovingAverageIndicator  # default=SMA
+    ma::MovingAverageIndicator  # default=SMA
 
     deltas::CircBuff
     mean_x::S
@@ -36,8 +36,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         ma = SMA,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, 1, rev = false)  # overkilled!
-        _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
-        _bb = FilterTransform(_bb, Tohlcv, transform = ValueExtractor.extract_close)
+        _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult, input_modifier = ValueExtractor.extract_close)
         _dc = DonchianChannels{Tohlcv,S}(; period = period)
         _kc = KeltnerChannels{Tohlcv,S}(;
             ma_period = period,
@@ -45,8 +44,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_mult_up = kc_atr_mult,
             atr_mult_down = kc_atr_mult,
         )  # ma = EMA by default
-        _ma = MAFactory(S)(ma, period = period)
-        _ma = FilterTransform(_ma, Tohlcv, transform = ValueExtractor.extract_close)
+        _ma = MAFactory(S)(ma, period = period, input_modifier = ValueExtractor.extract_close)
         sub_indicators = Series(_bb, _dc, _kc, _ma)
         deltas = CircBuff(S, period, rev = false)
         mean_x = sum(1:period-1) / period
