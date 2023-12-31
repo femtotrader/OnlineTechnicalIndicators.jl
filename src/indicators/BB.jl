@@ -43,12 +43,12 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
 end
 
 function _calculate_new_value(ind::BB)
-    if !has_output_value(ind.central_band)
-        ind.value = missing
-    else
+    if has_output_value(ind.central_band)
         lower = value(ind.central_band) - ind.std_dev_mult * value(ind.std_dev)
         central = value(ind.central_band)
         upper = value(ind.central_band) + ind.std_dev_mult * value(ind.std_dev)
-        ind.value = BBVal(lower, central, upper)
+        return BBVal(lower, central, upper)
+    else
+        return missing
     end
 end

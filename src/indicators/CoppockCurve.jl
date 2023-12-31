@@ -33,7 +33,6 @@ end
 function _calculate_new_value(ind::CoppockCurve)
     if has_output_value(ind.fast_roc) && has_output_value(ind.slow_roc)
         fit!(ind.wma, value(ind.slow_roc) + value(ind.fast_roc))
-        ind.value = value(ind.wma)
         if has_output_value(ind.wma)
             return value(ind.wma)
         else
