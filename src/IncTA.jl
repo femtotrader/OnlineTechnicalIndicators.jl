@@ -82,11 +82,11 @@ function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
         fit!(ind.input_values, data)
     end
     has_sub_indicators = :sub_indicators in _fieldnames && length(ind.sub_indicators.stats) > 0
-    if :sub_indicators in fieldnames(O)
+    if has_sub_indicators
         fit!(ind.sub_indicators, data)
     end
     ind.n += 1
-    ind.value = has_input_values || has_sub_indicators ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
+    ind.value = (has_input_values || has_sub_indicators) ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
     fit_listeners!(ind)
 end
 

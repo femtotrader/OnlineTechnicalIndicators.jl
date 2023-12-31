@@ -35,7 +35,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, 1, rev = false)
+        input_values = CircBuff(Tohlcv, 1, rev = false)  # overkilled!
         _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
         _bb = FilterTransform(_bb, Tohlcv, transform = candle -> candle.close)
         _dc = DonchianChannels{Tohlcv,S}(; period = period)
@@ -72,7 +72,6 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function _calculate_new_value(ind::TTM)
-# function _calculate_new_value_only_from_incoming_data(ind::TTM, candle)
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC

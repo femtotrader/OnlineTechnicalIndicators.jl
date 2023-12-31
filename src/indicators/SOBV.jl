@@ -27,8 +27,8 @@ end
 function _calculate_new_value(ind::SOBV)
     fit!(ind.obv_ma, value(ind.obv))
     if has_output_value(ind.obv_ma)
-        ind.value = value(ind.obv_ma)
+        return value(ind.obv_ma)
     else
-        ind.value = missing
+        return missing
     end
 end
