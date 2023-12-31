@@ -364,4 +364,15 @@
         @test isapprox(value(ind), 10.124616; atol = ATOL)
     end
 
+    @testset "TRIX" begin
+        ind = TRIX{Float64}(period = 10)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+        @test isapprox(value(ind.lag[end-2]), 66.062922; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 75.271366; atol = ATOL)
+        @test isapprox(value(ind), 80.317194; atol = ATOL)
+    end
+
 end
