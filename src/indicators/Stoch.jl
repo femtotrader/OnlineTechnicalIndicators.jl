@@ -12,7 +12,7 @@ end
 The `Stoch` type implements the Stochastic indicator.
 """
 mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
-    value::Union{Missing,StochVal{S}}  # Tprice
+    value::Union{Missing,StochVal}
     n::Int
 
     output_listeners::Series
@@ -20,8 +20,8 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     period::Integer
     smoothing_period::Integer
 
-    values_d::SMA{S}
-    input_values::CircBuff{Tohlcv}
+    values_d::SMA
+    input_values::CircBuff
 
     input_indicator::Union{Missing,TechnicalIndicator}
 
