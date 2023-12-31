@@ -2,7 +2,7 @@ const TSI_FAST_PERIOD = 14
 const TSI_SLOW_PERIOD = 23
 
 """
-    TSI{T}(; fast_period = TSI_FAST_PERIOD, slow_period = TSI_SLOW_PERIOD, ma = EMA)
+    TSI{T}(; fast_period = TSI_FAST_PERIOD, slow_period = TSI_SLOW_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `TSI` type implements a True Strength Index indicator.
 """
@@ -14,24 +14,39 @@ mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
 
     fast_ma::MovingAverageIndicator
     slow_ma::MovingAverageIndicator
-    
+
     abs_fast_ma::MovingAverageIndicator
     abs_slow_ma::MovingAverageIndicator
 
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
-    function TSI{Tval}(; fast_period = TSI_FAST_PERIOD, slow_period = TSI_SLOW_PERIOD, ma = EMA) where {Tval}
+    function TSI{Tval}(;
+        fast_period = TSI_FAST_PERIOD,
+        slow_period = TSI_SLOW_PERIOD,
+        ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
 
         input_values = CircBuff(Tval, 2, rev = false)
 
         slow_ma = MAFactory(Tval)(ma, period = slow_period)
-        fast_ma = MAFactory(Union{Missing,Tval})(ma, period = fast_period, input_filter=!ismissing)
+        fast_ma = MAFactory(Union{Missing,Tval})(
+            ma,
+            period = fast_period,
+            input_filter = !ismissing,
+        )
         add_input_indicator!(fast_ma, slow_ma)  # <-
 
         abs_slow_ma = MAFactory(Tval)(ma, period = slow_period)
-        abs_fast_ma = MAFactory(Union{Missing,Tval})(ma, period = fast_period, input_filter=!ismissing)
+        abs_fast_ma = MAFactory(Union{Missing,Tval})(
+            ma,
+            period = fast_period,
+            input_filter = !ismissing,
+        )
         add_input_indicator!(abs_fast_ma, abs_slow_ma)  # <-
 
         output_listeners = Series()

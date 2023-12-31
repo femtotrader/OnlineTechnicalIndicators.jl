@@ -32,13 +32,23 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
         ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = T1
+        input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
         _central_band = MAFactory(T2)(ma, period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
         _std_dev = StdDev{T2}(period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
         sub_indicators = Series(_central_band, _std_dev)
-        new{T1,T2}(missing, 0, period, std_dev_mult, sub_indicators, _central_band, _std_dev, input_filter, input_modifier)
+        new{T1,T2}(
+            missing,
+            0,
+            period,
+            std_dev_mult,
+            sub_indicators,
+            _central_band,
+            _std_dev,
+            input_filter,
+            input_modifier,
+        )
     end
 end
 

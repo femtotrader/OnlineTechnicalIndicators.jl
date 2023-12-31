@@ -1,7 +1,7 @@
 const DPO_PERIOD = 20
 
 """
-    DPO{T}(; period = DPO_PERIOD)
+    DPO{T}(; period = DPO_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `DPO` type implements a Detrended Price Oscillator indicator.
 """
@@ -17,7 +17,13 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
 
     input_values::CircBuff{Tval}
 
-    function DPO{Tval}(; period = DPO_PERIOD, ma = SMA) where {Tval}
+    function DPO{Tval}(;
+        period = DPO_PERIOD,
+        ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         input_values = CircBuff(Tval, period, rev = false)
         _ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)

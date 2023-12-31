@@ -4,7 +4,7 @@ const ALMA_SIGMA = 6.0
 
 
 """
-    ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA)
+    ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
 """
@@ -25,6 +25,9 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
         period = ALMA_PERIOD,
         offset = ALMA_OFFSET,
         sigma = ALMA_SIGMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         w = Tval[]
         w_sum = 0.0

@@ -1,7 +1,7 @@
 const VWAP_MEMORY = 3
 
 """
-    VWAP{Tohlcv,S}()
+    VWAP{Tohlcv,S}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `VWAP` type implements a Volume Weighted Moving Average indicator.
 """
@@ -12,7 +12,11 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     sum_price_vol::S
     sum_vol::S
 
-    function VWAP{Tohlcv,S}() where {Tohlcv,S}
+    function VWAP{Tohlcv,S}(
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         sum_price_vol = zero(S)
         sum_vol = zero(S)
         new{Tohlcv,S}(missing, 0, sum_price_vol, sum_vol)

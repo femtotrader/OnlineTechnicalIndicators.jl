@@ -9,7 +9,7 @@ struct SFXVal{Tval}
 end
 
 """
-    SFX{Tohlcv,S}(; atr_period = SFX_ATR_PERIOD, std_dev_period = SFX_STD_DEV_PERIOD, std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD, ma = SMA)
+    SFX{Tohlcv,S}(; atr_period = SFX_ATR_PERIOD, std_dev_period = SFX_STD_DEV_PERIOD, std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD, ma = SMA, , input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SFX` type implements a SFX indicator.
 """
@@ -28,9 +28,15 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         std_dev_period = SFX_STD_DEV_PERIOD,
         std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD,
         ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
-        std_dev = StdDev{Float64}(period = std_dev_period, input_modifier = ValueExtractor.extract_close)
+        std_dev = StdDev{Float64}(
+            period = std_dev_period,
+            input_modifier = ValueExtractor.extract_close,
+        )
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
         new{Tohlcv,S}(missing, 0, sub_indicators, atr, std_dev, ma_std_dev)

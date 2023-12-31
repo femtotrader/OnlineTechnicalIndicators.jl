@@ -13,7 +13,7 @@ input `val` will be modified/transformed using `input_modifier` function (defaul
 
 `input_modifier_return_type` is the type `T2` of return of the `input_modifier` function it's also type of indicator value
 
-by default `T1 = T2`
+by default `T2 = T1`
 """
 mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     value::Union{Missing,T2}
@@ -29,12 +29,26 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     input_filter::Function
     input_modifier::Function
 
-    function SMA{T1}(; period = SMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T1) where {T1}
+    function SMA{T1}(;
+        period = SMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = T1,
+    ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
         output_listeners = Series()
         input_indicator = missing
-        new{T1,T2}(missing, 0, output_listeners, period, input_indicator, input_values, input_filter, input_modifier)
+        new{T1,T2}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            input_indicator,
+            input_values,
+            input_filter,
+            input_modifier,
+        )
     end
 end
 

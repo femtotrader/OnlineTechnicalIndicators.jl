@@ -1,5 +1,5 @@
 """
-    OBV{Tohlcv,S}()
+    OBV{Tohlcv,S}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `OBV` type implements On Balance Volume indicator.
 """
@@ -9,7 +9,11 @@ mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function OBV{Tohlcv,S}() where {Tohlcv,S}
+    function OBV{Tohlcv,S}(
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, 2, rev = false)
         new{Tohlcv,S}(missing, 0, input_values)
     end

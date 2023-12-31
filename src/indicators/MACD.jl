@@ -9,7 +9,7 @@ struct MACDVal{Tval}
 end
 
 """
-    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, output_listeners = Series())
+    MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `MACD` type implements Moving Average Convergence Divergence indicator.
 """
@@ -32,6 +32,9 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
         ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         # fast_ma = EMA{Tval}(period = fast_period)
         # slow_ma = EMA{Tval}(period = slow_period)

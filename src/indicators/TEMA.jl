@@ -1,7 +1,7 @@
 const TEMA_PERIOD = 20
 
 """
-    TEMA{T}(; period = TEMA_PERIOD, ma = EMA)
+    TEMA{T}(; period = TEMA_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `TEMA` type implements a Triple Exponential Moving Average indicator.
 """
@@ -17,7 +17,13 @@ mutable struct TEMA{Tval} <: MovingAverageIndicator{Tval}
     ma_ma::MovingAverageIndicator  # EMA
     ma_ma_ma::MovingAverageIndicator  # EMA
 
-    function TEMA{Tval}(; period = TEMA_PERIOD, ma = EMA) where {Tval}
+    function TEMA{Tval}(;
+        period = TEMA_PERIOD,
+        ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         # _ma = EMA{Tval}(period = period)
         _ma = MAFactory(Tval)(ma, period = period)
         sub_indicators = Series(_ma)

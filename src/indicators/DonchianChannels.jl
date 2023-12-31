@@ -7,7 +7,7 @@ struct DonchianChannelsVal{Tval}
 end
 
 """
-    DonchianChannels{Tohlcv,S}(; period = DonchianChannels_ATR_PERIOD)
+    DonchianChannels{Tohlcv,S}(; period = DonchianChannels_ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 """
@@ -21,6 +21,9 @@ mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     function DonchianChannels{Tohlcv,S}(;
         period = DonchianChannels_ATR_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, period, rev = false)
         new{Tohlcv,S}(missing, 0, period, input_values)

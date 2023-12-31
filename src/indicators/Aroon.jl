@@ -6,7 +6,7 @@ struct AroonVal{Tval}
 end
 
 """
-    Aroon{Tohlcv,S}(; period = Aroon_PERIOD)
+    Aroon{Tohlcv,S}(; period = Aroon_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `Aroon` type implements an Aroon indicator.
 """
@@ -18,7 +18,12 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function Aroon{Tohlcv,S}(; period = Aroon_PERIOD) where {Tohlcv,S}
+    function Aroon{Tohlcv,S}(;
+        period = Aroon_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         input = CircBuff(Tohlcv, period + 1, rev = false)
         new{Tohlcv,S}(missing, 0, period, input)
     end

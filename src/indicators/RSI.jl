@@ -1,7 +1,7 @@
 const RSI_PERIOD = 3
 
 """
-    RSI{T}(; period = SMA_PERIOD)
+    RSI{T}(; period = SMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `RSI` type implements a Relative Strength Index indicator.
 """
@@ -16,7 +16,12 @@ mutable struct RSI{Tval} <: TechnicalIndicator{Tval}
 
     input_values::CircBuff{Tval}
 
-    function RSI{Tval}(; period = RSI_PERIOD) where {Tval}
+    function RSI{Tval}(;
+        period = RSI_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         input = CircBuff(Tval, 2, rev = false)
         value = missing
         gains = SMMA{Tval}(period = period)

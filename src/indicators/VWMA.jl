@@ -1,7 +1,7 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Tohlcv,S}(; period = VWMA_PERIOD)
+    VWMA{Tohlcv,S}(; period = VWMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `VWMA` type implements a Volume Weighted Moving Average indicator.
 """
@@ -13,7 +13,12 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function VWMA{Tohlcv,S}(; period = VWMA_PERIOD) where {Tohlcv,S}
+    function VWMA{Tohlcv,S}(;
+        period = VWMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, period, rev = false)
         new{Tohlcv,S}(missing, 0, period, input_values)
     end

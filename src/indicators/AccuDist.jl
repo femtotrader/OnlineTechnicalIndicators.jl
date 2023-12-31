@@ -1,13 +1,33 @@
 """
-    AccuDist{Tohlcv,S}()
+    AccuDist{Tohlcv,S}(input_filter = always_true, input_modifier = identity)
 
 The `AccuDist` type implements an Accumulation and Distribution indicator.
 """
 mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-    function AccuDist{Tohlcv,S}() where {Tohlcv,S}
-        new{Tohlcv,S}(missing, 0)
+
+    output_listeners::Series
+
+    input_indicator::Union{Missing,TechnicalIndicator}
+
+    input_filter::Function
+    input_modifier::Function
+
+    function AccuDist{Tohlcv,S}(
+        input_filter = always_true,
+        input_modifier = identity,
+    ) where {Tohlcv,S}
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            input_indicator,
+            input_filter,
+            input_modifier,
+        )
     end
 end
 
@@ -22,5 +42,5 @@ function _calculate_new_value_only_from_incoming_data(ind::AccuDist, candle)
         # In case high and low are equal (division by zero), return previous value if exists, otherwise return missing
         return value(ind)
     end
-        return has_output_value(ind) ? value(ind) + mfv : mfv
+    return has_output_value(ind) ? value(ind) + mfv : mfv
 end

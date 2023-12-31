@@ -1,7 +1,7 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tohlcv,S}(; period = ATR_PERIOD)
+    ATR{Tohlcv,S}(; period = ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ATR` type implements an Average True Range indicator.
 """
@@ -9,17 +9,42 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     period::Number
 
-    tr::CircBuff{S}
+    tr::CircBuff
     rolling::Bool
 
-    input_values::CircBuff{Tohlcv}  # seems a bit overkilled just to get ind.input_values[end - 1].close (maybe use simply a Tuple with current and previous value - see ForceIndex)
+    input_indicator::Union{Missing,TechnicalIndicator}
+    input_values::CircBuff
 
-    function ATR{Tohlcv,S}(; period = ATR_PERIOD) where {Tohlcv,S}
+    input_filter::Function
+    input_modifier::Function
+
+    function ATR{Tohlcv,S}(;
+        period = ATR_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
+        T2 = input_modifier_return_type
         tr = CircBuff(S, period, rev = false)
-        input_values = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, tr, false, input_values)
+        input_values = CircBuff(T2, period, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            tr,
+            false,
+            input_indicator,
+            input_values,
+            input_filter,
+            input_modifier,
+        )
     end
 end
 

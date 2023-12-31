@@ -2,7 +2,7 @@ const EMV_PERIOD = 20
 const EMV_VOLUME_DIV = 10000
 
 """
-    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA)
+    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `EMV` type implements a Ease of Movement indicator.
 """
@@ -15,12 +15,15 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     emv_ma::MovingAverageIndicator  # SMA
 
-    input_values::CircBuff{Tohlcv}
+    input_values::CircBuff
 
     function EMV{Tohlcv,S}(;
         period = EMV_PERIOD,
         volume_div = EMV_VOLUME_DIV,
         ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         _emv_ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(Tohlcv, period, rev = false)

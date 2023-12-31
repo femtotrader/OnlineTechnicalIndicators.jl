@@ -2,7 +2,7 @@ const CHOP_PERIOD = 14
 
 
 """
-    CHOP{Tohlcv,S}(; period = CHOP_PERIOD)
+    CHOP{Tohlcv,S}(; period = CHOP_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `CHOP` type implements a Choppiness Index indicator.
 """
@@ -19,7 +19,12 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function CHOP{Tohlcv,S}(; period = CHOP_PERIOD) where {Tohlcv,S}
+    function CHOP{Tohlcv,S}(;
+        period = CHOP_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = T,
+    ) where {Tohlcv,S}
         @warn "WIP - buggy"
         atr = ATR{Tohlcv,S}(period = 1)
         sub_indicators = Series(atr)

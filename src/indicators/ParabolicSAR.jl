@@ -16,7 +16,7 @@ struct ParabolicSARVal{Tval}
 end
 
 """
-    ParabolicSAR{Tohlcv,S}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT)
+    ParabolicSAR{Tohlcv,S}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ParabolicSAR` type implements a Super Trend indicator.
 """
@@ -34,6 +34,9 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
         accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
         max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, SAR_INIT_LEN, rev = false)
         new{Tohlcv,S}(
@@ -72,9 +75,8 @@ function _calculate_new_value(ind::ParabolicSAR)
         if (prev_sar.trend == SARTrend.UP) &&
            (new_sar_val > min(candle_pm1.low, candle_pm2.low))
             new_sar_val = min(candle_pm1.low, candle_pm2.low)
-        elseif (prev_sar.trend == SARTrend.DOWN) && (
-            new_sar_val < max(candle_pm1.high, candle_pm2.high)
-        )
+        elseif (prev_sar.trend == SARTrend.DOWN) &&
+               (new_sar_val < max(candle_pm1.high, candle_pm2.high))
             new_sar_val = max(candle_pm1.high, candle_pm2.high)
         end
 

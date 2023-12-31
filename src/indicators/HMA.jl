@@ -1,7 +1,7 @@
 const HMA_PERIOD = 20
 
 """
-    HMA{T}(; period = HMA_PERIOD)
+    HMA{T}(; period = HMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `HMA` type implements a Hull Moving Average indicator.
 """
@@ -17,7 +17,12 @@ mutable struct HMA{Tval} <: MovingAverageIndicator{Tval}
 
     hma::WMA
 
-    function HMA{Tval}(; period = HMA_PERIOD) where {Tval}
+    function HMA{Tval}(;
+        period = HMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         wma = WMA{Tval}(period = period)
         wma2 = WMA{Tval}(period = floor(Int, period / 2))
         sub_indicators = Series(wma, wma2)

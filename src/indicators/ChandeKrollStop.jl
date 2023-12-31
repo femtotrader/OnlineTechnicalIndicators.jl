@@ -8,7 +8,7 @@ struct ChandeKrollStopVal{Tval}
 end
 
 """
-    ChandeKrollStop{Tohlcv,S}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD)
+    ChandeKrollStop{Tohlcv,S}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 """
@@ -32,6 +32,9 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr_period = ChandeKrollStop_ATR_PERIOD,
         atr_mult = ChandeKrollStop_ATR_MULT,
         period = ChandeKrollStop_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, atr_period, rev = false)
         atr = ATR{Tohlcv,S}(period = atr_period)

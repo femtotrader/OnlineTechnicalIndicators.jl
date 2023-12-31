@@ -7,7 +7,7 @@ struct StochVal{Tprice}
 end
 
 """
-    Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD, ma = SMA)
+    Stoch{Tohlcv,S}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `Stoch` type implements the Stochastic indicator.
 """
@@ -33,8 +33,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv
-
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         Tstore = input_modifier_return_type
         # values_d = SMA{S}(; period = smoothing_period)
@@ -52,7 +51,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             input,
             input_indicator,
             input_filter,
-            input_modifier
+            input_modifier,
         )
     end
 end

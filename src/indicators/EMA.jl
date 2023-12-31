@@ -2,7 +2,7 @@ const EMA_PERIOD = 3
 
 
 """
-    EMA{T}(; period = EMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T2)
+    EMA{T}(; period = EMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `EMA` type implements an Exponential Moving Average indicator.
 """
@@ -23,7 +23,12 @@ mutable struct EMA{T1,T2} <: MovingAverageIndicator{T1}
     input_filter::Function
     input_modifier::Function
 
-    function EMA{T1}(; period = EMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T1) where {T1}
+    function EMA{T1}(;
+        period = EMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = T1,
+    ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
         mult = 2 * one(T2) / (period + one(T2))

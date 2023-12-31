@@ -11,7 +11,7 @@ struct KeltnerChannelsVal{Tval}
 end
 
 """
-    KeltnerChannels{Tohlcv,S}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA)
+    KeltnerChannels{Tohlcv,S}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `KeltnerChannels` type implements a Keltner Channels indicator.
 """
@@ -34,9 +34,16 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr_mult_up = KeltnerChannels_ATR_MULT_UP,
         atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
         ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         atr = ATR{Tohlcv,S}(period = atr_period)
-        _cb = MAFactory(S)(ma, period = ma_period, input_modifier = ValueExtractor.extract_close)
+        _cb = MAFactory(S)(
+            ma,
+            period = ma_period,
+            input_modifier = ValueExtractor.extract_close,
+        )
         sub_indicators = Series(atr, _cb)
         new{Tohlcv,S}(
             missing,

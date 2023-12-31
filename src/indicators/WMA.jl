@@ -1,7 +1,7 @@
 const WMA_PERIOD = 3
 
 """
-    WMA{T}(; period = WMA_PERIOD)
+    WMA{T}(; period = WMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `WMA` type implements a Weighted Moving Average indicator.
 """
@@ -17,7 +17,12 @@ mutable struct WMA{Tval} <: MovingAverageIndicator{Tval}
 
     input_values::CircBuff{Tval}
 
-    function WMA{Tval}(; period = WMA_PERIOD) where {Tval}
+    function WMA{Tval}(;
+        period = WMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         input_values = CircBuff(Tval, period + 1, rev = false)
         total = zero(Tval)
         numerator = zero(Tval)

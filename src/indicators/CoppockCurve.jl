@@ -3,7 +3,7 @@ const CoppockCurve_SLOW_ROC_PERIOD = 14
 const CoppockCurve_WMA_PERIOD = 10
 
 """
-    CoppockCurve{T}(; fast_roc_period = CoppockCurve_FAST_ROC_PERIOD, slow_roc_period = CoppockCurve_SLOW_ROC_PERIOD, wma_period = CoppockCurve_WMA_PERIOD)
+    CoppockCurve{T}(; fast_roc_period = CoppockCurve_FAST_ROC_PERIOD, slow_roc_period = CoppockCurve_SLOW_ROC_PERIOD, wma_period = CoppockCurve_WMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `CoppockCurve` type implements a Coppock Curve indicator.
 """
@@ -21,6 +21,9 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
         fast_roc_period = CoppockCurve_FAST_ROC_PERIOD,
         slow_roc_period = CoppockCurve_SLOW_ROC_PERIOD,
         wma_period = CoppockCurve_WMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         fast_roc = ROC{Tval}(period = fast_roc_period)
         slow_roc = ROC{Tval}(period = slow_roc_period)

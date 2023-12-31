@@ -5,7 +5,7 @@ const STC_STOCH_SMOOTHING_PERIOD = 3
 
 
 """
-    STC{T}(; fast_macd_period = STC_FAST_MACD_PERIOD, slow_macd_period = STC_SLOW_MACD_PERIOD, stoch_period = STC_STOCH_PERIOD, stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD, ma = SMA)
+    STC{T}(; fast_macd_period = STC_FAST_MACD_PERIOD, slow_macd_period = STC_SLOW_MACD_PERIOD, stoch_period = STC_STOCH_PERIOD, stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD, ma = SMA, , input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `STC` type implements a chaff Trend Cycle indicator.
 """
@@ -25,6 +25,9 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
         stoch_period = STC_STOCH_PERIOD,
         stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD,
         ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         @assert fast_macd_period < slow_macd_period "fast_macd_period < slow_macd_period is not respected"
         # use slow_macd_period for signal line as signal line is not relevant here
@@ -35,17 +38,18 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
         )
         sub_indicators = Series(macd)
         stoch_macd = Stoch{Union{Missing,MACDVal},Tval}(
-        #stoch_macd = Stoch{MACDVal,Tval}(
+            #stoch_macd = Stoch{MACDVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
             input_filter = !ismissing,
-            input_modifier = macd_val -> OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
-            input_modifier_return_type = OHLCV
+            input_modifier = macd_val ->
+                OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
+            input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_macd, macd)  # <---
         stoch_d = Stoch{Union{Missing,StochVal},Tval}(
-        #stoch_d = Stoch{StochVal,Tval}(
+            #stoch_d = Stoch{StochVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,

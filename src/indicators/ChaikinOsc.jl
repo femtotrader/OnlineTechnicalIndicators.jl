@@ -2,7 +2,7 @@ const ChaikinOsc_FAST_PERIOD = 5
 const ChaikinOsc_SLOW_PERIOD = 7
 
 """
-    ChaikinOsc{Tohlcv,S}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD, fast_ma = EMA, slow_ma = EMA)
+    ChaikinOsc{Tohlcv,S}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD, fast_ma = EMA, slow_ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ChaikinOsc` type implements a Chaikin Oscillator.
 """
@@ -21,6 +21,9 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_period = ChaikinOsc_SLOW_PERIOD,
         fast_ma = EMA,
         slow_ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         accu_dist = AccuDist{Tohlcv,S}()
         sub_indicators = Series(accu_dist)

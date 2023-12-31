@@ -2,7 +2,7 @@ const TRIX_PERIOD = 10
 
 
 """
-    TRIX{T}(; period = TRIX_PERIOD)
+    TRIX{T}(; period = TRIX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `TRIX` type implements a TRIX Moving Average indicator.
 """
@@ -25,12 +25,17 @@ mutable struct TRIX{Tval} <: MovingAverageIndicator{Tval}
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
-    function TRIX{Tval}(; period = TRIX_PERIOD) where {Tval}
+    function TRIX{Tval}(;
+        period = TRIX_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         input_values = CircBuff(Tval, 2, rev = false)
         ema1 = EMA{Tval}(period = period)
 
-        ema2 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
-        ema3 = EMA{Union{Missing,Tval}}(period = period, input_filter=!ismissing)
+        ema2 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
+        ema3 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
         add_input_indicator!(ema2, ema1)  # <-
         add_input_indicator!(ema3, ema2)  # <-
         sub_indicators = Series(ema1)
@@ -59,7 +64,8 @@ function _calculate_new_value(ind::TRIX)
     if has_output_value(ind.ema3)
         fit!(ind.output_history, value(ind.ema3))
         if length(ind.output_history.value) == 2
-            return 10000.0 * (ind.output_history[end] - ind.output_history[end-1]) / ind.output_history[end-1]
+            return 10000.0 * (ind.output_history[end] - ind.output_history[end-1]) /
+                   ind.output_history[end-1]
         else
             return missing
         end

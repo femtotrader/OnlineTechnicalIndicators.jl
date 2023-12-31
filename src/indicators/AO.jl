@@ -2,7 +2,7 @@ const AO_FAST_PERIOD = 3
 const AO_SLOW_PERIOD = 21
 
 """
-    AO{Tohlcv,S}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA)
+    AO{Tohlcv,S}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `AO` type implements an Awesome Oscillator indicator.
 """
@@ -18,6 +18,9 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_period = AO_SLOW_PERIOD,
         fast_ma = SMA,
         slow_ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)

@@ -24,7 +24,8 @@ end
         roc4_period = KST_ROC4_PERIOD,
         roc4_ma_period = KST_ROC4_MA_PERIOD,
         signal_period = KST_SIGNAL_PERIOD,
-        ma = SMA
+        ma = SMA,
+        input_filter = always_true, input_modifier = identity, input_modifier_return_type = T
     )
 
 The `KST` type implements Know Sure Thing indicator.
@@ -57,6 +58,9 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         roc4_ma_period = KST_ROC4_MA_PERIOD,
         signal_period = KST_SIGNAL_PERIOD,
         ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         # roc1 = SMA{Tval}(period = roc1_period)
         # roc2 = SMA{Tval}(period = roc2_period)

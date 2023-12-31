@@ -1,7 +1,7 @@
 const SMMA_PERIOD = 3
 
 """
-    SMMA{T}(; period = SMMA_PERIOD)
+    SMMA{T}(; period = SMMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SMMA` type implements a SMoothed Moving Average indicator.
 """
@@ -15,7 +15,12 @@ mutable struct SMMA{Tval} <: MovingAverageIndicator{Tval}
 
     input_values::CircBuff{Tval}
 
-    function SMMA{Tval}(; period = SMMA_PERIOD) where {Tval}
+    function SMMA{Tval}(;
+        period = SMMA_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         value = missing
         rolling = false
         input = CircBuff(Tval, period, rev = false)

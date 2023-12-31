@@ -77,7 +77,7 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
 include("ohlcv.jl")
 include("sample_data.jl")
 
-function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
+function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
     if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
         if ind.input_filter(data)
@@ -90,12 +90,15 @@ function OnlineStatsBase._fit!(ind::O, data) where {O <: TechnicalIndicator}
     if has_input_values
         fit!(ind.input_values, data)
     end
-    has_sub_indicators = :sub_indicators in _fieldnames && length(ind.sub_indicators.stats) > 0
+    has_sub_indicators =
+        :sub_indicators in _fieldnames && length(ind.sub_indicators.stats) > 0
     if has_sub_indicators
         fit!(ind.sub_indicators, data)
     end
     ind.n += 1
-    ind.value = (has_input_values || has_sub_indicators) ? _calculate_new_value(ind) : _calculate_new_value_only_from_incoming_data(ind, data)
+    ind.value =
+        (has_input_values || has_sub_indicators) ? _calculate_new_value(ind) :
+        _calculate_new_value_only_from_incoming_data(ind, data)
     fit_listeners!(ind)
 end
 

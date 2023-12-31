@@ -1,7 +1,7 @@
 const SOBV_PERIOD = 20
 
 """
-    SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA)
+    SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `SOBV` type implements a Smoothed On Balance Volume indicator.
 """
@@ -15,7 +15,13 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     obv::OBV
     obv_ma::SMA
 
-    function SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA) where {Tohlcv,S}
+    function SOBV{Tohlcv,S}(;
+        period = SOBV_PERIOD,
+        ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         obv = OBV{Tohlcv,S}()
         # obv_ma = SMA{S}(period = period)
         obv_ma = MAFactory(S)(ma, period = period)

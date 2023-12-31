@@ -6,7 +6,7 @@ struct VTXVal{Tval}
 end
 
 """
-    VTC{Tohlcv,S}(; period = VTX_PERIOD)
+    VTC{Tohlcv,S}(; period = VTX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `VTX` type implements a Vortex Indicator.
 """
@@ -26,7 +26,12 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function VTX{Tohlcv,S}(; period = VTX_PERIOD) where {Tohlcv,S}
+    function VTX{Tohlcv,S}(;
+        period = VTX_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv,S}
         @warn "WIP - buggy"
         atr = ATR{Tohlcv,S}(period = 1)
         sub_indicators = Series(atr)

@@ -34,9 +34,16 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
         kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, 1, rev = false)  # (maybe) a bit overkilled! but that's to keep the same interface
-        _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult, input_modifier = ValueExtractor.extract_close)
+        _bb = BB{S}(;
+            period = period,
+            std_dev_mult = bb_std_dev_mult,
+            input_modifier = ValueExtractor.extract_close,
+        )
         _dc = DonchianChannels{Tohlcv,S}(; period = period)
         _kc = KeltnerChannels{Tohlcv,S}(;
             ma_period = period,
@@ -44,7 +51,8 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr_mult_up = kc_atr_mult,
             atr_mult_down = kc_atr_mult,
         )  # ma = EMA by default
-        _ma = MAFactory(S)(ma, period = period, input_modifier = ValueExtractor.extract_close)
+        _ma =
+            MAFactory(S)(ma, period = period, input_modifier = ValueExtractor.extract_close)
         sub_indicators = Series(_bb, _dc, _kc, _ma)
         deltas = CircBuff(S, period, rev = false)
         mean_x = sum(1:period-1) / period

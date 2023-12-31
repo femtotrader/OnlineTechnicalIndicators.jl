@@ -1,7 +1,7 @@
 const DEMA_PERIOD = 20
 
 """
-    DEMA{T}(; period = DEMA_PERIOD)
+    DEMA{T}(; period = DEMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `DEMA` type implements a Double Exponential Moving Average indicator.
 """
@@ -15,7 +15,13 @@ mutable struct DEMA{Tval} <: MovingAverageIndicator{Tval}
     ma::MovingAverageIndicator  # EMA
     ma_ma::MovingAverageIndicator  # EMA
 
-    function DEMA{Tval}(; period = DEMA_PERIOD, ma = EMA) where {Tval}
+    function DEMA{Tval}(;
+        period = DEMA_PERIOD,
+        ma = EMA,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         # _ma = EMA{Tval}(period = period)
         _ma = MAFactory(Tval)(ma, period = period)
         # _ma_ma = EMA{Tval}(period = period)

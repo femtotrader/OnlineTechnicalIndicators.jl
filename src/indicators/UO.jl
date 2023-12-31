@@ -3,7 +3,7 @@ const UI_MID_PERIOD = 5
 const UO_SLOW_PERIOD = 7
 
 """
-    UO{Tohlcv,S}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD)
+    UO{Tohlcv,S}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `UO` type implements an Ultimate Oscillator.
 """
@@ -24,6 +24,9 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         fast_period = UO_FAST_PERIOD,
         mid_period = UO_MID_PERIOD,
         slow_period = UO_SLOW_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
         input_values = CircBuff(Tohlcv, 2, rev = false)

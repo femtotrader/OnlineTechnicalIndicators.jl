@@ -3,7 +3,7 @@ const KAMA_FAST_EMA_CONSTANT_PERIOD = 2
 const KAMA_SLOW_EMA_CONSTANT_PERIOD = 30
 
 """
-    KAMA{T}(; period = KAMA_PERIOD, fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD, slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD)
+    KAMA{T}(; period = KAMA_PERIOD, fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD, slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `KAMA` type implements a Kaufman's Adaptive Moving Average indicator.
 """
@@ -24,6 +24,9 @@ mutable struct KAMA{Tval} <: MovingAverageIndicator{Tval}
         period = KAMA_PERIOD,
         fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD,
         slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD,
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = Tval,
     ) where {Tval}
         @warn "WIP - buggy"
 

@@ -71,9 +71,9 @@ end
 
 
 module ValueExtractor
-    extract_open = candle -> candle.open
-    extract_high = candle -> candle.high
-    extract_low = candle -> candle.low
-    extract_close = candle -> candle.close
-    extract_volume = candle -> candle.volume
+extract_open = candle -> candle.open
+extract_high = candle -> candle.high
+extract_low = candle -> candle.low
+extract_close = candle -> candle.close
+extract_volume = candle -> candle.volume
 end
