@@ -49,7 +49,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function _calculate_new_value(ind::Stoch)
-    # load candles until i have enough data
+    # get latest received candle
     candle = ind.input_values[end]
     # get max high and min low
     max_high = max([cdl.high for cdl in value(ind.input_values)]...)
