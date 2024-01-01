@@ -33,7 +33,7 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
-    input_values::CircBuff{Tohlcv}
+    input_values::CircBuff
 
     function ParabolicSAR{Tohlcv,S}(;
         init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
@@ -43,7 +43,8 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, SAR_INIT_LEN, rev = false)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, SAR_INIT_LEN, rev = false)
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(

@@ -34,7 +34,8 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
-        input_values = CircBuff(Tohlcv, 2, rev = false)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
         output_listeners = Series()

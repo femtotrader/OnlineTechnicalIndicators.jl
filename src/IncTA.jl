@@ -73,6 +73,7 @@ for ind in [
     ind = Symbol(ind)
     @eval export $ind
 end
+export SARTrend
 
 export add_input_indicator!
 

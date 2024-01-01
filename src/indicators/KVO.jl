@@ -31,13 +31,14 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
+        T2 = input_modifier_return_type
         _fast_ma = MAFactory(S)(ma, period = fast_period)
         _slow_ma = MAFactory(S)(ma, period = slow_period)
         trend = CircBuff(S, 2, rev = false)
         cumulative_measurement = CircBuff(S, 2, rev = false)
         output_listeners = Series()
         input_indicator = missing
-        input_values = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
             missing,
             0,

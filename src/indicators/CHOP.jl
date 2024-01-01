@@ -31,12 +31,13 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = T,
     ) where {Tohlcv,S}
         @warn "WIP - buggy"
-        atr = ATR{Tohlcv,S}(period = 1)
+        T2 = input_modifier_return_type
+        atr = ATR{T2,S}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         output_listeners = Series()
         input_indicator = missing
-        input_values = CircBuff(Tohlcv, period, rev = false)
+        input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
             missing,
             0,
