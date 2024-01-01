@@ -27,7 +27,7 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         period = CHOP_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = T,
+        input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         @warn "WIP - buggy"
         T2 = input_modifier_return_type
@@ -51,7 +51,7 @@ end
 function _calculate_new_value(ind::CHOP)
     fit!(ind.atr_values, value(ind.atr))
 
-    if (!has_output_value(ind.atr)) || (length(ind.input_values) != ind.period)
+    if !has_valid_values(ind.atr_values, ind.period) || !has_valid_values(ind.input_values, ind.period)
         return missing
     end
 
