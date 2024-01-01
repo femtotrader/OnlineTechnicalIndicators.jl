@@ -28,6 +28,7 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
+        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
         new{Tohlcv,S}(

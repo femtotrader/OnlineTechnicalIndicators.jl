@@ -42,11 +42,12 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
+        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         atr = ATR{T2,S}(period = atr_period)
         sub_indicators = Series(atr)
-        fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
-        flb = CircBuff(S, atr_period, rev = false)
+        fub = CircBuff(S, 2, rev = false)  # capacity 2 may be enough
+        flb = CircBuff(S, 2, rev = false)
         input_values = CircBuff(T2, atr_period, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
@@ -68,6 +69,8 @@ function _calculate_new_value(ind::SuperTrend)
         return missing
     end
 
+    candle = ind.input_values[end]
+
     #=
     BASIC UPPER BAND = HLA + [ MULT * 10-DAY ATR ]
     BASIC LOWER BAND = HLA - [ MULT * 10-DAY ATR ]
@@ -85,11 +88,11 @@ function _calculate_new_value(ind::SuperTrend)
     if length(ind.fub) == 0
         fub = 0.0
     else
-        if bub < ind.fub.value[end] ||
-           ind.input_values.value[end-1].close > ind.fub.value[end]
+        if bub < ind.fub[end] ||
+           ind.input_values[end-1].close > ind.fub[end]
             fub = bub
         else
-            fub = ind.fub.value[end]
+            fub = ind.fub[end]
         end
     end
     fit!(ind.fub, fub)
@@ -101,11 +104,11 @@ function _calculate_new_value(ind::SuperTrend)
 
     if length(ind.flb) == 0
         flb = 0.0
-    elseif blb > ind.flb.value[end] ||
-           ind.input_values.value[end-1].close < ind.flb.value[end]
+    elseif blb > ind.flb[end] ||
+           ind.input_values[end-1].close < ind.flb[end]
         flb = blb
     else
-        flb = ind.flb.value[end]
+        flb = ind.flb[end]
     end
     fit!(ind.flb, flb)
 
@@ -121,26 +124,17 @@ function _calculate_new_value(ind::SuperTrend)
     else
         _val = value(ind)
         supertrend = 99999999
-        println(
-            _val.value,
-            " ",
-            ind.fub.value[end-1],
-            " ",
-            candle.close,
-            " ",
-            ind.fub.value[end],
-        )
-        if _val.value == ind.fub.value[end-1] && candle.close <= ind.fub.value[end]
-            supertrend = ind.fub.value[end]
+        if _val.value == ind.fub[end-1] && candle.close <= ind.fub[end]
+            supertrend = ind.fub[end]
             supertrend = 100000
-        elseif _val.value == ind.fub.value[end-1] && candle.close > ind.fub.value[end]
+        elseif _val.value == ind.fub[end-1] && candle.close > ind.fub[end]
             supertrend = ind.fub.value[end]
             supertrend = 200000
-        elseif _val.value == ind.flb.value[end-1] && candle.close >= ind.flb.value[end]
-            supertrend = ind.fub.value[end]
+        elseif _val.value == ind.flb[end-1] && candle.close >= ind.flb[end]
+            supertrend = ind.fub[end]
             supertrend = 300000
-        elseif _val.value == ind.flb.value[end-1] && candle.close < ind.flb.value[end]
-            supertrend = ind.fub.value[end]
+        elseif _val.value == ind.flb[end-1] && candle.close < ind.flb[end]
+            supertrend = ind.fub[end]
             supertrend = 400000
         end
         println(supertrend)

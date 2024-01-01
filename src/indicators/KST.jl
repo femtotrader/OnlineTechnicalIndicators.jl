@@ -69,6 +69,7 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
+        @warn "WIP - buggy"
         T2 = input_modifier_return_type
 
         # roc1 = SMA{T2}(period = roc1_period)

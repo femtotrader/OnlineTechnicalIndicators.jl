@@ -46,6 +46,7 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
+        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         atr = ATR{T2,S}(period = di_period)
         sub_indicators = Series(atr)

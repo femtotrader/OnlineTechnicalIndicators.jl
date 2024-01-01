@@ -60,7 +60,8 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function _calculate_new_value(ind::VTX)
-    fit!(ind.atr_values, value(ind.atr))
+    _atr_value = value(ind.atr)
+    fit!(ind.atr_values, _atr_value)
 
     if ind.n < 2
         return missing
@@ -72,9 +73,9 @@ function _calculate_new_value(ind::VTX)
     fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
     fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
 
-    if length(ind.atr_values) < ind.period ||
-       length(ind.plus_vm) < ind.period ||
-       length(ind.minus_vm) < ind.period
+    if !has_valid_values(ind.atr_values, ind.period) ||
+        !has_valid_values(ind.plus_vm, ind.period) ||
+        !has_valid_values(ind.minus_vm, ind.period)
         return missing
     end
     atr_sum = sum(value(ind.atr_values))
