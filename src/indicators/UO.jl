@@ -1,5 +1,5 @@
 const UO_FAST_PERIOD = 3
-const UI_MID_PERIOD = 5
+const UO_MID_PERIOD = 5
 const UO_SLOW_PERIOD = 7
 
 """

@@ -14,12 +14,13 @@ mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
-    function OBV{Tohlcv,S}(
+    function OBV{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, 2, rev = false)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 2, rev = false)
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(

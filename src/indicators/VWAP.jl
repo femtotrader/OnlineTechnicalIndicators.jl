@@ -18,7 +18,7 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
 
-    function VWAP{Tohlcv,S}(
+    function VWAP{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,

@@ -63,7 +63,13 @@ MIMO_INDICATORS = [
 OTHERS_INDICATORS = ["STC"]
 
 # Export indicators
-for ind in [SISO_INDICATORS..., SIMO_INDICATORS..., MISO_INDICATORS..., MIMO_INDICATORS..., OTHERS_INDICATORS...]
+for ind in [
+    SISO_INDICATORS...,
+    SIMO_INDICATORS...,
+    MISO_INDICATORS...,
+    MIMO_INDICATORS...,
+    OTHERS_INDICATORS...,
+]
     ind = Symbol(ind)
     @eval export $ind
 end
@@ -133,7 +139,13 @@ end
 always_true(x) = true
 
 # include SISO, SIMO, MISO, MIMO and OTHERS indicators
-for ind in [SISO_INDICATORS..., SIMO_INDICATORS..., MISO_INDICATORS..., MIMO_INDICATORS..., OTHERS_INDICATORS...]
+for ind in [
+    SISO_INDICATORS...,
+    SIMO_INDICATORS...,
+    MISO_INDICATORS...,
+    MIMO_INDICATORS...,
+    OTHERS_INDICATORS...,
+]
     include("indicators/$(ind).jl")
 end
 

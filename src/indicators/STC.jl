@@ -3,6 +3,13 @@ const STC_SLOW_MACD_PERIOD = 10
 const STC_STOCH_PERIOD = 10
 const STC_STOCH_SMOOTHING_PERIOD = 3
 
+function macd_to_ohlcv(macd_val::MACDVal)
+    return OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd)
+end
+
+function stoch_d_to_ohlcv(stoch_val::StochVal)
+    return OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d)
+end
 
 """
     STC{T}(; fast_macd_period = STC_FAST_MACD_PERIOD, slow_macd_period = STC_SLOW_MACD_PERIOD, stoch_period = STC_STOCH_PERIOD, stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD, ma = SMA, , input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
@@ -49,8 +56,7 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             smoothing_period = stoch_smoothing_period,
             ma = ma,
             input_filter = !ismissing,
-            input_modifier = macd_val ->
-                OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd),
+            input_modifier = macd_to_ohlcv,
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_macd, macd)  # <---
@@ -60,8 +66,7 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             smoothing_period = stoch_smoothing_period,
             ma = ma,
             input_filter = !ismissing,
-            input_modifier = stoch_val ->
-                OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d),
+            input_modifier = stoch_d_to_ohlcv,
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_d, stoch_macd)  # <---

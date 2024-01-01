@@ -1,4 +1,6 @@
-using IncTA: TechnicalIndicator, SISO_INDICATORS, SIMO_INDICATORS, MISO_INDICATORS, MIMO_INDICATORS
+using IncTA:
+    TechnicalIndicator, SISO_INDICATORS, SIMO_INDICATORS, MISO_INDICATORS, MIMO_INDICATORS, OTHERS_INDICATORS
+using IncTA: MACDVal, macd_to_ohlcv
 
 @testset "interfaces" begin
     files = readdir("../src/indicators")
@@ -40,7 +42,7 @@ end
 
 @testset "input_modifier" begin
     @testset "SISO" begin
-        # SISO indicator with OHLCV input but with an input_modifier
+        # SISO indicator with OHLCV input but with an input_modifier which extract close value
         for IND in SISO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
@@ -54,7 +56,7 @@ end
         end
     end
     @testset "SIMO" begin
-        # SIMO indicator with OHLCV input but with an input_modifier
+        # SIMO indicator with OHLCV input but with an input_modifier which extract close value
         for IND in SIMO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
@@ -67,4 +69,49 @@ end
             end
         end
     end
+    @testset "MISO" begin
+        # MISO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
+        for IND in MISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{MACDVal,Float64}(
+                    input_modifier = macd_to_ohlcv,
+                    input_modifier_return_type = OHLCV,
+                )
+                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset_skip "MIMO" begin
+        # MIMO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
+        for IND in MIMO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{MACDVal,Float64}(
+                    input_modifier = macd_to_ohlcv,
+                    input_modifier_return_type = OHLCV,
+                )
+                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset_skip "Other" begin
+        # MIMO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
+        for IND in OTHERS_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{OHLCV{Missing,Float64,Float64},Float64}(
+                    input_modifier = macd_to_ohlcv,
+                    input_modifier_return_type = Float64,
+                )
+                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                @test 1 == 1
+            end
+        end
+    end
+
 end

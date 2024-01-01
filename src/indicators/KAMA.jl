@@ -45,7 +45,7 @@ mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
         input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
 
-        new{Tval, T2}(
+        new{Tval,T2}(
             missing,
             0,
             output_listeners,

@@ -13,7 +13,7 @@ mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
 
-    function BOP{Tohlcv,S}(
+    function BOP{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,

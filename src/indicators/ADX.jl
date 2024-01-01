@@ -59,15 +59,15 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         dx = CircBuff(S, adx_period, rev = false)
         output_listeners = Series()
         input_indicator = missing
-        input_values = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
             missing,
             0,
             output_listeners,
             di_period,
             adx_period,
-            atr,
             sub_indicators,
+            atr,
             pdm,
             mdm,
             spdm,
