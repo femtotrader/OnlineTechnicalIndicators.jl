@@ -9,8 +9,8 @@ The `EMV` type implements a Ease of Movement indicator.
 mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
     volume_div::Integer
@@ -19,7 +19,6 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function EMV{Tohlcv,S}(;
@@ -32,19 +31,14 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
         _emv_ma = MAFactory(S)(ma, period = period)
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             volume_div,
             _emv_ma,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

@@ -15,8 +15,8 @@ The `TTM` type implements a TTM indicator.
 mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,TTMVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
     sub_indicators::Series
@@ -31,7 +31,6 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function TTM{Tohlcv,S}(;
@@ -69,9 +68,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             sub_indicators,
             _bb,
@@ -83,7 +80,6 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             denom,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

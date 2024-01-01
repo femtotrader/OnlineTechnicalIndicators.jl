@@ -8,8 +8,8 @@ The `DPO` type implements a Detrended Price Oscillator indicator.
 mutable struct DPO{Tval,T2} <: TechnicalIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
     semi_period::Int
@@ -19,7 +19,6 @@ mutable struct DPO{Tval,T2} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function DPO{Tval}(;
@@ -34,19 +33,14 @@ mutable struct DPO{Tval,T2} <: TechnicalIndicator{Tval}
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             semi_period,
             sub_indicators,
             _ma,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

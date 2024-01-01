@@ -8,8 +8,8 @@ The `ATR` type implements an Average True Range indicator.
 mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Number
 
@@ -18,7 +18,6 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
 
@@ -31,18 +30,13 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         T2 = input_modifier_return_type
         tr = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             tr,
             false,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

@@ -10,8 +10,8 @@ The `UO` type implements an Ultimate Oscillator.
 mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     fast_period::Integer
     mid_period::Integer
@@ -22,7 +22,7 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
+
     input_values::CircBuff
 
     function UO{Tohlcv,S}(;
@@ -41,9 +41,7 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             fast_period,
             mid_period,
             slow_period,
@@ -51,7 +49,6 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             true_range,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

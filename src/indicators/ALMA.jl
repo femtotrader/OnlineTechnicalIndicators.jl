@@ -11,8 +11,8 @@ The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
 mutable struct ALMA{Tval,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
     offset::T2
@@ -23,7 +23,6 @@ mutable struct ALMA{Tval,T2} <: MovingAverageIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function ALMA{Tval}(;
@@ -44,13 +43,9 @@ mutable struct ALMA{Tval,T2} <: MovingAverageIndicator{Tval}
             push!(w, w_val)
             w_sum += w_val
         end
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             offset,
             sigma,
@@ -58,7 +53,6 @@ mutable struct ALMA{Tval,T2} <: MovingAverageIndicator{Tval}
             w_sum,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

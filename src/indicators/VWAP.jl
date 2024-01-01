@@ -8,15 +8,14 @@ The `VWAP` type implements a Volume Weighted Moving Average indicator.
 mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     sum_price_vol::S
     sum_vol::S
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function VWAP{Tohlcv,S}(;
         input_filter = always_true,
@@ -29,14 +28,11 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             sum_price_vol,
             sum_vol,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

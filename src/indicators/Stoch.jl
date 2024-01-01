@@ -14,8 +14,8 @@ The `Stoch` type implements the Stochastic indicator.
 mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,StochVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
     smoothing_period::Integer
@@ -24,7 +24,6 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function Stoch{Tohlcv,S}(;
@@ -42,15 +41,12 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             smoothing_period,
             values_d,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

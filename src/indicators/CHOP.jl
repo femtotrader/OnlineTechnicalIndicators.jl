@@ -9,8 +9,8 @@ The `CHOP` type implements a Choppiness Index indicator.
 mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -21,7 +21,6 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function CHOP{Tohlcv,S}(;
@@ -35,20 +34,15 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr = ATR{T2,S}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             sub_indicators,
             atr,
             atr_values,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

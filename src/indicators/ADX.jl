@@ -15,8 +15,8 @@ The `ADX` type implements an Average Directional Index indicator.
 mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ADXVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     di_period::Integer
     adx_period::Integer
@@ -37,7 +37,6 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function ADX{Tohlcv,S}(;
@@ -57,13 +56,9 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         pdi = CircBuff(S, adx_period, rev = false)
         mdi = CircBuff(S, adx_period, rev = false)
         dx = CircBuff(S, adx_period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             di_period,
             adx_period,
             sub_indicators,
@@ -77,7 +72,6 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             dx,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

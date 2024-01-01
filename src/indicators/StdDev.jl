@@ -8,14 +8,13 @@ The `StdDev` type implements a Standard Deviation indicator.
 mutable struct StdDev{T1,T2} <: TechnicalIndicator{T1}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function StdDev{T1}(;
@@ -29,13 +28,10 @@ mutable struct StdDev{T1,T2} <: TechnicalIndicator{T1}
         input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{T1,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

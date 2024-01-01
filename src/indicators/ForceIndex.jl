@@ -8,8 +8,8 @@ The `ForceIndex` type implements a Force Index indicator.
 mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -17,7 +17,7 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
+
     input_values::CircBuff
 
     function ForceIndex{Tohlcv,S}(;
@@ -29,18 +29,13 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
         _ma = MAFactory(S)(ma, period = period)
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             _ma,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

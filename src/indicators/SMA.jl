@@ -1,5 +1,6 @@
 const SMA_PERIOD = 3
 
+
 """
     SMA{T1}(; period = SMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T2)
 
@@ -18,14 +19,13 @@ by default `T2 = T1`
 mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff{T2}
 
     function SMA{T1}(;
@@ -36,16 +36,11 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{T1,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

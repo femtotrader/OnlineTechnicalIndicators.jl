@@ -11,8 +11,8 @@ The `MassIndex` type implements a Commodity Channel Index.
 mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     ma_ratio_period::Integer
 
@@ -22,7 +22,6 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function MassIndex{Tohlcv,S}(;
         ma_period = MassIndex_MA_PERIOD,
@@ -38,19 +37,14 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         # ma_ma = EMA{S}(period = ma_ma_period)
         _ma_ma = MAFactory(S)(ma, period = ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             ma_ratio_period,
             _ma,
             _ma_ma,
             _ma_ratio,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

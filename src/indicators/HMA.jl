@@ -8,8 +8,8 @@ The `HMA` type implements a Hull Moving Average indicator.
 mutable struct HMA{Tval,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -21,7 +21,6 @@ mutable struct HMA{Tval,T2} <: MovingAverageIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function HMA{Tval}(;
         period = HMA_PERIOD,
@@ -34,12 +33,8 @@ mutable struct HMA{Tval,T2} <: MovingAverageIndicator{Tval}
         wma2 = WMA{T2}(period = floor(Int, period / 2))
         sub_indicators = Series(wma, wma2)
         hma = WMA{T2}(period = floor(Int, sqrt(period)))
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             sub_indicators,
             wma,
@@ -47,7 +42,6 @@ mutable struct HMA{Tval,T2} <: MovingAverageIndicator{Tval}
             hma,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

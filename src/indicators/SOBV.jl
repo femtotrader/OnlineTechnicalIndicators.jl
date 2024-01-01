@@ -8,8 +8,8 @@ The `SOBV` type implements a Smoothed On Balance Volume indicator.
 mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -19,7 +19,6 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function SOBV{Tohlcv,S}(;
         period = SOBV_PERIOD,
@@ -36,16 +35,13 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             sub_indicators,
             obv,
             obv_ma,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

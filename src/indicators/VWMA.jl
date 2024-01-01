@@ -8,14 +8,13 @@ The `VWMA` type implements a Volume Weighted Moving Average indicator.
 mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function VWMA{Tohlcv,S}(;
@@ -29,13 +28,10 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
         input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

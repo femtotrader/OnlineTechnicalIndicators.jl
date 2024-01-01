@@ -16,8 +16,8 @@ The `MACD` type implements Moving Average Convergence Divergence indicator.
 mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,MACDVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     sub_indicators::Series
     fast_ma::EMA
@@ -27,7 +27,6 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function MACD{Tval}(;
         fast_period = MACD_FAST_PERIOD,
@@ -46,19 +45,14 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         sub_indicators = Series(fast_ma, slow_ma)
         # signal_line = EMA{Tval}(period = signal_period)
         signal_line = MAFactory(T2)(ma, period = signal_period)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             sub_indicators,
             fast_ma,
             slow_ma,
             signal_line,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

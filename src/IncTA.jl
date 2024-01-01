@@ -85,6 +85,14 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
 include("ohlcv.jl")
 include("sample_data.jl")
 
+function initialize_indicator_common_fields()
+    value = missing
+    n = 0
+    output_listeners = Series()
+    input_indicator = missing
+    return value, n, output_listeners, input_indicator
+end
+
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
     if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform

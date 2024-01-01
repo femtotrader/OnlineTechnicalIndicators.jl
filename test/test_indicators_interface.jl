@@ -46,7 +46,7 @@ using IncTA: MACDVal, macd_to_ohlcv
     end
 end
 
-@testset "input_modifier" begin
+@testset "input filter/modifier" begin
     @testset "SISO" begin
         # SISO indicator with OHLCV input but with an input_modifier which extract close value
         for IND in SISO_INDICATORS

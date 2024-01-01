@@ -9,8 +9,8 @@ The `TSI` type implements a True Strength Index indicator.
 mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     fast_ma::MovingAverageIndicator
     slow_ma::MovingAverageIndicator
@@ -20,7 +20,6 @@ mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function TSI{Tval}(;
@@ -54,16 +53,13 @@ mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
         output_listeners = Series()
         input_indicator = missing
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             fast_ma,
             slow_ma,
             abs_fast_ma,
             abs_slow_ma,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

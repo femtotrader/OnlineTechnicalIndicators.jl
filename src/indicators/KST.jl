@@ -35,8 +35,8 @@ The `KST` type implements Know Sure Thing indicator.
 mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,KSTVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     sub_indicators::Series
     roc1::MovingAverageIndicator  # SMA
@@ -53,7 +53,6 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,
@@ -96,13 +95,8 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         # signal_line = SMA{T2}(period = signal_period)
         signal_line = MAFactory(T2)(ma, period = signal_period)
 
-        output_listeners = Series()
-        input_indicator = missing
-
         new{Tval}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             sub_indicators,
             roc1,
             roc2,
@@ -115,7 +109,6 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
             signal_line,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

@@ -8,8 +8,8 @@ The `MeanDev` type implements a Mean Deviation indicator.
 mutable struct MeanDev{Tval,T2} <: TechnicalIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -18,7 +18,6 @@ mutable struct MeanDev{Tval,T2} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function MeanDev{Tval}(;
@@ -33,18 +32,13 @@ mutable struct MeanDev{Tval,T2} <: TechnicalIndicator{Tval}
         #_ma = SMA{Tval}(period = period)
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             sub_indicators,
             _ma,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

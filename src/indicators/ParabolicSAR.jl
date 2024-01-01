@@ -23,8 +23,8 @@ The `ParabolicSAR` type implements a Super Trend indicator.
 mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ParabolicSARVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     init_accel_factor::S
     accel_factor_inc::S
@@ -32,7 +32,6 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function ParabolicSAR{Tohlcv,S}(;
@@ -45,18 +44,13 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, SAR_INIT_LEN, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             init_accel_factor,
             accel_factor_inc,
             max_accel_factor,
             input_modifier,
             input_filter,
-            input_indicator,
             input_values,
         )
     end

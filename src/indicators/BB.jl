@@ -15,8 +15,8 @@ The `BB` type implements Bollinger Bands indicator.
 mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
     value::Union{Missing,BBVal}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
     std_dev_mult::T2
@@ -27,7 +27,6 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function BB{T1}(;
         period = BB_PERIOD,
@@ -41,12 +40,8 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
         _central_band = MAFactory(T2)(ma, period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
         _std_dev = StdDev{T2}(period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
         sub_indicators = Series(_central_band, _std_dev)
-        output_listeners = Series()
-        input_indicator = missing
         new{T1,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             period,
             std_dev_mult,
             sub_indicators,
@@ -54,7 +49,6 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
             _std_dev,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end

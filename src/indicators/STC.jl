@@ -19,8 +19,8 @@ The `STC` type implements a chaff Trend Cycle indicator.
 mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-
     output_listeners::Series
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     sub_indicators::Series
     macd::MACD
@@ -30,7 +30,6 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
 
     input_modifier::Function
     input_filter::Function
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     function STC{Tval}(;
         fast_macd_period = STC_FAST_MACD_PERIOD,
@@ -74,16 +73,13 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
         output_listeners = Series()
         input_indicator = missing
         new{Tval,T2}(
-            missing,
-            0,
-            output_listeners,
+            initialize_indicator_common_fields()...,
             sub_indicators,
             macd,
             stoch_macd,
             stoch_d,
             input_modifier,
             input_filter,
-            input_indicator,
         )
     end
 end
