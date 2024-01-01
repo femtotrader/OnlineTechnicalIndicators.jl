@@ -25,22 +25,24 @@ end
         roc4_ma_period = KST_ROC4_MA_PERIOD,
         signal_period = KST_SIGNAL_PERIOD,
         ma = SMA,
-        input_filter = always_true, input_modifier = identity, input_modifier_return_type = T
+        input_filter = always_true,
+        input_modifier = identity,
+        input_modifier_return_type = T
     )
 
 The `KST` type implements Know Sure Thing indicator.
 """
 mutable struct KST{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,KSTVal{Tval}}
+    value::Union{Missing,KSTVal}
     n::Int
 
     output_listeners::Series
 
     sub_indicators::Series
-    roc1::Any  # SMA
-    roc2::Any  # SMA
-    roc3::Any  # SMA
-    roc4::Any  # SMA
+    roc1::MovingAverageIndicator  # SMA
+    roc2::MovingAverageIndicator  # SMA
+    roc3::MovingAverageIndicator  # SMA
+    roc4::MovingAverageIndicator  # SMA
 
     roc1_ma::MovingAverageIndicator  # SMA
     roc2_ma::MovingAverageIndicator  # SMA
@@ -68,29 +70,31 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        # roc1 = SMA{Tval}(period = roc1_period)
-        # roc2 = SMA{Tval}(period = roc2_period)
-        # roc3 = SMA{Tval}(period = roc3_period)
-        # roc4 = SMA{Tval}(period = roc4_period)
+        T2 = input_modifier_return_type
 
-        roc1 = MAFactory(Tval)(ma, period = roc1_period)
-        roc2 = MAFactory(Tval)(ma, period = roc2_period)
-        roc3 = MAFactory(Tval)(ma, period = roc3_period)
-        roc4 = MAFactory(Tval)(ma, period = roc4_period)
+        # roc1 = SMA{T2}(period = roc1_period)
+        # roc2 = SMA{T2}(period = roc2_period)
+        # roc3 = SMA{T2}(period = roc3_period)
+        # roc4 = SMA{T2}(period = roc4_period)
+
+        roc1 = MAFactory(T2)(ma, period = roc1_period)
+        roc2 = MAFactory(T2)(ma, period = roc2_period)
+        roc3 = MAFactory(T2)(ma, period = roc3_period)
+        roc4 = MAFactory(T2)(ma, period = roc4_period)
         sub_indicators = Series(roc1, roc2, roc3, roc4)
 
-        # roc1_ma = SMA{Tval}(period = roc1_ma_period)
-        # roc2_ma = SMA{Tval}(period = roc2_ma_period)
-        # roc3_ma = SMA{Tval}(period = roc3_ma_period)
-        # roc4_ma = SMA{Tval}(period = roc4_ma_period)
+        # roc1_ma = SMA{T2}(period = roc1_ma_period)
+        # roc2_ma = SMA{T2}(period = roc2_ma_period)
+        # roc3_ma = SMA{T2}(period = roc3_ma_period)
+        # roc4_ma = SMA{T2}(period = roc4_ma_period)
 
-        roc1_ma = MAFactory(Tval)(ma, period = roc1_ma_period)
-        roc2_ma = MAFactory(Tval)(ma, period = roc2_ma_period)
-        roc3_ma = MAFactory(Tval)(ma, period = roc3_ma_period)
-        roc4_ma = MAFactory(Tval)(ma, period = roc4_ma_period)
+        roc1_ma = MAFactory(T2)(ma, period = roc1_ma_period)
+        roc2_ma = MAFactory(T2)(ma, period = roc2_ma_period)
+        roc3_ma = MAFactory(T2)(ma, period = roc3_ma_period)
+        roc4_ma = MAFactory(T2)(ma, period = roc4_ma_period)
 
-        # signal_line = SMA{Tval}(period = signal_period)
-        signal_line = MAFactory(Tval)(ma, period = signal_period)
+        # signal_line = SMA{T2}(period = signal_period)
+        signal_line = MAFactory(T2)(ma, period = signal_period)
 
         output_listeners = Series()
         input_indicator = missing
@@ -119,19 +123,19 @@ end
 function _calculate_new_value(ind::KST)
 
     if has_output_value(ind.roc1)
-        fit!(ind.roc1_ma, ind.roc1.value[end])
+        fit!(ind.roc1_ma, value(ind.roc1))
     end
 
     if has_output_value(ind.roc2)
-        fit!(ind.roc2_ma, ind.roc2.value[end])
+        fit!(ind.roc2_ma, value(ind.roc2))
     end
 
     if has_output_value(ind.roc3)
-        fit!(ind.roc3_ma, ind.roc3.value[end])
+        fit!(ind.roc3_ma, value(ind.roc3))
     end
 
     if has_output_value(ind.roc4)
-        fit!(ind.roc4_ma, ind.roc4.value[end])
+        fit!(ind.roc4_ma, value(ind.roc4))
     end
 
     if !has_output_value(ind.roc1) ||
@@ -142,14 +146,14 @@ function _calculate_new_value(ind::KST)
     end
 
     kst =
-        1.0 * ind.roc1_ma[end] +
-        2.0 * ind.roc2_ma[end] +
-        3.0 * ind.roc3_ma[end] +
-        4.0 * ind.roc4_ma[end]
+        1.0 * value(ind.roc1_ma) +
+        2.0 * value(ind.roc2_ma) +
+        3.0 * value(ind.roc3_ma) +
+        4.0 * value(ind.roc4_ma)
     fit!(ind.signal_line, kst)
 
     if length(ind.signal_line.value) > 0
-        signal_value = ind.signal_line.value[end]
+        signal_value = value(ind.signal_line)
     else
         signal_value = missing
     end

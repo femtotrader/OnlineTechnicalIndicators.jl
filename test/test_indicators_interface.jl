@@ -1,4 +1,4 @@
-using IncTA: TechnicalIndicator, SISO_INDICATORS
+using IncTA: TechnicalIndicator, SISO_INDICATORS, SIMO_INDICATORS, MISO_INDICATORS, MIMO_INDICATORS
 
 @testset "interfaces" begin
     files = readdir("../src/indicators")
@@ -42,6 +42,20 @@ end
     @testset "SISO" begin
         # SISO indicator with OHLCV input but with an input_modifier
         for IND in SISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{OHLCV{Missing,Float64,Float64}}(
+                    input_modifier = ValueExtractor.extract_close,
+                    input_modifier_return_type = Float64,
+                )
+                fit!(ind, V_OHLCV)
+                @test 1 == 1
+            end
+        end
+    end
+    @testset "SIMO" begin
+        # SIMO indicator with OHLCV input but with an input_modifier
+        for IND in SIMO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
                 ind = IND{OHLCV{Missing,Float64,Float64}}(
