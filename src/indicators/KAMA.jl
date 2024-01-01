@@ -18,7 +18,7 @@ mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
     fast_smoothing_constant::T2
     slow_smoothing_constant::T2
 
-    volatilities::CircBuff
+    volatility::CircBuff
 
     input_modifier::Function
     input_filter::Function
@@ -36,14 +36,14 @@ mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
         T2 = input_modifier_return_type
         fast_smoothing_constant = 2 * one(T2) / (fast_ema_constant_period + one(T2))
         slow_smoothing_constant = 2 * one(T2) / (slow_ema_constant_period + one(T2))
-        volatilities = CircBuff(T2, period, rev = false)
-        input_values = CircBuff(T2, period, rev = false)
+        volatility = CircBuff(T2, period, rev = false)
+        input_values = CircBuff(T2, period + 1, rev = false)
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             period,
             fast_smoothing_constant,
             slow_smoothing_constant,
-            volatilities,
+            volatility,
             input_modifier,
             input_filter,
             input_values,
@@ -53,17 +53,17 @@ end
 
 function _calculate_new_value(ind::KAMA)
     if ind.n >= 2
-        fit!(ind.volatilities, abs(ind.input_values[end] - ind.input_values[end-1]))
+        fit!(ind.volatility, abs(ind.input_values[end] - ind.input_values[end-1]))
 
-        if length(ind.volatilities) < ind.period
+        if !has_valid_values(ind.volatility, ind.period)
             return missing
         end
 
-        volatility = sum(value(ind.volatilities))
-        change = abs(ind.input_values[end] - ind.input_values[1])
+        _volatility = sum(ind.volatility.value)
+        change = abs(ind.input_values[end] - ind.input_values[end-ind.period])
 
-        if volatility != 0
-            efficiency_ratio = change / volatility
+        if _volatility != 0
+            efficiency_ratio = change / _volatility
         else
             efficiency_ratio = 0
         end
@@ -79,7 +79,7 @@ function _calculate_new_value(ind::KAMA)
             #if length(ind.value) == 0  # tofix!!!!
             prev_kama = ind.input_values[end-1]
         else
-            prev_kama = ind.value[end]
+            prev_kama = value(ind)
         end
 
         return prev_kama + smoothing_constant * (ind.input_values[end] - prev_kama)

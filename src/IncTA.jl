@@ -122,6 +122,18 @@ function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end
 
+function has_valid_values(cb::O, period) where {O<:OnlineStat}
+    try
+        _has_valid_values = true
+        for i in 1:period
+            _has_valid_values = _has_valid_values && !ismissing(cb[end-i+1])
+        end
+        return _has_valid_values
+    catch
+        return false
+    end
+end
+
 function fit_listeners!(ind::O) where {O<:TechnicalIndicator}
     if :output_listeners in fieldnames(typeof(ind))
         if length(ind.output_listeners.stats) == 0

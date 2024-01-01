@@ -300,16 +300,18 @@
         @test isapprox(value(ind), 10.323950; atol = ATOL)
     end
 
-    @testset_skip "KAMA (buggy - help wanted)" begin
+    @testset "KAMA" begin
         ind = KAMA{Float64}(
             period = 14,
             fast_ema_constant_period = 2,
             slow_ema_constant_period = 30,
         )
         @test nobs(ind) == 0
+        @test isapprox(ind.fast_smoothing_constant, 0.666666; atol = ATOL)
+        @test isapprox(ind.slow_smoothing_constant, 0.064516; atol = ATOL)
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == 14
+        @test nobs(ind) == length(CLOSE_TMPL)
         @test isapprox(value(ind.lag[end-2]), 8.884374; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 8.932091; atol = ATOL)
         @test isapprox(value(ind), 8.941810; atol = ATOL)
