@@ -83,12 +83,7 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::ADX, candle)
-    fit!(ind.input_values, candle)
-    fit!(ind.sub_indicators, candle)
-    #fit!(ind.atr, candle)
-    ind.n += 1
-    #atr, = ind.sub_indicators.stats
+function _calculate_new_value(ind::ADX)
     if ind.n >= 2
 
         current_input = ind.input_values[end]
@@ -109,8 +104,7 @@ function OnlineStatsBase._fit!(ind::ADX, candle)
         end
 
         if length(ind.pdm) < ind.di_period
-            ind.value = missing
-            return
+            return missing
         elseif length(ind.pdm) == ind.di_period
             fit!(ind.spdm, sum(ind.pdm.value) / ind.di_period)
             fit!(ind.smdm, sum(ind.mdm.value) / ind.di_period)
@@ -141,10 +135,10 @@ function OnlineStatsBase._fit!(ind::ADX, candle)
             adx = (value(ind).adx * (ind.adx_period - 1) + ind.dx[end]) / ind.adx_period
         end
 
-        ind.value = ADXVal(adx, ind.pdi[end], ind.mdi[end])
+        return ADXVal(adx, ind.pdi[end], ind.mdi[end])
 
     else
-        ind.value = missing
+        return missing
     end
 
 end

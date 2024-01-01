@@ -28,7 +28,8 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        obv = OBV{Tohlcv,S}()
+        T2 = input_modifier_return_type
+        obv = OBV{T2,S}()
         # obv_ma = SMA{S}(period = period)
         obv_ma = MAFactory(S)(ma, period = period)
         sub_indicators = Series(obv)

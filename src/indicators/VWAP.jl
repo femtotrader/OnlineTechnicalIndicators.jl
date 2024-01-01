@@ -23,6 +23,7 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
+        #T2 = input_modifier_return_type
         sum_price_vol = zero(S)
         sum_vol = zero(S)
         output_listeners = Series()

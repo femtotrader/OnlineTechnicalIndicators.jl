@@ -51,7 +51,7 @@ end
     include("test_ohlcv.jl")
 
     @testset "indicators" begin
-        #include("test_indicators_interface.jl")
+        include("test_indicators_interface.jl")
         include("test_ind_single_input_single_output.jl")  # SISO
         include("test_ind_single_input_several_outputs.jl")  # SIMO
         include("test_ind_OHLCV_input_single_output.jl")  # MISO

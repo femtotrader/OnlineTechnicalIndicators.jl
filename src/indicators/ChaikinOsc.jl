@@ -13,7 +13,7 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     output_listeners::Series
 
     sub_indicators::Series
-    accu_dist::AccuDist{Tohlcv}
+    accu_dist::AccuDist
 
     fast_ma::MovingAverageIndicator  # EMA by default
     slow_ma::MovingAverageIndicator  # EMA by default
@@ -31,7 +31,8 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        accu_dist = AccuDist{Tohlcv,S}()
+        T2 = input_modifier_return_type
+        accu_dist = AccuDist{T2,S}()
         sub_indicators = Series(accu_dist)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)

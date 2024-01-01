@@ -54,18 +54,12 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     end
 end
 
-function OnlineStatsBase._fit!(ind::CHOP, candle)
-    fit!(ind.input_values, candle)
-    fit!(ind.sub_indicators, candle)
-    ind.n += 1
-    #atr, = ind.sub_indicators.stats
+function _calculate_new_value(ind::CHOP)
     fit!(ind.atr_values, value(ind.atr))
 
     if (!has_output_value(ind.atr)) || (length(ind.input_values) != ind.period)
-        ind.value = missing
-        return
+        return missing
     end
-
 
     max_high = max([cdl.high for cdl in value(ind.input_values)]...)
     min_low = min([cdl.low for cdl in value(ind.input_values)]...)
@@ -76,9 +70,9 @@ function OnlineStatsBase._fit!(ind::CHOP, candle)
             log10(ind.period)
     else
         if length(ind.value) > 0
-            ind.value = value(ind)
+            return value(ind)
         else
-            ind.value = missing
+            return missing
         end
     end
 end
