@@ -13,11 +13,17 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,Tval}
     n::Int
 
+    output_listeners::Series
+
     sub_indicators::Series
     macd::MACD
 
     stoch_macd::Stoch
     stoch_d::Stoch
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function STC{Tval}(;
         fast_macd_period = STC_FAST_MACD_PERIOD,
@@ -59,7 +65,20 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_d, stoch_macd)  # <---
-        new{Tval}(missing, 0, sub_indicators, macd, stoch_macd, stoch_d)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tval}(
+            missing,
+            0,
+            output_listeners,
+            sub_indicators,
+            macd,
+            stoch_macd,
+            stoch_d,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

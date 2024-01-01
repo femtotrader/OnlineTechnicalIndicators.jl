@@ -11,6 +11,8 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     fast_period::Integer
     mid_period::Integer
     slow_period::Integer
@@ -18,6 +20,9 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     buy_press::CircBuff
     true_range::CircBuff
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function UO{Tohlcv,S}(;
@@ -32,14 +37,20 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_values = CircBuff(Tohlcv, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             fast_period,
             mid_period,
             slow_period,
             buy_press,
             true_range,
+            input_modifier,
+            input_filter,
+            input_indicator,
             input_values,
         )
     end

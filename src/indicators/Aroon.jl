@@ -14,8 +14,13 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,AroonVal{S}}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function Aroon{Tohlcv,S}(;
@@ -24,8 +29,19 @@ mutable struct Aroon{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        input = CircBuff(Tohlcv, period + 1, rev = false)
-        new{Tohlcv,S}(missing, 0, period, input)
+        output_listeners = Series()
+        input_indicator = missing
+        input_values = CircBuff(Tohlcv, period + 1, rev = false)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

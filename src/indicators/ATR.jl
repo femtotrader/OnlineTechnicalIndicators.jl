@@ -16,11 +16,11 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     tr::CircBuff
     rolling::Bool
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
-    input_filter::Function
-    input_modifier::Function
 
     function ATR{Tohlcv,S}(;
         period = ATR_PERIOD,
@@ -40,10 +40,10 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             period,
             tr,
             false,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
-            input_filter,
-            input_modifier,
         )
     end
 end

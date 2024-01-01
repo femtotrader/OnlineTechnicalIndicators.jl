@@ -6,11 +6,13 @@ const TRIX_PERIOD = 10
 
 The `TRIX` type implements a TRIX Moving Average indicator.
 """
-mutable struct TRIX{Tval} <: MovingAverageIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct TRIX{Tval,T2} <: MovingAverageIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
 
     output_listeners::Series
+
+    output_history::CircBuff
 
     period::Int
 
@@ -20,8 +22,8 @@ mutable struct TRIX{Tval} <: MovingAverageIndicator{Tval}
     ema2::EMA
     ema3::EMA
 
-    output_history::CircBuff
-
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
@@ -31,29 +33,32 @@ mutable struct TRIX{Tval} <: MovingAverageIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        input_values = CircBuff(Tval, 2, rev = false)
-        ema1 = EMA{Tval}(period = period)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 2, rev = false)
+        ema1 = EMA{T2}(period = period)
 
-        ema2 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
-        ema3 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
+        ema2 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema3 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
         add_input_indicator!(ema2, ema1)  # <-
         add_input_indicator!(ema3, ema2)  # <-
         sub_indicators = Series(ema1)
 
-        output_history = CircBuff(Tval, 2, rev = false)
+        output_history = CircBuff(T2, 2, rev = false)
 
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(
+        new{Tval,T2}(
             missing,
             0,
             output_listeners,
+            output_history,
             period,
             sub_indicators,
             ema1,
             ema2,
             ema3,
-            output_history,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
         )

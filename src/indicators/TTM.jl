@@ -16,6 +16,8 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,TTMVal}
     n::Int
 
+    output_listeners::Series
+
     period::Int
     sub_indicators::Series
     bb::BB
@@ -27,6 +29,9 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     mean_x::S
     denom::S
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function TTM{Tohlcv,S}(;
@@ -60,9 +65,12 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         for x = 0:period-1
             denom += (x - mean_x)^2
         end
+        output_listeners = Series()
+        input_indicator = missing
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             period,
             sub_indicators,
             _bb,
@@ -72,6 +80,9 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             deltas,
             mean_x,
             denom,
+            input_modifier,
+            input_filter,
+            input_indicator,
             input_values,
         )
     end

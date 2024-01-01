@@ -9,10 +9,10 @@ mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     output_listeners::Series
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
 
-    input_filter::Function
-    input_modifier::Function
 
     function AccuDist{Tohlcv,S}(
         input_filter = always_true,
@@ -24,9 +24,9 @@ mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             missing,
             0,
             output_listeners,
-            input_indicator,
-            input_filter,
             input_modifier,
+            input_filter,
+            input_indicator,
         )
     end
 end

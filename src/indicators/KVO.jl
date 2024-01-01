@@ -10,12 +10,17 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     fast_ma::MovingAverageIndicator  # EMA by default
     slow_ma::MovingAverageIndicator  # EMA by default
 
     trend::CircBuff
     cumulative_measurement::CircBuff
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function KVO{Tohlcv,S}(;
@@ -30,14 +35,20 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         _slow_ma = MAFactory(S)(ma, period = slow_period)
         trend = CircBuff(S, 2, rev = false)
         cumulative_measurement = CircBuff(S, 2, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(Tohlcv, 2, rev = false)
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             _fast_ma,
             _slow_ma,
             trend,
             cumulative_measurement,
+            input_modifier,
+            input_filter,
+            input_indicator,
             input_values,
         )
     end

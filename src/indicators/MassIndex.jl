@@ -12,11 +12,17 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     ma_ratio_period::Integer
 
     ma::MovingAverageIndicator  # EMA
     ma_ma::MovingAverageIndicator  # EMA
     ma_ratio::CircBuff{S}
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function MassIndex{Tohlcv,S}(;
         ma_period = MassIndex_MA_PERIOD,
@@ -32,7 +38,20 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         # ma_ma = EMA{S}(period = ma_ma_period)
         _ma_ma = MAFactory(S)(ma, period = ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
-        new{Tohlcv,S}(missing, 0, ma_ratio_period, _ma, _ma_ma, _ma_ratio)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            ma_ratio_period,
+            _ma,
+            _ma_ma,
+            _ma_ratio,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

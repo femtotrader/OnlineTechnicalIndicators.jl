@@ -9,10 +9,15 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
     ma::MovingAverageIndicator  # EMA
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function ForceIndex{Tohlcv,S}(;
@@ -23,8 +28,20 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         _ma = MAFactory(S)(ma, period = period)
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(Tohlcv, 2, rev = false)
-        new{Tohlcv,S}(missing, 0, period, _ma, input_values)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            _ma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

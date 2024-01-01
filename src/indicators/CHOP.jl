@@ -10,6 +10,8 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
     sub_indicators::Series
@@ -17,6 +19,9 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     atr_values::CircBuff
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function CHOP{Tohlcv,S}(;
@@ -29,8 +34,22 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr = ATR{Tohlcv,S}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
-        input = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, sub_indicators, atr, atr_values, input)
+        output_listeners = Series()
+        input_indicator = missing
+        input_values = CircBuff(Tohlcv, period, rev = false)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            sub_indicators,
+            atr,
+            atr_values,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

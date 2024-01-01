@@ -9,9 +9,15 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
     mean_dev::MeanDev{S}
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function CCI{Tohlcv,S}(;
         period = CCI_PERIOD,
@@ -20,7 +26,18 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         mean_dev = MeanDev{S}(period = period)
-        new{Tohlcv,S}(missing, 0, period, mean_dev)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            mean_dev,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

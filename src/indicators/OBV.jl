@@ -7,6 +7,11 @@ mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function OBV{Tohlcv,S}(
@@ -15,7 +20,17 @@ mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         input_values = CircBuff(Tohlcv, 2, rev = false)
-        new{Tohlcv,S}(missing, 0, input_values)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

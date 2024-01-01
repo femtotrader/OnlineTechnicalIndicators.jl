@@ -25,6 +25,8 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
 
     signal_line::EMA{Tval}
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
 
     function MACD{Tval}(;
@@ -53,6 +55,8 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
             fast_ma,
             slow_ma,
             signal_line,
+            input_modifier,
+            input_filter,
             input_indicator,
         )
     end

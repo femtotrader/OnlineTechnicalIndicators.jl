@@ -59,11 +59,15 @@ IncTA.STC
 IncTA.StdDev
 IncTA.Stoch
 IncTA.SuperTrend
+IncTA.T3
 IncTA.TEMA
+IncTA.TRIX
+IncTA.TSI
 IncTA.TTM
 IncTA.UO
 IncTA.VTX
 IncTA.VWAP
 IncTA.VWMA
 IncTA.WMA
+IncTA.ZLEMA
 ```

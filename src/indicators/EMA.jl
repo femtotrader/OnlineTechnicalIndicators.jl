@@ -17,11 +17,11 @@ mutable struct EMA{T1,T2} <: MovingAverageIndicator{T1}
     mult_complement::T2
 
     rolling::Bool
+
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
-
-    input_filter::Function
-    input_modifier::Function
 
     function EMA{T1}(;
         period = EMA_PERIOD,
@@ -43,10 +43,10 @@ mutable struct EMA{T1,T2} <: MovingAverageIndicator{T1}
             mult,
             mult_complement,
             false,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
-            input_filter,
-            input_modifier,
         )
     end
 end

@@ -14,6 +14,8 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,VTXVal}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
     sub_indicators::Series
@@ -24,6 +26,9 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     plus_vm::CircBuff
     minus_vm::CircBuff
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function VTX{Tohlcv,S}(;
@@ -38,17 +43,23 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
-        input = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(Tohlcv, 2, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             period,
             sub_indicators,
             atr,
             atr_values,
             plus_vm,
             minus_vm,
-            input,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
         )
     end
 end

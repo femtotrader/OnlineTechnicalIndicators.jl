@@ -7,8 +7,8 @@ const T3_FACTOR = 0.7
 
 The `T3` type implements a T3 Moving Average indicator.
 """
-mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct T3{Tval,T2} <: MovingAverageIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
 
     output_listeners::Series
@@ -24,13 +24,15 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
     ema5::EMA
     ema6::EMA
 
-    c1::Tval
-    c2::Tval
-    c3::Tval
-    c4::Tval
+    c1::T2
+    c2::T2
+    c3::T2
+    c4::T2
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
-    input_values::CircBuff{Tval}
+    input_values::CircBuff
 
     function T3{Tval}(;
         period = T3_PERIOD,
@@ -39,8 +41,9 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        input_values = CircBuff(Tval, 2, rev = false)
-        ema1 = EMA{Tval}(period = period)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 2, rev = false)
+        ema1 = EMA{T2}(period = period)
 
         #=
         ema2 = EMA{Tval}(period = period)
@@ -50,11 +53,11 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
         ema6 = EMA{Tval}(period = period)
         =#
 
-        ema2 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
-        ema3 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
-        ema4 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
-        ema5 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
-        ema6 = EMA{Union{Missing,Tval}}(period = period, input_filter = !ismissing)
+        ema2 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema3 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema4 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema5 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema6 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
         add_input_indicator!(ema2, ema1)  # <-
         add_input_indicator!(ema3, ema2)  # <-
         add_input_indicator!(ema4, ema3)  # <-
@@ -67,7 +70,7 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
         c4 = 1 + 3 * factor + factor^3 + 3 * factor^2
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(
+        new{Tval,T2}(
             missing,
             0,
             output_listeners,
@@ -83,6 +86,8 @@ mutable struct T3{Tval} <: MovingAverageIndicator{Tval}
             c2,
             c3,
             c4,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
         )

@@ -10,8 +10,14 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     fast_ma::Any  # default SMA
     slow_ma::Any  # default SMA
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function AO{Tohlcv,S}(;
         fast_period = AO_FAST_PERIOD,
@@ -25,7 +31,18 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
-        new{Tohlcv,S}(missing, 0, _fast_ma, _slow_ma)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            _fast_ma,
+            _slow_ma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

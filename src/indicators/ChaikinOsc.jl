@@ -10,11 +10,17 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     sub_indicators::Series
     accu_dist::AccuDist{Tohlcv}
 
     fast_ma::MovingAverageIndicator  # EMA by default
     slow_ma::MovingAverageIndicator  # EMA by default
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function ChaikinOsc{Tohlcv,S}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
@@ -29,7 +35,20 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         sub_indicators = Series(accu_dist)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
-        new{Tohlcv,S}(missing, 0, sub_indicators, accu_dist, _fast_ma, _slow_ma)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            sub_indicators,
+            accu_dist,
+            _fast_ma,
+            _slow_ma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

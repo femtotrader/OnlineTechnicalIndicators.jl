@@ -35,11 +35,10 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     dx::CircBuff  # directional index
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
-
-    input_filter::Function
-    input_modifier::Function
 
     function ADX{Tohlcv,S}(;
         di_period = 14,
@@ -58,6 +57,8 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         pdi = CircBuff(S, adx_period, rev = false)
         mdi = CircBuff(S, adx_period, rev = false)
         dx = CircBuff(S, adx_period, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(Tohlcv, 2, rev = false)
         new{Tohlcv,S}(
             missing,
@@ -74,10 +75,10 @@ mutable struct ADX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             pdi,
             mdi,
             dx,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
-            input_filter,
-            input_modifier,
         )
     end
 end

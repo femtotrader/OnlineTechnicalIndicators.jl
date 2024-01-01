@@ -9,11 +9,14 @@ mutable struct StdDev{T1,T2} <: TechnicalIndicator{T1}
     value::Union{Missing,T2}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
 
-    input_values::CircBuff
-    input_filter::Function
     input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
+    input_values::CircBuff
 
     function StdDev{T1}(;
         period = StdDev_PERIOD,
@@ -22,8 +25,19 @@ mutable struct StdDev{T1,T2} <: TechnicalIndicator{T1}
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
-        new{T1,T2}(missing, 0, period, input_values, input_filter, input_modifier)
+        new{T1,T2}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

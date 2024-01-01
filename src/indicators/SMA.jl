@@ -23,11 +23,10 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
 
     period::Int
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff{T2}
-
-    input_filter::Function
-    input_modifier::Function
 
     function SMA{T1}(;
         period = SMA_PERIOD,
@@ -44,10 +43,10 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
             0,
             output_listeners,
             period,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
-            input_filter,
-            input_modifier,
         )
     end
 end

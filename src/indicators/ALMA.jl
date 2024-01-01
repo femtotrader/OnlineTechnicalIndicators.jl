@@ -8,18 +8,23 @@ const ALMA_SIGMA = 6.0
 
 The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
 """
-mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct ALMA{Tval,T2} <: MovingAverageIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
-    offset::Tval
-    sigma::Tval
+    offset::T2
+    sigma::T2
 
-    w::Vector{Tval}
-    w_sum::Tval
+    w::Vector
+    w_sum::T2
 
-    input_values::CircBuff{Tval}
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
+    input_values::CircBuff
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
@@ -29,7 +34,8 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        w = Tval[]
+        T2 = input_modifier_return_type
+        w = T2[]
         w_sum = 0.0
         s = period / sigma
         m = trunc(Int, (period - 1) * offset)
@@ -38,8 +44,23 @@ mutable struct ALMA{Tval} <: MovingAverageIndicator{Tval}
             push!(w, w_val)
             w_sum += w_val
         end
-        input_values = CircBuff(Tval, period, rev = false)
-        new{Tval}(missing, 0, period, offset, sigma, w, w_sum, input_values)
+        output_listeners = Series()
+        input_indicator = missing
+        input_values = CircBuff(T2, period, rev = false)
+        new{Tval,T2}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            offset,
+            sigma,
+            w,
+            w_sum,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

@@ -6,8 +6,8 @@ const TSI_SLOW_PERIOD = 23
 
 The `TSI` type implements a True Strength Index indicator.
 """
-mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
 
     output_listeners::Series
@@ -18,6 +18,8 @@ mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
     abs_fast_ma::MovingAverageIndicator
     abs_slow_ma::MovingAverageIndicator
 
+    input_modifier::Function
+    input_filter::Function
     input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
@@ -30,19 +32,19 @@ mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 2, rev = false)
 
-        input_values = CircBuff(Tval, 2, rev = false)
-
-        slow_ma = MAFactory(Tval)(ma, period = slow_period)
-        fast_ma = MAFactory(Union{Missing,Tval})(
+        slow_ma = MAFactory(T2)(ma, period = slow_period)
+        fast_ma = MAFactory(Union{Missing,T2})(
             ma,
             period = fast_period,
             input_filter = !ismissing,
         )
         add_input_indicator!(fast_ma, slow_ma)  # <-
 
-        abs_slow_ma = MAFactory(Tval)(ma, period = slow_period)
-        abs_fast_ma = MAFactory(Union{Missing,Tval})(
+        abs_slow_ma = MAFactory(T2)(ma, period = slow_period)
+        abs_fast_ma = MAFactory(Union{Missing,T2})(
             ma,
             period = fast_period,
             input_filter = !ismissing,
@@ -51,7 +53,7 @@ mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
 
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(
+        new{Tval,T2}(
             missing,
             0,
             output_listeners,
@@ -59,6 +61,8 @@ mutable struct TSI{Tval} <: TechnicalIndicator{Tval}
             slow_ma,
             abs_fast_ma,
             abs_slow_ma,
+            input_modifier,
+            input_filter,
             input_indicator,
             input_values,
         )

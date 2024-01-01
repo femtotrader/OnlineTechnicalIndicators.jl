@@ -7,15 +7,21 @@ const CoppockCurve_WMA_PERIOD = 10
 
 The `CoppockCurve` type implements a Coppock Curve indicator.
 """
-mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct CoppockCurve{Tval,T2} <: TechnicalIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
+
+    output_listeners::Series
 
     sub_indicators::Series
     fast_roc::ROC
     slow_roc::ROC
 
-    wma::WMA{Tval}
+    wma::WMA
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function CoppockCurve{Tval}(;
         fast_roc_period = CoppockCurve_FAST_ROC_PERIOD,
@@ -25,11 +31,25 @@ mutable struct CoppockCurve{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        fast_roc = ROC{Tval}(period = fast_roc_period)
-        slow_roc = ROC{Tval}(period = slow_roc_period)
+        T2 = input_modifier_return_type
+        fast_roc = ROC{T2}(period = fast_roc_period)
+        slow_roc = ROC{T2}(period = slow_roc_period)
         sub_indicators = Series(fast_roc, slow_roc)
-        wma = WMA{Tval}(period = wma_period)
-        new{Tval}(missing, 0, sub_indicators, fast_roc, slow_roc, wma)
+        wma = WMA{T2}(period = wma_period)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tval,T2}(
+            missing,
+            0,
+            output_listeners,
+            sub_indicators,
+            fast_roc,
+            slow_roc,
+            wma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

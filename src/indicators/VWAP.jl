@@ -9,8 +9,14 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     sum_price_vol::S
     sum_vol::S
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function VWAP{Tohlcv,S}(
         input_filter = always_true,
@@ -19,7 +25,18 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         sum_price_vol = zero(S)
         sum_vol = zero(S)
-        new{Tohlcv,S}(missing, 0, sum_price_vol, sum_vol)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            sum_price_vol,
+            sum_vol,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

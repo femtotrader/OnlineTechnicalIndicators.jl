@@ -34,6 +34,8 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     value::Union{Missing,KSTVal{Tval}}
     n::Int
 
+    output_listeners::Series
+
     sub_indicators::Series
     roc1::Any  # SMA
     roc2::Any  # SMA
@@ -46,6 +48,10 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     roc4_ma::MovingAverageIndicator  # SMA
 
     signal_line::MovingAverageIndicator  # SMA
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function KST{Tval}(;
         roc1_period = KST_ROC1_PERIOD,
@@ -86,9 +92,13 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         # signal_line = SMA{Tval}(period = signal_period)
         signal_line = MAFactory(Tval)(ma, period = signal_period)
 
+        output_listeners = Series()
+        input_indicator = missing
+
         new{Tval}(
             missing,
             0,
+            output_listeners,
             sub_indicators,
             roc1,
             roc2,
@@ -99,6 +109,9 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
             roc3_ma,
             roc4_ma,
             signal_line,
+            input_modifier,
+            input_filter,
+            input_indicator,
         )
     end
 end

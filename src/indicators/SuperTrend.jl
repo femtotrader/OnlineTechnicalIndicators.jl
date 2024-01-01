@@ -20,6 +20,8 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,SuperTrendVal}
     n::Int
 
+    output_listeners::Series
+
     atr_period::Integer
     mult::Integer
 
@@ -29,6 +31,9 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     fub::CircBuff  # final upper band
     flb::CircBuff  # Tprice  # final lower band
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff{Tohlcv}
 
     function SuperTrend{Tohlcv,S}(;
@@ -42,16 +47,22 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         sub_indicators = Series(atr)
         fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
         flb = CircBuff(S, atr_period, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(Tohlcv, atr_period, rev = false)
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             atr_period,
             mult,
             sub_indicators,
             atr,
             fub,
             flb,
+            input_modifier,
+            input_filter,
+            input_indicator,
             input_values,
         )
     end

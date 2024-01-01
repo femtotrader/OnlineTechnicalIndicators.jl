@@ -16,6 +16,8 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal{S}}
     n::Int
 
+    output_listeners::Series
+
     atr_period::Integer
     atr_mult::S
     period::Integer
@@ -26,6 +28,9 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     high_stop_list::CircBuff
     low_stop_list::CircBuff
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function ChandeKrollStop{Tohlcv,S}(;
@@ -41,9 +46,12 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         sub_indicators = Series(atr)
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)
+        output_listeners = Series()
+        input_indicator = missing
         new{Tohlcv,S}(
             missing,
             0,
+            output_listeners,
             atr_period,
             atr_mult,
             period,
@@ -51,6 +59,9 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             atr,
             high_stop_list,
             low_stop_list,
+            input_modifier,
+            input_filter,
+            input_indicator,
             input_values,
         )
     end

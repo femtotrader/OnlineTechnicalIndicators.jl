@@ -10,11 +10,16 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
 
+    output_listeners::Series
+
     period::Integer
     volume_div::Integer
 
     emv_ma::MovingAverageIndicator  # SMA
 
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function EMV{Tohlcv,S}(;
@@ -26,8 +31,21 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         _emv_ma = MAFactory(S)(ma, period = period)
+        output_listeners = Series()
+        input_indicator = missing
         input_values = CircBuff(Tohlcv, period, rev = false)
-        new{Tohlcv,S}(missing, 0, period, volume_div, _emv_ma, input_values)
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            volume_div,
+            _emv_ma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

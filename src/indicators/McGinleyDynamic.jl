@@ -6,13 +6,19 @@ const McGinleyDynamic_PERIOD = 14
 
 The `McGinleyDynamic` type implements a McGinley Dynamic indicator.
 """
-mutable struct McGinleyDynamic{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct McGinleyDynamic{Tval,T2} <: TechnicalIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
+
+    output_listeners::Series
 
     period::Int
 
     rolling::Bool
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
     input_values::CircBuff
 
     function McGinleyDynamic{Tval}(;
@@ -21,8 +27,21 @@ mutable struct McGinleyDynamic{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        input = CircBuff(Tval, period, rev = false)
-        new{Tval}(missing, 0, period, false, input)
+        T2 = input_modifier_return_type
+        output_listeners = Series()
+        input_indicator = missing
+        input_values = CircBuff(T2, period, rev = false)
+        new{Tval,T2}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            false,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 

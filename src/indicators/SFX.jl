@@ -17,11 +17,17 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,SFXVal}
     n::Int
 
+    output_listeners::Series
+
     sub_indicators::Series
     atr::ATR
     std_dev::StdDev
 
     ma_std_dev::MovingAverageIndicator
+
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
 
     function SFX{Tohlcv,S}(;
         atr_period = SFX_ATR_PERIOD,
@@ -39,7 +45,20 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         )
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
-        new{Tohlcv,S}(missing, 0, sub_indicators, atr, std_dev, ma_std_dev)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tohlcv,S}(
+            missing,
+            0,
+            output_listeners,
+            sub_indicators,
+            atr,
+            std_dev,
+            ma_std_dev,
+            input_modifier,
+            input_filter,
+            input_indicator,
+        )
     end
 end
 

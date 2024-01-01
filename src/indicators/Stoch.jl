@@ -21,11 +21,11 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     smoothing_period::Integer
 
     values_d::SMA
-    input_values::CircBuff
 
-    input_indicator::Union{Missing,TechnicalIndicator}
-    input_filter::Function
     input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
+    input_values::CircBuff
 
     function Stoch{Tohlcv,S}(;
         period = STOCH_PERIOD,
@@ -38,7 +38,7 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         Tstore = input_modifier_return_type
         # values_d = SMA{S}(; period = smoothing_period)
         values_d = MAFactory(S)(ma, period = smoothing_period)
-        input = CircBuff(Tstore, period, rev = false)
+        input_values = CircBuff(Tstore, period, rev = false)
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(
@@ -48,10 +48,10 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
             period,
             smoothing_period,
             values_d,
-            input,
-            input_indicator,
-            input_filter,
             input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
         )
     end
 end

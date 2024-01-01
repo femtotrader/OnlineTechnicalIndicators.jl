@@ -5,9 +5,11 @@ const DPO_PERIOD = 20
 
 The `DPO` type implements a Detrended Price Oscillator indicator.
 """
-mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct DPO{Tval,T2} <: TechnicalIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
+
+    output_listeners::Series
 
     period::Int
     semi_period::Int
@@ -15,7 +17,10 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
     sub_indicators::Series
     ma::MovingAverageIndicator # SMA
 
-    input_values::CircBuff{Tval}
+    input_modifier::Function
+    input_filter::Function
+    input_indicator::Union{Missing,TechnicalIndicator}
+    input_values::CircBuff
 
     function DPO{Tval}(;
         period = DPO_PERIOD,
@@ -24,11 +29,26 @@ mutable struct DPO{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        input_values = CircBuff(Tval, period, rev = false)
-        _ma = MAFactory(Tval)(ma, period = period)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, period, rev = false)
+        _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
-        new{Tval}(missing, 0, period, semi_period, sub_indicators, _ma, input_values)
+        output_listeners = Series()
+        input_indicator = missing
+        new{Tval,T2}(
+            missing,
+            0,
+            output_listeners,
+            period,
+            semi_period,
+            sub_indicators,
+            _ma,
+            input_modifier,
+            input_filter,
+            input_indicator,
+            input_values,
+        )
     end
 end
 
