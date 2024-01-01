@@ -35,11 +35,8 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         Tstore = input_modifier_return_type
-        # values_d = SMA{S}(; period = smoothing_period)
         values_d = MAFactory(S)(ma, period = smoothing_period)
         input_values = CircBuff(Tstore, period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,

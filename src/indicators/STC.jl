@@ -50,8 +50,8 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
             signal_period = slow_macd_period,
         )
         sub_indicators = Series(macd)
+        #stoch_macd = Stoch{MACDVal,Tval}(
         stoch_macd = Stoch{Union{Missing,MACDVal},T2}(
-            #stoch_macd = Stoch{MACDVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
@@ -60,8 +60,8 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_macd, macd)  # <---
+        #stoch_d = Stoch{StochVal,Tval}(
         stoch_d = Stoch{Union{Missing,StochVal},T2}(
-            #stoch_d = Stoch{StochVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
@@ -70,8 +70,6 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_d, stoch_macd)  # <---
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             sub_indicators,

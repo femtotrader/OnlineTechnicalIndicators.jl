@@ -24,8 +24,7 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
-        output_listeners = Series()
-        input_indicator = missing
+
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,

@@ -38,8 +38,6 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_values = CircBuff(T2, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             fast_period,

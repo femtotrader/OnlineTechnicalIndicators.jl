@@ -24,8 +24,6 @@ mutable struct StdDev{T1,T2} <: TechnicalIndicator{T1}
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{T1,T2}(
             initialize_indicator_common_fields()...,

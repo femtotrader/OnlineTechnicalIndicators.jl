@@ -67,8 +67,6 @@ mutable struct T3{Tval,T2} <: MovingAverageIndicator{Tval}
         c2 = 3 * factor^2 + 3 * factor^3
         c3 = -6 * factor^2 - 3 * factor - 3 * factor^3
         c4 = 1 + 3 * factor + factor^3 + 3 * factor^2
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             period,

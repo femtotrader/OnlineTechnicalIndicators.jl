@@ -25,8 +25,7 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         #T2 = input_modifier_return_type
         sum_price_vol = zero(S)
         sum_vol = zero(S)
-        output_listeners = Series()
-        input_indicator = missing
+
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             sum_price_vol,

@@ -30,8 +30,7 @@ mutable struct ZLEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         lag = round(Int, (period - 1) / 2.0)
         input_values = CircBuff(T2, lag + 1, rev = false)
         ema = EMA{T2}(period = period)
-        output_listeners = Series()
-        input_indicator = missing
+
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             period,

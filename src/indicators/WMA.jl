@@ -32,8 +32,7 @@ mutable struct WMA{Tval,T2} <: MovingAverageIndicator{Tval}
         total = zero(T2)
         numerator = zero(T2)
         denominator = period * (period + one(T2)) / (2 * one(T2))
-        output_listeners = Series()
-        input_indicator = missing
+
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             period,

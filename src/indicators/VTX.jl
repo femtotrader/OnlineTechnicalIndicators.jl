@@ -44,8 +44,6 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,

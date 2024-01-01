@@ -29,7 +29,6 @@ mutable struct MeanDev{Tval,T2} <: TechnicalIndicator{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        #_ma = SMA{Tval}(period = period)
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         new{Tval,T2}(

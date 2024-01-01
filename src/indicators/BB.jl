@@ -37,8 +37,8 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
-        _central_band = MAFactory(T2)(ma, period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
-        _std_dev = StdDev{T2}(period = period) #, input_filter = input_filter, input_modifier = input_modifier, input_modifier_return_type = input_modifier_return_type)
+        _central_band = MAFactory(T2)(ma, period = period)
+        _std_dev = StdDev{T2}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
         new{T1,T2}(
             initialize_indicator_common_fields()...,

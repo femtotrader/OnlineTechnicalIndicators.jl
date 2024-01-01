@@ -37,13 +37,10 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        # fast_ma = EMA{Tval}(period = fast_period)
-        # slow_ma = EMA{Tval}(period = slow_period)
         T2 = input_modifier_return_type
         fast_ma = MAFactory(T2)(ma, period = fast_period)
         slow_ma = MAFactory(T2)(ma, period = slow_period)
         sub_indicators = Series(fast_ma, slow_ma)
-        # signal_line = EMA{Tval}(period = signal_period)
         signal_line = MAFactory(T2)(ma, period = signal_period)
         new{Tval}(
             initialize_indicator_common_fields()...,

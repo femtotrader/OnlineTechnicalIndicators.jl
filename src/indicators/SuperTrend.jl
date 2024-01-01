@@ -47,8 +47,6 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         sub_indicators = Series(atr)
         fub = CircBuff(S, atr_period, rev = false)  # capacity 2 may be enougth
         flb = CircBuff(S, atr_period, rev = false)
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, atr_period, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,

@@ -44,8 +44,6 @@ mutable struct TRIX{Tval,T2} <: MovingAverageIndicator{Tval}
 
         output_history = CircBuff(T2, 2, rev = false)
 
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             output_history,

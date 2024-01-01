@@ -28,8 +28,6 @@ mutable struct SMMA{Tval,T2} <: MovingAverageIndicator{Tval}
         T2 = input_modifier_return_type
         value = missing
         rolling = false
-        output_listeners = Series()
-        input_indicator = missing
         input_values = CircBuff(T2, period, rev = false)
         new{Tval,T2}(
             initialize_indicator_common_fields()...,

@@ -65,8 +65,6 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         for x = 0:period-1
             denom += (x - mean_x)^2
         end
-        output_listeners = Series()
-        input_indicator = missing
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,

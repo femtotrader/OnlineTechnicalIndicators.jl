@@ -30,15 +30,10 @@ mutable struct TEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
-        # _ma = EMA{Tval}(period = period)
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
-        # _ma_ma = EMA{Tval}(period = period)
         _ma_ma = MAFactory(T2)(ma, period = period)
-        # _ma_ma_ma = EMA{Tval}(period = period)
         _ma_ma_ma = MAFactory(T2)(ma, period = period)
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             period,

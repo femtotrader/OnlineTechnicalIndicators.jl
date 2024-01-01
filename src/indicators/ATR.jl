@@ -20,7 +20,6 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-
     function ATR{Tohlcv,S}(;
         period = ATR_PERIOD,
         input_filter = always_true,

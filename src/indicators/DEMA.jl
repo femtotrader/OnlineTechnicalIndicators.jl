@@ -28,9 +28,7 @@ mutable struct DEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
-        # _ma = EMA{Tval}(period = period)
         _ma = MAFactory(T2)(ma, period = period)
-        # _ma_ma = EMA{Tval}(period = period)
         _ma_ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         new{Tval,T2}(

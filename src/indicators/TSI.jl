@@ -50,8 +50,6 @@ mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
         )
         add_input_indicator!(abs_fast_ma, abs_slow_ma)  # <-
 
-        output_listeners = Series()
-        input_indicator = missing
         new{Tval,T2}(
             initialize_indicator_common_fields()...,
             fast_ma,
