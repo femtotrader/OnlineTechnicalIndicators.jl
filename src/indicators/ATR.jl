@@ -47,14 +47,14 @@ function _calculate_new_value(ind::ATR)
     if ind.n != 1
         close2 = ind.input_values[end-1].close
         fit!(ind.tr, max(true_range, abs(candle.high - close2), abs(candle.low - close2)))
-        if ind.n < ind.period
-            return missing
+        if ind.rolling  # CircBuff is full and rolling
+            return (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
         else
-            if !ind.rolling
+            if ind.n == ind.period  # CircBuff is full but not rolling
                 ind.rolling = true
                 return sum(value(ind.tr)) / ind.period
-            else
-                return (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
+            else   # CircBuff is filling up
+                return missing
             end
         end
     else
