@@ -3,7 +3,11 @@ const STOCH_SMOOTHING_PERIOD = 3
 
 struct StochVal{Tprice}
     k::Tprice
-    d::Tprice
+    d::Union{Missing,Tprice}
+end
+
+function is_valid(stoch_val::StochVal)
+    return !ismissing(stoch_val.k) && !ismissing(stoch_val.d)
 end
 
 """
@@ -34,9 +38,9 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        Tstore = input_modifier_return_type
+        T2 = input_modifier_return_type
         values_d = MAFactory(S)(ma, period = smoothing_period)
-        input_values = CircBuff(Tstore, period, rev = false)
+        input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,
@@ -63,10 +67,6 @@ function _calculate_new_value(ind::Stoch)
     end
     # calculate d
     fit!(ind.values_d, k)
-    if length(ind.values_d.value) > 0
-        d = value(ind.values_d)
-    else
-        d = missing
-    end
+    d = value(ind.values_d)
     return StochVal(k, d)
 end

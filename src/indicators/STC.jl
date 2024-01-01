@@ -50,22 +50,22 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
             signal_period = slow_macd_period,
         )
         sub_indicators = Series(macd)
-        #stoch_macd = Stoch{MACDVal,Tval}(
+        #stoch_macd = Stoch{MACDVal,T2}(
         stoch_macd = Stoch{Union{Missing,MACDVal},T2}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-            input_filter = !ismissing,
+            input_filter = is_valid,
             input_modifier = macd_to_ohlcv,
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_macd, macd)  # <---
-        #stoch_d = Stoch{StochVal,Tval}(
+        #stoch_d = Stoch{StochVal,T2}(
         stoch_d = Stoch{Union{Missing,StochVal},T2}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-            input_filter = !ismissing,
+            input_filter = is_valid,
             input_modifier = stoch_d_to_ohlcv,
             input_modifier_return_type = OHLCV,
         )
@@ -85,7 +85,11 @@ end
 function _calculate_new_value(ind::STC)
     stoch_d_val = value(ind.stoch_d)
     if !ismissing(stoch_d_val)
-        return max(min(stoch_d_val.d, 100), 0)
+        if !ismissing(stoch_d_val.d)
+            return max(min(stoch_d_val.d, 100), 0)
+        else
+            return missing
+        end
     else
         return missing
     end

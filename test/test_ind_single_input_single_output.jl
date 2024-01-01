@@ -40,9 +40,9 @@
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
         ind1 = SMA{Float64}(period = 3)
-        ind2 = SMA{Float64}(period = 3)
-        ind3 = SMA{Float64}(period = 3)
-        ind4 = SMA{Float64}(period = 3)
+        ind2 = SMA{Union{Missing,Float64}}(period = 3)
+        ind3 = SMA{Union{Missing,Float64}}(period = 3)
+        ind4 = SMA{Union{Missing,Float64}}(period = 3)
         add_input_indicator!(ind2, ind1)  # <---
         add_input_indicator!(ind3, ind2)
         add_input_indicator!(ind4, ind3)

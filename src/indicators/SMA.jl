@@ -27,7 +27,7 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
 
     input_modifier::Function
     input_filter::Function
-    input_values::CircBuff{T2}
+    input_values::CircBuff
 
     function SMA{T1}(;
         period = SMA_PERIOD,
@@ -50,11 +50,13 @@ end
 
 function _calculate_new_value(ind::SMA)
     if ind.rolling  # CircBuff is full and rolling
-        return sum(ind.input_values.value) / length(ind.input_values.value)
+        _values = ind.input_values.value
+        return sum(_values) / length(_values)
     else
-        if ind.n == ind.period # CircBuff is full but not rolling
+        if ind.n == ind.period  # CircBuff is full but not rolling
             ind.rolling = true
-            return sum(ind.input_values.value) / length(ind.input_values.value)
+            _values = ind.input_values.value
+            return sum(_values) / length(_values)
         else  # CircBuff is filling up
             return missing
         end
