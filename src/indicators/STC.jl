@@ -16,8 +16,8 @@ end
 
 The `STC` type implements a chaff Trend Cycle indicator.
 """
-mutable struct STC{Tval} <: TechnicalIndicator{Tval}
-    value::Union{Missing,Tval}
+mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
+    value::Union{Missing,T2}
     n::Int
 
     output_listeners::Series
@@ -43,14 +43,15 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         @assert fast_macd_period < slow_macd_period "fast_macd_period < slow_macd_period is not respected"
+        T2 = input_modifier_return_type
         # use slow_macd_period for signal line as signal line is not relevant here
-        macd = MACD{Tval}(
+        macd = MACD{T2}(
             fast_period = fast_macd_period,
             slow_period = slow_macd_period,
             signal_period = slow_macd_period,
         )
         sub_indicators = Series(macd)
-        stoch_macd = Stoch{Union{Missing,MACDVal},Tval}(
+        stoch_macd = Stoch{Union{Missing,MACDVal},T2}(
             #stoch_macd = Stoch{MACDVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
@@ -60,7 +61,7 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_macd, macd)  # <---
-        stoch_d = Stoch{Union{Missing,StochVal},Tval}(
+        stoch_d = Stoch{Union{Missing,StochVal},T2}(
             #stoch_d = Stoch{StochVal,Tval}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
@@ -72,7 +73,7 @@ mutable struct STC{Tval} <: TechnicalIndicator{Tval}
         add_input_indicator!(stoch_d, stoch_macd)  # <---
         output_listeners = Series()
         input_indicator = missing
-        new{Tval}(
+        new{Tval,T2}(
             missing,
             0,
             output_listeners,
