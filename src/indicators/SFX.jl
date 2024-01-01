@@ -38,7 +38,8 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        atr = ATR{Tohlcv,S}(period = atr_period)
+        T2 = input_modifier_return_type
+        atr = ATR{T2,S}(period = atr_period)
         std_dev = StdDev{Float64}(
             period = std_dev_period,
             input_modifier = ValueExtractor.extract_close,

@@ -44,7 +44,8 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        atr = ATR{Tohlcv,S}(period = atr_period)
+        T2 = input_modifier_return_type
+        atr = ATR{T2,S}(period = atr_period)
         _cb = MAFactory(S)(
             ma,
             period = ma_period,

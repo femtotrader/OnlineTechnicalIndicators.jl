@@ -41,8 +41,9 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, atr_period, rev = false)
-        atr = ATR{Tohlcv,S}(period = atr_period)
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, atr_period, rev = false)
+        atr = ATR{T2,S}(period = atr_period)
         sub_indicators = Series(atr)
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)

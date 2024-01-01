@@ -89,7 +89,7 @@ end
         end
     end
 
-    @testset_skip "MIMO" begin
+    @testset "MIMO" begin
         # MIMO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
         for IND in MIMO_INDICATORS
             @testset "$(IND)" begin
@@ -98,7 +98,7 @@ end
                     input_modifier = macd_to_ohlcv,
                     input_modifier_return_type = OHLCV,
                 )
-                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                fit!(ind, MACDVal(0.0, 0.0, 0.0))
                 @test 1 == 1
             end
         end
@@ -113,7 +113,7 @@ end
                     input_modifier = macd_to_ohlcv,
                     input_modifier_return_type = Float64,
                 )
-                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                #fit!(ind, MACDVal(0.0, 0.0, 0.0))
                 @test 1 == 1
             end
         end

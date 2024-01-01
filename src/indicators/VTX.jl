@@ -38,12 +38,13 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         @warn "WIP - buggy"
-        atr = ATR{Tohlcv,S}(period = 1)
+        T2 = input_modifier_return_type
+        atr = ATR{T2,S}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
-        input_values = CircBuff(Tohlcv, 2, rev = false)
+        input_values = CircBuff(T2, 2, rev = false)
         output_listeners = Series()
         input_indicator = missing
         new{Tohlcv,S}(

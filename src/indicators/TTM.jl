@@ -43,14 +43,15 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        input_values = CircBuff(Tohlcv, 1, rev = false)  # (maybe) a bit overkilled! but that's to keep the same interface
+        T2 = input_modifier_return_type
+        input_values = CircBuff(T2, 1, rev = false)  # (maybe) a bit overkilled! but that's to keep the same interface
         _bb = BB{S}(;
             period = period,
             std_dev_mult = bb_std_dev_mult,
             input_modifier = ValueExtractor.extract_close,
         )
-        _dc = DonchianChannels{Tohlcv,S}(; period = period)
-        _kc = KeltnerChannels{Tohlcv,S}(;
+        _dc = DonchianChannels{T2,S}(; period = period)
+        _kc = KeltnerChannels{T2,S}(;
             ma_period = period,
             atr_period = period,
             atr_mult_up = kc_atr_mult,
