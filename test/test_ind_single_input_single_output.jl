@@ -3,9 +3,13 @@
     @testset "SMA" begin
         ind = SMA{Float64}(period = P)
         @test nobs(ind) == 0
-        ind = StatLag(ind, 3)
+        ind = StatLag(ind, length(CLOSE_TMPL))
         fit!(ind, CLOSE_TMPL)
         @test nobs(ind) == length(CLOSE_TMPL)
+        @test ismissing(value(ind.lag[1]))
+        @test ismissing(value(ind.lag[2]))
+        @test ismissing(value(ind.lag[3]))
+
         @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.183000; atol = ATOL)
         @test isapprox(value(ind), 9.308500; atol = ATOL)
@@ -387,5 +391,6 @@
         @test isapprox(value(ind.lag[end-1]), 10.724944; atol = ATOL)
         @test isapprox(value(ind), 11.181863; atol = ATOL)
     end
+
 
 end

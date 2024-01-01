@@ -23,6 +23,7 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
+    rolling::Bool
 
     input_modifier::Function
     input_filter::Function
@@ -39,6 +40,7 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
         new{T1,T2}(
             initialize_indicator_common_fields()...,
             period,
+            false,
             input_modifier,
             input_filter,
             input_values,
@@ -47,6 +49,14 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
 end
 
 function _calculate_new_value(ind::SMA)
-    values = ind.input_values.value
-    return sum(values) / length(values)  # mean(values)
+    if ind.rolling  # CircBuff is full and rolling
+        return sum(ind.input_values.value) / length(ind.input_values.value)
+    else
+        if ind.n == ind.period # CircBuff is full but not rolling
+            ind.rolling = true
+            return sum(ind.input_values.value) / length(ind.input_values.value)
+        else  # CircBuff is filling up
+            return missing
+        end
+    end
 end
