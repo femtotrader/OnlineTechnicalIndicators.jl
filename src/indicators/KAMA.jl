@@ -32,7 +32,6 @@ mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         fast_smoothing_constant = 2 * one(T2) / (fast_ema_constant_period + one(T2))
         slow_smoothing_constant = 2 * one(T2) / (slow_ema_constant_period + one(T2))
