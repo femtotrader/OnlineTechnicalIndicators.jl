@@ -65,7 +65,7 @@ See [tests](test/)
 | `STC` | Schaff Trend Cycle | :1234: | :1234: | `MACD`, `Stoch` with `input_modifier` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | :heavy_check_mark:
 | `StdDev` | Standard Deviation | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
 | `Stoch` | Stochastic | :candle: | :m: | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
-| `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | subindicator RSI and 2 managed sequences (with MA) [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/11)
+| `StochRSI` | Stochastic RSI | :1234: | :m: | `RSI`, `SMA` | :heavy_check_mark:
 | `SuperTrend` | Super Trend | :candle: | :m: | `CircBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
 | `T3` | T3 Moving Average | :1234: | :1234: |  | :heavy_check_mark:
 | `TEMA` | Triple Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:

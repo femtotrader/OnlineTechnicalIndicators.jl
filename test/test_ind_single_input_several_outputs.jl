@@ -40,6 +40,23 @@
         @test isapprox(value(ind).histogram, 0.148439; atol = ATOL)
     end
 
+    @testset "StochRSI" begin
+        ind = StochRSI{Float64}(rsi_period = 14, stoch_period = 14, k_smoothing_period = 3, d_smoothing_period = 3)
+        ind = StatLag(ind, 3)
+        @test nobs(ind) == 0
+        fit!(ind, CLOSE_TMPL)
+        @test nobs(ind) == length(CLOSE_TMPL)
+
+        @test isapprox(value(ind.lag[end-2]).k, 100.000000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).d, 82.573394; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).k, 92.453271; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).d, 92.500513; atol = ATOL)
+
+        @test isapprox(value(ind).k, 80.286409; atol = ATOL)
+        @test isapprox(value(ind).d, 90.913227; atol = ATOL)
+    end
+
     @testset_skip "KST (buggy - help wanted)" begin
         ind = KST{Float64}(
             roc1_period = 5,

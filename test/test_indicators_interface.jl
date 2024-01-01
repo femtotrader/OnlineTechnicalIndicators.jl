@@ -10,7 +10,7 @@ using IncTA: MACDVal, macd_to_ohlcv
 
 @testset "interfaces" begin
     files = readdir("../src/indicators")
-    @test length(files) == 51  # number of indicators
+    @test length(files) == 52  # number of indicators
 
     _exported = names(IncTA)
 

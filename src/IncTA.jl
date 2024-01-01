@@ -27,7 +27,7 @@ SISO_INDICATORS = [
     "TRIX",
     "TSI",
 ]
-SIMO_INDICATORS = ["BB", "MACD", "KST"]
+SIMO_INDICATORS = ["BB", "MACD", "StochRSI", "KST"]
 MISO_INDICATORS = [
     "AccuDist",
     "BOP",
