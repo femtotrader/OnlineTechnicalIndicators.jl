@@ -10,7 +10,7 @@ const KST_SIGNAL_PERIOD = 9
 
 struct KSTVal{Tval}
     kst::Tval
-    signal::Tval
+    signal::Union{Missing,Tval}
 end
 
 """
@@ -72,29 +72,23 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         @warn "WIP - buggy"
         T2 = input_modifier_return_type
 
-        # roc1 = SMA{T2}(period = roc1_period)
-        # roc2 = SMA{T2}(period = roc2_period)
-        # roc3 = SMA{T2}(period = roc3_period)
-        # roc4 = SMA{T2}(period = roc4_period)
-
         roc1 = MAFactory(T2)(ma, period = roc1_period)
         roc2 = MAFactory(T2)(ma, period = roc2_period)
         roc3 = MAFactory(T2)(ma, period = roc3_period)
         roc4 = MAFactory(T2)(ma, period = roc4_period)
-        sub_indicators = Series(roc1, roc2, roc3, roc4)
+        sub_indicators = Series(roc1, roc2, roc3, roc4)  # roc1, ... 4 are sub_indicators
 
-        # roc1_ma = SMA{T2}(period = roc1_ma_period)
-        # roc2_ma = SMA{T2}(period = roc2_ma_period)
-        # roc3_ma = SMA{T2}(period = roc3_ma_period)
-        # roc4_ma = SMA{T2}(period = roc4_ma_period)
-
-        roc1_ma = MAFactory(T2)(ma, period = roc1_ma_period)
-        roc2_ma = MAFactory(T2)(ma, period = roc2_ma_period)
-        roc3_ma = MAFactory(T2)(ma, period = roc3_ma_period)
-        roc4_ma = MAFactory(T2)(ma, period = roc4_ma_period)
+        roc1_ma = MAFactory(Union{Missing,T2})(ma, period = roc1_ma_period) #, input_filter = !ismissing)
+        roc2_ma = MAFactory(Union{Missing,T2})(ma, period = roc2_ma_period) #, input_filter = !ismissing)
+        roc3_ma = MAFactory(Union{Missing,T2})(ma, period = roc3_ma_period) #, input_filter = !ismissing)
+        roc4_ma = MAFactory(Union{Missing,T2})(ma, period = roc4_ma_period) #, input_filter = !ismissing)
+        add_input_indicator!(roc1_ma, roc1)  # <-
+        add_input_indicator!(roc2_ma, roc2)  # <-
+        add_input_indicator!(roc3_ma, roc3)  # <-
+        add_input_indicator!(roc4_ma, roc4)  # <-
 
         # signal_line = SMA{T2}(period = signal_period)
-        signal_line = MAFactory(T2)(ma, period = signal_period)
+        signal_line = MAFactory(Union{Missing,T2})(ma, period = signal_period) #, input_filter = !ismissing)
 
         new{Tval}(
             initialize_indicator_common_fields()...,
@@ -115,27 +109,7 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
 end
 
 function _calculate_new_value(ind::KST)
-
-    if has_output_value(ind.roc1)
-        fit!(ind.roc1_ma, value(ind.roc1))
-    end
-
-    if has_output_value(ind.roc2)
-        fit!(ind.roc2_ma, value(ind.roc2))
-    end
-
-    if has_output_value(ind.roc3)
-        fit!(ind.roc3_ma, value(ind.roc3))
-    end
-
-    if has_output_value(ind.roc4)
-        fit!(ind.roc4_ma, value(ind.roc4))
-    end
-
-    if !has_output_value(ind.roc1) ||
-       !has_output_value(ind.roc2) ||
-       !has_output_value(ind.roc3) ||
-       !has_output_value(ind.roc4)
+    if !has_output_value(ind.roc1_ma) || !has_output_value(ind.roc2_ma) || !has_output_value(ind.roc3_ma) || !has_output_value(ind.roc4_ma)
         return missing
     end
 
@@ -146,7 +120,7 @@ function _calculate_new_value(ind::KST)
         4.0 * value(ind.roc4_ma)
     fit!(ind.signal_line, kst)
 
-    if length(ind.signal_line.value) > 0
+    if has_output_value(ind.signal_line)
         signal_value = value(ind.signal_line)
     else
         signal_value = missing

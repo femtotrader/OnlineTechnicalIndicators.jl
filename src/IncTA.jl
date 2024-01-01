@@ -95,13 +95,13 @@ end
 
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
-    if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
-        if ind.input_filter(data)
-            data = ind.input_modifier(data)
-        else
-            return
-        end
+    #if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
+    if ind.input_filter(data)
+        data = ind.input_modifier(data)
+    else
+        return nothing
     end
+    #end
     has_input_values = :input_values in _fieldnames
     if has_input_values
         fit!(ind.input_values, data)
@@ -117,6 +117,8 @@ function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
         _calculate_new_value_only_from_incoming_data(ind, data)
     fit_listeners!(ind)
 end
+
+is_valid(::Missing) = false
 
 function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))

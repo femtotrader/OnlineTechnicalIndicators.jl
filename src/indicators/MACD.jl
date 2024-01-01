@@ -8,6 +8,10 @@ struct MACDVal{Tval}
     histogram::Union{Missing,Tval}
 end
 
+function is_valid(macd_val::MACDVal)
+    return !ismissing(macd_val.macd) && !ismissing(macd_val.signal) && !ismissing(macd_val.histogram)
+end
+
 """
     MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 

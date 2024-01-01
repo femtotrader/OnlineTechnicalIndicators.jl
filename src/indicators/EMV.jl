@@ -57,14 +57,8 @@ function _calculate_new_value(ind::EMV)
         else
             emv = 0.0
         end
-
         fit!(ind.emv_ma, emv)
-
-        if length(ind.emv_ma.value) >= 1
-            return value(ind.emv_ma)
-        else
-            return missing
-        end
+        return value(ind.emv_ma)
     else
         return missing
     end
