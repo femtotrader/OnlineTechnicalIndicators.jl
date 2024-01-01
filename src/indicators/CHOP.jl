@@ -49,7 +49,9 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 end
 
 function _calculate_new_value(ind::CHOP)
-    fit!(ind.atr_values, value(ind.atr))
+    _atr_value = value(ind.atr)
+    println(_atr_value)
+    fit!(ind.atr_values, _atr_value)
 
     if !has_valid_values(ind.atr_values, ind.period) || !has_valid_values(ind.input_values, ind.period)
         return missing
@@ -59,11 +61,10 @@ function _calculate_new_value(ind::CHOP)
     min_low = min([cdl.low for cdl in value(ind.input_values)]...)
 
     if max_high != min_low
-        ind.value =
-            100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
+        return 100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
             log10(ind.period)
     else
-        if length(ind.value) > 0
+        if has_output_value(ind)
             return value(ind)
         else
             return missing

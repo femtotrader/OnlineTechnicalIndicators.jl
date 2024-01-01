@@ -124,7 +124,7 @@ function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end
 
-function has_valid_values(cb::O, period) where {O<:OnlineStat}
+function has_valid_values(cb::CircBuff, period)
     try
         _has_valid_values = true
         for i in 1:period
