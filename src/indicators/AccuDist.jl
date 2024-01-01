@@ -17,7 +17,7 @@ mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function AccuDist{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv  # not necessary but here to unify interface
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         output_listeners = Series()
         input_indicator = missing

@@ -1,5 +1,10 @@
 using IncTA:
-    TechnicalIndicator, SISO_INDICATORS, SIMO_INDICATORS, MISO_INDICATORS, MIMO_INDICATORS, OTHERS_INDICATORS
+    TechnicalIndicator,
+    SISO_INDICATORS,
+    SIMO_INDICATORS,
+    MISO_INDICATORS,
+    MIMO_INDICATORS,
+    OTHERS_INDICATORS
 using IncTA: MACDVal, macd_to_ohlcv
 
 @testset "interfaces" begin
@@ -78,7 +83,7 @@ end
                     input_modifier = macd_to_ohlcv,
                     input_modifier_return_type = OHLCV,
                 )
-                #fit!(ind, MACDVal(0.0,0.0,0.0))
+                fit!(ind, MACDVal(0.0, 0.0, 0.0))
                 @test 1 == 1
             end
         end
