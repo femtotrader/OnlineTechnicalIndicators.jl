@@ -67,12 +67,12 @@ function _calculate_new_value(ind::VTX)
         fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
         fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
         if !has_valid_values(ind.atr_values, ind.period) ||
-            !has_valid_values(ind.plus_vm, ind.period) ||
-            !has_valid_values(ind.minus_vm, ind.period)
+           !has_valid_values(ind.plus_vm, ind.period) ||
+           !has_valid_values(ind.minus_vm, ind.period)
             return missing
         end
         atr_sum = sum(value(ind.atr_values))
-        return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)    
+        return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
     else
         return missing
     end

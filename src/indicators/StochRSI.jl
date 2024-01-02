@@ -43,8 +43,13 @@ mutable struct StochRSI{Tval} <: TechnicalIndicator{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         rsi = RSI{T2}(period = rsi_period)
-        smoothed_k = MAFactory(T2)(ma, period = k_smoothing_period, input_filter = !ismissing)
-        values_d = MAFactory(Union{Missing,T2})(ma, period = d_smoothing_period, input_filter = !ismissing)
+        smoothed_k =
+            MAFactory(T2)(ma, period = k_smoothing_period, input_filter = !ismissing)
+        values_d = MAFactory(Union{Missing,T2})(
+            ma,
+            period = d_smoothing_period,
+            input_filter = !ismissing,
+        )
         sub_indicators = Series(rsi)
         recent_rsi = CircBuff(Union{Missing,T2}, stoch_period, rev = false)
         new{Tval}(
@@ -66,18 +71,18 @@ function _calculate_new_value(ind::StochRSI)
     if has_valid_values(ind.recent_rsi, ind.stoch_period)
         max_high = max(ind.recent_rsi.value...)
         min_low = min(ind.recent_rsi.value...)
-    
+
         if max_high == min_low
             k = 100.0
         else
             k = 100.0 * (value(ind.rsi) - min_low) / (max_high - min_low)
         end
-    
+
         fit!(ind.smoothed_k, k)
         _smoothed_k = value(ind.smoothed_k)
         fit!(ind.values_d, _smoothed_k)
-    
-        return StochRSIVal(_smoothed_k, value(ind.values_d))    
+
+        return StochRSIVal(_smoothed_k, value(ind.values_d))
     else
         return missing
     end

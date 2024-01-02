@@ -9,7 +9,9 @@ struct MACDVal{Tval}
 end
 
 function is_valid(macd_val::MACDVal)
-    return !ismissing(macd_val.macd) && !ismissing(macd_val.signal) && !ismissing(macd_val.histogram)
+    return !ismissing(macd_val.macd) &&
+           !ismissing(macd_val.signal) &&
+           !ismissing(macd_val.histogram)
 end
 
 """

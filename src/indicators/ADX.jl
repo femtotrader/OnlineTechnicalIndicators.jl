@@ -127,7 +127,7 @@ function _calculate_new_value(ind::ADX)
         elseif length(ind.dx) > ind.adx_period
             adx = (value(ind).adx * (ind.adx_period - 1) + ind.dx[end]) / ind.adx_period
         end
-        
+
         return ADXVal(adx, ind.pdi[end], ind.mdi[end])
 
     else

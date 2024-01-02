@@ -9,7 +9,7 @@
         @test ismissing(value(ind.lag[1]))
         @test ismissing(value(ind.lag[2]))
         @test ismissing(value(ind.lag[3]))
-        @test ismissing(value(ind.lag[P - 1]))
+        @test ismissing(value(ind.lag[P-1]))
         @test !ismissing(value(ind.lag[P]))
 
         @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
@@ -91,7 +91,7 @@
                 push!(calculated, v)
             end
             =#
-            calculated = map(val->value(fit!(ind, val)), CLOSE_TMPL)
+            calculated = map(val -> value(fit!(ind, val)), CLOSE_TMPL)
             @test nobs(ind) == length(CLOSE_TMPL)
             expected = [
                 missing,

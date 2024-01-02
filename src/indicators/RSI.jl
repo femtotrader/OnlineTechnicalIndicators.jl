@@ -49,22 +49,22 @@ function _calculate_new_value(ind::RSI)
 
         gain = change > 0 ? change : 0.0
         loss = change < 0 ? -change : 0.0
-    
+
         fit!(ind.gains, gain)
         fit!(ind.losses, loss)
-    
+
         _losses = value(ind.losses)
         if ismissing(_losses)
             return missing
         end
-    
+
         if _losses == 0
             rsi = 100.0
         else
             rs = value(ind.gains) / _losses
             rsi = 100.0 - 100.0 / (1.0 + rs)
         end
-        return rsi    
+        return rsi
     else
         return missing
     end

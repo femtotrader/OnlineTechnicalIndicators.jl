@@ -57,7 +57,7 @@ end
                     input_modifier = ValueExtractor.extract_close,
                     input_modifier_return_type = Float64,
                 )
-                candle = OHLCV(2.0,4.0,1.0,3.0)
+                candle = OHLCV(2.0, 4.0, 1.0, 3.0)
                 @test ind.input_filter(candle) == true
                 @test ind.input_modifier(candle) == 3.0
                 fit!(ind, V_OHLCV)
@@ -75,7 +75,7 @@ end
                     input_modifier = ValueExtractor.extract_close,
                     input_modifier_return_type = Float64,
                 )
-                candle = OHLCV(2.0,4.0,1.0,3.0)
+                candle = OHLCV(2.0, 4.0, 1.0, 3.0)
                 @test ind.input_filter(candle) == true
                 @test ind.input_modifier(candle) == 3.0
                 fit!(ind, V_OHLCV)
@@ -95,7 +95,8 @@ end
                 )
                 macd_val = MACDVal(0.0, 0.0, 0.0)
                 @test ind.input_filter(macd_val) == true
-                @test ind.input_modifier(macd_val) == OHLCV(0.0, 0.0, 0.0, 0.0, volume=0.0)
+                @test ind.input_modifier(macd_val) ==
+                      OHLCV(0.0, 0.0, 0.0, 0.0, volume = 0.0)
                 fit!(ind, macd_val)
                 @test 1 == 1
             end
@@ -114,7 +115,8 @@ end
                 )
                 macd_val = MACDVal(0.0, 0.0, 0.0)
                 @test ind.input_filter(macd_val) == true
-                @test ind.input_modifier(macd_val) == OHLCV(0.0, 0.0, 0.0, 0.0, volume=0.0)
+                @test ind.input_modifier(macd_val) ==
+                      OHLCV(0.0, 0.0, 0.0, 0.0, volume = 0.0)
                 fit!(ind, macd_val)
                 @test 1 == 1
             end

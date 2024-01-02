@@ -107,12 +107,15 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
 end
 
 function _calculate_new_value(ind::KST)
-    if has_output_value(ind.roc1_ma) && has_output_value(ind.roc2_ma) && has_output_value(ind.roc3_ma) && has_output_value(ind.roc4_ma)
+    if has_output_value(ind.roc1_ma) &&
+       has_output_value(ind.roc2_ma) &&
+       has_output_value(ind.roc3_ma) &&
+       has_output_value(ind.roc4_ma)
         kst =
-        1.0 * value(ind.roc1_ma) +
-        2.0 * value(ind.roc2_ma) +
-        3.0 * value(ind.roc3_ma) +
-        4.0 * value(ind.roc4_ma)
+            1.0 * value(ind.roc1_ma) +
+            2.0 * value(ind.roc2_ma) +
+            3.0 * value(ind.roc3_ma) +
+            4.0 * value(ind.roc4_ma)
         fit!(ind.signal_line, kst)
 
         if has_output_value(ind.signal_line)

@@ -41,7 +41,12 @@
     end
 
     @testset "StochRSI" begin
-        ind = StochRSI{Float64}(rsi_period = 14, stoch_period = 14, k_smoothing_period = 3, d_smoothing_period = 3)
+        ind = StochRSI{Float64}(
+            rsi_period = 14,
+            stoch_period = 14,
+            k_smoothing_period = 3,
+            d_smoothing_period = 3,
+        )
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, CLOSE_TMPL)
