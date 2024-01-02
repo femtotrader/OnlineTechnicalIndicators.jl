@@ -9,6 +9,8 @@
         @test ismissing(value(ind.lag[1]))
         @test ismissing(value(ind.lag[2]))
         @test ismissing(value(ind.lag[3]))
+        @test ismissing(value(ind.lag[P - 1]))
+        @test !ismissing(value(ind.lag[P]))
 
         @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
         @test isapprox(value(ind.lag[end-1]), 9.183000; atol = ATOL)
@@ -40,9 +42,9 @@
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
         ind1 = SMA{Float64}(period = 3)
-        ind2 = SMA{Union{Missing,Float64}}(period = 3)
-        ind3 = SMA{Union{Missing,Float64}}(period = 3)
-        ind4 = SMA{Union{Missing,Float64}}(period = 3)
+        ind2 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        ind3 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        ind4 = SMA{Float64}(period = 3, input_filter = !ismissing)
         add_input_indicator!(ind2, ind1)  # <---
         add_input_indicator!(ind3, ind2)
         add_input_indicator!(ind4, ind3)
@@ -99,12 +101,15 @@
         @testset "vector" begin
             ind = SMMA{Float64}(period = P)
             @test nobs(ind) == 0
+            #=
             calculated = Union{Missing,Float64}[]
             for p in CLOSE_TMPL
                 fit!(ind, p)
                 v = value(ind)
                 push!(calculated, v)
             end
+            =#
+            calculated = map(val->value(fit!(ind, val)), CLOSE_TMPL)
             @test nobs(ind) == length(CLOSE_TMPL)
             expected = [
                 missing,

@@ -43,8 +43,8 @@ mutable struct StochRSI{Tval} <: TechnicalIndicator{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         rsi = RSI{T2}(period = rsi_period)
-        smoothed_k = MAFactory(T2)(ma, period = k_smoothing_period)
-        values_d = MAFactory(Union{Missing,T2})(ma, period = d_smoothing_period)
+        smoothed_k = MAFactory(T2)(ma, period = k_smoothing_period, input_filter = !ismissing)
+        values_d = MAFactory(Union{Missing,T2})(ma, period = d_smoothing_period, input_filter = !ismissing)
         sub_indicators = Series(rsi)
         recent_rsi = CircBuff(Union{Missing,T2}, stoch_period, rev = false)
         new{Tval}(

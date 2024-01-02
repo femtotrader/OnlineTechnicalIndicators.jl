@@ -78,6 +78,7 @@ export SARTrend, Trend
 export add_input_indicator!
 
 using OnlineStatsBase
+export value
 
 abstract type TechnicalIndicator{T} <: OnlineStat{T} end
 abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
@@ -142,7 +143,9 @@ function fit_listeners!(ind::O) where {O<:TechnicalIndicator}
             return
         end
         for listener in ind.output_listeners.stats
-            fit!(listener, ind.value)
+            if listener.input_filter(ind.value)
+                fit!(listener, ind.value)
+            end
         end
     end
 end

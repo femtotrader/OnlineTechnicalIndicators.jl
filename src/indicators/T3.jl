@@ -52,11 +52,11 @@ mutable struct T3{Tval,T2} <: MovingAverageIndicator{Tval}
         ema6 = EMA{Tval}(period = period)
         =#
 
-        ema2 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
-        ema3 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
-        ema4 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
-        ema5 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
-        ema6 = EMA{Union{Missing,T2}}(period = period, input_filter = !ismissing)
+        ema2 = EMA{T2}(period = period, input_filter = !ismissing)
+        ema3 = EMA{T2}(period = period, input_filter = !ismissing)
+        ema4 = EMA{T2}(period = period, input_filter = !ismissing)
+        ema5 = EMA{T2}(period = period, input_filter = !ismissing)
+        ema6 = EMA{T2}(period = period, input_filter = !ismissing)
         add_input_indicator!(ema2, ema1)  # <-
         add_input_indicator!(ema3, ema2)  # <-
         add_input_indicator!(ema4, ema3)  # <-
