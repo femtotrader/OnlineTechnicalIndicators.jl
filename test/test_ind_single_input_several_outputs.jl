@@ -57,7 +57,7 @@
         @test isapprox(value(ind).d, 90.913227; atol = ATOL)
     end
 
-    @testset_skip "KST (buggy - help wanted)" begin
+    @testset "KST (buggy - help wanted)" begin
         ind = KST{Float64}(
             roc1_period = 5,
             roc1_ma_period = 5,

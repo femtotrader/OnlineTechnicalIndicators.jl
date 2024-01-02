@@ -39,10 +39,10 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
     input_indicator::Union{Missing,TechnicalIndicator}
 
     sub_indicators::Series
-    roc1::MovingAverageIndicator  # SMA
-    roc2::MovingAverageIndicator  # SMA
-    roc3::MovingAverageIndicator  # SMA
-    roc4::MovingAverageIndicator  # SMA
+    roc1::ROC
+    roc2::ROC
+    roc3::ROC
+    roc4::ROC
 
     roc1_ma::MovingAverageIndicator  # SMA
     roc2_ma::MovingAverageIndicator  # SMA
@@ -69,26 +69,24 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
         input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
-        @warn "WIP - buggy"
         T2 = input_modifier_return_type
 
-        roc1 = MAFactory(T2)(ma, period = roc1_period)
-        roc2 = MAFactory(T2)(ma, period = roc2_period)
-        roc3 = MAFactory(T2)(ma, period = roc3_period)
-        roc4 = MAFactory(T2)(ma, period = roc4_period)
+        roc1 = ROC{T2}(period = roc1_period)
+        roc2 = ROC{T2}(period = roc2_period)
+        roc3 = ROC{T2}(period = roc3_period)
+        roc4 = ROC{T2}(period = roc4_period)
         sub_indicators = Series(roc1, roc2, roc3, roc4)  # roc1, ... 4 are sub_indicators
 
-        roc1_ma = MAFactory(Union{Missing,T2})(ma, period = roc1_ma_period) #, input_filter = !ismissing)
-        roc2_ma = MAFactory(Union{Missing,T2})(ma, period = roc2_ma_period) #, input_filter = !ismissing)
-        roc3_ma = MAFactory(Union{Missing,T2})(ma, period = roc3_ma_period) #, input_filter = !ismissing)
-        roc4_ma = MAFactory(Union{Missing,T2})(ma, period = roc4_ma_period) #, input_filter = !ismissing)
+        roc1_ma = MAFactory(T2)(ma, period = roc1_ma_period, input_filter = !ismissing)
+        roc2_ma = MAFactory(T2)(ma, period = roc2_ma_period, input_filter = !ismissing)
+        roc3_ma = MAFactory(T2)(ma, period = roc3_ma_period, input_filter = !ismissing)
+        roc4_ma = MAFactory(T2)(ma, period = roc4_ma_period, input_filter = !ismissing)
         add_input_indicator!(roc1_ma, roc1)  # <-
         add_input_indicator!(roc2_ma, roc2)  # <-
         add_input_indicator!(roc3_ma, roc3)  # <-
         add_input_indicator!(roc4_ma, roc4)  # <-
 
-        # signal_line = SMA{T2}(period = signal_period)
-        signal_line = MAFactory(Union{Missing,T2})(ma, period = signal_period) #, input_filter = !ismissing)
+        signal_line = MAFactory(T2)(ma, period = signal_period)
 
         new{Tval}(
             initialize_indicator_common_fields()...,
@@ -109,22 +107,22 @@ mutable struct KST{Tval} <: TechnicalIndicator{Tval}
 end
 
 function _calculate_new_value(ind::KST)
-    if !has_output_value(ind.roc1_ma) || !has_output_value(ind.roc2_ma) || !has_output_value(ind.roc3_ma) || !has_output_value(ind.roc4_ma)
-        return missing
-    end
-
-    kst =
+    if has_output_value(ind.roc1_ma) && has_output_value(ind.roc2_ma) && has_output_value(ind.roc3_ma) && has_output_value(ind.roc4_ma)
+        kst =
         1.0 * value(ind.roc1_ma) +
         2.0 * value(ind.roc2_ma) +
         3.0 * value(ind.roc3_ma) +
         4.0 * value(ind.roc4_ma)
-    fit!(ind.signal_line, kst)
+        fit!(ind.signal_line, kst)
 
-    if has_output_value(ind.signal_line)
-        signal_value = value(ind.signal_line)
+        if has_output_value(ind.signal_line)
+            signal_value = value(ind.signal_line)
+        else
+            signal_value = missing
+        end
+
+        return KSTVal(kst, signal_value)
     else
-        signal_value = missing
+        return missing
     end
-
-    return KSTVal(kst, signal_value)
 end
