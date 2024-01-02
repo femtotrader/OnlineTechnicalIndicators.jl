@@ -44,25 +44,23 @@ end
 function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
     true_range = candle.high - candle.low
-    if ind.period != 1
-        if ind.n != 1
-            close2 = ind.input_values[end-1].close
-            fit!(ind.tr, max(true_range, abs(candle.high - close2), abs(candle.low - close2)))
-            if ind.rolling  # CircBuff is full and rolling
-                return (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
-            else
-                if ind.n == ind.period  # CircBuff is full but not rolling
-                    ind.rolling = true
-                    return sum(value(ind.tr)) / ind.period
-                else   # CircBuff is filling up
-                    return missing
-                end
-            end
-        else
-            fit!(ind.tr, true_range)
+
+    #if has_valid_values(ind.input_values, 1, exact = true)
+    if sum((!ismissing).(ind.input_values.value)) == 1
+        fit!(ind.tr, true_range)
+    else
+        close2 = ind.input_values[end-1].close
+        fit!(ind.tr, max(true_range, abs(candle.high - close2), abs(candle.low - close2)))
+    end
+
+    if ind.rolling
+        return (value(ind) * (ind.period - 1) + value(ind.tr)[end]) / ind.period
+    else
+        if ind.n == ind.period  # CircBuff is full but not rolling
+            ind.rolling = true
+            return sum(value(ind.tr)) / ind.period
+        else   # CircBuff is filling up
             return missing
         end
-    else
-        return true_range
     end
 end
