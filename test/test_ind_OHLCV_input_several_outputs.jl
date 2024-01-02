@@ -7,8 +7,8 @@
         fit!(ind, V_OHLCV)
         @test nobs(ind) == length(V_OHLCV)
 
-        # @test isapprox(ind[end-15].value, 9.711592; atol=ATOL) # pretty old!
-        # @test ind[end-15].trend == Trend.DOWN # pretty old!
+        @test isapprox(value(ind.lag[1]).value, 9.711592; atol = ATOL) # pretty old! (end-15=1)
+        @test value(ind.lag[1]).trend == Trend.DOWN # pretty old!
 
         @test isapprox(value(ind.lag[end-3]).value, 8.110029; atol = ATOL)
         @test value(ind.lag[end-3]).trend == Trend.UP
@@ -107,7 +107,7 @@
         @test isapprox(value(ind).minus_di, 20.812570; atol = ATOL)
     end
 
-    @testset_skip "Aroon" begin
+    @testset "Aroon" begin
         ind = Aroon{OHLCV{Missing,Float64,Float64},Float64}(period = 10)
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
