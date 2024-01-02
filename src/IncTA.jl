@@ -125,6 +125,15 @@ function has_output_value(ind::O) where {O<:OnlineStat}
     return !ismissing(value(ind))
 end
 
+
+function has_output_value(cb::CircBuff)
+    if length(cb.value) > 0
+        return !ismissing(cb[end])
+    else
+        return false
+    end
+end
+
 function has_valid_values(cb::CircBuff, period)
     try
         _has_valid_values = true

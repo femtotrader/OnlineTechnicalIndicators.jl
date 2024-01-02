@@ -42,7 +42,6 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         atr = ATR{T2,S}(period = atr_period)
         sub_indicators = Series(atr)
@@ -85,7 +84,7 @@ function _calculate_new_value(ind::SuperTrend)
     IF THE CONDITION IS NOT SATISFIED: C.FUB = P.FUB
     =#
 
-    if length(ind.fub) == 0
+    if !has_output_value(ind.fub)
         fub = 0.0
     else
         if bub < ind.fub[end] ||
@@ -102,7 +101,7 @@ function _calculate_new_value(ind::SuperTrend)
     IF THE CONDITION IS NOT SATISFIED: C.FLB = P.FLB
     =#
 
-    if length(ind.flb) == 0
+    if !has_output_value(ind.flb)
         flb = 0.0
     elseif blb > ind.flb[end] ||
            ind.input_values[end-1].close < ind.flb[end]
@@ -119,25 +118,19 @@ function _calculate_new_value(ind::SuperTrend)
     IF P.ST == P.FLB AND C.CLOSE < C.FLB: C.ST = C.FUB
     =#
 
-    if !has_output_value(ind)
-        supertrend = 0
-    else
-        _val = value(ind)
-        supertrend = 99999999
-        if _val.value == ind.fub[end-1] && candle.close <= ind.fub[end]
+    if has_output_value(ind)
+        _value_ind = value(ind)
+        if _value_ind.value == ind.fub[end-1] && candle.close <= ind.fub[end]
             supertrend = ind.fub[end]
-            supertrend = 100000
-        elseif _val.value == ind.fub[end-1] && candle.close > ind.fub[end]
-            supertrend = ind.fub.value[end]
-            supertrend = 200000
-        elseif _val.value == ind.flb[end-1] && candle.close >= ind.flb[end]
+        elseif _value_ind.value == ind.fub[end-1] && candle.close > ind.fub[end]
+            supertrend = ind.flb[end]
+        elseif _value_ind.value == ind.flb[end-1] && candle.close >= ind.flb[end]
+            supertrend = ind.flb[end]
+        elseif _value_ind.value == ind.flb[end-1] && candle.close < ind.flb[end]
             supertrend = ind.fub[end]
-            supertrend = 300000
-        elseif _val.value == ind.flb[end-1] && candle.close < ind.flb[end]
-            supertrend = ind.fub[end]
-            supertrend = 400000
         end
-        println(supertrend)
+    else
+        supertrend = 0
     end
 
     trend_dir = candle.close > supertrend ? Trend.UP : Trend.DOWN
