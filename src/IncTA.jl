@@ -134,6 +134,7 @@ function has_output_value(cb::CircBuff)
     end
 end
 
+#=
 function has_valid_values(cb::CircBuff, period)
     try
         _has_valid_values = true
@@ -143,6 +144,15 @@ function has_valid_values(cb::CircBuff, period)
         return _has_valid_values
     catch
         return false
+    end
+end
+=#
+
+function has_valid_values(sequence::CircBuff, window; exact = false)
+    if !exact
+        return length(sequence) >= window && !ismissing(sequence[end-window+1])
+    else
+        return (length(sequence) == window && !missing(sequence[end-window+1])) || (length(sequence) > window && !ismissing(sequence[end-window+1]) && !ismissing(sequence[end-window]))
     end
 end
 
