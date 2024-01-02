@@ -87,7 +87,7 @@
 
     end
 
-    @testset_skip "ADX" begin
+    @testset "ADX" begin
         ind = ADX{OHLCV{Missing,Float64,Float64},Float64}(di_period = 14, adx_period = 14)
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
