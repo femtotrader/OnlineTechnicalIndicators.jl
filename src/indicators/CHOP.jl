@@ -29,7 +29,6 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         atr = ATR{T2,S}(period = 1)
         sub_indicators = Series(atr)
@@ -50,7 +49,6 @@ end
 
 function _calculate_new_value(ind::CHOP)
     _atr_value = value(ind.atr)
-    println(_atr_value)
     fit!(ind.atr_values, _atr_value)
 
     if !has_valid_values(ind.atr_values, ind.period) || !has_valid_values(ind.input_values, ind.period)

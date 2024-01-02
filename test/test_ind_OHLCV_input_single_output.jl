@@ -194,7 +194,7 @@
         @test isapprox(value(ind), 9.648128; atol = ATOL)
     end
 
-    @testset_skip "CHOP - help wanted" begin
+    @testset "CHOP - help wanted" begin
         ind = CHOP{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)

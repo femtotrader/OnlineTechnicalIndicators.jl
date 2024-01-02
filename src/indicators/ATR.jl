@@ -28,7 +28,7 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
         tr = CircBuff(S, period, rev = false)
-        input_values = CircBuff(T2, period, rev = false)
+        input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,
@@ -46,7 +46,6 @@ function _calculate_new_value(ind::ATR)
     true_range = candle.high - candle.low
 
     if has_valid_values(ind.input_values, 1, exact = true)
-    #if sum((!ismissing).(ind.input_values.value)) == 1
         fit!(ind.tr, true_range)
     else
         close2 = ind.input_values[end-1].close
@@ -54,7 +53,7 @@ function _calculate_new_value(ind::ATR)
     end
 
     if ind.rolling
-        return (value(ind) * (ind.period - 1) + value(ind.tr)[end]) / ind.period
+        return (value(ind) * (ind.period - 1) + ind.tr[end]) / ind.period
     else
         if ind.n == ind.period  # CircBuff is full but not rolling
             ind.rolling = true

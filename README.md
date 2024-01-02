@@ -34,7 +34,7 @@ See [tests](test/)
 | `CCI` | Commodity Channel Index | :candle: | :1234: | `MeanDev` | :heavy_check_mark:
 | `ChaikinOsc` | Chaikin Oscillator | :candle: | :1234: | `AccuDist`, `EMA` | :heavy_check_mark:
 | `ChandeKrollStop` | Chande Kroll Stop | :candle: | :m: | `CircBuff`, `ATR` | :heavy_check_mark:
-| `CHOP` | Choppiness Index | :candle: | :1234: | `CirBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
+| `CHOP` | Choppiness Index | :candle: | :1234: | `CirBuff`, `ATR` | :heavy_check_mark:
 | `CoppockCurve` | Coppock Curve | :1234: | :1234: | `ROC`, `WMA` | :heavy_check_mark:
 | `DEMA` | Double Exponential Moving Average | :1234: | :1234: | `EMA` | :heavy_check_mark:
 | `DonchianChannels` | Donchian Channels | :candle: | :m: | `CircBuff` | :heavy_check_mark:
