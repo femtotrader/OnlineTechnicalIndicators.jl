@@ -222,47 +222,49 @@ using IncTA: PivotsHLVal
         @test isapprox(value(ind).histogram, 1.036864; atol = ATOL)
     end
 
-    @testset_skip "PivotsHL - WIP" begin
+    @testset "PivotsHL" begin
         ind = PivotsHL{OHLCV{Missing,Float64,Float64},Float64}(
             high_period = 7,
             low_period = 7,
         )
         @test nobs(ind) == 0
 
-        # be aware that this indicator behave a bit differently than other ones 
-        # you need to skip old pivots value (or more exactly watch the isnew field of output)
+        # be aware that this indicator behave a bit differently than other ones !
 
-        pivots = PivotsHLVal[]
-        for candle in V_OHLCV
-            fit!(ind, candle)
-            val = value(ind)
-            if !ismissing(val) && val.isnew
-                push!(pivots, value(ind))
-            end
-        end
-        println(pivots)
+        #pivots = PivotsHLVal[]
+        #for candle in V_OHLCV
+        #    fit!(ind, candle)
+        #    #val = value(ind)
+        #    #if !ismissing(val) && val.isnew
+        #    #    push!(pivots, value(ind))
+        #    #end
+        #end
+        fit!(ind, V_OHLCV)
         @test nobs(ind) == length(V_OHLCV)
 
-        @test isapprox(pivots[end-2].ohlcv.open, 9.160000; atol = ATOL)
-        @test isapprox(pivots[end-2].ohlcv.high, 10.10000; atol = ATOL)
-        @test isapprox(pivots[end-2].ohlcv.low, 9.160000; atol = ATOL)
-        @test isapprox(pivots[end-2].ohlcv.close, 9.760000; atol = ATOL)
-        @test isapprox(pivots[end-2].ohlcv.volume, 199.200000; atol = ATOL)
-        @test pivots[end-2].type == HLType.HIGH
+        # println(ind.output_values)
+        @test length(ind.output_values) == 9
 
-        @test isapprox(pivots[end-1].ohlcv.open, 8.490000; atol = ATOL)
-        @test isapprox(pivots[end-1].ohlcv.high, 9.400000; atol = ATOL)
-        @test isapprox(pivots[end-1].ohlcv.low, 8.420000; atol = ATOL)
-        @test isapprox(pivots[end-1].ohlcv.close, 9.210000; atol = ATOL)
-        @test isapprox(pivots[end-1].ohlcv.volume, 120.020000; atol = ATOL)
-        @test pivots[end-1].type == HLType.LOW
+        @test isapprox(ind.output_values[end-2].ohlcv.open, 9.160000; atol = ATOL)
+        @test isapprox(ind.output_values[end-2].ohlcv.high, 10.10000; atol = ATOL)
+        @test isapprox(ind.output_values[end-2].ohlcv.low, 9.160000; atol = ATOL)
+        @test isapprox(ind.output_values[end-2].ohlcv.close, 9.760000; atol = ATOL)
+        @test isapprox(ind.output_values[end-2].ohlcv.volume, 199.200000; atol = ATOL)
+        @test ind.output_values[end-2].type == HLType.HIGH
 
-        @test isapprox(pivots[end].ohlcv.open, 10.290000; atol = ATOL)
-        @test isapprox(pivots[end].ohlcv.high, 10.860000; atol = ATOL)
-        @test isapprox(pivots[end].ohlcv.low, 10.190000; atol = ATOL)
-        @test isapprox(pivots[end].ohlcv.close, 10.590000; atol = ATOL)
-        @test isapprox(pivots[end].ohlcv.volume, 108.270000; atol = ATOL)
-        @test pivots[end-1].type == HLType.HIGH
+        @test isapprox(ind.output_values[end-1].ohlcv.open, 8.490000; atol = ATOL)
+        @test isapprox(ind.output_values[end-1].ohlcv.high, 9.400000; atol = ATOL)
+        @test isapprox(ind.output_values[end-1].ohlcv.low, 8.420000; atol = ATOL)
+        @test isapprox(ind.output_values[end-1].ohlcv.close, 9.210000; atol = ATOL)
+        @test isapprox(ind.output_values[end-1].ohlcv.volume, 120.020000; atol = ATOL)
+        @test ind.output_values[end-1].type == HLType.LOW
+
+        @test isapprox(ind.output_values[end].ohlcv.open, 10.290000; atol = ATOL)
+        @test isapprox(ind.output_values[end].ohlcv.high, 10.860000; atol = ATOL)
+        @test isapprox(ind.output_values[end].ohlcv.low, 10.190000; atol = ATOL)
+        @test isapprox(ind.output_values[end].ohlcv.close, 10.590000; atol = ATOL)
+        @test isapprox(ind.output_values[end].ohlcv.volume, 108.270000; atol = ATOL)
+        @test ind.output_values[end].type == HLType.HIGH
     end
 
 end

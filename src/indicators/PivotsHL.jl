@@ -20,12 +20,12 @@ end
 The `PivotsHL` type implements a High/Low Pivots Indicator.
 """
 mutable struct PivotsHL{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
-    value::Union{Missing,PivotsHLVal}
+    value::Missing
     n::Int
     output_listeners::Series
     input_indicator::Union{Missing,TechnicalIndicator}
 
-    output_latest::Union{Missing,PivotsHLVal}
+    output_values::Vector
 
     high_period::Integer
     low_period::Integer
@@ -45,14 +45,13 @@ mutable struct PivotsHL{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
-        @warn "WIP - buggy"
-        output_latest = missing
+        output_values = PivotsHLVal[]
         high_input_values = CircBuff(S, high_period, rev = false)
         low_input_values = CircBuff(S, low_period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)  # could also be of size max(high_period, low_period) and avoid creation of 2 other CircBuff (high_input_values, low_input_values)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
-            output_latest,
+            output_values,
             high_period,
             low_period,
             high_input_values,
@@ -63,6 +62,8 @@ mutable struct PivotsHL{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         )
     end
 end
+
+has_output_value(ind::PivotsHL) = length(ind.output_values) > 0
 
 function _calculate_new_value(ind::PivotsHL)
     candle = ind.input_values[end]
@@ -78,25 +79,19 @@ function _calculate_new_value(ind::PivotsHL)
         min_low = min([p for p in ind.low_input_values.value]...)
 
         if high >= max_high
-            if !has_output_value(ind) || value(ind).type == HLType.LOW
-                println("1")
-                return PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false)
+            if !has_output_value(ind) || ind.output_values[end].type == HLType.LOW
+                push!(ind.output_values, PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false))
             else
-                println("2")
-                return PivotsHLVal(ind.input_values[end-1], HLType.HIGH, true)
+                ind.output_values[end] = PivotsHLVal(ind.input_values[end-1], HLType.HIGH, true)
             end
         elseif low <= min_low
-            if !has_output_value(ind) || value(ind).type == HLType.HIGH
-                println("3")
-                return PivotsHLVal(ind.input_values[end-1], HLType.LOW, false)
+            if !has_output_value(ind) || ind.output_values[end].type == HLType.HIGH
+                push!(ind.output_values, PivotsHLVal(ind.input_values[end-1], HLType.LOW, false))
             else
-                println("4")
-                return PivotsHLVal(ind.input_values[end-1], HLType.LOW, true)
+                ind.output_values[end] = PivotsHLVal(ind.input_values[end-1], HLType.LOW, true)
             end
         end
-        println("5")
         return missing
-        # return ind.output_latest
     else
         return missing
     end
