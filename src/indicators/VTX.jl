@@ -36,7 +36,6 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
-        @warn "WIP - buggy"
         T2 = input_modifier_return_type
         atr = ATR{T2,S}(period = 1)
         sub_indicators = Series(atr)
@@ -62,22 +61,19 @@ end
 function _calculate_new_value(ind::VTX)
     _atr_value = value(ind.atr)
     fit!(ind.atr_values, _atr_value)
-
-    if ind.n < 2
+    if ind.n > 1
+        candle = ind.input_values[end]
+        candle_prev = ind.input_values[end-1]
+        fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
+        fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
+        if !has_valid_values(ind.atr_values, ind.period) ||
+            !has_valid_values(ind.plus_vm, ind.period) ||
+            !has_valid_values(ind.minus_vm, ind.period)
+            return missing
+        end
+        atr_sum = sum(value(ind.atr_values))
+        return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)    
+    else
         return missing
     end
-
-    candle = ind.input_values[end]
-    candle_prev = ind.input_values[end-1]
-
-    fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
-    fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
-
-    if !has_valid_values(ind.atr_values, ind.period) ||
-        !has_valid_values(ind.plus_vm, ind.period) ||
-        !has_valid_values(ind.minus_vm, ind.period)
-        return missing
-    end
-    atr_sum = sum(value(ind.atr_values))
-    return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
 end

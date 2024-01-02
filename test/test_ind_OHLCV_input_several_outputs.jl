@@ -23,14 +23,12 @@
         @test value(ind).trend == Trend.UP
     end
 
-    @testset_skip "VTX" begin
+    @testset "VTX" begin
         ind = VTX{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
         @test nobs(ind) == length(V_OHLCV)
-
-        println(ind.stat.atr_values)
 
         @test isapprox(value(ind.lag[end-2]).plus_vtx, 1.133113; atol = ATOL)
         @test isapprox(value(ind.lag[end-2]).minus_vtx, 0.818481; atol = ATOL)

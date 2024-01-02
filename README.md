@@ -73,7 +73,7 @@ See [tests](test/)
 | `TSI` | True Strength Index | :1234: | :1234: | `EMA`, indicator chaining | :heavy_check_mark:
 | `TTM` | TTM Squeeze | :candle: | :m: | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | :heavy_check_mark:
 | `UO` | Ultimate Oscillator | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
-| `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :heavy_exclamation_mark: Doesn't work as expected - help wanted
+| `VTX` | Vortex Indicator | :candle: | :m: | `CircBuff`, `ATR` | :heavy_check_mark:
 | `VWAP` |  Volume Weighted Average Price | :candle: | :1234: | - | :heavy_check_mark:
 | `VWMA` | Volume Weighted Moving Average | :candle: | :1234: | `CircBuff` | :heavy_check_mark:
 | `WMA` | Weighted Moving Average | :1234: | :1234: | `CircBuff` | :heavy_check_mark:
