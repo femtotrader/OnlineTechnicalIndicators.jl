@@ -45,8 +45,8 @@ function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
     true_range = candle.high - candle.low
 
-    #if has_valid_values(ind.input_values, 1, exact = true)
-    if sum((!ismissing).(ind.input_values.value)) == 1
+    if has_valid_values(ind.input_values, 1, exact = true)
+    #if sum((!ismissing).(ind.input_values.value)) == 1
         fit!(ind.tr, true_range)
     else
         close2 = ind.input_values[end-1].close
