@@ -58,6 +58,7 @@ MIMO_INDICATORS = [
     "ParabolicSAR",
     "SFX",
     "TTM",
+    "PivotsHL",
 ]
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
@@ -73,7 +74,7 @@ for ind in [
     ind = Symbol(ind)
     @eval export $ind
 end
-export SARTrend, Trend
+export SARTrend, Trend, HLType
 
 export add_input_indicator!
 
