@@ -53,6 +53,10 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
     end
 end
 
+function expected_return_type(ind::IncTA.BB)
+    return BBVal{typeof(ind).parameters[end]}
+end
+
 function _calculate_new_value(ind::BB)
     if has_output_value(ind.central_band)
         lower = value(ind.central_band) - ind.std_dev_mult * value(ind.std_dev)
