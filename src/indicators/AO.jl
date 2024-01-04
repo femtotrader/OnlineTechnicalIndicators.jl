@@ -25,7 +25,7 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         slow_ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)

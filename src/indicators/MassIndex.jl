@@ -30,7 +30,7 @@ mutable struct MassIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         ma = EMA,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         _ma = MAFactory(S)(ma, period = ma_period)
         _ma_ma = MAFactory(S)(ma, period = ma_ma_period)

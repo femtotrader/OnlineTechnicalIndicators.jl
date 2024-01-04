@@ -15,7 +15,7 @@ mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function BOP{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         new{Tohlcv,S}(initialize_indicator_common_fields()..., input_modifier, input_filter)
     end

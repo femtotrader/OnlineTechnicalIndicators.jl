@@ -22,7 +22,7 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         period = CCI_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         mean_dev = MeanDev{S}(period = period)
         new{Tohlcv,S}(

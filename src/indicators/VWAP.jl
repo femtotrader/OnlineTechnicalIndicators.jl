@@ -20,7 +20,7 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     function VWAP{Tohlcv,S}(;
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
+        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
     ) where {Tohlcv,S}
         #T2 = input_modifier_return_type
         sum_price_vol = zero(S)
