@@ -53,7 +53,7 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
     end
 end
 
-function expected_return_type(ind::IncTA.BB)
+function expected_return_type(ind::BB)
     return BBVal{typeof(ind).parameters[end]}
 end
 
