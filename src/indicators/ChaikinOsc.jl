@@ -21,7 +21,7 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function ChaikinOsc{Tohlcv,S}(;
+    function ChaikinOsc{Tohlcv}(;
         fast_period = ChaikinOsc_FAST_PERIOD,
         slow_period = ChaikinOsc_SLOW_PERIOD,
         fast_ma = EMA,
@@ -29,9 +29,10 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        accu_dist = AccuDist{T2,S}()
+        S = fieldtype(T2, :close)
+        accu_dist = AccuDist{T2}()
         sub_indicators = Series(accu_dist)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)

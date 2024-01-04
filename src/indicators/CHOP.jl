@@ -23,14 +23,15 @@ mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function CHOP{Tohlcv,S}(;
+    function CHOP{Tohlcv}(;
         period = CHOP_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        atr = ATR{T2,S}(period = 1)
+        S = fieldtype(T2, :close)
+        atr = ATR{T2}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         input_values = CircBuff(T2, period, rev = false)

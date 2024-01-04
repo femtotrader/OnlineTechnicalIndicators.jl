@@ -16,7 +16,7 @@
     end
 
     @testset "AccuDist" begin
-        ind = AccuDist{OHLCV{Missing,Float64,Float64},Float64}()
+        ind = AccuDist{OHLCV{Missing,Float64}}()
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -27,7 +27,7 @@
     end
 
     @testset "BOP" begin
-        ind = BOP{OHLCV{Missing,Float64,Float64},Float64}()
+        ind = BOP{OHLCV{Missing,Float64,Float64}}()
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -38,7 +38,7 @@
     end
 
     @testset "CCI" begin
-        ind = CCI{OHLCV{Missing,Float64,Float64},Float64}(period = 20)
+        ind = CCI{OHLCV{Missing,Float64,Float64}}(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -49,10 +49,7 @@
     end
 
     @testset "ChaikinOsc" begin
-        ind = ChaikinOsc{OHLCV{Missing,Float64,Float64},Float64}(
-            fast_period = 5,
-            slow_period = 7,
-        )
+        ind = ChaikinOsc{OHLCV{Missing,Float64,Float64}}(fast_period = 5, slow_period = 7)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -63,7 +60,7 @@
     end
 
     @testset "VWMA" begin
-        ind = VWMA{OHLCV{Missing,Float64,Float64},Float64}(period = P)
+        ind = VWMA{OHLCV{Missing,Float64,Float64}}(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -74,7 +71,7 @@
     end
 
     @testset "VWAP" begin
-        ind = VWAP{OHLCV{Missing,Float64,Float64},Float64}()
+        ind = VWAP{OHLCV{Missing,Float64,Float64}}()
         @test nobs(ind) == 0
         ind = StatLag(ind, length(V_OHLCV))
         fit!(ind, V_OHLCV)
@@ -88,7 +85,7 @@
     end
 
     @testset "AO" begin
-        ind = AO{OHLCV{Missing,Float64,Float64},Float64}(fast_period = 5, slow_period = 7)
+        ind = AO{OHLCV{Missing,Float64,Float64}}(fast_period = 5, slow_period = 7)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -99,7 +96,7 @@
     end
 
     @testset "ATR" begin
-        ind = ATR{OHLCV{Missing,Float64,Float64},Float64}(period = 5)
+        ind = ATR{OHLCV{Missing,Float64,Float64}}(period = 5)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -110,7 +107,7 @@
     end
 
     @testset "ATR(1)" begin
-        ind = ATR{OHLCV{Missing,Float64,Float64},Float64}(period = 1)
+        ind = ATR{OHLCV{Missing,Float64,Float64}}(period = 1)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -121,7 +118,7 @@
     end
 
     @testset "ForceIndex" begin
-        ind = ForceIndex{OHLCV{Missing,Float64,Float64},Float64}(period = 20)
+        ind = ForceIndex{OHLCV{Missing,Float64,Float64}}(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -132,7 +129,7 @@
     end
 
     @testset "OBV" begin
-        ind = OBV{OHLCV{Missing,Float64,Float64},Float64}()
+        ind = OBV{OHLCV{Missing,Float64,Float64}}()
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -143,7 +140,7 @@
     end
 
     @testset "SOBV" begin
-        ind = SOBV{OHLCV{Missing,Float64,Float64},Float64}(period = 20)
+        ind = SOBV{OHLCV{Missing,Float64,Float64}}(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -154,7 +151,7 @@
     end
 
     @testset "EMV" begin
-        ind = EMV{OHLCV{Missing,Float64,Float64},Float64}(period = 14, volume_div = 10000)
+        ind = EMV{OHLCV{Missing,Float64,Float64}}(period = 14, volume_div = 10000)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -165,8 +162,7 @@
     end
 
     @testset "Stoch" begin
-        ind =
-            Stoch{OHLCV{Missing,Float64,Float64},Float64}(period = 14, smoothing_period = 3)
+        ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 14, smoothing_period = 3)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -180,7 +176,7 @@
     end
 
     @testset "MassIndex" begin
-        ind = MassIndex{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = MassIndex{OHLCV{Missing,Float64,Float64}}(
             ma_period = 9,
             ma_ma_period = 9,
             ma_ratio_period = 10,
@@ -194,8 +190,8 @@
         @test isapprox(value(ind), 9.648128; atol = ATOL)
     end
 
-    @testset "CHOP - help wanted" begin
-        ind = CHOP{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
+    @testset "CHOP" begin
+        ind = CHOP{OHLCV{Missing,Float64,Float64}}(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -206,7 +202,7 @@
     end
 
     @testset "KVO" begin
-        ind = KVO{OHLCV{Missing,Float64,Float64},Float64}(fast_period = 5, slow_period = 10)
+        ind = KVO{OHLCV{Missing,Float64,Float64}}(fast_period = 5, slow_period = 10)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -217,7 +213,7 @@
     end
 
     @testset "UO" begin
-        ind = UO{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = UO{OHLCV{Missing,Float64,Float64}}(
             fast_period = 3,
             mid_period = 5,
             slow_period = 7,

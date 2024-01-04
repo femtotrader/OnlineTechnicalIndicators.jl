@@ -43,6 +43,7 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
     ) where {Tval}
         @assert fast_macd_period < slow_macd_period "fast_macd_period < slow_macd_period is not respected"
         T2 = input_modifier_return_type
+        #S = fieldtype(T2, :close)
         # use slow_macd_period for signal line as signal line is not relevant here
         macd = MACD{T2}(
             fast_period = fast_macd_period,
@@ -51,7 +52,7 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
         )
         sub_indicators = Series(macd)
         #stoch_macd = Stoch{MACDVal,T2}(
-        stoch_macd = Stoch{Union{Missing,MACDVal},T2}(
+        stoch_macd = Stoch{MACDVal}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
@@ -61,7 +62,7 @@ mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
         )
         add_input_indicator!(stoch_macd, macd)  # <---
         #stoch_d = Stoch{StochVal,T2}(
-        stoch_d = Stoch{Union{Missing,StochVal},T2}(
+        stoch_d = Stoch{StochVal}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,

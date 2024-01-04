@@ -16,7 +16,7 @@ end
 
 The `SuperTrend` type implements a Super Trend indicator.
 """
-mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct SuperTrend{Tohlcv} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,SuperTrendVal}
     n::Int
     output_listeners::Series
@@ -35,20 +35,21 @@ mutable struct SuperTrend{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function SuperTrend{Tohlcv,S}(;
+    function SuperTrend{Tohlcv}(;
         atr_period = SuperTrend_ATR_PERIOD,
         mult = SuperTrend_MULT,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        atr = ATR{T2,S}(period = atr_period)
+        S = fieldtype(T2, :close)
+        atr = ATR{T2}(period = atr_period)
         sub_indicators = Series(atr)
         fub = CircBuff(S, 2, rev = false)  # capacity 2 may be enough
         flb = CircBuff(S, 2, rev = false)
         input_values = CircBuff(T2, atr_period, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv}(
             initialize_indicator_common_fields()...,
             atr_period,
             mult,

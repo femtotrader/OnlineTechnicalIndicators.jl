@@ -30,15 +30,16 @@ mutable struct Stoch{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function Stoch{Tohlcv,S}(;
+    function Stoch{Tohlcv}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
         ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         values_d = MAFactory(S)(ma, period = smoothing_period)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(

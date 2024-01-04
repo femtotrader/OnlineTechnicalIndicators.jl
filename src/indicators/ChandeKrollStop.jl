@@ -13,7 +13,7 @@ end
 The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 """
 mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
-    value::Union{Missing,ChandeKrollStopVal{S}}
+    value::Union{Missing,ChandeKrollStopVal}
     n::Int
     output_listeners::Series
     input_indicator::Union{Missing,TechnicalIndicator}
@@ -32,17 +32,18 @@ mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function ChandeKrollStop{Tohlcv,S}(;
+    function ChandeKrollStop{Tohlcv}(;
         atr_period = ChandeKrollStop_ATR_PERIOD,
         atr_mult = ChandeKrollStop_ATR_MULT,
         period = ChandeKrollStop_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         input_values = CircBuff(T2, atr_period, rev = false)
-        atr = ATR{T2,S}(period = atr_period)
+        atr = ATR{T2}(period = atr_period)
         sub_indicators = Series(atr)
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)

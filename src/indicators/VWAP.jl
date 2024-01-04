@@ -17,15 +17,15 @@ mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function VWAP{Tohlcv,S}(;
+    function VWAP{Tohlcv}(;
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
-    ) where {Tohlcv,S}
-        #T2 = input_modifier_return_type
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
+        T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         sum_price_vol = zero(S)
         sum_vol = zero(S)
-
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             sum_price_vol,

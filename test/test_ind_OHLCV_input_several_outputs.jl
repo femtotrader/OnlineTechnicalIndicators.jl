@@ -3,7 +3,7 @@ using IncTA: PivotsHLVal
 @testset "OHLC input - several output values" begin
 
     @testset "SuperTrend" begin
-        ind = SuperTrend{OHLCV{Missing,Float64,Float64},Float64}(atr_period = 10, mult = 3)
+        ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
         @test nobs(ind) == 0
         ind = StatLag(ind, 16)
         fit!(ind, V_OHLCV)
@@ -26,7 +26,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "VTX" begin
-        ind = VTX{OHLCV{Missing,Float64,Float64},Float64}(period = 14)
+        ind = VTX{OHLCV{Missing,Float64,Float64}}(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -43,7 +43,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "DonchianChannels" begin
-        ind = DonchianChannels{OHLCV{Missing,Float64,Float64},Float64}(period = 5)
+        ind = DonchianChannels{OHLCV{Missing,Float64,Float64}}(period = 5)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -63,7 +63,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "KeltnerChannels" begin
-        ind = KeltnerChannels{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = KeltnerChannels{OHLCV{Missing,Float64,Float64}}(
             ma_period = 10,
             atr_period = 10,
             atr_mult_up = 2,
@@ -90,7 +90,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "ADX" begin
-        ind = ADX{OHLCV{Missing,Float64,Float64},Float64}(di_period = 14, adx_period = 14)
+        ind = ADX{OHLCV{Missing,Float64,Float64}}(di_period = 14, adx_period = 14)
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -110,7 +110,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "Aroon" begin
-        ind = Aroon{OHLCV{Missing,Float64,Float64},Float64}(period = 10)
+        ind = Aroon{OHLCV{Missing,Float64,Float64}}(period = 10)
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -127,7 +127,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "ChandeKrollStop" begin
-        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64}}(
             atr_period = 5,
             atr_mult = 2.0,
             period = 3,
@@ -148,7 +148,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "ParabolicSAR" begin
-        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64}}(
             init_accel_factor = 0.02,
             accel_factor_inc = 0.02,
             max_accel_factor = 0.2,
@@ -175,7 +175,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "SFX" begin
-        ind = SFX{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = SFX{OHLCV{Missing,Float64,Float64}}(
             atr_period = 12,
             std_dev_period = 12,
             std_dev_smoothing_period = 3,
@@ -199,7 +199,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "TTM" begin
-        ind = TTM{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = TTM{OHLCV{Missing,Float64,Float64}}(
             period = 20,
             bb_std_dev_mult = 2.0,
             kc_atr_mult = 2.0,
@@ -223,7 +223,7 @@ using IncTA: PivotsHLVal
     end
 
     @testset "PivotsHL" begin
-        ind = PivotsHL{OHLCV{Missing,Float64,Float64},Float64}(
+        ind = PivotsHL{OHLCV{Missing,Float64,Float64}}(
             high_period = 7,
             low_period = 7,
             memory = 10,

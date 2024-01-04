@@ -18,16 +18,17 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function AO{Tohlcv,S}(;
+    function AO{Tohlcv}(;
         fast_period = AO_FAST_PERIOD,
         slow_period = AO_SLOW_PERIOD,
         fast_ma = SMA,
         slow_ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
-    ) where {Tohlcv,S}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
+        S = fieldtype(input_modifier_return_type, :close)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
         new{Tohlcv,S}(

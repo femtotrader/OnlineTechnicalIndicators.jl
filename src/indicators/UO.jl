@@ -25,16 +25,17 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function UO{Tohlcv,S}(;
+    function UO{Tohlcv}(;
         fast_period = UO_FAST_PERIOD,
         mid_period = UO_MID_PERIOD,
         slow_period = UO_SLOW_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)

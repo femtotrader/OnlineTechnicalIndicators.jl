@@ -22,15 +22,16 @@ mutable struct KVO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function KVO{Tohlcv,S}(;
+    function KVO{Tohlcv}(;
         fast_period = KVO_FAST_PERIOD,
         slow_period = KVO_SLOW_PERIOD,
         ma = EMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         _fast_ma = MAFactory(S)(ma, period = fast_period)
         _slow_ma = MAFactory(S)(ma, period = slow_period)
         trend = CircBuff(S, 2, rev = false)

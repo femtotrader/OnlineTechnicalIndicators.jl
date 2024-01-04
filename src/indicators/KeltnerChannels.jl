@@ -33,7 +33,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function KeltnerChannels{Tohlcv,S}(;
+    function KeltnerChannels{Tohlcv}(;
         ma_period = KeltnerChannels_MA_PERIOD,
         atr_period = KeltnerChannels_ATR_PERIOD,
         atr_mult_up = KeltnerChannels_ATR_MULT_UP,
@@ -42,9 +42,10 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        atr = ATR{T2,S}(period = atr_period)
+        S = fieldtype(T2, :close)
+        atr = ATR{T2}(period = atr_period)
         _cb = MAFactory(S)(
             ma,
             period = ma_period,

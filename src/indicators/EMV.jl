@@ -21,15 +21,16 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function EMV{Tohlcv,S}(;
+    function EMV{Tohlcv}(;
         period = EMV_PERIOD,
         volume_div = EMV_VOLUME_DIV,
         ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         _emv_ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(

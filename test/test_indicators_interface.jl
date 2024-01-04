@@ -88,10 +88,10 @@ end
         for IND in MISO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
-                ind = IND{MACDVal,Float64}(
+                ind = IND{MACDVal}(
                     input_filter = always_true,
                     input_modifier = macd_to_ohlcv,
-                    input_modifier_return_type = OHLCV,
+                    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
                 )
                 macd_val = MACDVal(0.0, 0.0, 0.0)
                 @test ind.input_filter(macd_val) == true
@@ -108,10 +108,10 @@ end
         for IND in MIMO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
-                ind = IND{MACDVal,Float64}(
+                ind = IND{MACDVal}(
                     input_filter = always_true,
                     input_modifier = macd_to_ohlcv,
-                    input_modifier_return_type = OHLCV,
+                    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
                 )
                 macd_val = MACDVal(0.0, 0.0, 0.0)
                 @test ind.input_filter(macd_val) == true

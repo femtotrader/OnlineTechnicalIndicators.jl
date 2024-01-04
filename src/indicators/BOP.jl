@@ -12,11 +12,12 @@ mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function BOP{Tohlcv,S}(;
+    function BOP{Tohlcv}(;
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
-    ) where {Tohlcv,S}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}        
+        S = fieldtype(input_modifier_return_type, :close)
         new{Tohlcv,S}(initialize_indicator_common_fields()..., input_modifier, input_filter)
     end
 end

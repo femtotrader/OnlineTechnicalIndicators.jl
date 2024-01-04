@@ -17,14 +17,14 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function VWMA{Tohlcv,S}(;
+    function VWMA{Tohlcv}(;
         period = VWMA_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-
+        S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,

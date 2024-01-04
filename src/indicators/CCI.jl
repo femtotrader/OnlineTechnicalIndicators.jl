@@ -18,12 +18,14 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function CCI{Tohlcv,S}(;
+    function CCI{Tohlcv}(;
         period = CCI_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
-        input_modifier_return_type = Tohlcv,  # not necessary but here to unify interface
-    ) where {Tohlcv,S}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
+        T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         mean_dev = MeanDev{S}(period = period)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,

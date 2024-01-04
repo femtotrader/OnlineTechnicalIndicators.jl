@@ -20,14 +20,15 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
 
     input_values::CircBuff
 
-    function ForceIndex{Tohlcv,S}(;
+    function ForceIndex{Tohlcv}(;
         period = ForceIndex_PERIOD,
         ma = EMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         _ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(

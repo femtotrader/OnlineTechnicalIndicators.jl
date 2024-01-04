@@ -10,7 +10,7 @@ end
 
 The `VTX` type implements a Vortex Indicator.
 """
-mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct VTX{Tohlcv} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,VTXVal}
     n::Int
     output_listeners::Series
@@ -30,20 +30,21 @@ mutable struct VTX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function VTX{Tohlcv,S}(;
+    function VTX{Tohlcv}(;
         period = VTX_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        atr = ATR{T2,S}(period = 1)
+        S = fieldtype(T2, :close)
+        atr = ATR{T2}(period = 1)
         sub_indicators = Series(atr)
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

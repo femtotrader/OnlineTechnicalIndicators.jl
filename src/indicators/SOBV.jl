@@ -20,15 +20,16 @@ mutable struct SOBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function SOBV{Tohlcv,S}(;
+    function SOBV{Tohlcv}(;
         period = SOBV_PERIOD,
         ma = SMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        obv = OBV{T2,S}()
+        S = fieldtype(T2, :close)
+        obv = OBV{T2}()
         obv_ma = MAFactory(S)(ma, period = period)
         sub_indicators = Series(obv)
         new{Tohlcv,S}(

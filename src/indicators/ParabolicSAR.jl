@@ -34,15 +34,16 @@ mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function ParabolicSAR{Tohlcv,S}(;
+    function ParabolicSAR{Tohlcv}(;
         init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
         accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
         max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         input_values = CircBuff(T2, SAR_INIT_LEN, rev = false)
         new{Tohlcv,S}(
             initialize_indicator_common_fields()...,

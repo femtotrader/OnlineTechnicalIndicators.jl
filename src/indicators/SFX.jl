@@ -13,7 +13,7 @@ end
 
 The `SFX` type implements a SFX indicator.
 """
-mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct SFX{Tohlcv} <: TechnicalIndicator{Tohlcv}
     value::Union{Missing,SFXVal}
     n::Int
     output_listeners::Series
@@ -28,7 +28,7 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_modifier::Function
     input_filter::Function
 
-    function SFX{Tohlcv,S}(;
+    function SFX{Tohlcv}(;
         atr_period = SFX_ATR_PERIOD,
         std_dev_period = SFX_STD_DEV_PERIOD,
         std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD,
@@ -36,16 +36,17 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
-        atr = ATR{T2,S}(period = atr_period)
+        S = fieldtype(T2, :close)
+        atr = ATR{T2}(period = atr_period)
         std_dev = StdDev{Float64}(
             period = std_dev_period,
             input_modifier = ValueExtractor.extract_close,
         )
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
-        new{Tohlcv,S}(
+        new{Tohlcv}(
             initialize_indicator_common_fields()...,
             sub_indicators,
             atr,

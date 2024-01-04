@@ -20,13 +20,18 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     input_filter::Function
     input_values::CircBuff
 
-    function ATR{Tohlcv,S}(;
+    function ATR{Tohlcv}(;
         period = ATR_PERIOD,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv,S}
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
+        if hasfield(T2, :close)
+            S = fieldtype(T2, :close)
+        else
+            S = Float64
+        end
         tr = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,S}(
