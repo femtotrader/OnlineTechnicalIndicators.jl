@@ -369,14 +369,27 @@
     end
 
     @testset "TSI" begin
-        ind = TSI{Float64}(fast_period = 14, slow_period = 23)
-        @test nobs(ind) == 0
-        ind = StatLag(ind, 3)
-        fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == length(CLOSE_TMPL)
-        @test isapprox(value(ind.lag[end-2]), 9.159520; atol = ATOL)
-        @test isapprox(value(ind.lag[end-1]), 10.724944; atol = ATOL)
-        @test isapprox(value(ind), 11.181863; atol = ATOL)
+        @testset "fit! with CLOSE_TMPL" begin
+            ind = TSI{Float64}(fast_period = 14, slow_period = 23)
+            @test nobs(ind) == 0
+            ind = StatLag(ind, 3)
+            fit!(ind, CLOSE_TMPL)
+            @test nobs(ind) == length(CLOSE_TMPL)
+            @test isapprox(value(ind.lag[end-2]), 9.159520; atol = ATOL)
+            @test isapprox(value(ind.lag[end-1]), 10.724944; atol = ATOL)
+            @test isapprox(value(ind), 11.181863; atol = ATOL)
+        end
+
+        @testset "fit! with CLOSE_EQUAL_VALUES_TMPL" begin
+            ind = TSI{Float64}(fast_period = 3, slow_period = 5)
+            @test nobs(ind) == 0
+            ind = StatLag(ind, length(CLOSE_EQUAL_VALUES_TMPL))
+            fit!(ind, CLOSE_EQUAL_VALUES_TMPL)
+            @test nobs(ind) == length(CLOSE_EQUAL_VALUES_TMPL)
+            results = Set([value(stat) for stat in value(ind.lag)])
+            @test length(results) == 1
+            @test ismissing(collect(results)[1])
+        end
     end
 
 
