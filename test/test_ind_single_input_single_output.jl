@@ -6,7 +6,7 @@
         ind = StatLag(ind, length(CLOSE_TMPL))
         fit!(ind, CLOSE_TMPL)
         @test nobs(ind) == length(CLOSE_TMPL)
-        for i in 1:P-1
+        for i = 1:P-1
             @test ismissing(value(ind.lag[i]))
         end
         @test !ismissing(value(ind.lag[P]))
@@ -58,7 +58,7 @@
 
     @testset "SMA with Vector as input" begin
         calculated = SMA(CLOSE_TMPL; period = P)
-        for i in 1:P-1
+        for i = 1:P-1
             @test ismissing(calculated[i])
         end
         @test !ismissing(calculated[P])

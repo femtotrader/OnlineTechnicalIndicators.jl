@@ -193,15 +193,15 @@ function Base.setindex!(o::CircBuff, val, i::Int)
     if nobs(o) ≤ length(o.rng.rng)
         o.value[i] = val
     else
-        o.value[o.rng[nobs(o) + i]] = val
+        o.value[o.rng[nobs(o)+i]] = val
     end
 end
-function Base.setindex!(o::CircBuff{<:Any, true}, val, i::Int)
+function Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)
     i = length(o.value) - i + 1
     if nobs(o) ≤ length(o.rng.rng)
         o.value[i] = val
     else
-        o.value[o.rng[nobs(o) + i]] = val
+        o.value[o.rng[nobs(o)+i]] = val
     end
 end
 

@@ -1,5 +1,12 @@
 using IncTA
-using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, CLOSE_EQUAL_VALUES_TMPL, VOLUME_TMPL, V_OHLCV
+using IncTA.SampleData:
+    OPEN_TMPL,
+    HIGH_TMPL,
+    LOW_TMPL,
+    CLOSE_TMPL,
+    CLOSE_EQUAL_VALUES_TMPL,
+    VOLUME_TMPL,
+    V_OHLCV
 using OnlineStatsBase
 using OnlineStats: StatLag
 

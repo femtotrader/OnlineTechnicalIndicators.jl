@@ -47,7 +47,7 @@ mutable struct PivotsHL{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv,S}
         T2 = input_modifier_return_type
-        output_values =  CircBuff(PivotsHLVal, memory, rev = false)
+        output_values = CircBuff(PivotsHLVal, memory, rev = false)
         high_input_values = CircBuff(S, high_period, rev = false)
         low_input_values = CircBuff(S, low_period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)  # could also be of size max(high_period, low_period) and avoid creation of 2 other CircBuff (high_input_values, low_input_values)
@@ -82,15 +82,23 @@ function _calculate_new_value(ind::PivotsHL)
 
         if high >= max_high
             if !has_output_value(ind) || ind.output_values[end].type == HLType.LOW
-                fit!(ind.output_values, PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false))
+                fit!(
+                    ind.output_values,
+                    PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false),
+                )
             else
-                ind.output_values[end] = PivotsHLVal(ind.input_values[end-1], HLType.HIGH, true)
+                ind.output_values[end] =
+                    PivotsHLVal(ind.input_values[end-1], HLType.HIGH, true)
             end
         elseif low <= min_low
             if !has_output_value(ind) || ind.output_values[end].type == HLType.HIGH
-                fit!(ind.output_values, PivotsHLVal(ind.input_values[end-1], HLType.LOW, false))
+                fit!(
+                    ind.output_values,
+                    PivotsHLVal(ind.input_values[end-1], HLType.LOW, false),
+                )
             else
-                ind.output_values[end] = PivotsHLVal(ind.input_values[end-1], HLType.LOW, true)
+                ind.output_values[end] =
+                    PivotsHLVal(ind.input_values[end-1], HLType.LOW, true)
             end
         end
         return missing

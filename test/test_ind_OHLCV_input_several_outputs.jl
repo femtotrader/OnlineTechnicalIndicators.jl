@@ -226,7 +226,7 @@ using IncTA: PivotsHLVal
         ind = PivotsHL{OHLCV{Missing,Float64,Float64},Float64}(
             high_period = 7,
             low_period = 7,
-            memory = 10
+            memory = 10,
         )
         @test nobs(ind) == 0
 
