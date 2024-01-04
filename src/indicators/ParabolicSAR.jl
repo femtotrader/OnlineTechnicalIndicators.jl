@@ -60,8 +60,8 @@ function _calculate_new_value(ind::ParabolicSAR)
     if ind.n < SAR_INIT_LEN
         return missing
     elseif ind.n == SAR_INIT_LEN
-        min_low = min([cdl.low for cdl in ind.input_values.value]...)
-        max_high = max([cdl.high for cdl in ind.input_values.value]...)
+        min_low = min((cdl.low for cdl in ind.input_values.value)...)
+        max_high = max((cdl.high for cdl in ind.input_values.value)...)
         return ParabolicSARVal(min_low, SARTrend.UP, max_high, ind.init_accel_factor)
     else
 

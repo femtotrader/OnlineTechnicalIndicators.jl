@@ -57,8 +57,8 @@ function _calculate_new_value(ind::Stoch)
     # get latest received candle
     candle = ind.input_values[end]
     # get max high and min low
-    max_high = max([cdl.high for cdl in value(ind.input_values)]...)
-    min_low = min([cdl.low for cdl in value(ind.input_values)]...)
+    max_high = max((cdl.high for cdl in value(ind.input_values))...)
+    min_low = min((cdl.low for cdl in value(ind.input_values))...)
     # calculate k
     if max_high == min_low
         k = 100.0

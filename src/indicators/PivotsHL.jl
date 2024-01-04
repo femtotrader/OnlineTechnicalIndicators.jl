@@ -75,8 +75,8 @@ function _calculate_new_value(ind::PivotsHL)
         high = ind.input_values[end-1].high
         low = ind.input_values[end-1].low
 
-        max_high = max([p for p in ind.high_input_values.value]...)
-        min_low = min([p for p in ind.low_input_values.value]...)
+        max_high = max((p for p in ind.high_input_values.value)...)
+        min_low = min((p for p in ind.low_input_values.value)...)
 
         if high >= max_high
             if !has_output_value(ind) || ind.output_values[end].type == HLType.LOW

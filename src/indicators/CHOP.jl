@@ -56,8 +56,8 @@ function _calculate_new_value(ind::CHOP)
         return missing
     end
 
-    max_high = max([cdl.high for cdl in value(ind.input_values)]...)
-    min_low = min([cdl.low for cdl in value(ind.input_values)]...)
+    max_high = max((cdl.high for cdl in value(ind.input_values))...)
+    min_low = min((cdl.low for cdl in value(ind.input_values))...)
 
     if max_high != min_low
         return 100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
