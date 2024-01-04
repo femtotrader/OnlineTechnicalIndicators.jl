@@ -4,6 +4,7 @@ export OHLCV, OHLCVFactory, ValueExtractor
 export fit!
 
 export SampleData
+export ArraysInterface
 
 SISO_INDICATORS = [
     "SMA",
@@ -217,5 +218,9 @@ end
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory
+
+# High order functions for AbstractArray input
+include("arrays.jl")
+
 
 end

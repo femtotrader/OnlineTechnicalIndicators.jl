@@ -6,10 +6,9 @@
         ind = StatLag(ind, length(CLOSE_TMPL))
         fit!(ind, CLOSE_TMPL)
         @test nobs(ind) == length(CLOSE_TMPL)
-        @test ismissing(value(ind.lag[1]))
-        @test ismissing(value(ind.lag[2]))
-        @test ismissing(value(ind.lag[3]))
-        @test ismissing(value(ind.lag[P-1]))
+        for i in 1:P-1
+            @test ismissing(value(ind.lag[i]))
+        end
         @test !ismissing(value(ind.lag[P]))
 
         @test isapprox(value(ind.lag[end-2]), 9.075500; atol = ATOL)
@@ -38,7 +37,7 @@
     end
     =#
 
-    @testset "Indicator chaining (SMA) - WIP" begin
+    @testset "Indicator chaining (SMA)" begin
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
         ind1 = SMA{Float64}(period = 3)
@@ -55,6 +54,17 @@
         @test isapprox(value(ind2), 8.0; atol = ATOL)
         @test isapprox(value(ind3), 7.0; atol = ATOL)
         @test isapprox(value(ind4), 6.0; atol = ATOL)
+    end
+
+    @testset "SMA with Vector as input" begin
+        calculated = ArraysInterface.SMA(CLOSE_TMPL; period = P)
+        for i in 1:P-1
+            @test ismissing(calculated[i])
+        end
+        @test !ismissing(calculated[P])
+        @test isapprox(calculated[end-2], 9.075500; atol = ATOL)
+        @test isapprox(calculated[end-1], 9.183000; atol = ATOL)
+        @test isapprox(calculated[end], 9.308500; atol = ATOL)
     end
 
     @testset "EMA" begin
@@ -81,7 +91,7 @@
         end
 
         @testset "vector" begin
-            ind = SMMA{Float64}(period = P)
+            ind = SMMA{eltype(CLOSE_TMPL)}(period = P)
             @test nobs(ind) == 0
             #=
             calculated = Union{Missing,Float64}[]
