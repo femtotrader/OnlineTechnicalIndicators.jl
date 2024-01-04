@@ -14,7 +14,7 @@ end
 """
     STC{T}(; fast_macd_period = STC_FAST_MACD_PERIOD, slow_macd_period = STC_SLOW_MACD_PERIOD, stoch_period = STC_STOCH_PERIOD, stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD, ma = SMA, , input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
-The `STC` type implements a chaff Trend Cycle indicator.
+The `STC` type implements a Schaff Trend Cycle indicator.
 """
 mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
     value::Union{Missing,T2}
