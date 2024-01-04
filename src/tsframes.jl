@@ -4,6 +4,9 @@ using IncTA
 using IncTA: TechnicalIndicator
 using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 
+using TSFrames
+using TSFrames: Not, select!
+
 const INPUT_FIELD = :Close
 const INPUT_FIELDS = [:Open, :High, :Low, :Close, :Volume]
 
@@ -48,15 +51,19 @@ function apply_func_SIMO(
         ret = value(ind)
         t = fieldvalues(ret)
         if length(t) != length(rename_flds)
-            #t = ntuple(i->missing, length(rename_flds))
             push!(results, missing)
         else
             push!(results, Tout(t...))
         end
 
     end
-    println(results)
-    TSFrame(results)
+    ts_result = TSFrame(results, index(ts))
+    for field in rename_flds
+        colname = String(common_field) * "_" * String(field)
+        ts_result.coredata[:, colname] = map(ret -> hasproperty(ret, field) ? getproperty(ret, field) : missing, ts_result.coredata[:, :x1])
+    end
+    select!(ts_result.coredata, Not([:x1]))
+    return ts_result
 end
 
 
@@ -135,10 +142,13 @@ TSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
 
 # SIMO
 BB(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.BB, input_field, :BB, [:lower, :central, :upper], args...; kwargs...)
-#MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.MACD, input_field, :MACD, args...; kwargs...)
+MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.MACD, input_field, :MACD, args...; kwargs...)
 #StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.StochRSI, input_field, :StochRSI, args...; kwargs...)
 #KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.KST, input_field, :KST, args...; kwargs...)
-
+#macd::Union{Missing,Tval}
+#signal::Union{Missing,Tval}
+#histogram::Union{Missing,Tval}
+#end
 # MISO
 
 # MIMO
