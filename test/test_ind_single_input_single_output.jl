@@ -57,7 +57,7 @@
     end
 
     @testset "SMA with Vector as input" begin
-        calculated = ArraysInterface.SMA(CLOSE_TMPL; period = P)
+        calculated = SMA(CLOSE_TMPL; period = P)
         for i in 1:P-1
             @test ismissing(calculated[i])
         end

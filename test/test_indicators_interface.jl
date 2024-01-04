@@ -136,3 +136,57 @@ end
     end
 
 end
+
+@testset "input as vector" begin
+    @testset "SISO" begin
+        # SISO indicators with vector input of close prices
+        for IND in SISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND(CLOSE_TMPL)
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset "SIMO" begin
+        # SIMO indicators with vector input of close prices
+        for IND in SIMO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND(CLOSE_TMPL)
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset "MISO" begin
+        # MISO indicators with vector input of candlestick
+        for IND in MISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND(V_OHLCV)
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset "MIMO" begin
+        # MIMO indicators with vector input of candlestick
+        for IND in MIMO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND(V_OHLCV)
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset "Others" begin
+        @testset "STC" begin
+            ind = STC(CLOSE_TMPL)
+            @test 1 == 1
+        end
+    end
+
+end
