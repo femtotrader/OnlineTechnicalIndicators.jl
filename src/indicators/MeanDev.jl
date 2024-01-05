@@ -5,7 +5,7 @@ const MeanDev_PERIOD = 3
 
 The `MeanDev` type implements a Mean Deviation indicator.
 """
-mutable struct MeanDev{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
+mutable struct MeanDev{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -31,7 +31,7 @@ mutable struct MeanDev{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
         input_values = CircBuff(T2, period, rev = false)
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

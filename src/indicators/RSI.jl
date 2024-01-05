@@ -5,7 +5,7 @@ const RSI_PERIOD = 3
 
 The `RSI` type implements a Relative Strength Index indicator.
 """
-mutable struct RSI{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
+mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -31,7 +31,7 @@ mutable struct RSI{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
         value = missing
         gains = SMMA{T2}(period = period)
         losses = SMMA{T2}(period = period)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             gains,

@@ -5,7 +5,7 @@ const CCI_PERIOD = 3
 
 The `CCI` type implements a Commodity Channel Index.
 """
-mutable struct CCI{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct CCI{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -27,7 +27,7 @@ mutable struct CCI{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         mean_dev = MeanDev{S}(period = period)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             mean_dev,

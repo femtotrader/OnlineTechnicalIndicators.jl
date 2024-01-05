@@ -5,7 +5,7 @@ const TEMA_PERIOD = 20
 
 The `TEMA` type implements a Triple Exponential Moving Average indicator.
 """
-mutable struct TEMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct TEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -34,7 +34,7 @@ mutable struct TEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         sub_indicators = Series(_ma)
         _ma_ma = MAFactory(T2)(ma, period = period)
         _ma_ma_ma = MAFactory(T2)(ma, period = period)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

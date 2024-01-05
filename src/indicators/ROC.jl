@@ -5,7 +5,7 @@ const ROC_PERIOD = 3
 
 The `ROC` type implements a Rate Of Change indicator.
 """
-mutable struct ROC{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
+mutable struct ROC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -25,7 +25,7 @@ mutable struct ROC{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             input_modifier,

@@ -7,7 +7,7 @@ const T3_FACTOR = 0.7
 
 The `T3` type implements a T3 Moving Average indicator.
 """
-mutable struct T3{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -67,7 +67,7 @@ mutable struct T3{Tval,T2} <: MovingAverageIndicator{Tval}
         c2 = 3 * factor^2 + 3 * factor^3
         c3 = -6 * factor^2 - 3 * factor - 3 * factor^3
         c4 = 1 + 3 * factor + factor^3 + 3 * factor^2
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

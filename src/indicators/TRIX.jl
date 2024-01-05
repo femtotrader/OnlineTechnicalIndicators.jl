@@ -6,7 +6,7 @@ const TRIX_PERIOD = 10
 
 The `TRIX` type implements a TRIX Moving Average indicator.
 """
-mutable struct TRIX{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct TRIX{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -44,7 +44,7 @@ mutable struct TRIX{Tval,T2} <: MovingAverageIndicator{Tval}
 
         output_history = CircBuff(T2, 2, rev = false)
 
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             output_history,
             period,

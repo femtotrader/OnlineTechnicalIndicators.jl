@@ -5,7 +5,7 @@ const WMA_PERIOD = 3
 
 The `WMA` type implements a Weighted Moving Average indicator.
 """
-mutable struct WMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct WMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -33,7 +33,7 @@ mutable struct WMA{Tval,T2} <: MovingAverageIndicator{Tval}
         numerator = zero(T2)
         denominator = period * (period + one(T2)) / (2 * one(T2))
 
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             total,

@@ -6,7 +6,7 @@ const EMV_VOLUME_DIV = 10000
 
 The `EMV` type implements a Ease of Movement indicator.
 """
-mutable struct EMV{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -33,7 +33,7 @@ mutable struct EMV{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         S = fieldtype(T2, :close)
         _emv_ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(T2, period, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             volume_div,

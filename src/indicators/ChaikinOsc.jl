@@ -6,7 +6,7 @@ const ChaikinOsc_SLOW_PERIOD = 7
 
 The `ChaikinOsc` type implements a Chaikin Oscillator.
 """
-mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct ChaikinOsc{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -36,7 +36,7 @@ mutable struct ChaikinOsc{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         sub_indicators = Series(accu_dist)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             sub_indicators,
             accu_dist,

@@ -7,7 +7,7 @@ const KAMA_SLOW_EMA_CONSTANT_PERIOD = 30
 
 The `KAMA` type implements a Kaufman's Adaptive Moving Average indicator.
 """
-mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct KAMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -37,7 +37,7 @@ mutable struct KAMA{Tval,T2} <: MovingAverageIndicator{Tval}
         slow_smoothing_constant = 2 * one(T2) / (slow_ema_constant_period + one(T2))
         volatility = CircBuff(T2, period, rev = false)
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             fast_smoothing_constant,

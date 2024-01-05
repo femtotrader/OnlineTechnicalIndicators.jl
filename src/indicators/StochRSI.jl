@@ -13,7 +13,7 @@ end
 
 The `StochRSI` type implements Moving Average Convergence Divergence indicator.
 """
-mutable struct StochRSI{Tval} <: TechnicalIndicatorMultiOutput{Tval}
+mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,StochRSIVal}
     n::Int
     output_listeners::Series
@@ -52,7 +52,7 @@ mutable struct StochRSI{Tval} <: TechnicalIndicatorMultiOutput{Tval}
         )
         sub_indicators = Series(rsi)
         recent_rsi = CircBuff(Union{Missing,T2}, stoch_period, rev = false)
-        new{Tval}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             stoch_period,
             sub_indicators,

@@ -15,8 +15,11 @@ input `val` will be modified/transformed using `input_modifier` function (defaul
 `input_modifier_return_type` is the type `T2` of return of the `input_modifier` function it's also type of indicator value
 
 by default `T2 = T1`
+
+IN = false means that indicator is of "single input" type
+IN = true means that indicator is of "multiple input" (candle) type
 """
-mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
+mutable struct SMA{T1,IN,T2} <: MovingAverageIndicator{T1}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -37,7 +40,7 @@ mutable struct SMA{T1,T2} <: MovingAverageIndicator{T1}
     ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{T1,T2}(
+        new{T1,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             false,

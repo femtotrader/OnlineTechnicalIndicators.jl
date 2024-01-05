@@ -7,7 +7,7 @@ const UO_SLOW_PERIOD = 7
 
 The `UO` type implements an Ultimate Oscillator.
 """
-mutable struct UO{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -39,7 +39,7 @@ mutable struct UO{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         input_values = CircBuff(T2, 2, rev = false)
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             fast_period,
             mid_period,

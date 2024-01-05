@@ -98,6 +98,8 @@ function initialize_indicator_common_fields()
     return value, n, output_listeners, input_indicator
 end
 
+ismultiinput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[2]
+# ismultioutput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[3]  # to implement
 expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} =
     typeof(ind).parameters[end]
 function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}
@@ -232,5 +234,6 @@ include("ma.jl")  # Moving Average Factory
 # Integration with Julia ecosystem (Arrays, Iterators...)
 include("other/arrays.jl")
 include("other/iterators.jl")
+include("other/tables.jl")
 
 end

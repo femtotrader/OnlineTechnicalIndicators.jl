@@ -5,7 +5,7 @@ const DPO_PERIOD = 20
 
 The `DPO` type implements a Detrended Price Oscillator indicator.
 """
-mutable struct DPO{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
+mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -33,7 +33,7 @@ mutable struct DPO{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
         _ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             semi_period,

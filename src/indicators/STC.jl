@@ -16,7 +16,7 @@ end
 
 The `STC` type implements a Schaff Trend Cycle indicator.
 """
-mutable struct STC{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
+mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -71,7 +71,7 @@ mutable struct STC{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
             input_modifier_return_type = OHLCV,
         )
         add_input_indicator!(stoch_d, stoch_macd)  # <---
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             sub_indicators,
             macd,

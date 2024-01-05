@@ -12,7 +12,7 @@ end
 
 The `BB` type implements Bollinger Bands indicator.
 """
-mutable struct BB{T1,T2} <: TechnicalIndicatorMultiOutput{T1}
+mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     value::Union{Missing,BBVal}
     n::Int
     output_listeners::Series
@@ -40,7 +40,7 @@ mutable struct BB{T1,T2} <: TechnicalIndicatorMultiOutput{T1}
         _central_band = MAFactory(T2)(ma, period = period)
         _std_dev = StdDev{T2}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
-        new{T1,T2}(
+        new{T1,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             std_dev_mult,

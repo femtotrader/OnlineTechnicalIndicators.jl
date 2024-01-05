@@ -20,7 +20,7 @@ end
 
 The `PivotsHL` type implements a High/Low Pivots Indicator.
 """
-mutable struct PivotsHL{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Missing
     n::Int
     output_listeners::Series
@@ -52,7 +52,7 @@ mutable struct PivotsHL{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
         high_input_values = CircBuff(S, high_period, rev = false)
         low_input_values = CircBuff(S, low_period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)  # could also be of size max(high_period, low_period) and avoid creation of 2 other CircBuff (high_input_values, low_input_values)
-        new{Tohlcv}(
+        new{Tohlcv,true}(
             initialize_indicator_common_fields()...,
             output_values,
             high_period,

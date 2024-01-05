@@ -5,7 +5,7 @@ const StdDev_PERIOD = 3
 
 The `StdDev` type implements a Standard Deviation indicator.
 """
-mutable struct StdDev{T1,T2} <: TechnicalIndicatorSingleOutput{T1}
+mutable struct StdDev{T1,IN,T2} <: TechnicalIndicatorSingleOutput{T1}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -25,7 +25,7 @@ mutable struct StdDev{T1,T2} <: TechnicalIndicatorSingleOutput{T1}
     ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        new{T1,T2}(
+        new{T1,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             input_modifier,

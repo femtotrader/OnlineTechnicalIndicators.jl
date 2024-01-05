@@ -5,7 +5,7 @@ const SMMA_PERIOD = 3
 
 The `SMMA` type implements a SMoothed Moving Average indicator.
 """
-mutable struct SMMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct SMMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -29,7 +29,7 @@ mutable struct SMMA{Tval,T2} <: MovingAverageIndicator{Tval}
         value = missing
         rolling = false
         input_values = CircBuff(T2, period, rev = false)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             rolling,

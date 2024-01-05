@@ -15,7 +15,7 @@ end
 
 The `KeltnerChannels` type implements a Keltner Channels indicator.
 """
-mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,KeltnerChannelsVal{S}}
     n::Int
     output_listeners::Series
@@ -52,7 +52,7 @@ mutable struct KeltnerChannels{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv
             input_modifier = ValueExtractor.extract_close,
         )
         sub_indicators = Series(atr, _cb)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             ma_period,
             atr_period,

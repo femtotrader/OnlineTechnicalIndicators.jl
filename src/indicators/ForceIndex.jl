@@ -5,7 +5,7 @@ const ForceIndex_PERIOD = 3
 
 The `ForceIndex` type implements a Force Index indicator.
 """
-mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct ForceIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -31,7 +31,7 @@ mutable struct ForceIndex{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         S = fieldtype(T2, :close)
         _ma = MAFactory(S)(ma, period = period)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             _ma,

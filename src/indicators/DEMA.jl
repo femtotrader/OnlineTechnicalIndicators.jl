@@ -5,7 +5,7 @@ const DEMA_PERIOD = 20
 
 The `DEMA` type implements a Double Exponential Moving Average indicator.
 """
-mutable struct DEMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -31,7 +31,7 @@ mutable struct DEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         _ma = MAFactory(T2)(ma, period = period)
         _ma_ma = MAFactory(T2)(ma, period = period)
         sub_indicators = Series(_ma)
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

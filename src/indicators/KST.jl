@@ -32,7 +32,7 @@ end
 
 The `KST` type implements Know Sure Thing indicator.
 """
-mutable struct KST{Tval} <: TechnicalIndicatorMultiOutput{Tval}
+mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,KSTVal}
     n::Int
     output_listeners::Series
@@ -88,7 +88,7 @@ mutable struct KST{Tval} <: TechnicalIndicatorMultiOutput{Tval}
 
         signal_line = MAFactory(T2)(ma, period = signal_period)
 
-        new{Tval}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             sub_indicators,
             roc1,

@@ -5,7 +5,7 @@ const ATR_PERIOD = 3
 
 The `ATR` type implements an Average True Range indicator.
 """
-mutable struct ATR{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -34,7 +34,7 @@ mutable struct ATR{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         end
         tr = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             tr,

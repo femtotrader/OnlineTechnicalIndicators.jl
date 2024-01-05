@@ -5,7 +5,7 @@ using IncTA:
     MISO_INDICATORS,
     MIMO_INDICATORS,
     OTHERS_INDICATORS
-using IncTA: always_true
+using IncTA: always_true, ismultiinput
 using IncTA: MACDVal, macd_to_ohlcv
 
 @testset "indicators interface" begin
@@ -49,28 +49,28 @@ using IncTA: MACDVal, macd_to_ohlcv
     end
 
 
-    @testset "expected_return_type" begin
+    @testset "expected_return_type / SI or MO" begin
         @testset "SISO" begin
             for IND in SISO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
                     ind = IND{Float64}()
                     @test expected_return_type(ind) == Float64
+                    @test !ismultiinput(ind)
                 end
             end
         end
 
-        #=
         @testset "SIMO" begin
             for IND in SIMO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
                     ind = IND{Float64}()
-                    @test expected_return_type(ind) == ...  # see in others tests
+                    # @test expected_return_type(ind) == ...  # see in others tests
+                    @test !ismultiinput(ind)
                 end
             end
         end
-        =#
 
         @testset "MISO" begin
             for IND in MISO_INDICATORS
@@ -78,21 +78,21 @@ using IncTA: MACDVal, macd_to_ohlcv
                     IND = eval(Meta.parse(IND))
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
                     @test expected_return_type(ind) == Float64
+                    @test ismultiinput(ind)
                 end
             end
         end
 
-        #=
         @testset "MIMO" begin
             for IND in MIMO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
-                    @test expected_return_type(ind) == ...  # see in others tests
+                    # @test expected_return_type(ind) == ...  # see in others tests
+                    @test ismultiinput(ind)
                 end
             end
         end
-        =#
 
         @testset "Others" begin
             @testset "STC" begin

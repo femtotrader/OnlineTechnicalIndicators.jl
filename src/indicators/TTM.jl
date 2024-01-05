@@ -12,7 +12,7 @@ end
 
 The `TTM` type implements a TTM indicator.
 """
-mutable struct TTM{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,TTMVal}
     n::Int
     output_listeners::Series
@@ -66,7 +66,7 @@ mutable struct TTM{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         for x = 0:period-1
             denom += (x - mean_x)^2
         end
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,

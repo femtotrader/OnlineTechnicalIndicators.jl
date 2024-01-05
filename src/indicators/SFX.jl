@@ -13,7 +13,7 @@ end
 
 The `SFX` type implements a SFX indicator.
 """
-mutable struct SFX{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SFXVal}
     n::Int
     output_listeners::Series
@@ -46,7 +46,7 @@ mutable struct SFX{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         )
         sub_indicators = Series(atr, std_dev)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             sub_indicators,
             atr,

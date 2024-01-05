@@ -6,7 +6,7 @@ const ZLEMA_PERIOD = 20
 
 The `ZLEMA` type implements a Zero Lag Exponential Moving Average indicator.
 """
-mutable struct ZLEMA{Tval,T2} <: MovingAverageIndicator{Tval}
+mutable struct ZLEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series
@@ -31,7 +31,7 @@ mutable struct ZLEMA{Tval,T2} <: MovingAverageIndicator{Tval}
         input_values = CircBuff(T2, lag + 1, rev = false)
         ema = EMA{T2}(period = period)
 
-        new{Tval,T2}(
+        new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
             lag,

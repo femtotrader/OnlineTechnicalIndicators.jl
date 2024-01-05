@@ -5,7 +5,7 @@ const VWMA_PERIOD = 3
 
 The `VWMA` type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
+mutable struct VWMA{Tohlcv,IN,S} <: MovingAverageIndicator{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
@@ -26,7 +26,7 @@ mutable struct VWMA{Tohlcv,S} <: MovingAverageIndicator{Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
-        new{Tohlcv,S}(
+        new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             input_modifier,
