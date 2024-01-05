@@ -7,6 +7,7 @@ using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL,
 using TSFrames
 using TSFrames: Not, select!
 
+
 const INPUT_FIELD = :Close
 const INPUT_FIELDS = [:Open, :High, :Low, :Close, :Volume]
 

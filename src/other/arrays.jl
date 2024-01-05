@@ -56,6 +56,7 @@ TRIX(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.TRIX, args...; 
 TSI(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.TSI, args...; kwargs...)
 
 # SIMO indicators
+
 BB(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.BB, args...; kwargs...)
 
 MACD(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.MACD, args...; kwargs...)
@@ -66,6 +67,7 @@ StochRSI(x::AbstractArray, args...; kwargs...) =
 KST(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.KST, args...; kwargs...)
 
 # MISO indicators
+
 AccuDist(x::AbstractArray, args...; kwargs...) =
     apply_func(x, IncTA.AccuDist, args...; kwargs...)
 
@@ -105,7 +107,6 @@ ADX(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.ADX, args...; kw
 KVO(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.KVO, args...; kwargs...)
 
 UO(x::AbstractArray, args...; kwargs...) = apply_func(x, IncTA.UO, args...; kwargs...)
-
 
 # MIMO indicators
 

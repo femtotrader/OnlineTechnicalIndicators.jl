@@ -230,6 +230,6 @@ end
 include("ma.jl")  # Moving Average Factory
 
 # High order functions for AbstractArray input
-include("arrays.jl")
+include("other/arrays.jl")
 
 end
