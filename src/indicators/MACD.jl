@@ -1,6 +1,6 @@
-const MACD_FAST_PERIOD = 5
-const MACD_SLOW_PERIOD = 5
-const MACD_SIGNAL_PERIOD = 5
+const MACD_FAST_PERIOD = 12
+const MACD_SLOW_PERIOD = 26
+const MACD_SIGNAL_PERIOD = 9
 
 struct MACDVal{Tval}
     macd::Union{Missing,Tval}
@@ -26,10 +26,10 @@ mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
     input_indicator::Union{Missing,TechnicalIndicator}
 
     sub_indicators::Series
-    fast_ma::EMA
-    slow_ma::EMA
+    fast_ma::MovingAverageIndicator  # EMA
+    slow_ma::MovingAverageIndicator  # EMA
 
-    signal_line::EMA
+    signal_line::MovingAverageIndicator  # EMA
 
     input_modifier::Function
     input_filter::Function
