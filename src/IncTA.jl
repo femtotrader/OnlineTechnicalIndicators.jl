@@ -99,7 +99,7 @@ function initialize_indicator_common_fields()
 end
 
 ismultiinput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[2]
-# ismultioutput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[3]  # to implement
+ismultioutput(ind::O) where {O<:TechnicalIndicator} = typeof(ind) <: TechnicalIndicatorMultiOutput
 expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} =
     typeof(ind).parameters[end]
 function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}

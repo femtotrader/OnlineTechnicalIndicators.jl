@@ -5,7 +5,7 @@ using IncTA:
     MISO_INDICATORS,
     MIMO_INDICATORS,
     OTHERS_INDICATORS
-using IncTA: always_true, ismultiinput
+using IncTA: always_true, ismultiinput, ismultioutput
 using IncTA: MACDVal, macd_to_ohlcv
 
 @testset "indicators interface" begin
@@ -57,6 +57,7 @@ using IncTA: MACDVal, macd_to_ohlcv
                     ind = IND{Float64}()
                     @test expected_return_type(ind) == Float64
                     @test !ismultiinput(ind)
+                    @test !ismultioutput(ind)
                 end
             end
         end
@@ -68,6 +69,7 @@ using IncTA: MACDVal, macd_to_ohlcv
                     ind = IND{Float64}()
                     # @test expected_return_type(ind) == ...  # see in others tests
                     @test !ismultiinput(ind)
+                    @test ismultioutput(ind)
                 end
             end
         end
@@ -79,6 +81,7 @@ using IncTA: MACDVal, macd_to_ohlcv
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
                     @test expected_return_type(ind) == Float64
                     @test ismultiinput(ind)
+                    @test !ismultioutput(ind)
                 end
             end
         end
@@ -90,14 +93,17 @@ using IncTA: MACDVal, macd_to_ohlcv
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
                     # @test expected_return_type(ind) == ...  # see in others tests
                     @test ismultiinput(ind)
+                    @test ismultioutput(ind)
                 end
             end
         end
 
         @testset "Others" begin
             @testset "STC" begin
-                ind = STC{Float64}()
+                ind = STC{Float64}()  # SISO
                 @test expected_return_type(ind) == Float64
+                @test !ismultiinput(ind)
+                @test !ismultioutput(ind)
             end
         end
 
