@@ -247,3 +247,16 @@ end
     end
 
 end
+
+using IncTA: TechnicalIndicatorIterator
+@testset "iterator" begin
+    @testset "SMA" begin
+        itr = TechnicalIndicatorIterator(SMA, CLOSE_TMPL, period = P)
+        values = collect(itr)
+        @test isapprox(values[end-2], 9.075500; atol = ATOL)
+        @test isapprox(values[end-1], 9.183000; atol = ATOL)
+        @test isapprox(values[end], 9.308500; atol = ATOL)
+        @test eltype(values) == Union{Missing, Float64}
+    end
+end
+
