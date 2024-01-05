@@ -11,7 +11,7 @@ end
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 """
-mutable struct DonchianChannels{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct DonchianChannels{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,DonchianChannelsVal}
     n::Int
     output_listeners::Series

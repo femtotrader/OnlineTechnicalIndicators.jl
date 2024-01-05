@@ -13,7 +13,7 @@ end
 
 The `SFX` type implements a SFX indicator.
 """
-mutable struct SFX{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct SFX{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SFXVal}
     n::Int
     output_listeners::Series

@@ -12,7 +12,7 @@ end
 
 The `ADX` type implements an Average Directional Index indicator.
 """
-mutable struct ADX{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct ADX{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ADXVal}
     n::Int
     output_listeners::Series

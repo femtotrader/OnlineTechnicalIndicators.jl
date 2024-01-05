@@ -16,7 +16,7 @@ end
 
 The `SuperTrend` type implements a Super Trend indicator.
 """
-mutable struct SuperTrend{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct SuperTrend{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SuperTrendVal}
     n::Int
     output_listeners::Series

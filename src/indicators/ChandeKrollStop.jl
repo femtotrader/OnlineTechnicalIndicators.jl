@@ -12,7 +12,7 @@ end
 
 The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 """
-mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct ChandeKrollStop{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal}
     n::Int
     output_listeners::Series

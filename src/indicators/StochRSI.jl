@@ -13,7 +13,7 @@ end
 
 The `StochRSI` type implements Moving Average Convergence Divergence indicator.
 """
-mutable struct StochRSI{Tval} <: TechnicalIndicator{Tval}
+mutable struct StochRSI{Tval} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,StochRSIVal}
     n::Int
     output_listeners::Series

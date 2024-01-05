@@ -20,7 +20,7 @@ end
 
 The `ParabolicSAR` type implements a Super Trend indicator.
 """
-mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct ParabolicSAR{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ParabolicSARVal}
     n::Int
     output_listeners::Series

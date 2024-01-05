@@ -89,6 +89,7 @@ end
     @testset "Others" begin
         @testset "STC" begin
             ind = STC{Float64}()
+            @test expected_return_type(ind) == Float64
         end
     end
 

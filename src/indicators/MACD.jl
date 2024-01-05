@@ -19,7 +19,7 @@ end
 
 The `MACD` type implements Moving Average Convergence Divergence indicator.
 """
-mutable struct MACD{Tval} <: TechnicalIndicator{Tval}
+mutable struct MACD{Tval} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,MACDVal}
     n::Int
     output_listeners::Series

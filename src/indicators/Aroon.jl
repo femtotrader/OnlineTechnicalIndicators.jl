@@ -10,7 +10,7 @@ end
 
 The `Aroon` type implements an Aroon indicator.
 """
-mutable struct Aroon{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct Aroon{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,AroonVal}
     n::Int
     output_listeners::Series

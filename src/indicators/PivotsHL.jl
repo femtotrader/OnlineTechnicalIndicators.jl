@@ -20,7 +20,7 @@ end
 
 The `PivotsHL` type implements a High/Low Pivots Indicator.
 """
-mutable struct PivotsHL{Tohlcv} <: TechnicalIndicator{Tohlcv}
+mutable struct PivotsHL{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Missing
     n::Int
     output_listeners::Series

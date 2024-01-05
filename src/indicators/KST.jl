@@ -32,7 +32,7 @@ end
 
 The `KST` type implements Know Sure Thing indicator.
 """
-mutable struct KST{Tval} <: TechnicalIndicator{Tval}
+mutable struct KST{Tval} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,KSTVal}
     n::Int
     output_listeners::Series

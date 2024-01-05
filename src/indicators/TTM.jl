@@ -12,7 +12,7 @@ end
 
 The `TTM` type implements a TTM indicator.
 """
-mutable struct TTM{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct TTM{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,TTMVal}
     n::Int
     output_listeners::Series
