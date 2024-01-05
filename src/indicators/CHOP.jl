@@ -6,7 +6,7 @@ const CHOP_PERIOD = 14
 
 The `CHOP` type implements a Choppiness Index indicator.
 """
-mutable struct CHOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct CHOP{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

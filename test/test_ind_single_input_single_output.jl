@@ -2,6 +2,7 @@
 
     @testset "SMA" begin
         ind = SMA{Float64}(period = P)
+        @test expected_return_type(ind) == Float64
         @test nobs(ind) == 0
         ind = StatLag(ind, length(CLOSE_TMPL))
         fit!(ind, CLOSE_TMPL)

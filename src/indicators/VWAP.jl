@@ -5,7 +5,7 @@ const VWAP_MEMORY = 3
 
 The `VWAP` type implements a Volume Weighted Moving Average indicator.
 """
-mutable struct VWAP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct VWAP{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

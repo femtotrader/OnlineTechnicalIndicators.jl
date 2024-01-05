@@ -3,7 +3,7 @@
 
 The `OBV` type implements On Balance Volume indicator.
 """
-mutable struct OBV{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct OBV{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

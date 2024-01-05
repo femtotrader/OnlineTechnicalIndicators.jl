@@ -1,4 +1,5 @@
 using IncTA
+using IncTA: expected_return_type
 using IncTA.SampleData:
     OPEN_TMPL,
     HIGH_TMPL,

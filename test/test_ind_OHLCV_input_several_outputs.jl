@@ -2,6 +2,20 @@ using IncTA: PivotsHLVal
 
 @testset "OHLC input - several output values" begin
 
+    @testset "Stoch" begin
+        ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 14, smoothing_period = 3)
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+        @test isapprox(value(ind.lag[end-2]).k, 88.934426; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).d, 88.344442; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).k, 74.180327; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).d, 84.499789; atol = ATOL)
+        @test isapprox(value(ind).k, 64.754098; atol = ATOL)
+        @test isapprox(value(ind).d, 75.956284; atol = ATOL)
+    end
+
     @testset "SuperTrend" begin
         ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
         @test nobs(ind) == 0

@@ -3,7 +3,7 @@
 
 The `AccuDist` type implements an Accumulation and Distribution indicator.
 """
-mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct AccuDist{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

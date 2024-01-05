@@ -7,7 +7,7 @@ const UO_SLOW_PERIOD = 7
 
 The `UO` type implements an Ultimate Oscillator.
 """
-mutable struct UO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct UO{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

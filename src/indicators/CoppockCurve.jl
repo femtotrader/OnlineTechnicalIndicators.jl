@@ -7,7 +7,7 @@ const CoppockCurve_WMA_PERIOD = 10
 
 The `CoppockCurve` type implements a Coppock Curve indicator.
 """
-mutable struct CoppockCurve{Tval,T2} <: TechnicalIndicator{Tval}
+mutable struct CoppockCurve{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series

@@ -46,6 +46,56 @@ using IncTA: MACDVal, macd_to_ohlcv
     end
 end
 
+
+@testset "expected_return_type" begin
+    @testset "SISO" begin
+        for IND in SISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{Float64}()
+                @test expected_return_type(ind) == Float64
+            end
+        end
+    end
+    @testset "SIMO" begin
+        for IND in SIMO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{Float64}()
+                @test 1 == 1
+            end
+        end
+    end
+    @testset "MISO" begin
+        for IND in MISO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{OHLCV{Missing,Float64,Float64}}()
+                @test expected_return_type(ind) == Float64
+            end
+        end
+    end
+
+    @testset "MIMO" begin
+        for IND in MIMO_INDICATORS
+            @testset "$(IND)" begin
+                IND = eval(Meta.parse(IND))
+                ind = IND{OHLCV{Missing,Float64,Float64}}()
+                @test 1 == 1
+            end
+        end
+    end
+
+    @testset "Others" begin
+        @testset "STC" begin
+            ind = STC{Float64}()
+        end
+    end
+
+end
+
+
+
 @testset "input filter/modifier" begin
     @testset "SISO" begin
         # SISO indicator with OHLCV input but with an input_modifier which extract close value

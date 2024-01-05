@@ -6,7 +6,7 @@ const TSI_SLOW_PERIOD = 23
 
 The `TSI` type implements a True Strength Index indicator.
 """
-mutable struct TSI{Tval,T2} <: TechnicalIndicator{Tval}
+mutable struct TSI{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series

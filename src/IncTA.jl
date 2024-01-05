@@ -42,14 +42,14 @@ MISO_INDICATORS = [
     "OBV",
     "SOBV",
     "EMV",
-    "Stoch",
     "MassIndex",
     "CHOP",
-    "ADX",
     "KVO",
     "UO",
 ]
 MIMO_INDICATORS = [
+    "Stoch",
+    "ADX",
     "SuperTrend",
     "VTX",
     "DonchianChannels",
@@ -83,7 +83,9 @@ using OnlineStatsBase
 export value
 
 abstract type TechnicalIndicator{T} <: OnlineStat{T} end
-abstract type MovingAverageIndicator{T} <: TechnicalIndicator{T} end
+abstract type TechnicalIndicatorSingleOutput{T} <: TechnicalIndicator{T} end
+abstract type TechnicalIndicatorMultiOutput{T} <: TechnicalIndicator{T} end
+abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 
 include("ohlcv.jl")
 include("sample_data.jl")
@@ -95,6 +97,8 @@ function initialize_indicator_common_fields()
     input_indicator = missing
     return value, n, output_listeners, input_indicator
 end
+
+expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} = typeof(ind).parameters[end] 
 
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)

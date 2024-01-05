@@ -16,7 +16,7 @@ end
 
 The `STC` type implements a Schaff Trend Cycle indicator.
 """
-mutable struct STC{Tval,T2} <: TechnicalIndicator{Tval}
+mutable struct STC{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series

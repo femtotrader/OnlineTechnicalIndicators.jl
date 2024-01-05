@@ -53,9 +53,7 @@ mutable struct BB{T1,T2} <: TechnicalIndicator{T1}
     end
 end
 
-function expected_return_type(ind::BB)
-    return BBVal{typeof(ind).parameters[end]}
-end
+expected_return_type(ind::BB) = BBVal{typeof(ind).parameters[end]}
 
 function _calculate_new_value(ind::BB)
     if has_output_value(ind.central_band)

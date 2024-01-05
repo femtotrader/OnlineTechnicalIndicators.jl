@@ -6,7 +6,7 @@ const AO_SLOW_PERIOD = 21
 
 The `AO` type implements an Awesome Oscillator indicator.
 """
-mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct AO{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series

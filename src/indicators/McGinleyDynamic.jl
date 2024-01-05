@@ -6,7 +6,7 @@ const McGinleyDynamic_PERIOD = 14
 
 The `McGinleyDynamic` type implements a McGinley Dynamic indicator.
 """
-mutable struct McGinleyDynamic{Tval,T2} <: TechnicalIndicator{Tval}
+mutable struct McGinleyDynamic{Tval,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
     output_listeners::Series

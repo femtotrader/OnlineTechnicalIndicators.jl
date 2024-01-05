@@ -3,7 +3,7 @@
 
 The `BOP` type implements a Balance Of Power indicator.
 """
-mutable struct BOP{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
+mutable struct BOP{Tohlcv,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
     output_listeners::Series
