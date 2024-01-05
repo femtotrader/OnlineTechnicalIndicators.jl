@@ -229,7 +229,8 @@ end
 # Other stuff
 include("ma.jl")  # Moving Average Factory
 
-# High order functions for AbstractArray input
+# Integration with Julia ecosystem (Arrays, Iterators...)
 include("other/arrays.jl")
+include("other/iterators.jl")
 
 end
