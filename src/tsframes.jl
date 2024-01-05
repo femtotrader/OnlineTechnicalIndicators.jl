@@ -58,17 +58,16 @@ function apply_func_SIMO(
         end
 
     end
-    results
-    #ts_result = TSFrame(results, index(ts))
-    #for field in fieldnames(Tout)
-    #    colname = String(output_field) * "_" * String(field)
-    #    ts_result.coredata[:, colname] = map(
-    #        ret -> hasproperty(ret, field) ? getproperty(ret, field) : missing,
-    #        ts_result.coredata[:, :x1],
-    #    )
-    #end
-    #select!(ts_result.coredata, Not([:x1]))
-    #return ts_result
+    ts_result = TSFrame(results, index(ts))
+    for field in fieldnames(Tout)
+        colname = String(output_field) * "_" * String(field)
+        ts_result.coredata[:, colname] = map(
+            ret -> hasproperty(ret, field) ? getproperty(ret, field) : missing,
+            ts_result.coredata[:, :x1],
+        )
+    end
+    select!(ts_result.coredata, Not([:x1]))
+    return ts_result
 end
 
 
