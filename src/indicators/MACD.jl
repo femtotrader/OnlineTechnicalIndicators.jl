@@ -60,10 +60,6 @@ mutable struct MACD{Tval} <: TechnicalIndicatorMultiOutput{Tval}
     end
 end
 
-function expected_return_type(ind::MACD)
-    return MACDVal{typeof(ind).parameters[end]}
-end
-
 function _calculate_new_value(ind::MACD)
     if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
         macd = value(ind.fast_ma) - value(ind.slow_ma)

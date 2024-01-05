@@ -11,7 +11,7 @@ end
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 """
-mutable struct DonchianChannels{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct DonchianChannels{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,DonchianChannelsVal}
     n::Int
     output_listeners::Series
@@ -32,7 +32,7 @@ mutable struct DonchianChannels{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
-        new{Tohlcv}(
+        new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,
             input_modifier,

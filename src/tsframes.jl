@@ -156,9 +156,9 @@ BB(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, IncTA.BB, input_field, :BB, args...; kwargs...)
 MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, IncTA.MACD, input_field, :MACD, args...; kwargs...)
-StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = 
+StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, IncTA.StochRSI, input_field, :StochRSI, args...; kwargs...)
-KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = 
+KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, IncTA.KST, input_field, :KST, args...; kwargs...)
 
 # MISO

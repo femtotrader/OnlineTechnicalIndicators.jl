@@ -2,6 +2,8 @@
 
     @testset "BB" begin
         ind = BB{Float64}(period = 5, std_dev_mult = 2.0)
+        @test expected_return_type(ind) == BBVal{Float64}
+
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -22,6 +24,7 @@
 
     @testset "MACD" begin
         ind = MACD{Float64}(fast_period = 12, slow_period = 26, signal_period = 9)
+        @test expected_return_type(ind) == MACDVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, CLOSE_TMPL)
@@ -47,6 +50,7 @@
             k_smoothing_period = 3,
             d_smoothing_period = 3,
         )
+        @test expected_return_type(ind) == StochRSIVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, CLOSE_TMPL)
@@ -74,6 +78,7 @@
             roc4_ma_period = 10,
             signal_period = 9,
         )
+        @test expected_return_type(ind) == KSTVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)

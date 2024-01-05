@@ -106,8 +106,6 @@ mutable struct KST{Tval} <: TechnicalIndicatorMultiOutput{Tval}
     end
 end
 
-expected_return_type(ind::KST) = KSTVal{typeof(ind).parameters[end]}
-
 function _calculate_new_value(ind::KST)
     if has_output_value(ind.roc1_ma) &&
        has_output_value(ind.roc2_ma) &&

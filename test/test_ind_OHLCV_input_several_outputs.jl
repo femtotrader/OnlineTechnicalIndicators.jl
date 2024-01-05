@@ -4,6 +4,7 @@ using IncTA: PivotsHLVal
 
     @testset "Stoch" begin
         ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 14, smoothing_period = 3)
+        @test expected_return_type(ind) == StochVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -18,6 +19,7 @@ using IncTA: PivotsHLVal
 
     @testset "SuperTrend" begin
         ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
+        @test expected_return_type(ind) == SuperTrendVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 16)
         fit!(ind, V_OHLCV)
@@ -41,6 +43,7 @@ using IncTA: PivotsHLVal
 
     @testset "VTX" begin
         ind = VTX{OHLCV{Missing,Float64,Float64}}(period = 14)
+        @test expected_return_type(ind) == VTXVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -58,6 +61,7 @@ using IncTA: PivotsHLVal
 
     @testset "DonchianChannels" begin
         ind = DonchianChannels{OHLCV{Missing,Float64,Float64}}(period = 5)
+        @test expected_return_type(ind) == DonchianChannelsVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -83,7 +87,7 @@ using IncTA: PivotsHLVal
             atr_mult_up = 2,
             atr_mult_down = 3,
         )
-
+        @test expected_return_type(ind) == KeltnerChannelsVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)
@@ -105,6 +109,7 @@ using IncTA: PivotsHLVal
 
     @testset "ADX" begin
         ind = ADX{OHLCV{Missing,Float64,Float64}}(di_period = 14, adx_period = 14)
+        @test expected_return_type(ind) == ADXVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -125,6 +130,7 @@ using IncTA: PivotsHLVal
 
     @testset "Aroon" begin
         ind = Aroon{OHLCV{Missing,Float64,Float64}}(period = 10)
+        @test expected_return_type(ind) == AroonVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -146,6 +152,7 @@ using IncTA: PivotsHLVal
             atr_mult = 2.0,
             period = 3,
         )
+        @test expected_return_type(ind) == ChandeKrollStopVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -167,6 +174,7 @@ using IncTA: PivotsHLVal
             accel_factor_inc = 0.02,
             max_accel_factor = 0.2,
         )
+        @test expected_return_type(ind) == ParabolicSARVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -194,6 +202,7 @@ using IncTA: PivotsHLVal
             std_dev_period = 12,
             std_dev_smoothing_period = 3,
         )
+        @test expected_return_type(ind) == SFXVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -218,6 +227,7 @@ using IncTA: PivotsHLVal
             bb_std_dev_mult = 2.0,
             kc_atr_mult = 2.0,
         )
+        @test expected_return_type(ind) == TTMVal{Float64}
         ind = StatLag(ind, 12)
         @test nobs(ind) == 0
         fit!(ind, V_OHLCV)
@@ -242,6 +252,8 @@ using IncTA: PivotsHLVal
             low_period = 7,
             memory = 10,
         )
+        #@test expected_return_type(ind) == ... # should be implemented
+
         @test nobs(ind) == 0
 
         # be aware that this indicator behave a bit differently than other ones !

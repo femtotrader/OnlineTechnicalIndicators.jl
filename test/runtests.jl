@@ -1,5 +1,18 @@
 using IncTA
 using IncTA: expected_return_type
+using IncTA: BBVal, MACDVal, StochRSIVal, KSTVal  # SIMO
+using IncTA:
+    StochVal,
+    SuperTrendVal,
+    VTXVal,
+    DonchianChannelsVal,
+    KeltnerChannelsVal,
+    ADXVal,
+    AroonVal,
+    ChandeKrollStopVal,
+    ParabolicSARVal,
+    SFXVal,
+    TTMVal  # MIMO
 using IncTA.SampleData:
     OPEN_TMPL,
     HIGH_TMPL,

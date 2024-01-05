@@ -10,7 +10,7 @@ end
 
 The `Aroon` type implements an Aroon indicator.
 """
-mutable struct Aroon{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
+mutable struct Aroon{Tohlcv,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,AroonVal}
     n::Int
     output_listeners::Series
@@ -29,8 +29,9 @@ mutable struct Aroon{Tohlcv} <: TechnicalIndicatorMultiOutput{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
+        S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{Tohlcv}(
+        new{Tohlcv,S}(
             initialize_indicator_common_fields()...,
             period,
             input_modifier,

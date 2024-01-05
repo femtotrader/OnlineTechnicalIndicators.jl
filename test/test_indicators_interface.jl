@@ -57,15 +57,19 @@ end
             end
         end
     end
+
+    #=
     @testset "SIMO" begin
         for IND in SIMO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
                 ind = IND{Float64}()
-                @test 1 == 1
+                @test expected_return_type(ind) == ...  # see in others tests
             end
         end
     end
+    =#
+
     @testset "MISO" begin
         for IND in MISO_INDICATORS
             @testset "$(IND)" begin
@@ -76,15 +80,17 @@ end
         end
     end
 
+    #=
     @testset "MIMO" begin
         for IND in MIMO_INDICATORS
             @testset "$(IND)" begin
                 IND = eval(Meta.parse(IND))
                 ind = IND{OHLCV{Missing,Float64,Float64}}()
-                @test 1 == 1
+                @test expected_return_type(ind) == ...  # see in others tests
             end
         end
     end
+    =#
 
     @testset "Others" begin
         @testset "STC" begin

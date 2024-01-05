@@ -98,7 +98,13 @@ function initialize_indicator_common_fields()
     return value, n, output_listeners, input_indicator
 end
 
-expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} = typeof(ind).parameters[end] 
+expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} =
+    typeof(ind).parameters[end]
+function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}
+    retval = String(nameof(typeof(ind))) * "Val"  # return value as String "BBVal", "MACDVal"...
+    RETVAL = eval(Meta.parse(retval))
+    return RETVAL{typeof(ind).parameters[end]}
+end
 
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
@@ -225,6 +231,5 @@ include("ma.jl")  # Moving Average Factory
 
 # High order functions for AbstractArray input
 include("arrays.jl")
-
 
 end
