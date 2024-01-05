@@ -30,7 +30,7 @@ function apply_func_SISO(
     return TSFrame(collect(mapped), index(ts), colnames = [output_field])
 end
 
-@generated fieldvalues(x) = Expr(:tuple, (:(x.$f) for f=fieldnames(x))...)
+@generated fieldvalues(x) = Expr(:tuple, (:(x.$f) for f in fieldnames(x))...)
 
 function apply_func_SIMO(
     ts::TSFrame,
@@ -49,6 +49,8 @@ function apply_func_SIMO(
         fit!(ind, val)
         ret = value(ind)
         t = fieldvalues(ret)
+        println(t)
+        println(length(return_types))
         if length(t) != length(return_types)
             push!(results, missing)
         else
@@ -56,13 +58,17 @@ function apply_func_SIMO(
         end
 
     end
-    ts_result = TSFrame(results, index(ts))
-    for field in fieldnames(Tout)
-        colname = String(output_field) * "_" * String(field)
-        ts_result.coredata[:, colname] = map(ret -> hasproperty(ret, field) ? getproperty(ret, field) : missing, ts_result.coredata[:, :x1])
-    end
-    select!(ts_result.coredata, Not([:x1]))
-    return ts_result
+    results
+    #ts_result = TSFrame(results, index(ts))
+    #for field in fieldnames(Tout)
+    #    colname = String(output_field) * "_" * String(field)
+    #    ts_result.coredata[:, colname] = map(
+    #        ret -> hasproperty(ret, field) ? getproperty(ret, field) : missing,
+    #        ts_result.coredata[:, :x1],
+    #    )
+    #end
+    #select!(ts_result.coredata, Not([:x1]))
+    #return ts_result
 end
 
 
@@ -125,7 +131,14 @@ ALMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, IncTA.ALMA, input_field, :ALMA, args...; kwargs...)
 
 McGinleyDynamic(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, IncTA.McGinleyDynamic, input_field, :McGinleyDynamic, args...; kwargs...)
+    apply_func_SISO(
+        x,
+        IncTA.McGinleyDynamic,
+        input_field,
+        :McGinleyDynamic,
+        args...;
+        kwargs...,
+    )
 
 ZLEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, IncTA.ZLEMA, input_field, :ZLEMA, args...; kwargs...)
@@ -140,19 +153,23 @@ TSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, IncTA.TSI, input_field, :TSI, args...; kwargs...)
 
 # SIMO
-BB(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.BB, input_field, :BB, args...; kwargs...)
-MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.MACD, input_field, :MACD, args...; kwargs...)
-#StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.StochRSI, input_field, :StochRSI, args...; kwargs...)
-#KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(x, IncTA.KST, input_field, :KST, args...; kwargs...)
-#macd::Union{Missing,Tval}
-#signal::Union{Missing,Tval}
-#histogram::Union{Missing,Tval}
-#end
+BB(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
+    apply_func_SIMO(x, IncTA.BB, input_field, :BB, args...; kwargs...)
+MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
+    apply_func_SIMO(x, IncTA.MACD, input_field, :MACD, args...; kwargs...)
+StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = 
+    apply_func_SIMO(x, IncTA.StochRSI, input_field, :StochRSI, args...; kwargs...)
+KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = 
+    apply_func_SIMO(x, IncTA.KST, input_field, :KST, args...; kwargs...)
+
 # MISO
 
 # MIMO
 
 #SMA(OHLCV_TSFRAME)
-#SMA(OHLCV_TSFRAME)
+#ZLEMA(OHLCV_TSFRAME)
 
 #BB(OHLCV_TSFRAME)
+#MACD(OHLCV_TSFRAME)
+#StochRSI(OHLCV_TSFRAME)
+#KST(OHLCV_TSFRAME)

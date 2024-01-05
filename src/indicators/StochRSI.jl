@@ -66,6 +66,8 @@ mutable struct StochRSI{Tval} <: TechnicalIndicator{Tval}
     end
 end
 
+expected_return_type(ind::StochRSI) = StochRSIVal{typeof(ind).parameters[end]}
+
 function _calculate_new_value(ind::StochRSI)
     fit!(ind.recent_rsi, value(ind.rsi))
     if has_valid_values(ind.recent_rsi, ind.stoch_period)
