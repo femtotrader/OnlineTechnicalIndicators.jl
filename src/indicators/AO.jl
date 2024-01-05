@@ -12,8 +12,8 @@ mutable struct AO{Tohlcv,S} <: TechnicalIndicator{Tohlcv}
     output_listeners::Series
     input_indicator::Union{Missing,TechnicalIndicator}
 
-    fast_ma::Any  # default SMA
-    slow_ma::Any  # default SMA
+    fast_ma::MovingAverageIndicator  # default SMA
+    slow_ma::MovingAverageIndicator  # default SMA
 
     input_modifier::Function
     input_filter::Function

@@ -14,7 +14,7 @@ mutable struct TEMA{Tval,T2} <: MovingAverageIndicator{Tval}
     period::Integer
 
     sub_indicators::Series
-    ma::Any  # EMA
+    ma::MovingAverageIndicator  # EMA
 
     ma_ma::MovingAverageIndicator  # EMA
     ma_ma_ma::MovingAverageIndicator  # EMA
