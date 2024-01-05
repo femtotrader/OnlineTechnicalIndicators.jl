@@ -1,6 +1,6 @@
 using OnlineStatsBase
 using IncTA
-using IncTA: TechnicalIndicator
+using IncTA: TechnicalIndicator, expected_return_type
 using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 
 
@@ -33,6 +33,7 @@ end
 # Base.eltype(::Type{TechnicalIndicatorIterator}) = Float64
 # Base.IteratorEltype(::Type{TechnicalIndicatorIterator}) = Base.HasEltype()
 # Base.IteratorSize(::Type{TechnicalIndicatorIterator}) = Base.IsInfinite()
+Base.eltype(itr::TechnicalIndicatorIterator) = Union{Missing,expected_return_type(itr.indicator_instance)}
 
 function Iterators.reset!(itr::TechnicalIndicatorIterator)
     Iterators.reset!(itr.input_iterator)
@@ -68,7 +69,11 @@ println("Third iteration with collect")
 # itr = TechnicalIndicatorIterator(SMA, CLOSE_TMPL; period = 3)
 # or
 Iterators.reset!(itr)
+println(eltype(itr))
 println(collect(itr))
+
+
+println("")
 
 # SIMO indicator
 itr = TechnicalIndicatorIterator(BB, CLOSE_TMPL)
