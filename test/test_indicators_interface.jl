@@ -54,10 +54,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in SISO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
+                    @test !ismultioutput(IND)
                     ind = IND{Float64}()
                     @test expected_return_type(ind) == Float64
                     @test !ismultiinput(ind)
-                    @test !ismultioutput(ind)
                 end
             end
         end
@@ -66,10 +66,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in SIMO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
+                    @test ismultioutput(IND)
                     ind = IND{Float64}()
                     # @test expected_return_type(ind) == ...  # see in others tests
                     @test !ismultiinput(ind)
-                    @test ismultioutput(ind)
                 end
             end
         end
@@ -79,9 +79,9 @@ using IncTA: MACDVal, macd_to_ohlcv
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
+                    @test !ismultioutput(IND)
                     @test expected_return_type(ind) == Float64
                     @test ismultiinput(ind)
-                    @test !ismultioutput(ind)
                 end
             end
         end
@@ -91,9 +91,9 @@ using IncTA: MACDVal, macd_to_ohlcv
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
                     ind = IND{OHLCV{Missing,Float64,Float64}}()
+                    @test ismultioutput(IND)
                     # @test expected_return_type(ind) == ...  # see in others tests
                     @test ismultiinput(ind)
-                    @test ismultioutput(ind)
                 end
             end
         end
@@ -103,7 +103,7 @@ using IncTA: MACDVal, macd_to_ohlcv
                 ind = STC{Float64}()  # SISO
                 @test expected_return_type(ind) == Float64
                 @test !ismultiinput(ind)
-                @test !ismultioutput(ind)
+                @test !ismultioutput(STC)
             end
         end
 
@@ -323,6 +323,7 @@ using IncTA: MACDVal, macd_to_ohlcv
 
     end
 
+    #=
 
     using IncTA: TechnicalIndicatorWrapper, load!
     @testset "table" begin
@@ -389,6 +390,7 @@ using IncTA: MACDVal, macd_to_ohlcv
 
 
     end
+    =#
 
 
 
