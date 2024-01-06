@@ -273,4 +273,25 @@ const OHLCV_FACTORY =
     OHLCVFactory(OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL; volume = VOLUME_TMPL)  # time is missing here
 const V_OHLCV = collect(OHLCV_FACTORY)
 
+
+const CT_OHLCV = (
+    Index = DATE_TMPL,
+    Open = OPEN_TMPL,
+    High = HIGH_TMPL,
+    Low = LOW_TMPL,
+    Close = CLOSE_TMPL,
+    Volume = VOLUME_TMPL,
+)
+
+const RT_OHLCV = [
+    (
+        Index = DATE_TMPL[i],
+        Open = OPEN_TMPL[i],
+        High = HIGH_TMPL[i],
+        Low = LOW_TMPL[i],
+        Close = CLOSE_TMPL[i],
+        Volume = VOLUME_TMPL[i],
+    ) for i = 1:length(CLOSE_TMPL)
+]
+
 end

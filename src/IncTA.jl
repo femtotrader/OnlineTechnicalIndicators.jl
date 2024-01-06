@@ -109,6 +109,12 @@ function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}
     return RETVAL{typeof(ind).parameters[end]}
 end
 
+function expected_return_type(ind::Type{O}) where {O<:TechnicalIndicatorMultiOutput}
+    retval = String(nameof(ind)) * "Val"  # return value as String "BBVal", "MACDVal"...
+    RETVAL = eval(Meta.parse(retval))
+    return RETVAL
+end
+
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
     #if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform

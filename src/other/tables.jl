@@ -37,18 +37,20 @@ function load!(
     sch = Tables.schema(table)
     _names = sch.names  # name of columns of input
 
-    #results = TechnicalIndicatorResults{Ttime, Tout}()
-    Ttime, Tout = Date, Union{Missing,Float64}
+    Ttime =
+        index_field ∈ sch.names ? sch.types[argmax((sch.names .== index_field))] : Missing
+    Tin =
+        default_field ∈ sch.names ? sch.types[argmax((sch.names .== default_field))] :
+        throw(ArgumentError("default field `$default_field` not found"))
+    if !ismultioutput(ti_wrap.indicator_type)
+        Tout = Union{Missing,Tin}
+    else
+        Tout = Union{Missing,expected_return_type(ti_wrap.indicator_type){Tin}}
+    end
     results = TechnicalIndicatorResults{Ttime,Tout}()
 
-    #if !ismultiinput(ind)  # should be known from type not from instance !!!!!
-    if true  # for testing purpose
-        println("single input")
-        (default_field ∉ _names) &&
-            throw(ArgumentError("default field `$default_field` not found"))
-        Tin = Float64  # shouldn't be like that... should come from close price type
+    if !ismultiinput(ti_wrap.indicator_type)
         ind = ti_wrap.indicator_type{Tin}(ti_wrap.args...; ti_wrap.kwargs...)
-
         for row in rows
             println(row)
             tim = index_field ∈ _names ? row[index_field] : missing
@@ -58,16 +60,14 @@ function load!(
             push!(results, (tim, value(ind)))
         end
     else
-        println("ohlcv input")
-
-        #typ = 
         ind = ti_wrap.indicator_type{OHLCV}(ti_wrap.args...; ti_wrap.kwargs...)
-
         for candle_field in candle_fields
-            (candle_field ∉ _names) &&
-                throw(ArgumentError("field `$candle_field` not found - $candle_fields are expected"))
+            (candle_field ∉ _names) && throw(
+                ArgumentError(
+                    "field `$candle_field` not found - $candle_fields are expected in input data",
+                ),
+            )
         end
-
         for row in rows
             println(row)
             tim = index_field ∈ _names ? row[index_field] : missing

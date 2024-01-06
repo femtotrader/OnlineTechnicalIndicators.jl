@@ -7,6 +7,7 @@ using IncTA:
     OTHERS_INDICATORS
 using IncTA: always_true, ismultiinput, ismultioutput
 using IncTA: MACDVal, macd_to_ohlcv
+using IncTA.SampleData: RT_OHLCV
 
 @testset "indicators interface" begin
 
@@ -323,74 +324,69 @@ using IncTA: MACDVal, macd_to_ohlcv
 
     end
 
-    #=
 
     using IncTA: TechnicalIndicatorWrapper, load!
     @testset "table" begin
         @testset "SISO" begin
             @testset "SMA" begin
                 wrap = TechnicalIndicatorWrapper(SMA, period = P)
-                load!(table, wrap)
-                # values = collect(itr)
-                # @test eltype(values) == Union{Missing, Float64}
-                # @test isapprox(values[end-2], 9.075500; atol = ATOL)
-                # @test isapprox(values[end-1], 9.183000; atol = ATOL)
-                # @test isapprox(values[end], 9.308500; atol = ATOL)
+                results = load!(RT_OHLCV, wrap)
+                values = results.output
+                @test eltype(values) == Union{Missing,Float64}
+                @test isapprox(values[end-2], 9.075500; atol = ATOL)
+                @test isapprox(values[end-1], 9.183000; atol = ATOL)
+                @test isapprox(values[end], 9.308500; atol = ATOL)
             end
         end
 
-        #=
-
-            @testset "SIMO" begin
-                @testset "BB" begin
-                    wrap = TechnicalIndicatorWrapper(BB, period = 5, std_dev_mult = 2.0)
-                    load!(table, wrap)
-                    # values = collect(itr)
-                    # @test eltype(values) == Union{Missing, BBVal{Float64}}
-                    # @test isapprox(values[end-2].lower, 8.186646; atol = ATOL)
-                    # @test isapprox(values[end-2].central, 9.748000; atol = ATOL)
-                    # @test isapprox(values[end-2].upper, 11.309353; atol = ATOL)
-                    # @test isapprox(values[end-1].lower, 9.161539; atol = ATOL)
-                    # @test isapprox(values[end-1].central, 10.096000; atol = ATOL)
-                    # @test isapprox(values[end-1].upper, 11.030460; atol = ATOL)
-                    # @test isapprox(values[end].lower, 9.863185; atol = ATOL)
-                    # @test isapprox(values[end].central, 10.254000; atol = ATOL)
-                    # @test isapprox(values[end].upper, 10.644814; atol = ATOL)
-                end
+        @testset "SIMO" begin
+            @testset "BB" begin
+                wrap = TechnicalIndicatorWrapper(BB, period = 5, std_dev_mult = 2.0)
+                results = load!(RT_OHLCV, wrap)
+                values = results.output
+                @test eltype(values) == Union{Missing,BBVal{Float64}}
+                @test isapprox(values[end-2].lower, 8.186646; atol = ATOL)
+                @test isapprox(values[end-2].central, 9.748000; atol = ATOL)
+                @test isapprox(values[end-2].upper, 11.309353; atol = ATOL)
+                @test isapprox(values[end-1].lower, 9.161539; atol = ATOL)
+                @test isapprox(values[end-1].central, 10.096000; atol = ATOL)
+                @test isapprox(values[end-1].upper, 11.030460; atol = ATOL)
+                @test isapprox(values[end].lower, 9.863185; atol = ATOL)
+                @test isapprox(values[end].central, 10.254000; atol = ATOL)
+                @test isapprox(values[end].upper, 10.644814; atol = ATOL)
             end
+        end
 
-            @testset "MISO" begin
-                @testset "ATR" begin
-                    wrap = TechnicalIndicatorWrapper(ATR, period = 5)
-                    load!(table, wrap)
-                    # values = collect(itr)
-                    # @test eltype(values) == Union{Missing, Float64}
-                    # @test isapprox(values[end-2], 0.676426; atol = ATOL)
-                    # @test isapprox(values[end-1], 0.665141; atol = ATOL)
-                    # @test isapprox(values[end], 0.686113; atol = ATOL)
-                end
+        @testset "MISO" begin
+            @testset "ATR" begin
+                wrap = TechnicalIndicatorWrapper(ATR, period = 5)
+                results = load!(RT_OHLCV, wrap)
+                values = results.output
+                @test eltype(values) == Union{Missing,Float64}
+                @test isapprox(values[end-2], 0.676426; atol = ATOL)
+                @test isapprox(values[end-1], 0.665141; atol = ATOL)
+                @test isapprox(values[end], 0.686113; atol = ATOL)
             end
+        end
 
-            @testset "MIMO" begin
-                @testset "ATR" begin
-                    wrap = TechnicalIndicatorWrapper(Stoch, period = 14, smoothing_period = 3)
-                    load!(table, wrap)
-                    # values = collect(itr)
-                    # @test eltype(values) == Union{Missing, StochVal{Float64}}
-                    # @test isapprox(values[end-2].k, 88.934426; atol = ATOL)
-                    # @test isapprox(values[end-2].d, 88.344442; atol = ATOL)
-                    # @test isapprox(values[end-1].k, 74.180327; atol = ATOL)
-                    # @test isapprox(values[end-1].d, 84.499789; atol = ATOL)
-                    # @test isapprox(values[end].k, 64.754098; atol = ATOL)
-                    # @test isapprox(values[end].d, 75.956284; atol = ATOL)
-                end
+        @testset "MIMO" begin
+            @testset "ATR" begin
+                wrap = TechnicalIndicatorWrapper(Stoch, period = 14, smoothing_period = 3)
+                results = load!(RT_OHLCV, wrap)
+                values = results.output
+                @test eltype(values) == Union{Missing,StochVal{Float64}}
+                @test isapprox(values[end-2].k, 88.934426; atol = ATOL)
+                @test isapprox(values[end-2].d, 88.344442; atol = ATOL)
+                @test isapprox(values[end-1].k, 74.180327; atol = ATOL)
+                @test isapprox(values[end-1].d, 84.499789; atol = ATOL)
+                @test isapprox(values[end].k, 64.754098; atol = ATOL)
+                @test isapprox(values[end].d, 75.956284; atol = ATOL)
             end
+        end
 
-        =#
 
 
     end
-    =#
 
 
 
