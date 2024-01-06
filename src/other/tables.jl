@@ -52,7 +52,6 @@ function load!(
         for row in rows
             tim = index_field ∈ _names ? row[index_field] : missing
             data = row[default_field]
-            println(tim, " ", data)
             fit!(ind, data)
             push!(results, (tim, value(ind)))
         end
