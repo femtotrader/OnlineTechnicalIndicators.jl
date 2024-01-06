@@ -54,10 +54,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in SISO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
+                    @test !ismultiinput(IND)
                     @test !ismultioutput(IND)
                     ind = IND{Float64}()
                     @test expected_return_type(ind) == Float64
-                    @test !ismultiinput(ind)
                 end
             end
         end
@@ -66,10 +66,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in SIMO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
+                    @test !ismultiinput(IND)
                     @test ismultioutput(IND)
                     ind = IND{Float64}()
                     # @test expected_return_type(ind) == ...  # see in others tests
-                    @test !ismultiinput(ind)
                 end
             end
         end
@@ -78,10 +78,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in MISO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
-                    ind = IND{OHLCV{Missing,Float64,Float64}}()
+                    @test ismultiinput(IND)
                     @test !ismultioutput(IND)
+                    ind = IND{OHLCV{Missing,Float64,Float64}}()
                     @test expected_return_type(ind) == Float64
-                    @test ismultiinput(ind)
                 end
             end
         end
@@ -90,10 +90,10 @@ using IncTA: MACDVal, macd_to_ohlcv
             for IND in MIMO_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
-                    ind = IND{OHLCV{Missing,Float64,Float64}}()
+                    @test ismultiinput(IND)
                     @test ismultioutput(IND)
+                    ind = IND{OHLCV{Missing,Float64,Float64}}()
                     # @test expected_return_type(ind) == ...  # see in others tests
-                    @test ismultiinput(ind)
                 end
             end
         end
@@ -101,9 +101,9 @@ using IncTA: MACDVal, macd_to_ohlcv
         @testset "Others" begin
             @testset "STC" begin
                 ind = STC{Float64}()  # SISO
-                @test expected_return_type(ind) == Float64
-                @test !ismultiinput(ind)
+                @test !ismultiinput(STC)
                 @test !ismultioutput(STC)
+                @test expected_return_type(ind) == Float64
             end
         end
 

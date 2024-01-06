@@ -98,7 +98,7 @@ function initialize_indicator_common_fields()
     return value, n, output_listeners, input_indicator
 end
 
-ismultiinput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[2]
+
 ismultioutput(ind::Type{O}) where {O<:TechnicalIndicator} =
     ind <: TechnicalIndicatorMultiOutput
 expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} =
@@ -228,6 +228,67 @@ for ind in [
 ]
     include("indicators/$(ind).jl")
 end
+
+# ismultiinput
+# ismultiinput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[2]
+# SISO
+ismultiinput(::Type{SMA}) = false
+ismultiinput(::Type{EMA}) = false
+ismultiinput(::Type{SMMA}) = false
+ismultiinput(::Type{RSI}) = false
+ismultiinput(::Type{MeanDev}) = false
+ismultiinput(::Type{StdDev}) = false
+ismultiinput(::Type{ROC}) = false
+ismultiinput(::Type{WMA}) = false
+ismultiinput(::Type{KAMA}) = false
+ismultiinput(::Type{HMA}) = false
+ismultiinput(::Type{DPO}) = false
+ismultiinput(::Type{CoppockCurve}) = false
+ismultiinput(::Type{DEMA}) = false
+ismultiinput(::Type{TEMA}) = false
+ismultiinput(::Type{ALMA}) = false
+ismultiinput(::Type{McGinleyDynamic}) = false
+ismultiinput(::Type{ZLEMA}) = false
+ismultiinput(::Type{T3}) = false
+ismultiinput(::Type{TRIX}) = false
+ismultiinput(::Type{TSI}) = false
+# SIMO
+ismultiinput(::Type{BB}) = false
+ismultiinput(::Type{MACD}) = false
+ismultiinput(::Type{StochRSI}) = false
+ismultiinput(::Type{KST}) = false
+# MISO
+ismultiinput(::Type{AccuDist}) = true
+ismultiinput(::Type{BOP}) = true
+ismultiinput(::Type{CCI}) = true
+ismultiinput(::Type{ChaikinOsc}) = true
+ismultiinput(::Type{VWMA}) = true
+ismultiinput(::Type{VWAP}) = true
+ismultiinput(::Type{AO}) = true
+ismultiinput(::Type{ATR}) = true
+ismultiinput(::Type{ForceIndex}) = true
+ismultiinput(::Type{OBV}) = true
+ismultiinput(::Type{SOBV}) = true
+ismultiinput(::Type{EMV}) = true
+ismultiinput(::Type{MassIndex}) = true
+ismultiinput(::Type{CHOP}) = true
+ismultiinput(::Type{KVO}) = true
+ismultiinput(::Type{UO}) = true
+# MIMO
+ismultiinput(::Type{Stoch}) = true
+ismultiinput(::Type{ADX}) = true
+ismultiinput(::Type{SuperTrend}) = true
+ismultiinput(::Type{VTX}) = true
+ismultiinput(::Type{DonchianChannels}) = true
+ismultiinput(::Type{KeltnerChannels}) = true
+ismultiinput(::Type{Aroon}) = true
+ismultiinput(::Type{ChandeKrollStop}) = true
+ismultiinput(::Type{ParabolicSAR}) = true
+ismultiinput(::Type{SFX}) = true
+ismultiinput(::Type{TTM}) = true
+ismultiinput(::Type{PivotsHL}) = true
+# Other
+ismultiinput(::Type{STC}) = false
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory
