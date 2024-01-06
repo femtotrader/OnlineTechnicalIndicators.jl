@@ -50,7 +50,6 @@ function load!(
     if !ismultiinput(ti_wrap.indicator_type)
         ind = ti_wrap.indicator_type{Tin}(ti_wrap.args...; ti_wrap.kwargs...)
         for row in rows
-            println(row)
             tim = index_field ∈ _names ? row[index_field] : missing
             data = row[default_field]
             println(tim, " ", data)
