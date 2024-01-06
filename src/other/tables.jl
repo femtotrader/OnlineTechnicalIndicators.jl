@@ -37,10 +37,9 @@ function load!(
     sch = Tables.schema(table)
     _names = sch.names  # name of columns of input
 
-    Ttime =
-        index_field ∈ sch.names ? sch.types[argmax((sch.names .== index_field))] : Missing
+    Ttime = index_field ∈ sch.names ? Tables.columntype(sch, index_field) : Missing
     Tin =
-        default_field ∈ sch.names ? sch.types[argmax((sch.names .== default_field))] :
+        default_field ∈ sch.names ? Tables.columntype(sch, default_field) :
         throw(ArgumentError("default field `$default_field` not found"))
     if !ismultioutput(ti_wrap.indicator_type)
         Tout = Union{Missing,Tin}
@@ -48,7 +47,6 @@ function load!(
         Tout = Union{Missing,expected_return_type(ti_wrap.indicator_type){Tin}}
     end
     results = TechnicalIndicatorResults{Ttime,Tout}()
-
     if !ismultiinput(ti_wrap.indicator_type)
         ind = ti_wrap.indicator_type{Tin}(ti_wrap.args...; ti_wrap.kwargs...)
         for row in rows
