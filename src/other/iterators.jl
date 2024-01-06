@@ -47,23 +47,30 @@ Returns an iterator.
     itr = TechnicalIndicatorIterator(BB, CLOSE_TMPL)
     println(collect(itr))
 """
-mutable struct TechnicalIndicatorIterator{T, I}
+mutable struct TechnicalIndicatorIterator{T,I}
     indicator_type::T
     args::Tuple
     kwargs::Base.Pairs
-    iterable_input
-    input_iterator #::I  # should be iterable
+    iterable_input::Any
+    input_iterator::Any #::I  # should be iterable
     indicator_instance::TechnicalIndicator
 
     function TechnicalIndicatorIterator(indicator_type, iterable_input, args...; kwargs...)
         ind = indicator_type{eltype(iterable_input)}(args...; kwargs...)
         input_iterator = Iterators.Stateful(iterable_input)
-        new{typeof(indicator_type), typeof(input_iterator)}(indicator_type, args, kwargs, iterable_input, input_iterator, ind)
+        new{typeof(indicator_type),typeof(input_iterator)}(
+            indicator_type,
+            args,
+            kwargs,
+            iterable_input,
+            input_iterator,
+            ind,
+        )
     end
 
 end
 
-function Base.iterate(itr::TechnicalIndicatorIterator, state=0)
+function Base.iterate(itr::TechnicalIndicatorIterator, state = 0)
     iter_result = iterate(itr.input_iterator, state)
     if iter_result !== nothing
         (element, state) = iter_result
@@ -73,11 +80,13 @@ function Base.iterate(itr::TechnicalIndicatorIterator, state=0)
     end
 end
 
-Base.eltype(itr::TechnicalIndicatorIterator) = Union{Missing,expected_return_type(itr.indicator_instance)}
+Base.eltype(itr::TechnicalIndicatorIterator) =
+    Union{Missing,expected_return_type(itr.indicator_instance)}
 
 function Iterators.reset!(itr::TechnicalIndicatorIterator)
     Iterators.reset!(itr.input_iterator)
-    itr.indicator_instance = itr.indicator_type{eltype(itr.iterable_input)}(itr.args...; itr.kwargs...)
+    itr.indicator_instance =
+        itr.indicator_type{eltype(itr.iterable_input)}(itr.args...; itr.kwargs...)
 end
 
 Base.length(itr::TechnicalIndicatorIterator) = length(itr.input_iterator)

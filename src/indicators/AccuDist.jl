@@ -19,7 +19,11 @@ mutable struct AccuDist{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        new{Tohlcv,true,S}(initialize_indicator_common_fields()..., input_modifier, input_filter)
+        new{Tohlcv,true,S}(
+            initialize_indicator_common_fields()...,
+            input_modifier,
+            input_filter,
+        )
     end
 end
 

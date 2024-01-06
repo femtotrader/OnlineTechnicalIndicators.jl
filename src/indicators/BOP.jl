@@ -18,7 +18,11 @@ mutable struct BOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         S = fieldtype(input_modifier_return_type, :close)
-        new{Tohlcv,true,S}(initialize_indicator_common_fields()..., input_modifier, input_filter)
+        new{Tohlcv,true,S}(
+            initialize_indicator_common_fields()...,
+            input_modifier,
+            input_filter,
+        )
     end
 end
 
