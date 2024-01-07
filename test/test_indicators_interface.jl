@@ -347,7 +347,7 @@ using IncTA.SampleData: RT_OHLCV
                 @test isapprox(values[end], 9.308500; atol = ATOL)
                 @test Tables.istable(typeof(results))
                 @test names(results) == [:SMA_value]
-                # @test Tables.rowaccess(typeof(results))
+                @test Tables.rowaccess(typeof(results))
                 # @test Tables.rows(results) === results
             end
         end
