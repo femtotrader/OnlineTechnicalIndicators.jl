@@ -294,7 +294,26 @@ const RT_OHLCV = [
     ) for i in eachindex(CLOSE_TMPL)
 ]
 
-# using Tables
+
+using Tables
+
 # const TAB_OHLCV = Tables.table([DATE_TMPL OPEN_TMPL HIGH_TMPL LOW_TMPL CLOSE_TMPL VOLUME_TMPL]; header=[:Index, :Open, :High, :Low, :Close, :Volume])
+
+struct TabOHLCV
+    Index::Vector{Date}
+    Open::Vector{Float64}
+    High::Vector{Float64}
+    Low::Vector{Float64}
+    Close::Vector{Float64}
+    Volume::Vector{Float64}
+    TabOHLCV() = new(DATE_TMPL, OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL)
+end
+Tables.istable(::Type{<:TabOHLCV}) = true
+Base.names(table::TabOHLCV) = [:Index, :Open, :High, :Low, :Close, :Volume]
+Tables.schema(table::TabOHLCV) = Tables.Schema(names(table), [Dates.Date, Float64, Float64, Float64, Float64, Float64])
+Tables.columnaccess(::Type{<:TabOHLCV}) = true
+#Tables.columns(table::TabOHLCV) = (getfield(table, colname) for colname in fieldnames(typeof(table)))
+
+const TAB_OHLCV = TabOHLCV()
 
 end
