@@ -4,7 +4,7 @@ const TTM_KC_ATR_MULT = 2.0# 1.5
 
 struct TTMVal{Tval}
     squeeze::Bool  # squeeze is on (=True) or off (=False)
-    histogram::Union{Missing,Tval}  # histogram of the linear regression
+    histogram::Tval  # histogram of the linear regression
 end
 
 """
@@ -84,7 +84,7 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::TTM)
+function _calculate_new_value(ind::TTM{T,IN,S}) where {T, IN, S}
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC
@@ -102,7 +102,7 @@ function _calculate_new_value(ind::TTM)
             # calculate linear regression y = ax + b
             mean_y = sum(ind.deltas.value) / ind.period
 
-            numer = 0.0
+            numer = zero(S)
             for (x, y) in zip(0:ind.period-1, value(ind.deltas))
                 numer += (x - ind.mean_x) * (y - mean_y)
             end

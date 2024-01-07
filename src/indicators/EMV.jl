@@ -45,7 +45,7 @@ mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::EMV)
+function _calculate_new_value(ind::EMV{T,IN,S}) where {T, IN, S}
     if ind.n >= 2
         candle = ind.input_values[end]
         candle_prev = ind.input_values[end-1]
@@ -56,7 +56,7 @@ function _calculate_new_value(ind::EMV)
             box_ratio = (candle.volume / ind.volume_div / (candle.high - candle.low))
             emv = distance / box_ratio
         else
-            emv = 0.0
+            emv = zero(S)
         end
         fit!(ind.emv_ma, emv)
         return value(ind.emv_ma)

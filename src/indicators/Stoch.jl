@@ -54,7 +54,7 @@ mutable struct Stoch{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::Stoch)
+function _calculate_new_value(ind::Stoch{T,IN,S}) where {T, IN, S}
     # get latest received candle
     candle = ind.input_values[end]
     # get max high and min low
@@ -62,9 +62,9 @@ function _calculate_new_value(ind::Stoch)
     min_low = min((cdl.low for cdl in value(ind.input_values))...)
     # calculate k
     if max_high == min_low
-        k = 100.0
+        k = 100 * one(S)
     else
-        k = 100.0 * (candle.close - min_low) / (max_high - min_low)
+        k = 100 * one(S) * (candle.close - min_low) / (max_high - min_low)
     end
     # calculate d
     fit!(ind.values_d, k)

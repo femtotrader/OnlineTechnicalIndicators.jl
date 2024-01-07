@@ -43,12 +43,12 @@ mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
-function _calculate_new_value(ind::RSI)
+function _calculate_new_value(ind::RSI{T,IN,S}) where {T, IN, S}
     if ind.n > 1
         change = ind.input_values[end] - ind.input_values[end-1]
 
-        gain = change > 0 ? change : 0.0
-        loss = change < 0 ? -change : 0.0
+        gain = change > 0 ? change : zero(S)
+        loss = change < 0 ? -change : zero(S)
 
         fit!(ind.gains, gain)
         fit!(ind.losses, loss)
@@ -59,10 +59,10 @@ function _calculate_new_value(ind::RSI)
         end
 
         if _losses == 0
-            rsi = 100.0
+            rsi = 100 * one(S)
         else
             rs = value(ind.gains) / _losses
-            rsi = 100.0 - 100.0 / (1.0 + rs)
+            rsi = 100 * one(S) - 100 * one(S) / (one(S) + rs)
         end
         return rsi
     else

@@ -64,7 +64,7 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::SuperTrend)
+function _calculate_new_value(ind::SuperTrend{T,IN,S}) where {T, IN, S}
     if has_output_value(ind.atr)
 
         candle = ind.input_values[end]
@@ -84,7 +84,7 @@ function _calculate_new_value(ind::SuperTrend)
         =#
 
         if !has_output_value(ind.fub)
-            fub = 0.0
+            fub = zero(S)
         else
             if bub < ind.fub[end] || ind.input_values[end-1].close > ind.fub[end]
                 fub = bub
@@ -100,7 +100,7 @@ function _calculate_new_value(ind::SuperTrend)
         =#
 
         if !has_output_value(ind.flb)
-            flb = 0.0
+            flb = zero(S)
         elseif blb > ind.flb[end] || ind.input_values[end-1].close < ind.flb[end]
             flb = blb
         else
@@ -127,7 +127,7 @@ function _calculate_new_value(ind::SuperTrend)
                 supertrend = ind.fub[end]
             end
         else
-            supertrend = 0
+            supertrend = zero(S)
         end
 
         trend_dir = candle.close > supertrend ? Trend.UP : Trend.DOWN

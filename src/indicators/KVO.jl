@@ -50,7 +50,7 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::KVO)
+function _calculate_new_value(ind::KVO{T,IN,S}) where {T, IN, S}
     if length(ind.input_values) < 2
         return missing
     end
@@ -59,13 +59,13 @@ function _calculate_new_value(ind::KVO)
     value2 = ind.input_values[end-1]
 
     if length(ind.trend) < 1
-        fit!(ind.trend, 0.0)
+        fit!(ind.trend, zero(S))
     else
         if (value1.high + value1.low + value1.close) >
            (value2.high + value2.low + value2.close)
-            fit!(ind.trend, 1.0)
+            fit!(ind.trend, one(S))
         else
-            fit!(ind.trend, -1.0)
+            fit!(ind.trend, -one(S))
         end
     end
 
@@ -89,7 +89,7 @@ function _calculate_new_value(ind::KVO)
     end
 
     if ind.cumulative_measurement[end] == 0
-        volume_force = 0.0
+        volume_force = zero(S)
     else
         volume_force =
             value1.volume *

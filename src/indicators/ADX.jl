@@ -78,7 +78,7 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::ADX)
+function _calculate_new_value(ind::ADX{T,IN,S}) where {T, IN, S}
     if ind.n > 1
 
         current_input = ind.input_values[end]
@@ -88,14 +88,14 @@ function _calculate_new_value(ind::ADX)
            current_input.high - prev_input.high > 0
             fit!(ind.pdm, current_input.high - prev_input.high)
         else
-            fit!(ind.pdm, 0.0)
+            fit!(ind.pdm, zero(S))
         end
 
         if prev_input.low - current_input.low > current_input.high - prev_input.high &&
            prev_input.low - current_input.low > 0
             fit!(ind.mdm, prev_input.low - current_input.low)
         else
-            fit!(ind.mdm, 0.0)
+            fit!(ind.mdm, zero(S))
         end
 
         if !has_valid_values(ind.pdm, ind.di_period)
@@ -114,12 +114,12 @@ function _calculate_new_value(ind::ADX)
             )
         end
 
-        fit!(ind.pdi, 100.0 * ind.spdm[end] / value(ind.atr))
-        fit!(ind.mdi, 100.0 * ind.smdm[end] / value(ind.atr))
+        fit!(ind.pdi, 100 * ind.spdm[end] / value(ind.atr))
+        fit!(ind.mdi, 100 * ind.smdm[end] / value(ind.atr))
 
         fit!(
             ind.dx,
-            100.0 * (abs(ind.pdi[end] - ind.mdi[end])) / (ind.pdi[end] + ind.mdi[end]),
+            100 * (abs(ind.pdi[end] - ind.mdi[end])) / (ind.pdi[end] + ind.mdi[end]),
         )
 
         adx = missing

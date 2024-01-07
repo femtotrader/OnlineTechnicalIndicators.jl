@@ -58,7 +58,7 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
             ma = ma,
             input_filter = is_valid,
             input_modifier = macd_to_ohlcv,
-            input_modifier_return_type = OHLCV,
+            input_modifier_return_type = OHLCV{Missing,Tval,Tval},
         )
         add_input_indicator!(stoch_macd, macd)  # <---
         #stoch_d = Stoch{StochVal,T2}(
@@ -68,7 +68,7 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
             ma = ma,
             input_filter = is_valid,
             input_modifier = stoch_d_to_ohlcv,
-            input_modifier_return_type = OHLCV,
+            input_modifier_return_type = OHLCV{Missing,Tval,Tval},
         )
         add_input_indicator!(stoch_d, stoch_macd)  # <---
         new{Tval,false,T2}(
