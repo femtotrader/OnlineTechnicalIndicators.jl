@@ -331,6 +331,10 @@ using IncTA.SampleData: RT_OHLCV
             @testset "SMA" begin
                 wrap = TechnicalIndicatorWrapper(SMA, period = P)
                 results = load!(RT_OHLCV, wrap)
+                @test results.name == :SMA
+                @test length(results.fieldnames) == 1
+                @test results.fieldnames[1] == :value
+                @test results.fieldtypes == (Float64, )
                 values = results.output
                 @test eltype(values) == Union{Missing,Float64}
                 @test isapprox(values[end-2], 9.075500; atol = ATOL)
@@ -343,6 +347,10 @@ using IncTA.SampleData: RT_OHLCV
             @testset "BB" begin
                 wrap = TechnicalIndicatorWrapper(BB, period = 5, std_dev_mult = 2.0)
                 results = load!(RT_OHLCV, wrap)
+                @test results.name == :BB
+                @test length(results.fieldnames) == 3
+                @test results.fieldnames == (:lower, :central, :upper)
+                @test results.fieldtypes == (Float64, Float64, Float64)
                 values = results.output
                 @test eltype(values) == Union{Missing,BBVal{Float64}}
                 @test isapprox(values[end-2].lower, 8.186646; atol = ATOL)
@@ -361,6 +369,10 @@ using IncTA.SampleData: RT_OHLCV
             @testset "ATR" begin
                 wrap = TechnicalIndicatorWrapper(ATR, period = 5)
                 results = load!(RT_OHLCV, wrap)
+                @test results.name == :ATR
+                @test length(results.fieldnames) == 1
+                @test results.fieldnames[1] == :value
+                @test results.fieldtypes == (Float64, )
                 values = results.output
                 @test eltype(values) == Union{Missing,Float64}
                 @test isapprox(values[end-2], 0.676426; atol = ATOL)
@@ -370,9 +382,13 @@ using IncTA.SampleData: RT_OHLCV
         end
 
         @testset "MIMO" begin
-            @testset "ATR" begin
+            @testset "Stoch" begin
                 wrap = TechnicalIndicatorWrapper(Stoch, period = 14, smoothing_period = 3)
                 results = load!(RT_OHLCV, wrap)
+                @test results.name == :Stoch
+                @test length(results.fieldnames) == 2
+                @test results.fieldnames == (:k, :d)
+                @test results.fieldtypes == (Float64, Union{Missing,Float64})
                 values = results.output
                 @test eltype(values) == Union{Missing,StochVal{Float64}}
                 @test isapprox(values[end-2].k, 88.934426; atol = ATOL)

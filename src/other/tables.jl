@@ -11,10 +11,15 @@ struct TechnicalIndicatorWrapper{T}
 end
 
 struct TechnicalIndicatorResults{Ttime,Tout}
-    index::Vector
-    output::Vector
-    function TechnicalIndicatorResults{Ttime,Tout}() where {Ttime,Tout}
-        new{Ttime,Tout}(Ttime[], Tout[])
+    name::Symbol
+    fieldnames::Tuple
+    fieldtypes::Tuple
+
+    index::Vector{Ttime}
+    output::Vector{Tout}
+
+    function TechnicalIndicatorResults{Ttime,Tout}(name, fieldnames, fieldtypes) where {Ttime,Tout}
+        new{Ttime,Tout}(name, fieldnames, fieldtypes, Ttime[], Tout[])
     end
 end
 
@@ -43,10 +48,14 @@ function load!(
         throw(ArgumentError("default field `$default_field` not found"))
     if !ismultioutput(ti_wrap.indicator_type)
         Tout = Union{Missing,Tin}
+        _expected_return_type = Tin
+        results = TechnicalIndicatorResults{Ttime,Tout}(Symbol(ti_wrap.indicator_type), (:value, ), (Tin, ))
     else
         Tout = Union{Missing,expected_return_type(ti_wrap.indicator_type){Tin}}
+        _expected_return_type = expected_return_type(ti_wrap.indicator_type){Tin}
+        results = TechnicalIndicatorResults{Ttime,Tout}(Symbol(ti_wrap.indicator_type), fieldnames(_expected_return_type), fieldtypes(_expected_return_type))
     end
-    results = TechnicalIndicatorResults{Ttime,Tout}()
+
     if !ismultiinput(ti_wrap.indicator_type)
         ind = ti_wrap.indicator_type{Tin}(ti_wrap.args...; ti_wrap.kwargs...)
         for row in rows
@@ -65,7 +74,6 @@ function load!(
             )
         end
         for row in rows
-            println(row)
             tim = index_field ∈ _names ? row[index_field] : missing
             opn = row[candle_fields[1]]
             hig = row[candle_fields[2]]

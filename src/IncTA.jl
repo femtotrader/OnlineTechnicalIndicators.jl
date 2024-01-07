@@ -109,8 +109,8 @@ function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}
     return RETVAL{typeof(ind).parameters[end]}
 end
 
-function expected_return_type(ind::Type{O}) where {O<:TechnicalIndicatorMultiOutput}
-    retval = String(nameof(ind)) * "Val"  # return value as String "BBVal", "MACDVal"...
+function expected_return_type(IND::Type{O}) where {O<:TechnicalIndicatorMultiOutput}
+    retval = String(nameof(IND)) * "Val"  # return value as String "BBVal", "MACDVal"...
     RETVAL = eval(Meta.parse(retval))
     return RETVAL
 end
