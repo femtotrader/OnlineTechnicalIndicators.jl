@@ -264,6 +264,7 @@ using IncTA.SampleData: RT_OHLCV
                 itr = TechnicalIndicatorIterator(SMA, CLOSE_TMPL, period = P)
                 values = collect(itr)
                 @test eltype(values) == Union{Missing,Float64}
+                @test length(values) == length(CLOSE_TMPL)
                 @test isapprox(values[end-2], 9.075500; atol = ATOL)
                 @test isapprox(values[end-1], 9.183000; atol = ATOL)
                 @test isapprox(values[end], 9.308500; atol = ATOL)
@@ -280,6 +281,7 @@ using IncTA.SampleData: RT_OHLCV
                 )
                 values = collect(itr)
                 @test eltype(values) == Union{Missing,BBVal{Float64}}
+                @test length(values) == length(CLOSE_TMPL)
                 @test isapprox(values[end-2].lower, 8.186646; atol = ATOL)
                 @test isapprox(values[end-2].central, 9.748000; atol = ATOL)
                 @test isapprox(values[end-2].upper, 11.309353; atol = ATOL)
@@ -297,6 +299,7 @@ using IncTA.SampleData: RT_OHLCV
                 itr = TechnicalIndicatorIterator(ATR, V_OHLCV, period = 5)
                 values = collect(itr)
                 @test eltype(values) == Union{Missing,Float64}
+                @test length(values) == length(CLOSE_TMPL)
                 @test isapprox(values[end-2], 0.676426; atol = ATOL)
                 @test isapprox(values[end-1], 0.665141; atol = ATOL)
                 @test isapprox(values[end], 0.686113; atol = ATOL)
@@ -313,6 +316,7 @@ using IncTA.SampleData: RT_OHLCV
                 )
                 values = collect(itr)
                 @test eltype(values) == Union{Missing,StochVal{Float64}}
+                @test length(values) == length(CLOSE_TMPL)
                 @test isapprox(values[end-2].k, 88.934426; atol = ATOL)
                 @test isapprox(values[end-2].d, 88.344442; atol = ATOL)
                 @test isapprox(values[end-1].k, 74.180327; atol = ATOL)
@@ -326,6 +330,7 @@ using IncTA.SampleData: RT_OHLCV
 
 
     using IncTA: TechnicalIndicatorWrapper, load!
+    using Tables
     @testset "table" begin
         @testset "SISO" begin
             @testset "SMA" begin
@@ -340,6 +345,10 @@ using IncTA.SampleData: RT_OHLCV
                 @test isapprox(values[end-2], 9.075500; atol = ATOL)
                 @test isapprox(values[end-1], 9.183000; atol = ATOL)
                 @test isapprox(values[end], 9.308500; atol = ATOL)
+                @test Tables.istable(typeof(results))
+                @test names(results) == [:SMA_value]
+                # @test Tables.rowaccess(typeof(results))
+                # @test Tables.rows(results) === results
             end
         end
 
@@ -362,6 +371,8 @@ using IncTA.SampleData: RT_OHLCV
                 @test isapprox(values[end].lower, 9.863185; atol = ATOL)
                 @test isapprox(values[end].central, 10.254000; atol = ATOL)
                 @test isapprox(values[end].upper, 10.644814; atol = ATOL)
+                @test Tables.istable(typeof(results))
+                @test names(results) == [:BB_lower, :BB_central, :BB_upper]
             end
         end
 
@@ -378,6 +389,8 @@ using IncTA.SampleData: RT_OHLCV
                 @test isapprox(values[end-2], 0.676426; atol = ATOL)
                 @test isapprox(values[end-1], 0.665141; atol = ATOL)
                 @test isapprox(values[end], 0.686113; atol = ATOL)
+                @test Tables.istable(typeof(results))
+                @test names(results) == [:ATR_value]
             end
         end
 
@@ -397,6 +410,8 @@ using IncTA.SampleData: RT_OHLCV
                 @test isapprox(values[end-1].d, 84.499789; atol = ATOL)
                 @test isapprox(values[end].k, 64.754098; atol = ATOL)
                 @test isapprox(values[end].d, 75.956284; atol = ATOL)
+                @test Tables.istable(typeof(results))
+                @test names(results) == [:Stoch_k, :Stoch_d]
             end
         end
 

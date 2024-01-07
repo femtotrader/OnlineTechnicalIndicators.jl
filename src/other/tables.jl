@@ -33,6 +33,9 @@ function Base.push!(results::TechnicalIndicatorResults, result)
     push!(results.output, val)
 end
 
+Base.names(results::TechnicalIndicatorResults) = [Symbol("$(results.name)_$(fieldname)") for fieldname in results.fieldnames]
+
+Tables.istable(::Type{<:TechnicalIndicatorResults}) = true
 
 function load!(
     table,

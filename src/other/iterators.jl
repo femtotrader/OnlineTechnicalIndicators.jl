@@ -70,7 +70,7 @@ mutable struct TechnicalIndicatorIterator{T,I}
 
 end
 
-function Base.iterate(itr::TechnicalIndicatorIterator, state = 0)
+function Base.iterate(itr::TechnicalIndicatorIterator, state = 1)
     iter_result = iterate(itr.input_iterator, state)
     if iter_result !== nothing
         (element, state) = iter_result
