@@ -17,7 +17,7 @@ Type `] dev https://github.com/femtotrader/IncTA.jl/`
 
 ## Usage
 
-See [tests](test/)
+See [examples](examples/) and [tests](test/)
 
 ## Indicators
 
