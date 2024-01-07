@@ -8,7 +8,7 @@ using IncTA:
     ALL_INDICATORS
 using IncTA: always_true, ismultiinput, ismultioutput
 using IncTA: MACDVal, macd_to_ohlcv
-using IncTA.SampleData: RT_OHLCV
+using IncTA.SampleData: RT_OHLCV # , TAB_OHLCV
 
 @testset "indicators interface" begin
 
@@ -423,7 +423,7 @@ using IncTA.SampleData: RT_OHLCV
             for IND in ALL_INDICATORS
                 @testset "$(IND)" begin
                     IND = eval(Meta.parse(IND))
-                    table = RT_OHLCV
+                    # table = TAB_OHLCV
                     result = IND(table)
                     @test 1 == 1
                 end

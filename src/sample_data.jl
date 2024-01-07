@@ -294,4 +294,7 @@ const RT_OHLCV = [
     ) for i in eachindex(CLOSE_TMPL)
 ]
 
+# using Tables
+# const TAB_OHLCV = Tables.table([DATE_TMPL OPEN_TMPL HIGH_TMPL LOW_TMPL CLOSE_TMPL VOLUME_TMPL]; header=[:Index, :Open, :High, :Low, :Close, :Volume])
+
 end
