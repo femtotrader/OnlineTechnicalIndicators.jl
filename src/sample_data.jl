@@ -291,7 +291,7 @@ const RT_OHLCV = [
         Low = LOW_TMPL[i],
         Close = CLOSE_TMPL[i],
         Volume = VOLUME_TMPL[i],
-    ) for i = 1:length(CLOSE_TMPL)
+    ) for i in eachindex(CLOSE_TMPL)
 ]
 
 end

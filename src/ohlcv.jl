@@ -45,7 +45,7 @@ end
 
 function Base.collect(factory::OHLCVFactory{Ttime,Tprice,Tvol}) where {Ttime,Tprice,Tvol}
     v_ohlcv = OHLCV{Ttime,Tprice,Tvol}[]
-    for i = 1:length(factory.close)
+    for i in eachindex(factory.close)
         if i <= length(factory.volume)
             volume = factory.volume[i]
         else

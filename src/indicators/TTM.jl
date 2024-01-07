@@ -4,7 +4,7 @@ const TTM_KC_ATR_MULT = 2.0# 1.5
 
 struct TTMVal{Tval}
     squeeze::Bool  # squeeze is on (=True) or off (=False)
-    histogram::Tval  # histogram of the linear regression
+    histogram::Union{Missing,Tval}  # histogram of the linear regression
 end
 
 """

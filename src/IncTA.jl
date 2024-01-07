@@ -64,14 +64,16 @@ MIMO_INDICATORS = [
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
 
-# Export indicators
-for ind in [
+ALL_INDICATORS = [
     SISO_INDICATORS...,
     SIMO_INDICATORS...,
     MISO_INDICATORS...,
     MIMO_INDICATORS...,
     OTHERS_INDICATORS...,
 ]
+
+# Export indicators
+for ind in ALL_INDICATORS
     ind = Symbol(ind)
     @eval export $ind
 end
