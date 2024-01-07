@@ -334,7 +334,7 @@ using IncTA.SampleData: RT_OHLCV
                 @test results.name == :SMA
                 @test length(results.fieldnames) == 1
                 @test results.fieldnames[1] == :value
-                @test results.fieldtypes == (Float64, )
+                @test results.fieldtypes == (Float64,)
                 values = results.output
                 @test eltype(values) == Union{Missing,Float64}
                 @test isapprox(values[end-2], 9.075500; atol = ATOL)
@@ -372,7 +372,7 @@ using IncTA.SampleData: RT_OHLCV
                 @test results.name == :ATR
                 @test length(results.fieldnames) == 1
                 @test results.fieldnames[1] == :value
-                @test results.fieldtypes == (Float64, )
+                @test results.fieldtypes == (Float64,)
                 values = results.output
                 @test eltype(values) == Union{Missing,Float64}
                 @test isapprox(values[end-2], 0.676426; atol = ATOL)

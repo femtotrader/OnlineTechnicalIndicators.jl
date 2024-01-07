@@ -18,7 +18,11 @@ struct TechnicalIndicatorResults{Ttime,Tout}
     index::Vector{Ttime}
     output::Vector{Tout}
 
-    function TechnicalIndicatorResults{Ttime,Tout}(name, fieldnames, fieldtypes) where {Ttime,Tout}
+    function TechnicalIndicatorResults{Ttime,Tout}(
+        name,
+        fieldnames,
+        fieldtypes,
+    ) where {Ttime,Tout}
         new{Ttime,Tout}(name, fieldnames, fieldtypes, Ttime[], Tout[])
     end
 end
@@ -49,11 +53,19 @@ function load!(
     if !ismultioutput(ti_wrap.indicator_type)
         Tout = Union{Missing,Tin}
         _expected_return_type = Tin
-        results = TechnicalIndicatorResults{Ttime,Tout}(Symbol(ti_wrap.indicator_type), (:value, ), (Tin, ))
+        results = TechnicalIndicatorResults{Ttime,Tout}(
+            Symbol(ti_wrap.indicator_type),
+            (:value,),
+            (Tin,),
+        )
     else
         Tout = Union{Missing,expected_return_type(ti_wrap.indicator_type){Tin}}
         _expected_return_type = expected_return_type(ti_wrap.indicator_type){Tin}
-        results = TechnicalIndicatorResults{Ttime,Tout}(Symbol(ti_wrap.indicator_type), fieldnames(_expected_return_type), fieldtypes(_expected_return_type))
+        results = TechnicalIndicatorResults{Ttime,Tout}(
+            Symbol(ti_wrap.indicator_type),
+            fieldnames(_expected_return_type),
+            fieldtypes(_expected_return_type),
+        )
     end
 
     if !ismultiinput(ti_wrap.indicator_type)
@@ -65,7 +77,13 @@ function load!(
             push!(results, (tim, value(ind)))
         end
     else
-        ind = ti_wrap.indicator_type{OHLCV}(ti_wrap.args...; ti_wrap.kwargs...)
+        Ttime = index_field ∈ sch.names ? Tables.columntype(sch, index_field) : Missing
+        Tprice = Tin
+        Tvol = volume_field ∈ sch.names ? Tables.columntype(sch, volume_field) : Missing
+        ind = ti_wrap.indicator_type{OHLCV{Ttime,Tprice,Tvol}}(
+            ti_wrap.args...;
+            ti_wrap.kwargs...,
+        )
         for candle_field in candle_fields
             (candle_field ∉ _names) && throw(
                 ArgumentError(
