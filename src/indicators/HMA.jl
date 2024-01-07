@@ -48,7 +48,7 @@ end
 
 function _calculate_new_value(ind::HMA)
     if has_output_value(ind.wma)
-        fit!(ind.hma, 2.0 * value(ind.wma2) - value(ind.wma))
+        fit!(ind.hma, 2 * value(ind.wma2) - value(ind.wma))
         if has_output_value(ind.hma)
             return value(ind.hma)
         else

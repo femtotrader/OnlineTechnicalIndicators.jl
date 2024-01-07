@@ -38,7 +38,7 @@ end
 
 
 function _calculate_new_value_only_from_incoming_data(ind::VWAP, candle)
-    typical_price = (candle.high + candle.low + candle.close) / 3.0
+    typical_price = (candle.high + candle.low + candle.close) / 3
 
     ind.sum_price_vol = ind.sum_price_vol + candle.volume * typical_price
     ind.sum_vol = ind.sum_vol + candle.volume

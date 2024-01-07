@@ -47,7 +47,7 @@ function _calculate_new_value(ind::DEMA)
     if has_output_value(ind.ma)
         fit!(ind.ma_ma, value(ind.ma))
         if has_output_value(ind.ma_ma)
-            return 2.0 * value(ind.ma) - value(ind.ma_ma)
+            return 2 * value(ind.ma) - value(ind.ma_ma)
         else
             return missing
         end

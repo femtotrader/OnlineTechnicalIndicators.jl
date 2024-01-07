@@ -1,6 +1,6 @@
 const TTM_PERIOD = 20
 const TTM_BB_STD_DEV_MULT = 2.0
-const TTM_KC_ATR_MULT = 2.0# 1.5
+const TTM_KC_ATR_MULT = 2.0  # 1.5
 
 struct TTMVal{Tval}
     squeeze::Bool  # squeeze is on (=True) or off (=False)
@@ -94,7 +94,7 @@ function _calculate_new_value(ind::TTM{T,IN,S}) where {T,IN,S}
 
         if has_output_value(ind.ma) && has_output_value(ind.dc)
             candle = ind.input_values[end]
-            fit!(ind.deltas, candle.close - (value(ind.dc).central + value(ind.ma)) / 2.0)
+            fit!(ind.deltas, candle.close - (value(ind.dc).central + value(ind.ma)) / 2)
         end
 
         hist = missing

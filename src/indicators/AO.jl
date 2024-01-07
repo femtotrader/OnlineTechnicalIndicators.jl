@@ -42,7 +42,7 @@ mutable struct AO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 end
 
 function _calculate_new_value_only_from_incoming_data(ind::AO, candle)
-    median = (candle.high + candle.low) / 2.0
+    median = (candle.high + candle.low) / 2
     fit!(ind.fast_ma, median)
     fit!(ind.slow_ma, median)
     return value(ind.fast_ma) - value(ind.slow_ma)

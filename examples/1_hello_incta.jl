@@ -1,3 +1,9 @@
+#=
+
+This example demonstrates how to uses an IncTA technical analysis indicator in an incremental approach feeding new data one observation at a time.
+
+=#
+
 using IncTA
 using IncTA.SampleData: CLOSE_TMPL, V_OHLCV
 
