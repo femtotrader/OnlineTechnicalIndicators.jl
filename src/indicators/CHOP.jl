@@ -61,7 +61,7 @@ function _calculate_new_value(ind::CHOP)
     min_low = min((cdl.low for cdl in value(ind.input_values))...)
 
     if max_high != min_low
-        return 100.0 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
+        return 100 * log10(sum(ind.atr_values.value) / (max_high - min_low)) /
                log10(ind.period)
     else
         if has_output_value(ind)

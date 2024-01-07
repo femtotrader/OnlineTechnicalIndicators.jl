@@ -84,7 +84,7 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::TTM{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::TTM{T,IN,S}) where {T,IN,S}
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 
         # squeeze is on if BB is entirely encompassed in KC

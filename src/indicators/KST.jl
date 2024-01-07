@@ -112,10 +112,10 @@ function _calculate_new_value(ind::KST)
        has_output_value(ind.roc3_ma) &&
        has_output_value(ind.roc4_ma)
         kst =
-            1.0 * value(ind.roc1_ma) +
-            2.0 * value(ind.roc2_ma) +
-            3.0 * value(ind.roc3_ma) +
-            4.0 * value(ind.roc4_ma)
+            value(ind.roc1_ma) +
+            2 * value(ind.roc2_ma) +
+            3 * value(ind.roc3_ma) +
+            4 * value(ind.roc4_ma)
         fit!(ind.signal_line, kst)
 
         if has_output_value(ind.signal_line)

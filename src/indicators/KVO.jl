@@ -50,7 +50,7 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::KVO{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::KVO{T,IN,S}) where {T,IN,S}
     if length(ind.input_values) < 2
         return missing
     end

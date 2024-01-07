@@ -45,7 +45,7 @@ mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::EMV{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::EMV{T,IN,S}) where {T,IN,S}
     if ind.n >= 2
         candle = ind.input_values[end]
         candle_prev = ind.input_values[end-1]

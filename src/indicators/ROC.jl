@@ -35,7 +35,7 @@ mutable struct ROC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
-function _calculate_new_value(ind::ROC{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::ROC{T,IN,S}) where {T,IN,S}
     if ind.n >= ind.period + 1
         return 100 * one(S) * (ind.input_values[end] - ind.input_values[end-ind.period]) /
                ind.input_values[end-ind.period]

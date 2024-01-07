@@ -54,7 +54,7 @@ mutable struct Stoch{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::Stoch{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::Stoch{T,IN,S}) where {T,IN,S}
     # get latest received candle
     candle = ind.input_values[end]
     # get max high and min low

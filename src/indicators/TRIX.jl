@@ -63,7 +63,7 @@ function _calculate_new_value(ind::TRIX)
     if has_output_value(ind.ema3)
         fit!(ind.output_history, value(ind.ema3))
         if length(ind.output_history.value) == 2
-            return 10000.0 * (ind.output_history[end] - ind.output_history[end-1]) /
+            return 10000 * (ind.output_history[end] - ind.output_history[end-1]) /
                    ind.output_history[end-1]
         else
             return missing

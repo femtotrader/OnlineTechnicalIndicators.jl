@@ -73,7 +73,7 @@ function _calculate_new_value(ind::TSI)
         end
 
         if value(ind.abs_fast_ma) != 0
-            return 100.0 * (value(ind.fast_ma) / value(ind.abs_fast_ma))
+            return 100 * (value(ind.fast_ma) / value(ind.abs_fast_ma))
         else
             return missing
         end

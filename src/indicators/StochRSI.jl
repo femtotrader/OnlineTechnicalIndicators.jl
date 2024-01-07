@@ -68,16 +68,16 @@ end
 
 expected_return_type(ind::StochRSI) = StochRSIVal{typeof(ind).parameters[end]}
 
-function _calculate_new_value(ind::StochRSI)
+function _calculate_new_value(ind::StochRSI{T,IN,S}) where {T,IN,S}
     fit!(ind.recent_rsi, value(ind.rsi))
     if has_valid_values(ind.recent_rsi, ind.stoch_period)
         max_high = max(ind.recent_rsi.value...)
         min_low = min(ind.recent_rsi.value...)
 
         if max_high == min_low
-            k = 100.0
+            k = 100 * one(S)
         else
-            k = 100.0 * (value(ind.rsi) - min_low) / (max_high - min_low)
+            k = 100 * (value(ind.rsi) - min_low) / (max_high - min_low)
         end
 
         fit!(ind.smoothed_k, k)

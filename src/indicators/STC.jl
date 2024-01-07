@@ -3,12 +3,18 @@ const STC_SLOW_MACD_PERIOD = 10
 const STC_STOCH_PERIOD = 10
 const STC_STOCH_SMOOTHING_PERIOD = 3
 
-function macd_to_ohlcv(macd_val::MACDVal)
-    return OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd, volume = 0.0)
+function macd_to_ohlcv(macd_val::MACDVal{S}) where {S}
+    return OHLCV(
+        macd_val.macd,
+        macd_val.macd,
+        macd_val.macd,
+        macd_val.macd,
+        volume = zero(S),
+    )
 end
 
-function stoch_d_to_ohlcv(stoch_val::StochVal)
-    return OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d, volume = 0.0)
+function stoch_d_to_ohlcv(stoch_val::StochVal{S}) where {S}
+    return OHLCV(stoch_val.d, stoch_val.d, stoch_val.d, stoch_val.d, volume = zero(S))
 end
 
 """

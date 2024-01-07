@@ -35,7 +35,7 @@ mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         w = T2[]
-        w_sum = 0.0
+        w_sum = zero(T2)
         s = period / sigma
         m = trunc(Int, (period - 1) * offset)
         for i = 1:period
@@ -58,9 +58,9 @@ mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
-function _calculate_new_value(ind::ALMA)
+function _calculate_new_value(ind::ALMA{T,IN,S}) where {T,IN,S}
     if ind.n >= ind.period
-        alma = 0
+        alma = zero(S)
         for i = 1:ind.period
             alma += ind.input_values[end-(ind.period-i)] * ind.w[i]
         end

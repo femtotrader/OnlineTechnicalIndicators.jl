@@ -50,7 +50,7 @@ function _calculate_new_value(ind::Aroon)
     days_low = argmin([cdl.low for cdl in reverse(value(ind.input_values))]) - 1
 
     return AroonVal(
-        100.0 * (ind.period - days_high) / ind.period,
-        100.0 * (ind.period - days_low) / ind.period,
+        100 * (ind.period - days_high) / ind.period,
+        100 * (ind.period - days_low) / ind.period,
     )
 end

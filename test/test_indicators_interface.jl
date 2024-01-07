@@ -398,7 +398,8 @@ using IncTA.SampleData: RT_OHLCV
 
             @testset "MIMO" begin
                 @testset "Stoch" begin
-                    wrap = TechnicalIndicatorWrapper(Stoch, period = 14, smoothing_period = 3)
+                    wrap =
+                        TechnicalIndicatorWrapper(Stoch, period = 14, smoothing_period = 3)
                     results = load!(RT_OHLCV, wrap)
                     @test results.name == :Stoch
                     @test length(results.fieldnames) == 2
@@ -427,7 +428,7 @@ using IncTA.SampleData: RT_OHLCV
                     @test 1 == 1
                 end
             end
-            
+
         end
 
     end

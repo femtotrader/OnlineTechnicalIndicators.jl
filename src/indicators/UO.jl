@@ -82,5 +82,5 @@ function _calculate_new_value(ind::UO)
         sum(value(ind.buy_press)[end-ind.slow_period+1:end]) /
         sum(value(ind.true_range)[end-ind.slow_period+1:end])
 
-    return 100.0 * (4.0 * avg_fast + 2.0 * avg_mid + avg_slow) / 7.0
+    return 100 * (4 * avg_fast + 2 * avg_mid + avg_slow) / 7
 end

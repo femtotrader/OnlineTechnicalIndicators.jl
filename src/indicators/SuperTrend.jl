@@ -64,7 +64,7 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::SuperTrend{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::SuperTrend{T,IN,S}) where {T,IN,S}
     if has_output_value(ind.atr)
 
         candle = ind.input_values[end]

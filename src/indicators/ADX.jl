@@ -78,7 +78,7 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
-function _calculate_new_value(ind::ADX{T,IN,S}) where {T, IN, S}
+function _calculate_new_value(ind::ADX{T,IN,S}) where {T,IN,S}
     if ind.n > 1
 
         current_input = ind.input_values[end]
