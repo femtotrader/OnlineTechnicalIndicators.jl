@@ -86,3 +86,8 @@ See [examples](examples/) and [tests](test/)
 :m: multiple numbers (output)
 
 :candle: OHLCV candlestick input
+
+:1234: :1234: SISO indicators
+:1234: :m: SIMO indicators
+:candle: :1234: MISO indicators
+:candle: :m: MIMO indicators
