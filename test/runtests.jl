@@ -22,7 +22,7 @@ using IncTA.SampleData:
     VOLUME_TMPL,
     V_OHLCV
 using OnlineStatsBase
-using OnlineStats: StatLag
+using IncTA: StatLag
 
 using Test
 

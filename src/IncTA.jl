@@ -89,6 +89,7 @@ abstract type TechnicalIndicatorSingleOutput{T} <: TechnicalIndicator{T} end
 abstract type TechnicalIndicatorMultiOutput{T} <: TechnicalIndicator{T} end
 abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 
+include("stats.jl")
 include("ohlcv.jl")
 include("sample_data.jl")
 
