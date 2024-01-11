@@ -42,7 +42,7 @@ end
 println("")
 
 println("Calculate Stoch (Stochastic)")
-ind = Stoch{OHLCV}(period = 3)  # this is a MIMO indicator
+ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 3)  # this is a MIMO indicator
 for candle in V_OHLCV
     fit!(ind, candle)
     println(value(ind))
