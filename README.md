@@ -7,7 +7,7 @@ This project implements some Technical Analysis Indicators in Julia in an increm
 
 It's inspired by Python project [talipp](https://github.com/nardew/talipp) which is used as "reference implementation" for unit tests.
 
-It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineStatsBase.jl) (and [OnlineStats.jl](https://joshday.github.io/OnlineStats.jl/)) and on [Tables.jl](https://tables.juliadata.org/)
+It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineStatsBase.jl) and on [Tables.jl](https://tables.juliadata.org/)
 
 :construction: This software is under construction. API can have breaking changes.
 
