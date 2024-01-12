@@ -7,7 +7,7 @@ struct DonchianChannelsVal{Tval}
 end
 
 """
-    DonchianChannels{Tohlcv,S}(; period = DonchianChannels_ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    DonchianChannels{Tohlcv}(; period = DonchianChannels_ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 """

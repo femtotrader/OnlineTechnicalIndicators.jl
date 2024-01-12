@@ -1,5 +1,5 @@
 """
-    AccuDist{Tohlcv,S}(input_filter = always_true, input_modifier = identity)
+    AccuDist{Tohlcv}(input_filter = always_true, input_modifier = identity)
 
 The `AccuDist` type implements an Accumulation and Distribution indicator.
 """

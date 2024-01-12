@@ -1,7 +1,7 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tohlcv,S}(; period = ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ATR{Tohlcv}(; period = ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ATR` type implements an Average True Range indicator.
 """

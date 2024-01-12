@@ -8,7 +8,7 @@ struct ADXVal{Tval}
 end
 
 """
-    ADX{Tohlcv,S}(; di_period = 14, adx_period = 14, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ADX{Tohlcv}(; di_period = 14, adx_period = 14, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ADX` type implements an Average Directional Index indicator.
 """

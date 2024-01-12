@@ -3,7 +3,7 @@ const UO_MID_PERIOD = 5
 const UO_SLOW_PERIOD = 7
 
 """
-    UO{Tohlcv,S}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    UO{Tohlcv}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `UO` type implements an Ultimate Oscillator.
 """

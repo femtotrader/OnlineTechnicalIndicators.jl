@@ -1,7 +1,7 @@
 const CCI_PERIOD = 3
 
 """
-    CCI{Tohlcv,S}(; period=CCI_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    CCI{Tohlcv}(; period=CCI_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `CCI` type implements a Commodity Channel Index.
 """

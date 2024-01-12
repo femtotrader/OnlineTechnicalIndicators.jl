@@ -1,7 +1,7 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Tohlcv,S}(; period = VWMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    VWMA{Tohlcv}(; period = VWMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `VWMA` type implements a Volume Weighted Moving Average indicator.
 """

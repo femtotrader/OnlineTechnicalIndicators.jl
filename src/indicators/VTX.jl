@@ -6,7 +6,7 @@ struct VTXVal{Tval}
 end
 
 """
-    VTX{Tohlcv,S}(; period = VTX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    VTX{Tohlcv}(; period = VTX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `VTX` type implements a Vortex Indicator.
 """

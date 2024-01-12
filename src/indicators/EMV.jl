@@ -2,7 +2,7 @@ const EMV_PERIOD = 20
 const EMV_VOLUME_DIV = 10000
 
 """
-    EMV{Tohlcv,S}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    EMV{Tohlcv}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `EMV` type implements a Ease of Movement indicator.
 """

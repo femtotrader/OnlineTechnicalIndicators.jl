@@ -6,7 +6,7 @@ struct AroonVal{Tval}
 end
 
 """
-    Aroon{Tohlcv,S}(; period = Aroon_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Aroon{Tohlcv}(; period = Aroon_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `Aroon` type implements an Aroon indicator.
 """

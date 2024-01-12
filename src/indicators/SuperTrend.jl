@@ -12,7 +12,7 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Tohlcv,S}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SuperTrend` type implements a Super Trend indicator.
 """

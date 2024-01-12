@@ -16,7 +16,7 @@ end
 # isnew(val::PivotsHLVal) = val.isnew
 
 """
-    PivotsHL{Tohlcv,S}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    PivotsHL{Tohlcv}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `PivotsHL` type implements a High/Low Pivots Indicator.
 """

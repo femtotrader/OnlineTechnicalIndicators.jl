@@ -1,7 +1,7 @@
 const VWAP_MEMORY = 3
 
 """
-    VWAP{Tohlcv,S}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    VWAP{Tohlcv}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `VWAP` type implements a Volume Weighted Moving Average indicator.
 """

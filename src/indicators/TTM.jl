@@ -8,7 +8,7 @@ struct TTMVal{Tval}
 end
 
 """
-    TTM{Tohlcv,S}(; atr_period = TTM_ATR_PERIOD, std_dev_period = TTM_STD_DEV_PERIOD, std_dev_smoothing_period = TTM_STD_DEV_SMOOTHING_PERIOD, ma = SMA)
+    TTM{Tohlcv}(; atr_period = TTM_ATR_PERIOD, std_dev_period = TTM_STD_DEV_PERIOD, std_dev_smoothing_period = TTM_STD_DEV_SMOOTHING_PERIOD, ma = SMA)
 
 The `TTM` type implements a TTM indicator.
 """

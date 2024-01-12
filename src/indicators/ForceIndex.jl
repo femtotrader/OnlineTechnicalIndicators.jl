@@ -1,7 +1,7 @@
 const ForceIndex_PERIOD = 3
 
 """
-    ForceIndex{Tohlcv,S}(; period = ForceIndex_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ForceIndex` type implements a Force Index indicator.
 """

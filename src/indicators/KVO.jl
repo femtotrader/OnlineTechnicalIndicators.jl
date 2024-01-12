@@ -2,7 +2,7 @@ const KVO_FAST_PERIOD = 5
 const KVO_SLOW_PERIOD = 10
 
 """
-    KVO{Tohlcv,S}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    KVO{Tohlcv}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `KVO` type implements a Klinger Volume Oscillator.
 """

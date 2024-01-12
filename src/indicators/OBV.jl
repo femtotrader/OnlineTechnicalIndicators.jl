@@ -1,5 +1,5 @@
 """
-    OBV{Tohlcv,S}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    OBV{Tohlcv}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `OBV` type implements On Balance Volume indicator.
 """

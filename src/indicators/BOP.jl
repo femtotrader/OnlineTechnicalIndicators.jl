@@ -1,5 +1,5 @@
 """
-    BOP{Tohlcv,S}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    BOP{Tohlcv}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `BOP` type implements a Balance Of Power indicator.
 """

@@ -1,7 +1,7 @@
 const SOBV_PERIOD = 20
 
 """
-    SOBV{Tohlcv,S}(; period = SOBV_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    SOBV{Tohlcv}(; period = SOBV_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `SOBV` type implements a Smoothed On Balance Volume indicator.
 """
