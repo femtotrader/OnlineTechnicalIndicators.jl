@@ -1,6 +1,6 @@
 #=
 
-This example demonstrates how to uses an IncTA technical analysis indicator in an incremental approach feeding new data one observation at a time.
+This example demonstrates how to use an IncTA technical analysis indicator in an incremental approach feeding new data one observation at a time.
 
 =#
 

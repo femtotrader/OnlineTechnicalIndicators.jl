@@ -1,6 +1,6 @@
 #=
 
-This example demonstrates how to uses an IncTA technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
+This example demonstrates how to use an IncTA technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
 
 =#
 
