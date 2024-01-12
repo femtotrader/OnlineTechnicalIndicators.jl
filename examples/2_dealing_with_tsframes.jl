@@ -25,7 +25,7 @@ println(SMA(ts; period = 3, default = :Open))
 println("")
 
 println("Calculate BB (Bollinger bands)")
-println(SMA(ts; period = 3))
+println(BB(ts; period = 3))
 
 println("")
 
