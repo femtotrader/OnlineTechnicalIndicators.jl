@@ -137,7 +137,7 @@ IncTA.StochVal{Float64}(26.744186046511697, 66.75126714370903)
 IncTA.StochVal{Float64}(30.645161290322637, 46.83811577894477)
 ```
 
-## Feeding a technical analysis indicator with a compatible Tables.jl table such as TSFrame.
+## Feeding a technical analysis indicator with a compatible Tables.jl table such as TSFrame
 
 A technical analysis indicator can also accept a [Tables.jl](https://tables.juliadata.org/) compatible table (`TSFrame`) as input parameter.
 
