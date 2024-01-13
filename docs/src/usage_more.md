@@ -1,6 +1,6 @@
 # Learn more about IncTA usage
 
-## Feeding a technical analysis indicator
+## Feeding a technical analysis indicator one observation at a time
 
 - A technical indicator can be feeded using `fit!` function.
 
