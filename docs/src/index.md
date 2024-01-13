@@ -72,7 +72,7 @@ IncTA.jl - dealing with TSFrames
 | `MeanDev` | Mean Deviation | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
 | `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
 | `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CirBuff` | ✔️
-| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
+| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | 🚧 unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
 | `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | ✔️
 | `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | ✔️
 | `SFX` | SFX | 🕯️ | Ⓜ️ | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | ✔️
@@ -420,7 +420,7 @@ The last implementation type of indicator are **MIMO** indicators ie indicator w
 4. Copy file into `src\indicators` directory with same name for `struct` and filename (that's important for tests)
 5. Increment number of indicators in `test_indicators_interface.jl`
     
-    @test length(files) == ...  # number of indicators
+    `@test length(files) == ...  # number of indicators`
 
 6. Create unit tests (in the correct category) and ensure they are passing.
 
