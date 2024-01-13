@@ -40,61 +40,61 @@ IncTA.jl - dealing with TSFrames
 
 | Name | Description | Input | Output | Dependencies | Implementation status |
 | --- | --- | --- | --- | --- | --- |
-| `AccuDist` | Accumulation and Distribution | 🕯️ | 🔢 | - | :heavy_check_mark:
-| `ADX` | Average Directional Index | 🕯️ | Ⓜ️ | `ATR` | :heavy_check_mark:
-| `ALMA` | Arnaud Legoux Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `AO` | Awesome Oscillator | 🕯️ | 🔢 | `SMA` | :heavy_check_mark:
-| `Aroon` | Aroon Up/Down | 🕯️ | Ⓜ️ | `CirBuff` | :heavy_check_mark:
-| `ATR` | Average True Range | 🕯️ | 🔢 | `CircBuff` | :heavy_check_mark:
-| `BB` | Bollinger Bands | 🔢 | Ⓜ️ | `SMA`, `StdDev` | :heavy_check_mark:
-| `BOP` | Balance Of Power | 🕯️ | 🔢 | - | :heavy_check_mark:
-| `CCI` | Commodity Channel Index | 🕯️ | 🔢 | `MeanDev` | :heavy_check_mark:
-| `ChaikinOsc` | Chaikin Oscillator | 🕯️ | 🔢 | `AccuDist`, `EMA` | :heavy_check_mark:
-| `ChandeKrollStop` | Chande Kroll Stop | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | :heavy_check_mark:
-| `CHOP` | Choppiness Index | 🕯️ | 🔢 | `CirBuff`, `ATR` | :heavy_check_mark:
-| `CoppockCurve` | Coppock Curve | 🔢 | 🔢 | `ROC`, `WMA` | :heavy_check_mark:
-| `DEMA` | Double Exponential Moving Average | 🔢 | 🔢 | `EMA` | :heavy_check_mark:
-| `DonchianChannels` | Donchian Channels | 🕯️ | Ⓜ️ | `CircBuff` | :heavy_check_mark:
-| `DPO` | Detrended Price Oscillator | 🔢 | 🔢 | `CircBuff`, `SMA` | :heavy_check_mark:
-| `EMA` | Exponential Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `EMV` | Ease of Movement | 🕯️ | 🔢 | `CircBuff`, `SMA` | :heavy_check_mark:
+| `AccuDist` | Accumulation and Distribution | 🕯️ | 🔢 | - | ✔️
+| `ADX` | Average Directional Index | 🕯️ | Ⓜ️ | `ATR` | ✔️
+| `ALMA` | Arnaud Legoux Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `AO` | Awesome Oscillator | 🕯️ | 🔢 | `SMA` | ✔️
+| `Aroon` | Aroon Up/Down | 🕯️ | Ⓜ️ | `CirBuff` | ✔️
+| `ATR` | Average True Range | 🕯️ | 🔢 | `CircBuff` | ✔️
+| `BB` | Bollinger Bands | 🔢 | Ⓜ️ | `SMA`, `StdDev` | ✔️
+| `BOP` | Balance Of Power | 🕯️ | 🔢 | - | ✔️
+| `CCI` | Commodity Channel Index | 🕯️ | 🔢 | `MeanDev` | ✔️
+| `ChaikinOsc` | Chaikin Oscillator | 🕯️ | 🔢 | `AccuDist`, `EMA` | ✔️
+| `ChandeKrollStop` | Chande Kroll Stop | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
+| `CHOP` | Choppiness Index | 🕯️ | 🔢 | `CirBuff`, `ATR` | ✔️
+| `CoppockCurve` | Coppock Curve | 🔢 | 🔢 | `ROC`, `WMA` | ✔️
+| `DEMA` | Double Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
+| `DonchianChannels` | Donchian Channels | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
+| `DPO` | Detrended Price Oscillator | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
+| `EMA` | Exponential Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `EMV` | Ease of Movement | 🕯️ | 🔢 | `CircBuff`, `SMA` | ✔️
 | `FibRetracement` | Fibonacci Retracement | :question: | :question: |  | doesn't look an indicator just a simple class with 236 382 5 618 786 values
-| `ForceIndex` | Force Index | 🕯️ | 🔢 | prev input val, `EMA` | :heavy_check_mark:
-| `HMA` | Hull Moving Average | 🔢 | 🔢 | `WMA` | :heavy_check_mark:
+| `ForceIndex` | Force Index | 🕯️ | 🔢 | prev input val, `EMA` | ✔️
+| `HMA` | Hull Moving Average | 🔢 | 🔢 | `WMA` | ✔️
 | `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences :question: unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
-| `KAMA` | Kaufman's Adaptive Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `KeltnerChannels` | Keltner Channels | 🕯️  | Ⓜ️ | `ATR`, `EMA` with `input_modifier` to extract close value of a candle | :heavy_check_mark:
-| `KST` | Know Sure Thing | 🔢 | Ⓜ️ | `ROC`, `SMA` | :heavy_check_mark:
-| `KVO` | Klinger Volume Oscillator | 🕯️ | 🔢 | `EMA` | :heavy_check_mark:
-| `MACD` | Moving Average Convergence Divergence | 🔢 | Ⓜ️ | `EMA` | :heavy_check_mark:
-| `MassIndex` | Mass Index | 🕯️ | 🔢 | `EMA`, `CircBuff` | :heavy_check_mark:
-| `McGinleyDynamic` | McGinley Dynamic | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `MeanDev` | Mean Deviation | 🔢 | 🔢 | `CircBuff`, `SMA` | :heavy_check_mark:
-| `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | :heavy_check_mark:
-| `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CirBuff` | :heavy_check_mark:
-| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready :heavy_check_mark:
-| `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | :heavy_check_mark:
-| `SFX` | SFX | 🕯️ | Ⓜ️ | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | :heavy_check_mark:
-| `SMA` | Simple Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `SMMA` | Smoothed Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `SOBV` | Smoothed On Balance Volume | 🕯️ | 🔢 | `OBV`, `SMA` | :heavy_check_mark:
-| `STC` | Schaff Trend Cycle | 🔢 | 🔢 | `MACD`, `Stoch` with `input_modifier` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | :heavy_check_mark:
-| `StdDev` | Standard Deviation | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `Stoch` | Stochastic | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | :heavy_check_mark: [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
-| `StochRSI` | Stochastic RSI | 🔢 | Ⓜ️ | `RSI`, `SMA` | :heavy_check_mark:
-| `SuperTrend` | Super Trend | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | :heavy_check_mark:
-| `T3` | T3 Moving Average | 🔢 | 🔢 | `EMA` with indicator chaining and input filter | :heavy_check_mark:
-| `TEMA` | Triple Exponential Moving Average | 🔢 | 🔢 | `EMA` | :heavy_check_mark:
-| `TRIX` | TRIX | 🕯️ | Ⓜ️ | `EMA`, indicator chaining | :heavy_check_mark:
-| `TSI` | True Strength Index | 🔢 | 🔢 | `EMA`, indicator chaining | :heavy_check_mark:
-| `TTM` | TTM Squeeze | 🕯️ | Ⓜ️ | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | :heavy_check_mark:
-| `UO` | Ultimate Oscillator | 🕯️ | 🔢 | `CircBuff` | :heavy_check_mark:
-| `VTX` | Vortex Indicator | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | :heavy_check_mark:
-| `VWAP` |  Volume Weighted Average Price | 🕯️ | 🔢 | - | :heavy_check_mark:
-| `VWMA` | Volume Weighted Moving Average | 🕯️ | 🔢 | `CircBuff` | :heavy_check_mark:
-| `WMA` | Weighted Moving Average | 🔢 | 🔢 | `CircBuff` | :heavy_check_mark:
-| `ZLEMA` | Zero Lag Exponential Moving Average | 🔢 | 🔢 | `EMA` | :heavy_check_mark:
+| `KAMA` | Kaufman's Adaptive Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `KeltnerChannels` | Keltner Channels | 🕯️  | Ⓜ️ | `ATR`, `EMA` with `input_modifier` to extract close value of a candle | ✔️
+| `KST` | Know Sure Thing | 🔢 | Ⓜ️ | `ROC`, `SMA` | ✔️
+| `KVO` | Klinger Volume Oscillator | 🕯️ | 🔢 | `EMA` | ✔️
+| `MACD` | Moving Average Convergence Divergence | 🔢 | Ⓜ️ | `EMA` | ✔️
+| `MassIndex` | Mass Index | 🕯️ | 🔢 | `EMA`, `CircBuff` | ✔️
+| `McGinleyDynamic` | McGinley Dynamic | 🔢 | 🔢 | `CircBuff` | ✔️
+| `MeanDev` | Mean Deviation | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
+| `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
+| `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CirBuff` | ✔️
+| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | :construction: unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
+| `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | ✔️
+| `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | ✔️
+| `SFX` | SFX | 🕯️ | Ⓜ️ | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | ✔️
+| `SMA` | Simple Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `SMMA` | Smoothed Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `SOBV` | Smoothed On Balance Volume | 🕯️ | 🔢 | `OBV`, `SMA` | ✔️
+| `STC` | Schaff Trend Cycle | 🔢 | 🔢 | `MACD`, `Stoch` with `input_modifier` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | ✔️
+| `StdDev` | Standard Deviation | 🔢 | 🔢 | `CircBuff` | ✔️
+| `Stoch` | Stochastic | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | ✔️ [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
+| `StochRSI` | Stochastic RSI | 🔢 | Ⓜ️ | `RSI`, `SMA` | ✔️
+| `SuperTrend` | Super Trend | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
+| `T3` | T3 Moving Average | 🔢 | 🔢 | `EMA` with indicator chaining and input filter | ✔️
+| `TEMA` | Triple Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
+| `TRIX` | TRIX | 🕯️ | Ⓜ️ | `EMA`, indicator chaining | ✔️
+| `TSI` | True Strength Index | 🔢 | 🔢 | `EMA`, indicator chaining | ✔️
+| `TTM` | TTM Squeeze | 🕯️ | Ⓜ️ | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | ✔️
+| `UO` | Ultimate Oscillator | 🕯️ | 🔢 | `CircBuff` | ✔️
+| `VTX` | Vortex Indicator | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
+| `VWAP` |  Volume Weighted Average Price | 🕯️ | 🔢 | - | ✔️
+| `VWMA` | Volume Weighted Moving Average | 🕯️ | 🔢 | `CircBuff` | ✔️
+| `WMA` | Weighted Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
+| `ZLEMA` | Zero Lag Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
 
 ### Legend
 
@@ -394,21 +394,21 @@ julia> Stoch(ts; period = 3)
 
 Categorization of indicators is done to better understand *implementation* of indicators, not to understand the *role* of each indicator. To better understand the role of each indicator other categories such as moving averages, momentum indicators, volatility indicators are better suited.
 
-#### SISO indicators (:1234: :1234:)
+#### SISO indicators (🔢 🔢)
 
 A **SISO** indicator takes one simple observation (price of an asset, volume of assets traded...) and output just one value for this observation.
 
 `SMA`, `EMA` are good examples of such indicator category (but also most of others moving average indicators).
 
-#### SIMO indicators (:1234: :m:)
+#### SIMO indicators (🔢 Ⓜ️)
 
 The very famous `BB` (Bollinger Bands developed by financial analyst John Bollinger) indicator is an example of **SIMO** indicator. Like a SISO indicator it takes one simple value at a time. But contrary to SISO indicator, SIMO indicators generate several values at a time (upper band, central value, lower band in the case of Bollinger Bands indicator).
 
-#### MISO indicators (:candle: :1234:)
+#### MISO indicators (🕯️ 🔢)
 
 IncTA have also some **MISO** indicators ie indicators which takes several values at a time. It can be candlestick OHLCV data for example. Average True Range (ATR) is an example of such an indicator. It's the average of true ranges over the specified period. ATR measures volatility, taking into account any gaps in the price movement. It was developed by a very prolific author named J. Welles Wilder (also author of RSI, ParabolicSAR and ADX).
 
-#### MIMO indicators (:candle: :m:)
+#### MIMO indicators (🕯️ Ⓜ️)
 
 The last implementation type of indicator are **MIMO** indicators ie indicator which take several values at a time (such a candlestick data) and ouput several values at a time. Stochastic oscillator (`Stoch` also known as KD indicator) is an example of such indicator implementation category). It was developed in the late 1950s by a technical analyst named Georges Lane. This method attempts to predict price turning points by comparing the closing price of a security to its price range. Such indicator ouputs 2 values at a time : k and d.
 
