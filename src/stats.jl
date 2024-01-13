@@ -1,11 +1,17 @@
-"""
-    StatLag(stat, b)
+using OnlineStatsBase: name
 
-Track a moving window (previous `b` copies) of `stat`.
+"""
+    StatLag(ind, b)
+
+Track a moving window (previous `b` copies) of `ind`.
 
 # Example
 
-    fit!(StatLag(Mean(), 10), 1:20)
+    ind = SMA{Float64}(period = 3)
+    prices = [10.81, 10.58, 10.07, 10.58, 10.56, 10.4, 10.74, 10.16, 10.29, 9.4, 9.62]
+    ind = StatLag(ind, 4)
+    fit!(ind, prices)
+    ind.lag[end-1]
 """
 struct StatLag{T, O<:OnlineStat{T}} <: OnlineStatsBase.StatWrapper{T}
     lag::CircBuff{O}
