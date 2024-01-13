@@ -12,7 +12,12 @@ Currently more than 50 technical analysis indicators are supported (SMA, EMA, SM
 🚧 This software is under construction. API can have breaking changes.
 
 ## Package Features
-- Calculate new value of some technical analysis indicators when new incoming are received
+- Input new data (one observation at a time) to indicator with `fit!` function (from [OnlineStats.jl](https://joshday.github.io/OnlineStats.jl/))
+- Input data which inherits `AbstractVector`
+- Input data as compatible [Tables.jl](https://tables.juliadata.org/) format
+- Sub-indicators
+- Indicators chaining
+- Filter/transform input of indicator
 
 ## Install
 Open Julia command line interface. 
@@ -99,10 +104,17 @@ IncTA.jl - dealing with TSFrames
 
 🕯️ OHLCV candlestick input
 
+#### Indicators implementation category
+
 🔢 🔢 SISO indicators
+
 🔢 Ⓜ️ SIMO indicators
+
 🕯️ 🔢 MISO indicators
+
 🕯️ Ⓜ️ MIMO indicators
+
+Indicators can be of 1 out of 4 categories given their input/output behavior : SISO, SIMO, MISO and MIMO.
 
 ### Feeding a technical analysis indicator
 
@@ -375,6 +387,42 @@ julia> Stoch(ts; period = 3)
  2020-01-21T18:00:00   67.5883        79.2893
  2020-01-21T19:00:00   35.0649        57.6443
 ```
+
+## Implementing your own indicator
+
+### Categorization of your indicator
+
+Categorization of indicators is done to better understand *implementation* of indicators, not to understand the *role* of each indicator. To better understand the role of each indicator other categories such as moving averages, momentum indicators, volatility indicators are better suited.
+
+#### SISO indicators (:1234: :1234:)
+
+A **SISO** indicator takes one simple observation (price of an asset, volume of assets traded...) and output just one value for this observation.
+
+`SMA`, `EMA` are good examples of such indicator category (but also most of others moving average indicators).
+
+#### SIMO indicators (:1234: :m:)
+
+The very famous `BB` (Bollinger Bands developed by financial analyst John Bollinger) indicator is an example of **SIMO** indicator. Like a SISO indicator it takes one simple value at a time. But contrary to SISO indicator, SIMO indicators generate several values at a time (upper band, central value, lower band in the case of Bollinger Bands indicator).
+
+#### MISO indicators (:candle: :1234:)
+
+IncTA have also some **MISO** indicators ie indicators which takes several values at a time. It can be candlestick OHLCV data for example. Average True Range (ATR) is an example of such an indicator. It's the average of true ranges over the specified period. ATR measures volatility, taking into account any gaps in the price movement. It was developed by a very prolific author named J. Welles Wilder (also author of RSI, ParabolicSAR and ADX).
+
+#### MIMO indicators (:candle: :m:)
+
+The last implementation type of indicator are **MIMO** indicators ie indicator which take several values at a time (such a candlestick data) and ouput several values at a time. Stochastic oscillator (`Stoch` also known as KD indicator) is an example of such indicator implementation category). It was developed in the late 1950s by a technical analyst named Georges Lane. This method attempts to predict price turning points by comparing the closing price of a security to its price range. Such indicator ouputs 2 values at a time : k and d.
+
+### Steps to implement your own indicator
+
+1. First step to implement your own indicator is to **categorized** it in the SISO, SIMO, MISO, MIMO category.
+2. Look at **indicator dependencies** and try to find out an existing indicator of similar category with similar features used.
+3. **Watch existing code** of an indicator of a similar category with quite similar dependencies.
+4. Copy file into `src\indicators` directory with same name for `struct` and filename (that's important for tests)
+5. Increment number of indicators in `test_indicators_interface.jl`
+    
+    @test length(files) == ...  # number of indicators
+
+6. Create unit tests (in the correct category) and ensure they are passing.
 
 ## API Documentation
 ### Indicators (alphabetically ordered)
