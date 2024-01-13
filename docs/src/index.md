@@ -58,10 +58,10 @@ IncTA.jl - dealing with TSFrames
 | `DPO` | Detrended Price Oscillator | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
 | `EMA` | Exponential Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `EMV` | Ease of Movement | 🕯️ | 🔢 | `CircBuff`, `SMA` | ✔️
-| `FibRetracement` | Fibonacci Retracement | :question: | :question: |  | doesn't look an indicator just a simple class with 236 382 5 618 786 values
+| `FibRetracement` | Fibonacci Retracement | ❓ | ❓ |  | doesn't look an indicator just a simple class with 236 382 5 618 786 values
 | `ForceIndex` | Force Index | 🕯️ | 🔢 | prev input val, `EMA` | ✔️
 | `HMA` | Hull Moving Average | 🔢 | 🔢 | `WMA` | ✔️
-| `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences :question: unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
+| `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences ❓ unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
 | `KAMA` | Kaufman's Adaptive Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `KeltnerChannels` | Keltner Channels | 🕯️  | Ⓜ️ | `ATR`, `EMA` with `input_modifier` to extract close value of a candle | ✔️
 | `KST` | Know Sure Thing | 🔢 | Ⓜ️ | `ROC`, `SMA` | ✔️
@@ -81,7 +81,7 @@ IncTA.jl - dealing with TSFrames
 | `SOBV` | Smoothed On Balance Volume | 🕯️ | 🔢 | `OBV`, `SMA` | ✔️
 | `STC` | Schaff Trend Cycle | 🔢 | 🔢 | `MACD`, `Stoch` with `input_modifier` (MACDVal->OHLCV and stoch_d->OHLCV), indicator chaining, `MAFactory` (default `SMA`) | ✔️
 | `StdDev` | Standard Deviation | 🔢 | 🔢 | `CircBuff` | ✔️
-| `Stoch` | Stochastic | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | ✔️ [:christmas_tree:](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
+| `Stoch` | Stochastic | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | ✔️ [🎄](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI | 🔢 | Ⓜ️ | `RSI`, `SMA` | ✔️
 | `SuperTrend` | Super Trend | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
 | `T3` | T3 Moving Average | 🔢 | 🔢 | `EMA` with indicator chaining and input filter | ✔️
