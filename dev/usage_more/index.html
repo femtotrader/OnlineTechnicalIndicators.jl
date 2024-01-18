@@ -142,48 +142,24 @@ julia&gt; ts = TSFrame(ta)  # converts a TimeSeries.TimeArray to TSFrames.TSFram
  2020-01-21T17:00:00      358.357
  2020-01-21T18:00:00      361.3
  2020-01-21T19:00:00      362.48</code></pre><h3 id="Calculate-BB-(Bollinger-bands)-2"><a class="docs-heading-anchor" href="#Calculate-BB-(Bollinger-bands)-2">Calculate <code>BB</code> (Bollinger bands)</a><a class="docs-heading-anchor-permalink" href="#Calculate-BB-(Bollinger-bands)-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">julia&gt; BB(ts; period = 3)
-500×1 TSFrame with DateTime Index
- Index                SMA
- DateTime             Float64?
-──────────────────────────────────
- 2020-01-01T00:00:00  missing
- 2020-01-01T01:00:00  missing
- 2020-01-01T02:00:00      332.487
- 2020-01-01T03:00:00      334.23
- 2020-01-01T04:00:00      334.537
-          ⋮                ⋮
- 2020-01-21T15:00:00      352.087
- 2020-01-21T16:00:00      358.41
- 2020-01-21T17:00:00      361.733
- 2020-01-21T18:00:00      363.213
- 2020-01-21T19:00:00      362.377</code></pre><h3 id="Calculate-ATR-(Average-true-range)-2"><a class="docs-heading-anchor" href="#Calculate-ATR-(Average-true-range)-2">Calculate <code>ATR</code> (Average true range)</a><a class="docs-heading-anchor-permalink" href="#Calculate-ATR-(Average-true-range)-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">julia&gt; ATR(ts; period = 3)
-500×1 TSFrame with DateTime Index
- Index                ATR
- DateTime             Float64?
-────────────────────────────────────
- 2020-01-01T00:00:00  missing
- 2020-01-01T01:00:00  missing
- 2020-01-01T02:00:00        6.38333
- 2020-01-01T03:00:00        6.18556
- 2020-01-01T04:00:00        6.74704
-          ⋮                 ⋮
- 2020-01-21T15:00:00        8.53068
- 2020-01-21T16:00:00        8.86378
- 2020-01-21T17:00:00        7.64586
- 2020-01-21T18:00:00        6.56724
- 2020-01-21T19:00:00        6.05149</code></pre><h3 id="Calculate-Stoch-(Stochastic)-2"><a class="docs-heading-anchor" href="#Calculate-Stoch-(Stochastic)-2">Calculate <code>Stoch</code> (Stochastic)</a><a class="docs-heading-anchor-permalink" href="#Calculate-Stoch-(Stochastic)-2" title="Permalink"></a></h3><pre><code class="language-julia hljs">julia&gt; Stoch(ts; period = 3)
-500×2 TSFrame with DateTime Index
- Index                Stoch_k    Stoch_d
- DateTime             Float64    Float64?
-───────────────────────────────────────────────
- 2020-01-01T00:00:00   88.9172   missing
- 2020-01-01T01:00:00   48.9311   missing
- 2020-01-01T02:00:00   74.3346        70.7276
- 2020-01-01T03:00:00   85.7143        69.66
- 2020-01-01T04:00:00   12.551         57.5333
-          ⋮               ⋮            ⋮
- 2020-01-21T15:00:00   91.4272        93.9504
- 2020-01-21T16:00:00  100.0           97.1424
- 2020-01-21T17:00:00   70.2795        87.2356
- 2020-01-21T18:00:00   67.5883        79.2893
- 2020-01-21T19:00:00   35.0649        57.6443</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../indicators_support/">« Indicators support</a><a class="docs-footer-nextpage" href="../internals/">Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Thursday 18 January 2024 06:21">Thursday 18 January 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+500×3 TSFrame with DateTime Index
+ Index                BB_lower     BB_central   BB_upper
+ DateTime             Float64?     Float64?     Float64?
+────────────────────────────────────────────────────────────
+ 2020-01-01T00:00:00  missing      missing      missing
+ 2020-01-01T01:00:00  missing      missing      missing
+ 2020-01-01T02:00:00      329.319      332.487      335.654
+ 2020-01-01T03:00:00      327.617      334.23       340.843
+ 2020-01-01T04:00:00      328.633      334.537      340.44
+          ⋮                ⋮            ⋮            ⋮
+ 2020-01-21T15:00:00      340.813      352.087      363.36
+ 2020-01-21T16:00:00      348.844      358.41       367.976
+ 2020-01-21T17:00:00      357.434      361.733      366.033
+ 2020-01-21T18:00:00      361.804      363.213      364.623
+ 2020-01-21T19:00:00      360.92       362.377      363.833
+ ```
+
+### Calculate `ATR` (Average true range)
+</code></pre><p>julia julia&gt; ATR(ts; period = 3) 500×1 TSFrame with DateTime Index  Index                ATR  DateTime             Float64? ────────────────────────────────────  2020-01-01T00:00:00  missing  2020-01-01T01:00:00  missing  2020-01-01T02:00:00        6.38333  2020-01-01T03:00:00        6.18556  2020-01-01T04:00:00        6.74704           ⋮                 ⋮  2020-01-21T15:00:00        8.53068  2020-01-21T16:00:00        8.86378  2020-01-21T17:00:00        7.64586  2020-01-21T18:00:00        6.56724  2020-01-21T19:00:00        6.05149</p><pre><code class="nohighlight hljs">
+### Calculate `Stoch` (Stochastic)
+</code></pre><p>julia julia&gt; Stoch(ts; period = 3) 500×2 TSFrame with DateTime Index  Index                Stoch<em>k    Stoch</em>d  DateTime             Float64    Float64? ───────────────────────────────────────────────  2020-01-01T00:00:00   88.9172   missing  2020-01-01T01:00:00   48.9311   missing  2020-01-01T02:00:00   74.3346        70.7276  2020-01-01T03:00:00   85.7143        69.66  2020-01-01T04:00:00   12.551         57.5333           ⋮               ⋮            ⋮  2020-01-21T15:00:00   91.4272        93.9504  2020-01-21T16:00:00  100.0           97.1424  2020-01-21T17:00:00   70.2795        87.2356  2020-01-21T18:00:00   67.5883        79.2893  2020-01-21T19:00:00   35.0649        57.6443 ```</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../indicators_support/">« Indicators support</a><a class="docs-footer-nextpage" href="../internals/">Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Thursday 18 January 2024 06:25">Thursday 18 January 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
