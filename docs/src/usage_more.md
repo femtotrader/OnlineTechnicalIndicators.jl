@@ -212,7 +212,7 @@ julia> SMA(ts; period = 3, default = :Open)
 ### Calculate `BB` (Bollinger bands)
 
 ```julia
-julia> SMA(ts; period = 3)
+julia> BB(ts; period = 3)
 500×1 TSFrame with DateTime Index
  Index                SMA
  DateTime             Float64?
