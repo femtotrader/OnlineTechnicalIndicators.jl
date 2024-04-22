@@ -79,4 +79,6 @@ end
         include("test_ind_OHLCV_input_several_outputs.jl")  # MIMO
     end
 
+    include("test_resample.jl")
+
 end
