@@ -1,5 +1,8 @@
 module Resample
     using Dates
+    using OnlineStatsBase
+    using IncTA
+    using IncTA: TechnicalIndicator, always_true, identity
 
     module TimeUnitType
     @enum(TimeUnitTypeEnum,
@@ -71,6 +74,104 @@ module Resample
         normalized_dt = period_start + Second(num_periods * period_length * CONVERSION_TO_SEC[period_type])
 
         return normalized_dt
+    end
+
+    struct TimedEvent
+        time
+        data
+    end
+
+    struct AgregatedStat
+        time
+        data
+    end
+
+    struct StatBuilder
+        agg
+    end
+    function (stat_builder::StatBuilder)()
+        return stat_builder.agg()
+    end
+
+    module OHLCStatus
+    @enum(OHLCStatusEnum,
+        INIT,
+        NEW,
+        USED
+    )
+    end
+
+    mutable struct OHLC{Tprice}
+        status::OHLCStatus.OHLCStatusEnum
+        open::Tprice
+        high::Tprice
+        low::Tprice
+        close::Tprice
+    end
+    function OHLC{Tprice}() where {Tprice}
+        p = zero(Tprice)
+        return OHLC(OHLCStatus.INIT, p, p, p, p)
+    end
+
+    struct OHLCStat{T} <: OnlineStat{T}
+        ohlc::OHLC
+        n::Int
+        function OHLCStat{T}() where {T} 
+            new(OHLC{T}(), 0)
+        end
+    end
+    function (ohlc_stat::OHLCStat{T})() where {T}
+        OHLC{T}()
+    end
+    function OnlineStatsBase._fit!(ohlc_stat::OHLCStat, data)
+        ohlc_stat.ohlc.close = data
+        if ohlc_stat.ohlc.status != OHLCStatus.INIT
+            if data < ohlc_stat.ohlc.low
+                ohlc_stat.ohlc.low = data
+            end
+            if data > ohlc_stat.ohlc.high
+                ohlc_stat.ohlc.high = data
+            end
+            ohlc_stat.ohlc.status = OHLCStatus.USED
+        else
+            ohlc_stat.ohlc.open = data
+            ohlc_stat.ohlc.high = data
+            ohlc_stat.ohlc.low = data
+            ohlc_stat.ohlc.close = data
+            ohlc_stat.ohlc.status = OHLCStatus.NEW
+        end
+    end
+
+    mutable struct ResamplerBy <: OnlineStat{TimedEvent}
+        agg::AgregatedStat
+        n::Int
+
+        sampling_period::SamplingPeriod
+        stat_builder::StatBuilder
+
+        input_modifier::Function
+        input_filter::Function
+    
+        function ResamplerBy(sampling_period::SamplingPeriod, agg;
+            input_filter = always_true,
+            input_modifier = identity)
+            #input_modifier_return_type = Tval)
+            stat_builder = StatBuilder(agg)
+            agregated_stat = AgregatedStat(unix2datetime(0), stat_builder())
+            new(agregated_stat, 0, sampling_period, stat_builder, input_modifier, input_filter)
+        end
+    end
+
+    function OnlineStatsBase._fit!(resampler::ResamplerBy, timed_evt::TimedEvent)
+        dt_normalized = normalize(Resampler(resampler.sampling_period), timed_evt.time)
+        if dt_normalized == resampler.agg.time
+            fit!(resampler.agg.data, timed_evt.data)
+        elseif dt_normalized > resampler.agg.time
+            resampler.agg = AgregatedStat(dt_normalized, resampler.stat_builder())
+            fit!(resampler.agg.data, timed_evt.data)
+        else
+            error("Not implemented - decreasing time")
+        end
     end
 
 end
