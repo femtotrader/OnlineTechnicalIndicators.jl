@@ -23,5 +23,6 @@ Pages = [
     "usage_more.md",
     "internals.md",
     "implementing_your_indic.md",
+    "api.md",
 ]
 ```

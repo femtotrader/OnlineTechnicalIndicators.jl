@@ -14,6 +14,7 @@ makedocs(
         "Learn more about usage" => "usage_more.md",
         "Internals" => "internals.md",
         "Implementing your own indicator" => "implementing_your_indic.md",
+        "API" => "api.md"
     ],
 )
 deploydocs(; repo = "github.com/femtotrader/IncTA.jl")
