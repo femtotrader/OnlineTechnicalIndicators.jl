@@ -301,6 +301,7 @@ ismultiinput(::Type{STC}) = false
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory
+include("resample.jl")
 
 # Integration with Julia ecosystem (Arrays, Iterators...)
 include("other/arrays.jl")
