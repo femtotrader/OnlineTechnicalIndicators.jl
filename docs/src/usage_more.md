@@ -281,6 +281,6 @@ julia> Stoch(ts; period = 3)
 
 ### Feed IncTA indicators with live random data
 
-![random walk with MA and RSI](https://github.com/femtotrader/IncTA.jl/blob/main/examples/notebooks/random_walk_with_ma_rsi.png)
+![random walk with MA and RSI](https://github.com/femtotrader/IncTA.jl/raw/main/examples/notebooks/random_walk_with_ma_rsi.png)
 
 - [Pluto notebook](https://github.com/femtotrader/IncTA.jl/blob/main/examples/notebooks/incta_notebook.jl)
