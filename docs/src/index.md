@@ -21,6 +21,7 @@ Pages = [
     "usage.md",
     "indicators_support.md",
     "usage_more.md",
+    "examples.md",
     "internals.md",
     "implementing_your_indic.md",
     "api.md",

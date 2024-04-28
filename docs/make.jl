@@ -12,6 +12,7 @@ makedocs(
         "Usage" => "usage.md",
         "Indicators support" => "indicators_support.md",
         "Learn more about usage" => "usage_more.md",
+        "Examples" => "examples.md",
         "Internals" => "internals.md",
         "Implementing your own indicator" => "implementing_your_indic.md",
         "API" => "api.md"
