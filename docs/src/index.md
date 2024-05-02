@@ -1,6 +1,6 @@
-[![Build Status](https://github.com/femtotrader/IncTA.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/femtotrader/IncTA.jl/actions/workflows/CI.yml?query=branch%main)
+[![Build Status](https://github.com/femtotrader/OnlineTechnicalIndicators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/femtotrader/OnlineTechnicalIndicators.jl/actions/workflows/CI.yml?query=branch%main)
 
-# IncTA.jl
+# OnlineTechnicalIndicators.jl
 This project implements some *Technical Analysis Indicators* in Julia in an incremental approach ie using [online algorithms](https://en.wikipedia.org/wiki/Online_algorithm).
 
 It's inspired by Python project [talipp](https://github.com/nardew/talipp) which is used as "reference implementation" for unit tests.

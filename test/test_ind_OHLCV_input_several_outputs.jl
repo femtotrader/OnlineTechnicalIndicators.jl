@@ -1,4 +1,4 @@
-using IncTA: PivotsHLVal
+using OnlineTechnicalIndicators: PivotsHLVal
 
 @testset "OHLC input - several output values" begin
 

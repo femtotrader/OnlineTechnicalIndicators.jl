@@ -1,4 +1,4 @@
-# IncTA internals
+# OnlineTechnicalIndicators internals
 
 ## Sub-indicator(s)
 

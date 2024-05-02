@@ -8,10 +8,10 @@ using InteractiveUtils
 import Pkg; Pkg.activate("..")
 
 # ╔═╡ 931da9b9-2de4-425b-8a7a-14934d81b033
-using IncTA
+using OnlineTechnicalIndicators
 
 # ╔═╡ b22340af-7262-480e-a5dc-74e73a39bddc
-using IncTA.SampleData: CLOSE_TMPL, V_OHLCV
+using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
 
 # ╔═╡ c095cbc9-93fc-4f30-b4ac-19e1bcbc2fef
 using MarketData
@@ -20,15 +20,15 @@ using MarketData
 using TSFrames
 
 # ╔═╡ 60ee2452-d281-4456-bc87-b53be3b232f7
-md"""# IncTA.jl tutorial notebook"""
+md"""# OnlineTechnicalIndicators.jl tutorial notebook"""
 
 # ╔═╡ c679d3bf-6611-4e33-88ae-036cf6177be9
-md"""## Using IncTA indicators feeding one value at a time with `fit!`
+md"""## Using OnlineTechnicalIndicators indicators feeding one value at a time with `fit!`
 
 
-The following examples demonstrate how to use an IncTA technical analysis indicator in an incremental approach feeding new data one observation at a time.
+The following examples demonstrate how to use an OnlineTechnicalIndicators technical analysis indicator in an incremental approach feeding new data one observation at a time.
 
-You first need to import [IncTA.jl](https://github.com/femtotrader/IncTA.jl) library.
+You first need to import [OnlineTechnicalIndicators.jl](https://github.com/femtotrader/OnlineTechnicalIndicators.jl) library.
 """
 
 # ╔═╡ d8b1703a-5847-4b4f-b1c8-5c661b34ddc9
@@ -113,10 +113,10 @@ begin
 end
 
 # ╔═╡ 77e61b06-39a9-41c2-a2bc-6e00f83b49d0
-md"""## Using IncTA indicators with `TSFrames.TSFrame`
+md"""## Using OnlineTechnicalIndicators indicators with `TSFrames.TSFrame`
 
 
-The following examples demonstrate how to use an IncTA technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
+The following examples demonstrate how to use an OnlineTechnicalIndicators technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
 
 You first need to import some aditional libraries:
 

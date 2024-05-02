@@ -1,8 +1,8 @@
 module Resample
     using Dates
     using OnlineStatsBase
-    using IncTA
-    using IncTA: TechnicalIndicator, always_true, identity
+    using OnlineTechnicalIndicators
+    using OnlineTechnicalIndicators: TechnicalIndicator, always_true, identity
 
     module TimeUnitType
     @enum(TimeUnitTypeEnum,

@@ -1,13 +1,13 @@
 #=
 
-This example demonstrates how to use an IncTA technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
+This example demonstrates how to use an OnlineTechnicalIndicators technical analysis indicator by feeding a compatible Tables.jl table such as TSFrame.
 
 =#
 
 
 using MarketData
 using TSFrames
-using IncTA
+using OnlineTechnicalIndicators
 
 print("Get input data")
 ta = random_ohlcv()  # should return a TimeSeries.TimeArray  (need latest dev version of MarketData) with random prices and volume

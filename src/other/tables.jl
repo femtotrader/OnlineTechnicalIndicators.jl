@@ -1,5 +1,5 @@
 using Tables
-using IncTA: ismultiinput
+using OnlineTechnicalIndicators: ismultiinput
 
 const DEFAULT_FIELD_DEFAULT = :Close
 const DEFAULT_FIELD_INDEX = :Index

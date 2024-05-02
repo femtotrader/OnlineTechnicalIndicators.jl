@@ -1,7 +1,7 @@
 @testset "resample" begin
 
-    using IncTA.Resample: TimeUnitType, SamplingPeriodType, Resampler, normalize, TimedEvent, ResamplerBy
-    using IncTA.Resample: OHLC, OHLCStat
+    using OnlineTechnicalIndicators.Resample: TimeUnitType, SamplingPeriodType, Resampler, normalize, TimedEvent, ResamplerBy
+    using OnlineTechnicalIndicators.Resample: OHLC, OHLCStat
     using Dates
 
     @testset "Units" begin

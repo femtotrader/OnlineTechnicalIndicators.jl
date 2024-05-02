@@ -1,11 +1,11 @@
 #=
 
-This example demonstrates how to use an IncTA technical analysis indicator in an incremental approach feeding new data one observation at a time.
+This example demonstrates how to use an OnlineTechnicalIndicators technical analysis indicator in an incremental approach feeding new data one observation at a time.
 
 =#
 
-using IncTA
-using IncTA.SampleData: CLOSE_TMPL, V_OHLCV
+using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
 
 
 println("Show close prices")

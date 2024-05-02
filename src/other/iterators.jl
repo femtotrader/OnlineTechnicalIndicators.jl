@@ -1,7 +1,7 @@
 using OnlineStatsBase
-using IncTA
-using IncTA: TechnicalIndicator, expected_return_type
-using IncTA.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
+using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators: TechnicalIndicator, expected_return_type
+using OnlineTechnicalIndicators.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 
 
 """
@@ -11,8 +11,8 @@ Returns an iterator.
 
 # Example
 
-    using IncTA
-    using IncTA.SampleData: CLOSE_TMPL
+    using OnlineTechnicalIndicators
+    using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
 
 ## SISO indicator
 

@@ -1,10 +1,10 @@
 # Inside make.jl
 push!(LOAD_PATH, "../src/")
-using IncTA
+using OnlineTechnicalIndicators
 using Documenter
 makedocs(
-    sitename = "IncTA.jl",
-    modules = [IncTA],
+    sitename = "OnlineTechnicalIndicators.jl",
+    modules = [OnlineTechnicalIndicators],
     pages = [
         "Home" => "index.md",
         "Package Features" => "features.md",
@@ -18,4 +18,4 @@ makedocs(
         "API" => "api.md"
     ],
 )
-deploydocs(; repo = "github.com/femtotrader/IncTA.jl")
+deploydocs(; repo = "github.com/femtotrader/OnlineTechnicalIndicators.jl")

@@ -1,4 +1,4 @@
-module IncTA
+module OnlineTechnicalIndicators
 
 export OHLCV, OHLCVFactory, ValueExtractor
 export fit!

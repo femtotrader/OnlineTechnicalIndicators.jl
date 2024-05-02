@@ -19,19 +19,19 @@ begin
 	import Pkg
 	Pkg.activate(mktempdir())
 	Pkg.add([
-		Pkg.PackageSpec(url = "https://github.com/femtotrader/IncTA.jl"),
+		Pkg.PackageSpec(url = "https://github.com/femtotrader/OnlineTechnicalIndicators.jl"),
 	])
 	Pkg.add(["Random", "PlutoUI", "Plots", "DataStructures"])
 	using PlutoUI, Plots, DataStructures
 	using Dates
 	gr()
 	using Random
-	using IncTA
-	using IncTA: StatLag
+	using OnlineTechnicalIndicators
+	using OnlineTechnicalIndicators: StatLag
 end
 
 # ╔═╡ f78dc6f0-f725-4829-bda4-827b96bf1517
-md"""# Feed IncTA indicators with live random data"""
+md"""# Feed OnlineTechnicalIndicators indicators with live random data"""
 
 # ╔═╡ 72e8c266-b3d4-45ad-be3f-36f74a9e3105
 begin

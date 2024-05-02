@@ -1,7 +1,7 @@
-using IncTA
-using IncTA: expected_return_type
-using IncTA: BBVal, MACDVal, StochRSIVal, KSTVal  # SIMO
-using IncTA:
+using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators: expected_return_type
+using OnlineTechnicalIndicators: BBVal, MACDVal, StochRSIVal, KSTVal  # SIMO
+using OnlineTechnicalIndicators:
     StochVal,
     SuperTrendVal,
     VTXVal,
@@ -13,7 +13,7 @@ using IncTA:
     ParabolicSARVal,
     SFXVal,
     TTMVal  # MIMO
-using IncTA.SampleData:
+using OnlineTechnicalIndicators.SampleData:
     OPEN_TMPL,
     HIGH_TMPL,
     LOW_TMPL,
@@ -22,7 +22,7 @@ using IncTA.SampleData:
     VOLUME_TMPL,
     V_OHLCV
 using OnlineStatsBase
-using IncTA: StatLag
+using OnlineTechnicalIndicators: StatLag
 
 using Test
 
@@ -68,7 +68,7 @@ macro testset_skip(args...)
 end
 
 
-@testset "IncTA.jl" begin
+@testset "OnlineTechnicalIndicators.jl" begin
     #include("test_ohlcv.jl")
 
     #@testset "indicators" begin

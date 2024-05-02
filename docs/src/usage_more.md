@@ -1,4 +1,4 @@
-# Learn more about IncTA usage
+# Learn more about OnlineTechnicalIndicators usage
 
 ## Feeding a technical analysis indicator one observation at a time
 
@@ -12,8 +12,8 @@
 Some sample data are provided for testing purpose.
 
 ```julia
-julia> using IncTA
-julia> using IncTA.SampleData: CLOSE_TMPL, V_OHLCV
+julia> using OnlineTechnicalIndicators
+julia> using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
 julia> CLOSE_TMPL
 50-element Vector{Float64}:
  10.5
@@ -63,15 +63,15 @@ julia> ind = BB{Float64}(period = 3)  # this is a SIMO (single input / multiple 
        end
 missing
 missing
-IncTA.BBVal{Float64}(9.585892709687261, 10.246666666666668, 10.907440623646075)
-IncTA.BBVal{Float64}(9.584067070444279, 10.250000000000002, 10.915932929555725)
-IncTA.BBVal{Float64}(10.433030926552087, 10.50666666666667, 10.580302406781252)
+OnlineTechnicalIndicators.BBVal{Float64}(9.585892709687261, 10.246666666666668, 10.907440623646075)
+OnlineTechnicalIndicators.BBVal{Float64}(9.584067070444279, 10.250000000000002, 10.915932929555725)
+OnlineTechnicalIndicators.BBVal{Float64}(10.433030926552087, 10.50666666666667, 10.580302406781252)
  ⋮
-IncTA.BBVal{Float64}(7.923987085233826, 9.283333333333339, 10.642679581432851)
-IncTA.BBVal{Float64}(8.921909932792502, 9.886666666666672, 10.851423400540842)
-IncTA.BBVal{Float64}(9.981396599151932, 10.346666666666671, 10.71193673418141)
-IncTA.BBVal{Float64}(10.061635473931714, 10.373333333333338, 10.685031192734963)
-IncTA.BBVal{Float64}(9.787718030627357, 10.273333333333339, 10.758948636039321)
+OnlineTechnicalIndicators.BBVal{Float64}(7.923987085233826, 9.283333333333339, 10.642679581432851)
+OnlineTechnicalIndicators.BBVal{Float64}(8.921909932792502, 9.886666666666672, 10.851423400540842)
+OnlineTechnicalIndicators.BBVal{Float64}(9.981396599151932, 10.346666666666671, 10.71193673418141)
+OnlineTechnicalIndicators.BBVal{Float64}(10.061635473931714, 10.373333333333338, 10.685031192734963)
+OnlineTechnicalIndicators.BBVal{Float64}(9.787718030627357, 10.273333333333339, 10.758948636039321)
 ```
 
 ### Showing sample data (OHLCV data)
@@ -124,17 +124,17 @@ julia> for candle in V_OHLCV
            fit!(ind, candle)
            println(value(ind))
        end
-IncTA.StochVal{Float64}(53.57142857142858, missing)
-IncTA.StochVal{Float64}(0.0, missing)
-IncTA.StochVal{Float64}(63.15789473684218, 38.90977443609025)
-IncTA.StochVal{Float64}(65.1612903225806, 42.77306168647426)
-IncTA.StochVal{Float64}(67.74193548387099, 65.35370684776458)
+OnlineTechnicalIndicators.StochVal{Float64}(53.57142857142858, missing)
+OnlineTechnicalIndicators.StochVal{Float64}(0.0, missing)
+OnlineTechnicalIndicators.StochVal{Float64}(63.15789473684218, 38.90977443609025)
+OnlineTechnicalIndicators.StochVal{Float64}(65.1612903225806, 42.77306168647426)
+OnlineTechnicalIndicators.StochVal{Float64}(67.74193548387099, 65.35370684776458)
  ⋮
-IncTA.StochVal{Float64}(83.17307692307695, 54.98661936768733)
-IncTA.StochVal{Float64}(90.38461538461543, 83.17307692307693)
-IncTA.StochVal{Float64}(83.12500000000001, 85.56089743589745)
-IncTA.StochVal{Float64}(26.744186046511697, 66.75126714370903)
-IncTA.StochVal{Float64}(30.645161290322637, 46.83811577894477)
+OnlineTechnicalIndicators.StochVal{Float64}(83.17307692307695, 54.98661936768733)
+OnlineTechnicalIndicators.StochVal{Float64}(90.38461538461543, 83.17307692307693)
+OnlineTechnicalIndicators.StochVal{Float64}(83.12500000000001, 85.56089743589745)
+OnlineTechnicalIndicators.StochVal{Float64}(26.744186046511697, 66.75126714370903)
+OnlineTechnicalIndicators.StochVal{Float64}(30.645161290322637, 46.83811577894477)
 ```
 
 ## Feeding a technical analysis indicator with a compatible Tables.jl table such as TSFrame

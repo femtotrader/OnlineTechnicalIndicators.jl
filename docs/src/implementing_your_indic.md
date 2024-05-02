@@ -16,7 +16,7 @@ The very famous `BB` (Bollinger Bands developed by financial analyst John Bollin
 
 ### MISO indicators (🕯️ 🔢)
 
-IncTA have also some **MISO** indicators ie indicators which takes several values at a time. It can be candlestick OHLCV data for example. Average True Range (ATR) is an example of such an indicator. It's the average of true ranges over the specified period. ATR measures volatility, taking into account any gaps in the price movement. It was developed by a very prolific author named J. Welles Wilder (also author of RSI, ParabolicSAR and ADX).
+OnlineTechnicalIndicators have also some **MISO** indicators ie indicators which takes several values at a time. It can be candlestick OHLCV data for example. Average True Range (ATR) is an example of such an indicator. It's the average of true ranges over the specified period. ATR measures volatility, taking into account any gaps in the price movement. It was developed by a very prolific author named J. Welles Wilder (also author of RSI, ParabolicSAR and ADX).
 
 ### MIMO indicators (🕯️ Ⓜ️)
 

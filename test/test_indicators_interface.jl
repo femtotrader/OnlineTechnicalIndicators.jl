@@ -1,4 +1,4 @@
-using IncTA:
+using OnlineTechnicalIndicators:
     TechnicalIndicator,
     SISO_INDICATORS,
     SIMO_INDICATORS,
@@ -6,9 +6,9 @@ using IncTA:
     MIMO_INDICATORS,
     OTHERS_INDICATORS,
     ALL_INDICATORS
-using IncTA: always_true, ismultiinput, ismultioutput
-using IncTA: MACDVal, macd_to_ohlcv
-using IncTA.SampleData: RT_OHLCV, TAB_OHLCV
+using OnlineTechnicalIndicators: always_true, ismultiinput, ismultioutput
+using OnlineTechnicalIndicators: MACDVal, macd_to_ohlcv
+using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 
 @testset "indicators interface" begin
 
@@ -16,7 +16,7 @@ using IncTA.SampleData: RT_OHLCV, TAB_OHLCV
         files = readdir("../src/indicators")
         @test length(files) == 53  # number of indicators
 
-        _exported = names(IncTA)
+        _exported = names(OnlineTechnicalIndicators)
 
         for file in files
             stem, suffix = splitext(file)
@@ -258,7 +258,7 @@ using IncTA.SampleData: RT_OHLCV, TAB_OHLCV
 
     end
 
-    using IncTA: TechnicalIndicatorIterator
+    using OnlineTechnicalIndicators: TechnicalIndicatorIterator
     @testset "iterator" begin
         @testset "SISO" begin
             @testset "SMA" begin
@@ -330,7 +330,7 @@ using IncTA.SampleData: RT_OHLCV, TAB_OHLCV
     end
 
 
-    using IncTA: TechnicalIndicatorWrapper, load!
+    using OnlineTechnicalIndicators: TechnicalIndicatorWrapper, load!
     using Tables
     @testset "table" begin
         @testset "some tests examples" begin
