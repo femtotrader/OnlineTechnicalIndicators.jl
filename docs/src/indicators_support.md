@@ -6,14 +6,14 @@
 | `ADX` | Average Directional Index | 🕯️ | Ⓜ️ | `ATR` | ✔️
 | `ALMA` | Arnaud Legoux Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `AO` | Awesome Oscillator | 🕯️ | 🔢 | `SMA` | ✔️
-| `Aroon` | Aroon Up/Down | 🕯️ | Ⓜ️ | `CirBuff` | ✔️
+| `Aroon` | Aroon Up/Down | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `ATR` | Average True Range | 🕯️ | 🔢 | `CircBuff` | ✔️
 | `BB` | Bollinger Bands | 🔢 | Ⓜ️ | `SMA`, `StdDev` | ✔️
 | `BOP` | Balance Of Power | 🕯️ | 🔢 | - | ✔️
 | `CCI` | Commodity Channel Index | 🕯️ | 🔢 | `MeanDev` | ✔️
 | `ChaikinOsc` | Chaikin Oscillator | 🕯️ | 🔢 | `AccuDist`, `EMA` | ✔️
 | `ChandeKrollStop` | Chande Kroll Stop | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
-| `CHOP` | Choppiness Index | 🕯️ | 🔢 | `CirBuff`, `ATR` | ✔️
+| `CHOP` | Choppiness Index | 🕯️ | 🔢 | `CircBuff`, `ATR` | ✔️
 | `CoppockCurve` | Coppock Curve | 🔢 | 🔢 | `ROC`, `WMA` | ✔️
 | `DEMA` | Double Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
 | `DonchianChannels` | Donchian Channels | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
@@ -33,7 +33,7 @@
 | `McGinleyDynamic` | McGinley Dynamic | 🔢 | 🔢 | `CircBuff` | ✔️
 | `MeanDev` | Mean Deviation | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
 | `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
-| `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CirBuff` | ✔️
+| `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | 🚧 unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
 | `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | ✔️
 | `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | ✔️
