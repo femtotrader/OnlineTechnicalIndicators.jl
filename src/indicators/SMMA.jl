@@ -4,6 +4,8 @@ const SMMA_PERIOD = 3
     SMMA{T}(; period = SMMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SMMA` type implements a SMoothed Moving Average indicator.
+
+SMMA can also in american technical analysis litterature be named Wilder's moving average.
 """
 mutable struct SMMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

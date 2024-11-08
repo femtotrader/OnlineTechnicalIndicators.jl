@@ -15,8 +15,6 @@ SMA(x::AbstractArray, args...; kwargs...) = apply_func(x, SMA, args...; kwargs..
 
 EMA(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.EMA, args...; kwargs...)
 
-WilderMA(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.WilderMA, args...; kwargs...)
-
 SMMA(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.SMMA, args...; kwargs...)
 
 RSI(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.RSI, args...; kwargs...)

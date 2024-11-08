@@ -1,7 +1,7 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tohlcv}(; period = ATR_PERIOD, ma = WilderMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ATR{Tohlcv}(; period = ATR_PERIOD, ma = SMMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ATR` type implements an Average True Range indicator.
 """
@@ -24,7 +24,7 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     function ATR{Tohlcv}(;
         period = ATR_PERIOD,
-        ma = WilderMA,
+        ma = SMMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,

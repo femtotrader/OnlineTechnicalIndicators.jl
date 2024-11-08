@@ -79,17 +79,6 @@
         @test isapprox(value(ind), 9.462662; atol = ATOL)
     end
 
-    @testset "WilderMA" begin
-        ind = WilderMA{Float64}(period = P)
-        @test nobs(ind) == 0
-        ind = StatLag(ind, 3)
-        fit!(ind, CLOSE_TMPL)
-        @test nobs(ind) == length(CLOSE_TMPL)
-        @test isapprox(value(ind.lag[end-2]), 9.149590; atol = ATOL)
-        @test isapprox(value(ind.lag[end-1]), 9.203610; atol = ATOL)
-        @test isapprox(value(ind), 9.243430; atol = ATOL)
-    end
-
     @testset "SMMA" begin
         @testset "last 3 values" begin
             ind = SMMA{Float64}(period = P)

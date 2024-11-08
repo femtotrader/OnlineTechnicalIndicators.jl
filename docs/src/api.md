@@ -53,7 +53,6 @@ OnlineTechnicalIndicators.UO
 OnlineTechnicalIndicators.VTX
 OnlineTechnicalIndicators.VWAP
 OnlineTechnicalIndicators.VWMA
-OnlineTechnicalIndicators.WilderMA
 OnlineTechnicalIndicators.WMA
 OnlineTechnicalIndicators.ZLEMA
 ```
