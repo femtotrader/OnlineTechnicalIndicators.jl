@@ -7,7 +7,7 @@ It's inspired by Python project [talipp](https://github.com/nardew/talipp) which
 
 It depends especially on [OnlineStatsBase.jl](https://github.com/joshday/OnlineStatsBase.jl) and on [Tables.jl](https://tables.juliadata.org/).
 
-Currently more than 50 technical analysis indicators are supported (SMA, EMA, SMMA, RSI, MeanDev, StdDev, ROC, WMA, KAMA, HMA, DPO, CoppockCurve, DEMA, TEMA, ALMA, McGinleyDynamic, ZLEMA, T3, TRIX, TSI ; BB, MACD, StochRSI, KST ; AccuDist, BOP, CCI, ChaikinOsc, VWMA, VWAP, AO, ATR, ForceIndex, OBV, SOBV, EMV, MassIndex, CHOP, KVO, UO ; Stoch, ADX, SuperTrend, VTX, DonchianChannels, KeltnerChannels, Aroon, ChandeKrollStop, ParabolicSAR, SFX, TTM, PivotsHL ; STC)
+Currently more than 50 technical analysis indicators are supported (SMA, EMA, SMMA, RSI, MeanDev, StdDev, ROC, WMA, KAMA, HMA, DPO, CoppockCurve, DEMA, TEMA, ALMA, McGinleyDynamic, ZLEMA, T3, TRIX, TSI ; BB, MACD, StochRSI, KST ; AccuDist, BOP, CCI, ChaikinOsc, VWMA, VWAP, AO, TrueRange, ATR, ForceIndex, OBV, SOBV, EMV, MassIndex, CHOP, KVO, UO ; Stoch, ADX, SuperTrend, VTX, DonchianChannels, KeltnerChannels, Aroon, ChandeKrollStop, ParabolicSAR, SFX, TTM, PivotsHL ; STC)
 
 🚧 This software is under construction. API can have breaking changes.
 
