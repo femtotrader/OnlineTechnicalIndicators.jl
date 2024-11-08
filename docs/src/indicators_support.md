@@ -7,7 +7,7 @@
 | `ALMA` | Arnaud Legoux Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `AO` | Awesome Oscillator | 🕯️ | 🔢 | `SMA` | ✔️
 | `Aroon` | Aroon Up/Down | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
-| `ATR` | Average True Range | 🕯️ | 🔢 | `CircBuff` | ✔️
+| `ATR` | Average True Range | 🕯️ | 🔢 | `TrueRange`, `SMMA` | ✔️
 | `BB` | Bollinger Bands | 🔢 | Ⓜ️ | `SMA`, `StdDev` | ✔️
 | `BOP` | Balance Of Power | 🕯️ | 🔢 | - | ✔️
 | `CCI` | Commodity Channel Index | 🕯️ | 🔢 | `MeanDev` | ✔️
