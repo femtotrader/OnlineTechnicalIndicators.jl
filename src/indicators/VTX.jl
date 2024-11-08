@@ -19,9 +19,9 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     period::Integer
 
     sub_indicators::Series
-    atr::ATR
+    tr::TrueRange
 
-    atr_values::CircBuff
+    tr_values::CircBuff
 
     plus_vm::CircBuff
     minus_vm::CircBuff
@@ -38,9 +38,9 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        atr = ATR{T2}(period = 1)
-        sub_indicators = Series(atr)
-        atr_values = CircBuff(Union{Missing,S}, period, rev = false)
+        tr = TrueRange{T2}()
+        sub_indicators = Series(tr)
+        tr_values = CircBuff(Union{Missing,S}, period, rev = false)
         plus_vm = CircBuff(S, period, rev = false)
         minus_vm = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
@@ -48,8 +48,8 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             initialize_indicator_common_fields()...,
             period,
             sub_indicators,
-            atr,
-            atr_values,
+            tr,
+            tr_values,
             plus_vm,
             minus_vm,
             input_modifier,
@@ -60,19 +60,19 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
 end
 
 function _calculate_new_value(ind::VTX)
-    _atr_value = value(ind.atr)
-    fit!(ind.atr_values, _atr_value)
+    _atr_value = value(ind.tr)
+    fit!(ind.tr_values, _atr_value)
     if ind.n > 1
         candle = ind.input_values[end]
         candle_prev = ind.input_values[end-1]
         fit!(ind.plus_vm, abs(candle.high - candle_prev.low))
         fit!(ind.minus_vm, abs(candle.low - candle_prev.high))
-        if !has_valid_values(ind.atr_values, ind.period) ||
+        if !has_valid_values(ind.tr_values, ind.period) ||
            !has_valid_values(ind.plus_vm, ind.period) ||
            !has_valid_values(ind.minus_vm, ind.period)
             return missing
         end
-        atr_sum = sum(value(ind.atr_values))
+        atr_sum = sum(value(ind.tr_values))
         return VTXVal(sum(value(ind.plus_vm)) / atr_sum, sum(value(ind.minus_vm)) / atr_sum)
     else
         return missing
