@@ -15,7 +15,7 @@ mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     sub_indicators::Series
     obv::OBV
-    obv_ma::SMA
+    obv_ma::MovingAverageIndicator
 
     input_modifier::Function
     input_filter::Function

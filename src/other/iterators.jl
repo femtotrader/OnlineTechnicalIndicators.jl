@@ -89,4 +89,4 @@ function Iterators.reset!(itr::TechnicalIndicatorIterator)
         itr.indicator_type{eltype(itr.iterable_input)}(itr.args...; itr.kwargs...)
 end
 
-Base.length(itr::TechnicalIndicatorIterator) = length(itr.input_iterator)
+Base.length(itr::TechnicalIndicatorIterator{T,I}) where {T, I} = length(itr.iterable_input) 
