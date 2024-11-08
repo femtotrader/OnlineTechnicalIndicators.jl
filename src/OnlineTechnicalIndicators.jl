@@ -9,6 +9,7 @@ export ArraysInterface
 SISO_INDICATORS = [
     "SMA",
     "EMA",
+    "WilderMA",
     "SMMA",
     "RSI",
     "MeanDev",
@@ -244,6 +245,7 @@ end
 # SISO
 ismultiinput(::Type{SMA}) = false
 ismultiinput(::Type{EMA}) = false
+ismultiinput(::Type{WilderMA}) = false
 ismultiinput(::Type{SMMA}) = false
 ismultiinput(::Type{RSI}) = false
 ismultiinput(::Type{MeanDev}) = false

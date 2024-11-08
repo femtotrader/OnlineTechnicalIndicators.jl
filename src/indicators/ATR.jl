@@ -1,7 +1,7 @@
 const ATR_PERIOD = 3
 
 """
-    ATR{Tohlcv}(; period = ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ATR{Tohlcv}(; period = ATR_PERIOD, ma = WilderMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ATR` type implements an Average True Range indicator.
 """
@@ -14,7 +14,7 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     period::Number
 
     tr::TrueRange
-    tr_values::CircBuff
+    tr_average::MovingAverageIndicator
 
     rolling::Bool
 
@@ -24,6 +24,7 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     function ATR{Tohlcv}(;
         period = ATR_PERIOD,
+        ma = WilderMA,
         input_filter = always_true,
         input_modifier = identity,
         input_modifier_return_type = Tohlcv,
@@ -35,13 +36,13 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
             S = Float64
         end
         tr = TrueRange{input_modifier_return_type}()
-        tr_values = CircBuff(S, period, rev = false)
+        tr_average = MAFactory(S)(ma, period = period)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
             initialize_indicator_common_fields()...,
             period,
             tr,
-            tr_values,
+            tr_average,
             false,
             input_modifier,
             input_filter,
@@ -52,19 +53,7 @@ end
 
 function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
-
     fit!(ind.tr, candle)
-
-    fit!(ind.tr_values, value(ind.tr))
-
-    if ind.rolling
-        return (value(ind) * (ind.period - 1) + ind.tr_values[end]) / ind.period
-    else
-        if ind.n == ind.period  # CircBuff is full but not rolling
-            ind.rolling = true
-            return sum(value(ind.tr_values)) / ind.period
-        else   # CircBuff is filling up
-            return missing
-        end
-    end
+    fit!(ind.tr_average, value(ind.tr))
+    return value(ind.tr_average)
 end
