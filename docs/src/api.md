@@ -46,6 +46,7 @@ OnlineTechnicalIndicators.SuperTrend
 OnlineTechnicalIndicators.T3
 OnlineTechnicalIndicators.TEMA
 OnlineTechnicalIndicators.TRIX
+OnlineTechnicalIndicators.TrueRange
 OnlineTechnicalIndicators.TSI
 OnlineTechnicalIndicators.TTM
 OnlineTechnicalIndicators.UO

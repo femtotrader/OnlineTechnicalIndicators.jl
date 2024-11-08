@@ -49,6 +49,7 @@
 | `T3` | T3 Moving Average | 🔢 | 🔢 | `EMA` with indicator chaining and input filter | ✔️
 | `TEMA` | Triple Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
 | `TRIX` | TRIX | 🕯️ | Ⓜ️ | `EMA`, indicator chaining | ✔️
+| `TrueRange` | True Range | 🕯️ | 🔢 | `CircBuff` | ✔️
 | `TSI` | True Strength Index | 🔢 | 🔢 | `EMA`, indicator chaining | ✔️
 | `TTM` | TTM Squeeze | 🕯️ | Ⓜ️ | `SMA`, `BB`, `DonchianChannels`, `KeltnerChannels` and `input_modifier` to extract `close` value of a candle | ✔️
 | `UO` | Ultimate Oscillator | 🕯️ | 🔢 | `CircBuff` | ✔️

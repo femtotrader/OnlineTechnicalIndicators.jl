@@ -14,7 +14,7 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 
     @testset "unified interface" begin
         files = readdir("../src/indicators")
-        @test length(files) == 53  # number of indicators
+        @test length(files) == 54  # number of indicators
 
         _exported = names(OnlineTechnicalIndicators)
 

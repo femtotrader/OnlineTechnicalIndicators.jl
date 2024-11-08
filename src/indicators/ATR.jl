@@ -48,13 +48,14 @@ end
 
 function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
-    true_range = candle.high - candle.low
+    candle_range = candle.high - candle.low
 
     if has_valid_values(ind.input_values, 1, exact = true)
-        fit!(ind.tr, true_range)
+        fit!(ind.tr, candle_range)
     else
         close2 = ind.input_values[end-1].close
-        fit!(ind.tr, max(true_range, abs(candle.high - close2), abs(candle.low - close2)))
+        true_range = max(candle_range, abs(candle.high - close2), abs(candle.low - close2))
+        fit!(ind.tr, true_range)
     end
 
     if ind.rolling

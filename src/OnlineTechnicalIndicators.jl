@@ -37,6 +37,7 @@ MISO_INDICATORS = [
     "VWMA",
     "VWAP",
     "AO",
+    "TrueRange",
     "ATR",
     "ForceIndex",
     "OBV",
@@ -274,6 +275,7 @@ ismultiinput(::Type{ChaikinOsc}) = true
 ismultiinput(::Type{VWMA}) = true
 ismultiinput(::Type{VWAP}) = true
 ismultiinput(::Type{AO}) = true
+ismultiinput(::Type{TrueRange}) = true
 ismultiinput(::Type{ATR}) = true
 ismultiinput(::Type{ForceIndex}) = true
 ismultiinput(::Type{OBV}) = true

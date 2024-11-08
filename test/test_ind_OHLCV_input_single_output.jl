@@ -95,6 +95,17 @@
         @test isapprox(value(ind), 0.373285; atol = ATOL)
     end
 
+    @testset "TrueRange" begin
+        ind = TrueRange{OHLCV{Missing,Float64,Float64}}()
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+        @test isapprox(value(ind.lag[end-2]), 0.670000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]), 0.620000, ; atol = ATOL)
+        @test isapprox(value(ind), 0.770000; atol = ATOL)
+    end
+
     @testset "ATR" begin
         ind = ATR{OHLCV{Missing,Float64,Float64}}(period = 5)
         @test nobs(ind) == 0

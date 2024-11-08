@@ -84,6 +84,8 @@ VWAP(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndica
 
 AO(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.AO, args...; kwargs...)
 
+TrueRange(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.TrueRange, args...; kwargs...)
+
 ATR(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.ATR, args...; kwargs...)
 
 ForceIndex(x::AbstractArray, args...; kwargs...) =
