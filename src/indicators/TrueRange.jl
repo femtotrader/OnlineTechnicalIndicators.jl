@@ -38,11 +38,11 @@ function _calculate_new_value(ind::TrueRange)
     candle = ind.input_values[end]
     candle_range = candle.high - candle.low
 
-    if ind.n == 1
-        return candle_range
-    else
+    if ind.n != 1
         close2 = ind.input_values[end-1].close
         return max(candle_range, abs(candle.high - close2), abs(candle.low - close2))
+    else
+        return candle_range
     end
 
 end
