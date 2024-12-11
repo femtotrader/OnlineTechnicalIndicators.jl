@@ -11,7 +11,7 @@
 
 Some sample data are provided for testing purpose.
 
-```julia
+```julia-repl
 julia> using OnlineTechnicalIndicators
 julia> using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
 julia> CLOSE_TMPL
@@ -30,7 +30,7 @@ julia> CLOSE_TMPL
 
 ### Calculate `SMA` (simple moving average)
 
-```julia
+```julia-repl
 julia> ind = SMA{Float64}(period = 3)  # this is a SISO (single input / single output) indicator
 SMA: n=0 | value=missing
 
@@ -55,7 +55,7 @@ missing
 
 ### Calculate BB (Bollinger bands)
 
-```julia
+```julia-repl
 julia> ind = BB{Float64}(period = 3)  # this is a SIMO (single input / multiple output) indicator
        for p in CLOSE_TMPL
            fit!(ind, p)
@@ -76,7 +76,7 @@ OnlineTechnicalIndicators.BBVal{Float64}(9.787718030627357, 10.273333333333339, 
 
 ### Showing sample data (OHLCV data)
 
-```julia
+```julia-repl
 julia> V_OHLCV  # fields are open/high/low/close/volume/time
 50-element Vector{OHLCV{Missing, Float64, Float64}}:
  OHLCV{Missing, Float64, Float64}(10.81, 11.02, 9.9, 10.5, 55.03, missing)
@@ -93,7 +93,7 @@ julia> V_OHLCV  # fields are open/high/low/close/volume/time
 
 ### Calculate ATR (Average true range)
 
-```julia
+```julia-repl
 julia> ind = ATR{OHLCV}(period = 3)  # this is a MISO (multi input / single output) indicator
 ATR: n=0 | value=missing
 
@@ -116,7 +116,7 @@ missing
 
 ### Calculate Stoch (Stochastic)
 
-```julia
+```julia-repl
 julia> ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 3)  # this is a MIMO indicator
 Stoch: n=0 | value=missing
 
@@ -143,7 +143,7 @@ A technical analysis indicator can also accept a [Tables.jl](https://tables.juli
 
 ### Showing sample data (OHLCV data)
 
-```julia
+```julia-repl
 julia> using MarketData
 julia> using TSFrames
 julia> using Random
@@ -169,7 +169,7 @@ julia> ts = TSFrame(ta)  # converts a TimeSeries.TimeArray to TSFrames.TSFrame
 
 ### Simple Moving Average (`SMA`) of close prices
 
-```julia
+```julia-repl
 julia> SMA(ts; period = 3)
 500×1 TSFrame with DateTime Index
  Index                SMA
@@ -190,7 +190,7 @@ julia> SMA(ts; period = 3)
 
 ### Simple Moving Average (`SMA`) of open prices
 
-```julia
+```julia-repl
 julia> SMA(ts; period = 3, default = :Open)
 500×1 TSFrame with DateTime Index
  Index                SMA
@@ -211,7 +211,7 @@ julia> SMA(ts; period = 3, default = :Open)
 
 ### Calculate `BB` (Bollinger bands)
 
-```julia
+```julia-repl
 julia> BB(ts; period = 3)
 500×3 TSFrame with DateTime Index
  Index                BB_lower     BB_central   BB_upper
@@ -232,7 +232,7 @@ julia> BB(ts; period = 3)
 
 ### Calculate `ATR` (Average true range)
 
-```julia
+```julia-repl
 julia> ATR(ts; period = 3)
 500×1 TSFrame with DateTime Index
  Index                ATR
@@ -253,7 +253,7 @@ julia> ATR(ts; period = 3)
 
 ### Calculate `Stoch` (Stochastic)
 
-```julia
+```julia-repl
 julia> Stoch(ts; period = 3)
 500×2 TSFrame with DateTime Index
  Index                Stoch_k    Stoch_d
