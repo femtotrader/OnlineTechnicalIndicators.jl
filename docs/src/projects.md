@@ -1,5 +1,7 @@
 # Projects
 
+If you know of a project that should be included here, click on the [edit](https://github.com/femtotrader/OnlineTechnicalIndicators.jl/blob/main/docs/src/projects.md) icon on the top-right, and feel free to send a pull request.
+
 ## Users of OnlineTechnicalIndicators
 
 - [TechnicalIndicatorCharts.jl](https://github.com/g-gundam/TechnicalIndicatorCharts.jl) - Use OnlineTechnicalIndicators.jl together with LightweightCharts.jl. 
