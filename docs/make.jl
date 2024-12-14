@@ -15,7 +15,8 @@ makedocs(
         "Examples" => "examples.md",
         "Internals" => "internals.md",
         "Implementing your own indicator" => "implementing_your_indic.md",
-        "API" => "api.md"
+        "API" => "api.md",
+        "Projects" => "projects.md"
     ],
 )
 deploydocs(; repo = "github.com/femtotrader/OnlineTechnicalIndicators.jl")
