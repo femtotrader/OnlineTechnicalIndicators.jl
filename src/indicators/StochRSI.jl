@@ -9,9 +9,9 @@ struct StochRSIVal{Tval}
 end
 
 """
-    StochRSI{T}(; fast_period = StochRSI_FAST_PERIOD, slow_period = StochRSI_SLOW_PERIOD, signal_period = StochRSI_SIGNAL_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    StochRSI{T}(; rsi_period = StochRSI_RSI_PERIOD, stoch_period = StochRSI_STOCH_PERIOD, k_smoothing_period = StochRSI_K_SMOOTHING_PERIOD, d_smoothing_period = StochRSI_D_SMOOTHING_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tval)
 
-The `StochRSI` type implements Moving Average Convergence Divergence indicator.
+The `StochRSI` type implements Stochastic RSI indicator.
 """
 mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,StochRSIVal}
