@@ -29,6 +29,7 @@ OnlineTechnicalIndicators.MACD
 OnlineTechnicalIndicators.MassIndex
 OnlineTechnicalIndicators.McGinleyDynamic
 OnlineTechnicalIndicators.MeanDev
+OnlineTechnicalIndicators.NATR
 OnlineTechnicalIndicators.OBV
 OnlineTechnicalIndicators.ParabolicSAR
 OnlineTechnicalIndicators.PivotsHL
