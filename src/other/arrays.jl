@@ -110,6 +110,8 @@ KVO(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicat
 
 UO(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.UO, args...; kwargs...)
 
+NATR(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.NATR, args...; kwargs...)
+
 # MIMO indicators
 
 SuperTrend(x::AbstractArray, args...; kwargs...) =

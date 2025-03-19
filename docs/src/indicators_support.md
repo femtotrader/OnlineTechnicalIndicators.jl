@@ -32,6 +32,7 @@
 | `MassIndex` | Mass Index | 🕯️ | 🔢 | `EMA`, `CircBuff` | ✔️
 | `McGinleyDynamic` | McGinley Dynamic | 🔢 | 🔢 | `CircBuff` | ✔️
 | `MeanDev` | Mean Deviation | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
+| `NATR` | Normalized Average True Range | 🕯️ | 🔢 | `ATR` | ✔️
 | `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
 | `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | 🚧 unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
