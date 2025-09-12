@@ -11,6 +11,14 @@ Currently more than 50 technical analysis indicators are supported (SMA, EMA, SM
 
 🚧 This software is under construction. API can have breaking changes.
 
+## ⚠️ Disclaimer – No Investment Advice
+
+OnlineTechnicalIndicators.jl is an open-source library provided **"as-is" for educational and informational purposes only**.
+* It does **not** constitute investment advice, brokerage services, or a recommendation to buy or sell any financial instrument.
+* All trading involves substantial risk; **past performance is not indicative of future results**. You may lose some or all of your capital.
+* By using OnlineTechnicalIndicators.jl you acknowledge that **you alone are responsible for your trading decisions** and agree that the OnlineTechnicalIndicators.jl maintainers and contributors will **not be liable for any loss or damage** arising from the use of this software.
+* Consult a qualified financial professional before deploying live capital.
+
 ## Contents
 
 ```@contents
