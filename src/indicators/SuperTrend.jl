@@ -78,6 +78,21 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
+function SuperTrend(;
+    atr_period = SuperTrend_ATR_PERIOD,
+    mult = SuperTrend_MULT,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    SuperTrend{input_modifier_return_type}(;
+        atr_period=atr_period,
+        mult=mult,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::SuperTrend{T,IN,S}) where {T,IN,S}
     if has_output_value(ind.atr)
 

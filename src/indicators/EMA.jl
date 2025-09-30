@@ -45,6 +45,19 @@ mutable struct EMA{T1,IN,T2} <: MovingAverageIndicator{T1}
     end
 end
 
+function EMA(;
+    period = EMA_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    EMA{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::EMA)
     if ind.rolling  # CircBuff is full and rolling
         return ind.mult * ind.input_values[end] + ind.mult_complement * ind.value

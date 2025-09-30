@@ -49,6 +49,25 @@ mutable struct MassIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function MassIndex(;
+    ma_period = MassIndex_MA_PERIOD,
+    ma_ma_period = MassIndex_MA_MA_PERIOD,
+    ma_ratio_period = MassIndex_MA_RATIO_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    MassIndex{input_modifier_return_type}(;
+        ma_period=ma_period,
+        ma_ma_period=ma_ma_period,
+        ma_ratio_period=ma_ratio_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value_only_from_incoming_data(ind::MassIndex, candle)
     fit!(ind.ma, candle.high - candle.low)
 

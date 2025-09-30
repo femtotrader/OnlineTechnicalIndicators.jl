@@ -46,6 +46,21 @@ mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
+function DPO(;
+    period = DPO_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    DPO{input_modifier_return_type}(;
+        period=period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::DPO)
     if length(ind.input_values) >= ind.semi_period + 2 && length(ind.ma.input_values) >= 1
         return ind.input_values[end-ind.semi_period-1] - value(ind.ma)

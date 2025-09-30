@@ -35,6 +35,19 @@ mutable struct StdDev{T1,IN,T2} <: TechnicalIndicatorSingleOutput{T1}
     end
 end
 
+function StdDev(;
+    period = StdDev_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    StdDev{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::StdDev)
     _mean = sum(value(ind.input_values)) / ind.period
     return sqrt(sum([(item - _mean)^2 for item in value(ind.input_values)]) / ind.period)

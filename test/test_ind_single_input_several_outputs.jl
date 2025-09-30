@@ -1,7 +1,8 @@
 @testset "single input - several output values" begin
 
     @testset "BB" begin
-        ind = BB{Float64}(period = 5, std_dev_mult = 2.0)
+        #ind = BB{Float64}(period = 5, std_dev_mult = 2.0)
+        ind = BB(period = 5, std_dev_mult = 2.0)
         @test expected_return_type(ind) == BBVal{Float64}
 
         @test nobs(ind) == 0
@@ -23,7 +24,8 @@
     end
 
     @testset "MACD" begin
-        ind = MACD{Float64}(fast_period = 12, slow_period = 26, signal_period = 9)
+        #ind = MACD{Float64}(fast_period = 12, slow_period = 26, signal_period = 9)
+        ind = MACD(fast_period = 12, slow_period = 26, signal_period = 9)
         @test expected_return_type(ind) == MACDVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
@@ -44,7 +46,8 @@
     end
 
     @testset "StochRSI" begin
-        ind = StochRSI{Float64}(
+        #ind = StochRSI{Float64}(
+        ind = StochRSI(
             rsi_period = 14,
             stoch_period = 14,
             k_smoothing_period = 3,
@@ -67,7 +70,8 @@
     end
 
     @testset "KST" begin
-        ind = KST{Float64}(
+        #ind = KST{Float64}(
+        ind = KST(
             roc1_period = 5,
             roc1_ma_period = 5,
             roc2_period = 10,

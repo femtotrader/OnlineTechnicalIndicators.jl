@@ -75,6 +75,25 @@ mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     end
 end
 
+function MACD(;
+    fast_period = MACD_FAST_PERIOD,
+    slow_period = MACD_SLOW_PERIOD,
+    signal_period = MACD_SIGNAL_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    MACD{input_modifier_return_type}(;
+        fast_period=fast_period,
+        slow_period=slow_period,
+        signal_period=signal_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::MACD)
     if has_output_value(ind.fast_ma) && has_output_value(ind.slow_ma)
         macd = value(ind.fast_ma) - value(ind.slow_ma)

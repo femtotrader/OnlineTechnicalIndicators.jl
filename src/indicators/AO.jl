@@ -41,6 +41,25 @@ mutable struct AO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function AO(;
+    fast_period = AO_FAST_PERIOD,
+    slow_period = AO_SLOW_PERIOD,
+    fast_ma = SMA,
+    slow_ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    AO{input_modifier_return_type}(;
+        fast_period=fast_period,
+        slow_period=slow_period,
+        fast_ma=fast_ma,
+        slow_ma=slow_ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value_only_from_incoming_data(ind::AO, candle)
     median = (candle.high + candle.low) / 2
     fit!(ind.fast_ma, median)

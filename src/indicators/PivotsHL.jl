@@ -81,6 +81,23 @@ mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
+function PivotsHL(;
+    high_period = PivotsHL_HIGH_PERIOD,
+    low_period = PivotsHL_LOW_PERIOD,
+    memory = PivotsHL_MEMORY,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    PivotsHL{input_modifier_return_type}(;
+        high_period=high_period,
+        low_period=low_period,
+        memory=memory,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 has_output_value(ind::PivotsHL) = length(ind.output_values) > 0
 
 function _calculate_new_value(ind::PivotsHL)

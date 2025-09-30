@@ -47,6 +47,23 @@ mutable struct CoppockCurve{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
+function CoppockCurve(;
+    fast_roc_period = CoppockCurve_FAST_ROC_PERIOD,
+    slow_roc_period = CoppockCurve_SLOW_ROC_PERIOD,
+    wma_period = CoppockCurve_WMA_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    CoppockCurve{input_modifier_return_type}(;
+        fast_roc_period=fast_roc_period,
+        slow_roc_period=slow_roc_period,
+        wma_period=wma_period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::CoppockCurve)
     if has_output_value(ind.fast_roc) && has_output_value(ind.slow_roc)
         fit!(ind.wma, value(ind.slow_roc) + value(ind.fast_roc))

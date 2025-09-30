@@ -50,6 +50,23 @@ mutable struct KAMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function KAMA(;
+    period = KAMA_PERIOD,
+    fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD,
+    slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    KAMA{input_modifier_return_type}(;
+        period=period,
+        fast_ema_constant_period=fast_ema_constant_period,
+        slow_ema_constant_period=slow_ema_constant_period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::KAMA)
     if ind.n >= 2
         fit!(ind.volatility, abs(ind.input_values[end] - ind.input_values[end-1]))

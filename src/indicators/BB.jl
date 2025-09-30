@@ -68,6 +68,23 @@ mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     end
 end
 
+function BB(;
+    period = BB_PERIOD,
+    std_dev_mult = BB_STD_DEV_MULT,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    BB{input_modifier_return_type}(;
+        period=period,
+        std_dev_mult=std_dev_mult,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::BB)
     if has_output_value(ind.central_band)
         lower = value(ind.central_band) - ind.std_dev_mult * value(ind.std_dev)

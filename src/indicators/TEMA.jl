@@ -47,6 +47,21 @@ mutable struct TEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function TEMA(;
+    period = TEMA_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    TEMA{input_modifier_return_type}(;
+        period=period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::TEMA)
     if has_output_value(ind.ma)
         fit!(ind.ma_ma, value(ind.ma))

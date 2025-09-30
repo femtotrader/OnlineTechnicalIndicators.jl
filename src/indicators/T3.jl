@@ -88,6 +88,21 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function T3(;
+    period = T3_PERIOD,
+    factor = T3_FACTOR,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    T3{input_modifier_return_type}(;
+        period=period,
+        factor=factor,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::T3)
     # much simpler with input_filter and indicator chaining
     if has_output_value(ind.ema6)

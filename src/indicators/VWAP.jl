@@ -36,6 +36,16 @@ mutable struct VWAP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function VWAP(;
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    VWAP{input_modifier_return_type}(;
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
 
 function _calculate_new_value_only_from_incoming_data(ind::VWAP, candle)
     typical_price = (candle.high + candle.low + candle.close) / 3

@@ -63,6 +63,23 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
+function TSI(;
+    fast_period = TSI_FAST_PERIOD,
+    slow_period = TSI_SLOW_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    TSI{input_modifier_return_type}(;
+        fast_period=fast_period,
+        slow_period=slow_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::TSI)
     if ind.n > 1
         fit!(ind.slow_ma, ind.input_values[end] - ind.input_values[end-1])

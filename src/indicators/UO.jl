@@ -53,6 +53,23 @@ mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function UO(;
+    fast_period = UO_FAST_PERIOD,
+    mid_period = UO_MID_PERIOD,
+    slow_period = UO_SLOW_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    UO{input_modifier_return_type}(;
+        fast_period=fast_period,
+        mid_period=mid_period,
+        slow_period=slow_period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::UO)
     if ind.n < 2
         return missing

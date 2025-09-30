@@ -77,6 +77,23 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
     end
 end
 
+function ChandeKrollStop(;
+    atr_period = ChandeKrollStop_ATR_PERIOD,
+    atr_mult = ChandeKrollStop_ATR_MULT,
+    period = ChandeKrollStop_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ChandeKrollStop{input_modifier_return_type}(;
+        atr_period=atr_period,
+        atr_mult=atr_mult,
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ChandeKrollStop)
     if (ind.n < ind.atr_period) || !has_output_value(ind.atr)
         return missing

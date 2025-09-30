@@ -81,6 +81,27 @@ mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
     end
 end
 
+function KeltnerChannels(;
+    ma_period = KeltnerChannels_MA_PERIOD,
+    atr_period = KeltnerChannels_ATR_PERIOD,
+    atr_mult_up = KeltnerChannels_ATR_MULT_UP,
+    atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    KeltnerChannels{input_modifier_return_type}(;
+        ma_period=ma_period,
+        atr_period=atr_period,
+        atr_mult_up=atr_mult_up,
+        atr_mult_down=atr_mult_down,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::KeltnerChannels)
     if has_output_value(ind.atr) && has_output_value(ind.cb)
         return KeltnerChannelsVal(

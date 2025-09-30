@@ -57,6 +57,19 @@ mutable struct DonchianChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{To
     end
 end
 
+function DonchianChannels(;
+    period = DonchianChannels_ATR_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    DonchianChannels{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::DonchianChannels)
     if ind.n >= ind.period
         max_high = max((k.high for k in value(ind.input_values))...)

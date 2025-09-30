@@ -39,6 +39,19 @@ mutable struct McGinleyDynamic{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tva
     end
 end
 
+function McGinleyDynamic(;
+    period = McGinleyDynamic_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    McGinleyDynamic{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::McGinleyDynamic)
     if ind.rolling  # CircBuff is full and rolling
         val = ind.input_values[end]

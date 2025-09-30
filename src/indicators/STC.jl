@@ -89,6 +89,27 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
+function STC(;
+    fast_macd_period = STC_FAST_MACD_PERIOD,
+    slow_macd_period = STC_SLOW_MACD_PERIOD,
+    stoch_period = STC_STOCH_PERIOD,
+    stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    STC{input_modifier_return_type}(;
+        fast_macd_period=fast_macd_period,
+        slow_macd_period=slow_macd_period,
+        stoch_period=stoch_period,
+        stoch_smoothing_period=stoch_smoothing_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::STC)
     stoch_d_val = value(ind.stoch_d)
     if !ismissing(stoch_d_val)
