@@ -1,5 +1,6 @@
 # OnlineTechnicalIndicators
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/femtotrader/OnlineTechnicalIndicators.jl)
 [![][docs-stable-img]][docs-stable-url]
 [![][docs-dev-img]][docs-dev-url]
 [![Build Status](https://github.com/femtotrader/OnlineTechnicalIndicators.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/femtotrader/OnlineTechnicalIndicators.jl/actions/workflows/CI.yml?query=branch%3Amain)
