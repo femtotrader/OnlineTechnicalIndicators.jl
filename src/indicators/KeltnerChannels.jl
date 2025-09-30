@@ -3,7 +3,18 @@ const KeltnerChannels_ATR_PERIOD = 10
 const KeltnerChannels_ATR_MULT_UP = 2.0
 const KeltnerChannels_ATR_MULT_DOWN = 3.0
 
+"""
+    KeltnerChannelsVal{Tval}
 
+Return value type for Keltner Channels indicator.
+
+# Fields
+- `lower::Tval`: Lower channel (central - ATR * multiplier)
+- `central::Tval`: Central line (moving average)
+- `upper::Tval`: Upper channel (central + ATR * multiplier)
+
+See also: [`KeltnerChannels`](@ref)
+"""
 struct KeltnerChannelsVal{Tval}
     lower::Tval
     central::Tval
@@ -14,6 +25,9 @@ end
     KeltnerChannels{Tohlcv}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `KeltnerChannels` type implements a Keltner Channels indicator.
+
+# Output
+- [`KeltnerChannelsVal`](@ref): A value containing `lower`, `central`, and `upper` channel values
 """
 mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,KeltnerChannelsVal{S}}

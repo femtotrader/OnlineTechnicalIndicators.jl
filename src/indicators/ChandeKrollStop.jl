@@ -2,6 +2,17 @@ const ChandeKrollStop_ATR_PERIOD = 5
 const ChandeKrollStop_ATR_MULT = 2.0
 const ChandeKrollStop_PERIOD = 3
 
+"""
+    ChandeKrollStopVal{Tval}
+
+Return value type for Chande Kroll Stop indicator.
+
+# Fields
+- `short_stop::Tval`: Short stop level (for short positions)
+- `long_stop::Tval`: Long stop level (for long positions)
+
+See also: [`ChandeKrollStop`](@ref)
+"""
 struct ChandeKrollStopVal{Tval}
     short_stop::Tval
     long_stop::Tval
@@ -11,6 +22,9 @@ end
     ChandeKrollStop{Tohlcv}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
+
+# Output
+- [`ChandeKrollStopVal`](@ref): A value containing `short_stop` and `long_stop` values
 """
 mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal}

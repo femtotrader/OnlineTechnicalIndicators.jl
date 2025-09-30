@@ -1,6 +1,18 @@
 const BB_PERIOD = 5
 const BB_STD_DEV_MULT = 2.0
 
+"""
+    BBVal{Tval}
+
+Return value type for Bollinger Bands indicator containing three bands.
+
+# Fields
+- `lower::Tval`: Lower band (central - std_dev_mult * standard deviation)
+- `central::Tval`: Central band (moving average)
+- `upper::Tval`: Upper band (central + std_dev_mult * standard deviation)
+
+See also: [`BB`](@ref)
+"""
 struct BBVal{Tval}
     lower::Tval
     central::Tval
@@ -11,6 +23,9 @@ end
     BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `BB` type implements Bollinger Bands indicator.
+
+# Output
+- [`BBVal`](@ref): A value containing `lower`, `central`, and `upper` band values
 """
 mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     value::Union{Missing,BBVal}

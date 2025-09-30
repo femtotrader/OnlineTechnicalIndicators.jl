@@ -1,5 +1,16 @@
 const VTX_PERIOD = 14
 
+"""
+    VTXVal{Tval}
+
+Return value type for Vortex Indicator.
+
+# Fields
+- `plus_vtx::Tval`: Plus Vortex Indicator (+VI)
+- `minus_vtx::Tval`: Minus Vortex Indicator (-VI)
+
+See also: [`VTX`](@ref)
+"""
 struct VTXVal{Tval}
     plus_vtx::Tval
     minus_vtx::Tval
@@ -9,6 +20,9 @@ end
     VTX{Tohlcv}(; period = VTX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `VTX` type implements a Vortex Indicator.
+
+# Output
+- [`VTXVal`](@ref): A value containing `plus_vtx` and `minus_vtx` values
 """
 mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,VTXVal}

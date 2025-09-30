@@ -20,10 +20,10 @@
 | `DPO` | Detrended Price Oscillator | 🔢 | 🔢 | `CircBuff`, `SMA` | ✔️
 | `EMA` | Exponential Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `EMV` | Ease of Movement | 🕯️ | 🔢 | `CircBuff`, `SMA` | ✔️
-| `FibRetracement` | Fibonacci Retracement | ❓ | ❓ |  | doesn't look an indicator just a simple class with 236 382 5 618 786 values
+| `FibRetracement` | Fibonacci Retracement | ❓ | ❓ |  | Simple class with standard Fibonacci levels (0.236, 0.382, 0.5, 0.618, 0.786)
 | `ForceIndex` | Force Index | 🕯️ | 🔢 | prev input val, `EMA` | ✔️
 | `HMA` | Hull Moving Average | 🔢 | 🔢 | `WMA` | ✔️
-| `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences ❓ unit tests doesn't exists in [reference implementation](https://github.com/nardew/talipp/issues/87)
+| `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences (unit tests not available in [reference implementation](https://github.com/nardew/talipp/issues/87))
 | `KAMA` | Kaufman's Adaptive Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
 | `KeltnerChannels` | Keltner Channels | 🕯️  | Ⓜ️ | `ATR`, `EMA` with `input_modifier` to extract close value of a candle | ✔️
 | `KST` | Know Sure Thing | 🔢 | Ⓜ️ | `ROC`, `SMA` | ✔️
@@ -35,7 +35,7 @@
 | `NATR` | Normalized Average True Range | 🕯️ | 🔢 | `ATR` | ✔️
 | `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
 | `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
-| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | 🚧 unit tests in reference implementation are [missing](https://github.com/nardew/talipp/issues/85) but code seems quite ready ✔️
+| `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | ✔️ (unit tests [missing](https://github.com/nardew/talipp/issues/85) in reference implementation)
 | `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | ✔️
 | `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | ✔️
 | `SFX` | SFX | 🕯️ | Ⓜ️ | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | ✔️
@@ -62,7 +62,7 @@
 
 ## Legend
 
-🔢 single number (input or ouput)
+🔢 single number (input or output)
 
 Ⓜ️ multiple numbers (output)
 

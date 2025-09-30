@@ -3,6 +3,17 @@ const StochRSI_STOCH_PERIOD = 14
 const StochRSI_K_SMOOTHING_PERIOD = 3
 const StochRSI_D_SMOOTHING_PERIOD = 3
 
+"""
+    StochRSIVal{Tval}
+
+Return value type for Stochastic RSI indicator.
+
+# Fields
+- `k::Tval`: %K line (stochastic of RSI)
+- `d::Union{Missing,Tval}`: %D line (smoothed %K)
+
+See also: [`StochRSI`](@ref)
+"""
 struct StochRSIVal{Tval}
     k::Tval
     d::Union{Missing,Tval}
@@ -12,6 +23,9 @@ end
     StochRSI{T}(; rsi_period = StochRSI_RSI_PERIOD, stoch_period = StochRSI_STOCH_PERIOD, k_smoothing_period = StochRSI_K_SMOOTHING_PERIOD, d_smoothing_period = StochRSI_D_SMOOTHING_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tval)
 
 The `StochRSI` type implements Stochastic RSI indicator.
+
+# Output
+- [`StochRSIVal`](@ref): A value containing `k` and `d` values
 """
 mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,StochRSIVal}

@@ -2,6 +2,18 @@ const MACD_FAST_PERIOD = 12
 const MACD_SLOW_PERIOD = 26
 const MACD_SIGNAL_PERIOD = 9
 
+"""
+    MACDVal{Tval}
+
+Return value type for Moving Average Convergence Divergence indicator.
+
+# Fields
+- `macd::Union{Missing,Tval}`: MACD line (fast MA - slow MA)
+- `signal::Union{Missing,Tval}`: Signal line (MA of MACD line)
+- `histogram::Union{Missing,Tval}`: MACD histogram (MACD - signal)
+
+See also: [`MACD`](@ref)
+"""
 struct MACDVal{Tval}
     macd::Union{Missing,Tval}
     signal::Union{Missing,Tval}
@@ -18,6 +30,9 @@ end
     MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `MACD` type implements Moving Average Convergence Divergence indicator.
+
+# Output
+- [`MACDVal`](@ref): A value containing `macd`, `signal`, and `histogram` values
 """
 mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,MACDVal}

@@ -13,6 +13,15 @@ module Resample
     )
     end
 
+    """
+        SamplingPeriod
+
+    Defines a time period for resampling data.
+
+    # Fields
+    - `type::TimeUnitType.TimeUnitTypeEnum`: Type of time unit (SEC, MIN, HOUR, DAY)
+    - `length::Integer`: Length of the period in the specified time units
+    """
     struct SamplingPeriod
         type::TimeUnitType.TimeUnitTypeEnum
         length::Integer
@@ -46,6 +55,14 @@ module Resample
         TimeUnitType.DAY => 3600 * 24,
     )
 
+    """
+        Resampler
+
+    Resamples time-series data according to a specified sampling period.
+
+    # Fields
+    - `sampling_period::SamplingPeriod`: The sampling period to use for resampling
+    """
     struct Resampler
         sampling_period::SamplingPeriod
     end
@@ -76,16 +93,42 @@ module Resample
         return normalized_dt
     end
 
+    """
+        TimedEvent
+
+    Represents a data point with an associated timestamp.
+
+    # Fields
+    - `time`: Timestamp of the event
+    - `data`: The data value at this time
+    """
     struct TimedEvent
         time
         data
     end
 
+    """
+        AgregatedStat
+
+    Holds aggregated statistical data for a time period.
+
+    # Fields
+    - `time`: Timestamp of the aggregated period
+    - `data`: The aggregated statistical value
+    """
     struct AgregatedStat
         time
         data
     end
 
+    """
+        StatBuilder
+
+    Builder for creating new statistical aggregation instances.
+
+    # Fields
+    - `agg`: A callable that creates new aggregation instances when invoked
+    """
     struct StatBuilder
         agg
     end
@@ -101,6 +144,18 @@ module Resample
     )
     end
 
+    """
+        OHLC{Tprice}
+
+    Mutable OHLC (Open, High, Low, Close) data structure for resampling price data.
+
+    # Fields
+    - `status::OHLCStatus.OHLCStatusEnum`: Status of the OHLC data (INIT, NEW, USED)
+    - `open::Tprice`: Opening price
+    - `high::Tprice`: Highest price
+    - `low::Tprice`: Lowest price
+    - `close::Tprice`: Closing price
+    """
     mutable struct OHLC{Tprice}
         status::OHLCStatus.OHLCStatusEnum
         open::Tprice
@@ -113,10 +168,19 @@ module Resample
         return OHLC(OHLCStatus.INIT, p, p, p, p)
     end
 
+    """
+        OHLCStat{T} <: OnlineStat{T}
+
+    Online statistic for computing OHLC values from streaming price data.
+
+    # Fields
+    - `ohlc::OHLC`: The current OHLC values
+    - `n::Int`: Number of observations processed
+    """
     struct OHLCStat{T} <: OnlineStat{T}
         ohlc::OHLC
         n::Int
-        function OHLCStat{T}() where {T} 
+        function OHLCStat{T}() where {T}
             new(OHLC{T}(), 0)
         end
     end
@@ -142,6 +206,19 @@ module Resample
         end
     end
 
+    """
+        ResamplerBy <: OnlineStat{TimedEvent}
+
+    Online statistic that resamples timed events into aggregated periods.
+
+    # Fields
+    - `agg::AgregatedStat`: Current aggregated statistic
+    - `n::Int`: Number of observations processed
+    - `sampling_period::SamplingPeriod`: The sampling period to use
+    - `stat_builder::StatBuilder`: Builder for creating new aggregation instances
+    - `input_modifier::Function`: Function to modify input data before processing
+    - `input_filter::Function`: Function to filter input data
+    """
     mutable struct ResamplerBy <: OnlineStat{TimedEvent}
         agg::AgregatedStat
         n::Int
@@ -151,7 +228,7 @@ module Resample
 
         input_modifier::Function
         input_filter::Function
-    
+
         function ResamplerBy(sampling_period::SamplingPeriod, agg;
             input_filter = always_true,
             input_modifier = identity)

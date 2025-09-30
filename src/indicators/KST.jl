@@ -8,6 +8,17 @@ const KST_ROC4_PERIOD = 25
 const KST_ROC4_MA_PERIOD = 10
 const KST_SIGNAL_PERIOD = 9
 
+"""
+    KSTVal{Tval}
+
+Return value type for Know Sure Thing (KST) indicator.
+
+# Fields
+- `kst::Tval`: KST line (weighted sum of smoothed ROC values)
+- `signal::Union{Missing,Tval}`: Signal line (moving average of KST)
+
+See also: [`KST`](@ref)
+"""
 struct KSTVal{Tval}
     kst::Tval
     signal::Union{Missing,Tval}
@@ -31,6 +42,9 @@ end
     )
 
 The `KST` type implements Know Sure Thing indicator.
+
+# Output
+- [`KSTVal`](@ref): A value containing `kst` and `signal` values
 """
 mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,KSTVal}

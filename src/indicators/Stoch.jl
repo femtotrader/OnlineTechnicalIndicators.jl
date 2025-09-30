@@ -1,6 +1,17 @@
 const STOCH_PERIOD = 14
 const STOCH_SMOOTHING_PERIOD = 3
 
+"""
+    StochVal{Tprice}
+
+Return value type for Stochastic oscillator indicator.
+
+# Fields
+- `k::Tprice`: %K line (fast stochastic)
+- `d::Union{Missing,Tprice}`: %D line (slow stochastic, smoothed %K)
+
+See also: [`Stoch`](@ref)
+"""
 struct StochVal{Tprice}
     k::Tprice
     d::Union{Missing,Tprice}
@@ -14,6 +25,9 @@ end
     Stoch{Tohlcv}(; period = STOCH_PERIOD, smoothing_period = STOCH_SMOOTHING_PERIOD, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `Stoch` type implements the Stochastic indicator.
+
+# Output
+- [`StochVal`](@ref): A value containing `k` and `d` values
 """
 mutable struct Stoch{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,StochVal}

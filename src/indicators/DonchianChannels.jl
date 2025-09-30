@@ -1,5 +1,17 @@
 const DonchianChannels_ATR_PERIOD = 5
 
+"""
+    DonchianChannelsVal{Tval}
+
+Return value type for Donchian Channels indicator.
+
+# Fields
+- `lower::Tval`: Lower channel (lowest low over period)
+- `central::Tval`: Central line (midpoint between upper and lower)
+- `upper::Tval`: Upper channel (highest high over period)
+
+See also: [`DonchianChannels`](@ref)
+"""
 struct DonchianChannelsVal{Tval}
     lower::Tval
     central::Tval
@@ -10,6 +22,9 @@ end
     DonchianChannels{Tohlcv}(; period = DonchianChannels_ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
+
+# Output
+- [`DonchianChannelsVal`](@ref): A value containing `lower`, `central`, and `upper` channel values
 """
 mutable struct DonchianChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,DonchianChannelsVal}

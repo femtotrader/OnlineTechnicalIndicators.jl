@@ -8,6 +8,19 @@ export TrendEnum
 @enum TrendEnum UP DOWN
 end # module
 
+"""
+    ParabolicSARVal{Tval}
+
+Return value type for Parabolic SAR indicator.
+
+# Fields
+- `value::Tval`: SAR value (stop and reverse price level)
+- `trend::SARTrend.TrendEnum`: Current trend direction (UP or DOWN)
+- `ep::Tval`: Extreme point (highest high or lowest low)
+- `accel_factor::Tval`: Current acceleration factor
+
+See also: [`ParabolicSAR`](@ref)
+"""
 struct ParabolicSARVal{Tval}
     value::Tval
     trend::SARTrend.TrendEnum
@@ -19,6 +32,9 @@ end
     ParabolicSAR{Tohlcv}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ParabolicSAR` type implements a Super Trend indicator.
+
+# Output
+- [`ParabolicSARVal`](@ref): A value containing `value`, `trend`, `ep`, and `accel_factor` values
 """
 mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ParabolicSARVal}

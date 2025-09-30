@@ -1,6 +1,18 @@
 const ADX_DI_PERIOD = 14
 const ADX_PERIOD = 14
 
+"""
+    ADXVal{Tval}
+
+Return value type for Average Directional Index indicator.
+
+# Fields
+- `adx::Union{Missing,Tval}`: Average Directional Index value (trend strength)
+- `plus_di::Tval`: Plus Directional Indicator (+DI)
+- `minus_di::Tval`: Minus Directional Indicator (-DI)
+
+See also: [`ADX`](@ref)
+"""
 struct ADXVal{Tval}
     adx::Union{Missing,Tval}
     plus_di::Tval
@@ -11,6 +23,9 @@ end
     ADX{Tohlcv}(; di_period = 14, adx_period = 14, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `ADX` type implements an Average Directional Index indicator.
+
+# Output
+- [`ADXVal`](@ref): A value containing `adx`, `plus_di`, and `minus_di` values
 """
 mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ADXVal}

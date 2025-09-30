@@ -6,6 +6,17 @@ export TrendEnum
 @enum TrendEnum UP DOWN
 end # module
 
+"""
+    SuperTrendVal{Tval}
+
+Return value type for Super Trend indicator.
+
+# Fields
+- `value::Tval`: Super Trend value (support/resistance level)
+- `trend::Trend.TrendEnum`: Current trend direction (UP or DOWN)
+
+See also: [`SuperTrend`](@ref)
+"""
 struct SuperTrendVal{Tval}
     value::Tval
     trend::Trend.TrendEnum
@@ -15,6 +26,9 @@ end
     SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SuperTrend` type implements a Super Trend indicator.
+
+# Output
+- [`SuperTrendVal`](@ref): A value containing `value` and `trend` values
 """
 mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SuperTrendVal}

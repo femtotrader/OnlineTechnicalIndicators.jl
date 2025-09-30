@@ -2,6 +2,17 @@ const TTM_PERIOD = 20
 const TTM_BB_STD_DEV_MULT = 2.0
 const TTM_KC_ATR_MULT = 2.0  # 1.5
 
+"""
+    TTMVal{Tval}
+
+Return value type for TTM Squeeze indicator.
+
+# Fields
+- `squeeze::Bool`: Squeeze status (true = squeeze on, false = squeeze off)
+- `histogram::Tval`: Momentum histogram value
+
+See also: [`TTM`](@ref)
+"""
 struct TTMVal{Tval}
     squeeze::Bool  # squeeze is on (=True) or off (=False)
     histogram::Tval  # histogram of the linear regression
@@ -11,6 +22,9 @@ end
     TTM{Tohlcv}(; atr_period = TTM_ATR_PERIOD, std_dev_period = TTM_STD_DEV_PERIOD, std_dev_smoothing_period = TTM_STD_DEV_SMOOTHING_PERIOD, ma = SMA)
 
 The `TTM` type implements a TTM indicator.
+
+# Output
+- [`TTMVal`](@ref): A value containing `squeeze` and `histogram` values
 """
 mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,TTMVal}

@@ -7,6 +7,16 @@ const DEFAULT_FIELDS_CANDLE = [:Open, :High, :Low, :Close]
 const DEFAULT_FIELD_VOLUME = :Volume
 const DEFAULT_OTHERS_POSSIBLE_INDEX = [:timestamp]
 
+"""
+    TechnicalIndicatorWrapper{T}
+
+Wraps a technical indicator type with its constructor arguments for deferred instantiation.
+
+# Fields
+- `indicator_type::T`: The type of technical indicator to construct
+- `args::Tuple`: Positional arguments for the indicator constructor
+- `kwargs::Base.Pairs`: Keyword arguments for the indicator constructor
+"""
 struct TechnicalIndicatorWrapper{T}
     indicator_type::T
     args::Tuple
@@ -16,6 +26,18 @@ struct TechnicalIndicatorWrapper{T}
     end
 end
 
+"""
+    TechnicalIndicatorResults{Ttime,Tout}
+
+Container for technical indicator results implementing the Tables.jl interface.
+
+# Fields
+- `name::Symbol`: Name of the indicator
+- `fieldnames::Tuple`: Names of the output fields
+- `fieldtypes::Tuple`: Types of the output fields
+- `index::Vector{Ttime}`: Vector of timestamps/indices
+- `output::Vector{Tout}`: Vector of indicator output values
+"""
 struct TechnicalIndicatorResults{Ttime,Tout}
     name::Symbol
     fieldnames::Tuple
