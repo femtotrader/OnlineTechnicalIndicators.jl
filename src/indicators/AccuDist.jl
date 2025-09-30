@@ -27,6 +27,17 @@ mutable struct AccuDist{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function AccuDist(;
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64},
+)
+    AccuDist{input_modifier_return_type}(;
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value_only_from_incoming_data(ind::AccuDist, candle)
     if candle.high != candle.low
         # Calculate MFI and MFV

@@ -58,6 +58,23 @@ mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function ALMA(;
+    period = ALMA_PERIOD,
+    offset = ALMA_OFFSET,
+    sigma = ALMA_SIGMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    ALMA{input_modifier_return_type}(;
+        period=period,
+        offset=offset,
+        sigma=sigma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ALMA{T,IN,S}) where {T,IN,S}
     if ind.n >= ind.period
         alma = zero(S)

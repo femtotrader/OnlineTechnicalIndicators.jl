@@ -59,6 +59,19 @@ mutable struct TRIX{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function TRIX(;
+    period = TRIX_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    TRIX{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::TRIX)
     if has_output_value(ind.ema3)
         fit!(ind.output_history, value(ind.ema3))

@@ -1,7 +1,8 @@
 @testset "single input - single output" begin  # take only a single value as input
 
     @testset "SMA" begin
-        ind = SMA{Float64}(period = P)
+        #ind = SMA{Float64}(period = P)
+        ind = SMA(period = P)  # use the constructor function with default type Float64
         @test expected_return_type(ind) == Float64
         @test nobs(ind) == 0
         ind = StatLag(ind, length(CLOSE_TMPL))
@@ -41,10 +42,14 @@
     @testset "Indicator chaining (SMA)" begin
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
-        ind1 = SMA{Float64}(period = 3)
-        ind2 = SMA{Float64}(period = 3, input_filter = !ismissing)
-        ind3 = SMA{Float64}(period = 3, input_filter = !ismissing)
-        ind4 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        #ind1 = SMA{Float64}(period = 3)
+        #ind2 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        #ind3 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        #ind4 = SMA{Float64}(period = 3, input_filter = !ismissing)
+        ind1 = SMA(period = 3)
+        ind2 = SMA(period = 3, input_filter = !ismissing)
+        ind3 = SMA(period = 3, input_filter = !ismissing)
+        ind4 = SMA(period = 3, input_filter = !ismissing)
         add_input_indicator!(ind2, ind1)  # <---
         add_input_indicator!(ind3, ind2)
         add_input_indicator!(ind4, ind3)
@@ -69,7 +74,8 @@
     end
 
     @testset "EMA" begin
-        ind = EMA{Float64}(period = P)
+        #ind = EMA{Float64}(period = P)
+        ind = EMA(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -81,7 +87,8 @@
 
     @testset "SMMA" begin
         @testset "last 3 values" begin
-            ind = SMMA{Float64}(period = P)
+            #ind = SMMA{Float64}(period = P)
+            ind = SMMA(period = P)
             @test nobs(ind) == 0
             ind = StatLag(ind, 3)
             fit!(ind, CLOSE_TMPL)
@@ -163,7 +170,8 @@
     end
 
     @testset "RSI" begin
-        ind = RSI{Float64}(period = P)
+        #ind = RSI{Float64}(period = P)
+        ind = RSI(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -174,7 +182,8 @@
     end
 
     @testset "MeanDev" begin
-        ind = MeanDev{Float64}(period = P)
+        #ind = MeanDev{Float64}(period = P)
+        ind = MeanDev(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -185,7 +194,8 @@
     end
 
     @testset "StdDev" begin
-        ind = StdDev{Float64}(period = P)
+        #ind = StdDev{Float64}(period = P)
+        ind = StdDev(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -196,7 +206,8 @@
     end
 
     @testset "ROC" begin
-        ind = ROC{Float64}(period = P)
+        #ind = ROC{Float64}(period = P)
+        ind = ROC(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -207,7 +218,8 @@
     end
 
     @testset "WMA" begin
-        ind = WMA{Float64}(period = P)
+        #ind = WMA{Float64}(period = P)
+        ind = WMA(period = P)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -218,7 +230,8 @@
     end
 
     @testset "DPO" begin
-        ind = DPO{Float64}(period = 20)
+        #ind = DPO{Float64}(period = 20)
+        ind = DPO(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -229,7 +242,8 @@
     end
 
     @testset "HMA" begin
-        ind = HMA{Float64}(period = 20)
+        #ind = HMA{Float64}(period = 20)
+        ind = HMA(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -240,7 +254,8 @@
     end
 
     @testset "CoppockCurve" begin
-        ind = CoppockCurve{Float64}(
+        #ind = CoppockCurve{Float64}(
+        ind = CoppockCurve(            
             fast_roc_period = 11,
             slow_roc_period = 14,
             wma_period = 10,
@@ -255,7 +270,8 @@
     end
 
     @testset "ALMA" begin
-        ind = ALMA{Float64}(period = 9, offset = 0.85, sigma = 6.0)
+        #ind = ALMA{Float64}(period = 9, offset = 0.85, sigma = 6.0)
+        ind = ALMA(period = 9, offset = 0.85, sigma = 6.0)
         @test nobs(ind) == 0
         w_expected = [
             0.000335,
@@ -281,7 +297,8 @@
     end
 
     @testset "DEMA" begin
-        ind = DEMA{Float64}(period = 20)
+        #ind = DEMA{Float64}(period = 20)
+        ind = DEMA(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -292,7 +309,8 @@
     end
 
     @testset "TEMA" begin
-        ind = TEMA{Float64}(period = 10)
+        #ind = TEMA{Float64}(period = 10)
+        ind = TEMA(period = 10)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -303,7 +321,8 @@
     end
 
     @testset "KAMA" begin
-        ind = KAMA{Float64}(
+        #ind = KAMA{Float64}(
+        ind = KAMA(
             period = 14,
             fast_ema_constant_period = 2,
             slow_ema_constant_period = 30,
@@ -320,7 +339,8 @@
     end
 
     @testset "McGinleyDynamic" begin
-        ind = McGinleyDynamic{Float64}(period = 14)
+        #ind = McGinleyDynamic{Float64}(period = 14)
+        ind = McGinleyDynamic(period = 14)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -331,7 +351,8 @@
     end
 
     @testset "STC" begin
-        ind = STC{Float64}(
+        #ind = STC{Float64}(
+        ind = STC(
             fast_macd_period = 5,
             slow_macd_period = 10,
             stoch_period = 10,
@@ -347,7 +368,8 @@
     end
 
     @testset "ZLEMA" begin
-        ind = ZLEMA{Float64}(period = 20)
+        #ind = ZLEMA{Float64}(period = 20)
+        ind = ZLEMA(period = 20)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -358,7 +380,8 @@
     end
 
     @testset "T3" begin
-        ind = T3{Float64}(period = 5, factor = 0.7)
+        #ind = T3{Float64}(period = 5, factor = 0.7)
+        ind = T3(period = 5, factor = 0.7)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -369,7 +392,8 @@
     end
 
     @testset "TRIX" begin
-        ind = TRIX{Float64}(period = 10)
+        #ind = TRIX{Float64}(period = 10)
+        ind = TRIX(period = 10)
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, CLOSE_TMPL)
@@ -381,7 +405,8 @@
 
     @testset "TSI" begin
         @testset "fit! with CLOSE_TMPL" begin
-            ind = TSI{Float64}(fast_period = 14, slow_period = 23)
+            #ind = TSI{Float64}(fast_period = 14, slow_period = 23)
+            ind = TSI(fast_period = 14, slow_period = 23)
             @test nobs(ind) == 0
             ind = StatLag(ind, 3)
             fit!(ind, CLOSE_TMPL)
@@ -392,7 +417,8 @@
         end
 
         @testset "fit! with CLOSE_EQUAL_VALUES_TMPL" begin
-            ind = TSI{Float64}(fast_period = 3, slow_period = 5)
+            #ind = TSI{Float64}(fast_period = 3, slow_period = 5)
+            ind = TSI(fast_period = 3, slow_period = 5)
             @test nobs(ind) == 0
             ind = StatLag(ind, length(CLOSE_EQUAL_VALUES_TMPL))
             fit!(ind, CLOSE_EQUAL_VALUES_TMPL)

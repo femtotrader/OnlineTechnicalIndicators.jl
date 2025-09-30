@@ -43,6 +43,19 @@ mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     end
 end
 
+function RSI(;
+    period = RSI_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    RSI{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::RSI{T,IN,S}) where {T,IN,S}
     if ind.n > 1
         change = ind.input_values[end] - ind.input_values[end-1]

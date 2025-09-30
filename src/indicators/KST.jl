@@ -120,6 +120,37 @@ mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     end
 end
 
+function KST(;
+    roc1_period = KST_ROC1_PERIOD,
+    roc1_ma_period = KST_ROC1_MA_PERIOD,
+    roc2_period = KST_ROC2_PERIOD,
+    roc2_ma_period = KST_ROC2_MA_PERIOD,
+    roc3_period = KST_ROC3_PERIOD,
+    roc3_ma_period = KST_ROC3_MA_PERIOD,
+    roc4_period = KST_ROC4_PERIOD,
+    roc4_ma_period = KST_ROC4_MA_PERIOD,
+    signal_period = KST_SIGNAL_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    KST{input_modifier_return_type}(;
+        roc1_period=roc1_period,
+        roc1_ma_period=roc1_ma_period,
+        roc2_period=roc2_period,
+        roc2_ma_period=roc2_ma_period,
+        roc3_period=roc3_period,
+        roc3_ma_period=roc3_ma_period,
+        roc4_period=roc4_period,
+        roc4_ma_period=roc4_ma_period,
+        signal_period=signal_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::KST)
     if has_output_value(ind.roc1_ma) &&
        has_output_value(ind.roc2_ma) &&

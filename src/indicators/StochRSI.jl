@@ -80,6 +80,27 @@ mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     end
 end
 
+function StochRSI(;
+    rsi_period = StochRSI_RSI_PERIOD,
+    stoch_period = StochRSI_STOCH_PERIOD,
+    k_smoothing_period = StochRSI_K_SMOOTHING_PERIOD,
+    d_smoothing_period = StochRSI_D_SMOOTHING_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    StochRSI{input_modifier_return_type}(;
+        rsi_period=rsi_period,
+        stoch_period=stoch_period,
+        k_smoothing_period=k_smoothing_period,
+        d_smoothing_period=d_smoothing_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 expected_return_type(ind::StochRSI) = StochRSIVal{typeof(ind).parameters[end]}
 
 function _calculate_new_value(ind::StochRSI{T,IN,S}) where {T,IN,S}

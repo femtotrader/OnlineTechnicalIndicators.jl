@@ -16,7 +16,8 @@
     end
 
     @testset "AccuDist" begin
-        ind = AccuDist{OHLCV{Missing,Float64}}()
+        #ind = AccuDist{OHLCV{Missing,Float64}}()
+        ind = AccuDist()
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
         fit!(ind, V_OHLCV)

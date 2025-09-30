@@ -42,6 +42,19 @@ mutable struct SMMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
+function SMMA(;
+    period = SMMA_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = Float64,
+)
+    SMMA{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::SMMA)
     if ind.rolling  # CircBuff is full and rolling
         data = ind.input_values[end]
