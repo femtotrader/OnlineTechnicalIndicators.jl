@@ -44,6 +44,21 @@ mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function SOBV(;
+    period = SOBV_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    SOBV{input_modifier_return_type}(;
+        period=period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::SOBV)
     fit!(ind.obv_ma, value(ind.obv))
     if has_output_value(ind.obv_ma)

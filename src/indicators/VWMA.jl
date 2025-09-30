@@ -36,6 +36,19 @@ mutable struct VWMA{Tohlcv,IN,S} <: MovingAverageIndicator{Tohlcv}
     end
 end
 
+function VWMA(;
+    period = VWMA_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    VWMA{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::VWMA)
     if ind.n >= ind.period
         s = 0

@@ -48,6 +48,25 @@ mutable struct ChaikinOsc{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function ChaikinOsc(;
+    fast_period = ChaikinOsc_FAST_PERIOD,
+    slow_period = ChaikinOsc_SLOW_PERIOD,
+    fast_ma = EMA,
+    slow_ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ChaikinOsc{input_modifier_return_type}(;
+        fast_period=fast_period,
+        slow_period=slow_period,
+        fast_ma=fast_ma,
+        slow_ma=slow_ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ChaikinOsc)
     if has_output_value(ind.accu_dist)
         accu_dist_value = value(ind.accu_dist)

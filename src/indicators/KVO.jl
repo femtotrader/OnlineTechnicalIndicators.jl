@@ -50,6 +50,23 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function KVO(;
+    fast_period = KVO_FAST_PERIOD,
+    slow_period = KVO_SLOW_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    KVO{input_modifier_return_type}(;
+        fast_period=fast_period,
+        slow_period=slow_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::KVO{T,IN,S}) where {T,IN,S}
     if length(ind.input_values) < 2
         return missing

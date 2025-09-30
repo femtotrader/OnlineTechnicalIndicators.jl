@@ -34,6 +34,17 @@ mutable struct TrueRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function TrueRange(;
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    TrueRange{input_modifier_return_type}(;
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::TrueRange)
     candle = ind.input_values[end]
     candle_range = candle.high - candle.low

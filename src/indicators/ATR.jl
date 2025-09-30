@@ -51,6 +51,21 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function ATR(;
+    period = ATR_PERIOD,
+    ma = SMMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ATR{input_modifier_return_type}(;
+        period=period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
     fit!(ind.tr, candle)

@@ -42,6 +42,21 @@ mutable struct ForceIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function ForceIndex(;
+    period = ForceIndex_PERIOD,
+    ma = EMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ForceIndex{input_modifier_return_type}(;
+        period=period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ForceIndex)
     if ind.n >= 2
         fit!(

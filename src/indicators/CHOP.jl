@@ -48,6 +48,19 @@ mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function CHOP(;
+    period = CHOP_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    CHOP{input_modifier_return_type}(;
+        period=period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::CHOP)
     _atr_value = value(ind.atr)
     fit!(ind.atr_values, _atr_value)

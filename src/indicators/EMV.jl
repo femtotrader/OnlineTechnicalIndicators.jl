@@ -45,6 +45,23 @@ mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     end
 end
 
+function EMV(;
+    period = EMV_PERIOD,
+    volume_div = EMV_VOLUME_DIV,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    EMV{input_modifier_return_type}(;
+        period=period,
+        volume_div=volume_div,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::EMV{T,IN,S}) where {T,IN,S}
     if ind.n >= 2
         candle = ind.input_values[end]
