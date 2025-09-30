@@ -299,6 +299,21 @@ using Tables
 
 # const TAB_OHLCV = Tables.table([DATE_TMPL OPEN_TMPL HIGH_TMPL LOW_TMPL CLOSE_TMPL VOLUME_TMPL]; header=[:Index, :Open, :High, :Low, :Close, :Volume])
 
+"""
+    TabOHLCV
+
+Sample OHLCV data table implementing the Tables.jl interface.
+
+Contains template financial data with Date indices and Float64 price/volume values.
+
+# Fields
+- `Index::Vector{Date}`: Vector of dates
+- `Open::Vector{Float64}`: Opening prices
+- `High::Vector{Float64}`: High prices
+- `Low::Vector{Float64}`: Low prices
+- `Close::Vector{Float64}`: Closing prices
+- `Volume::Vector{Float64}`: Trading volumes
+"""
 struct TabOHLCV
     Index::Vector{Date}
     Open::Vector{Float64}

@@ -58,6 +58,44 @@ OnlineTechnicalIndicators.WMA
 OnlineTechnicalIndicators.ZLEMA
 ```
 
+## Indicator Value Types (alphabetically ordered)
+```@docs
+OnlineTechnicalIndicators.ADXVal
+OnlineTechnicalIndicators.AroonVal
+OnlineTechnicalIndicators.BBVal
+OnlineTechnicalIndicators.ChandeKrollStopVal
+OnlineTechnicalIndicators.DonchianChannelsVal
+OnlineTechnicalIndicators.KSTVal
+OnlineTechnicalIndicators.KeltnerChannelsVal
+OnlineTechnicalIndicators.MACDVal
+OnlineTechnicalIndicators.ParabolicSARVal
+OnlineTechnicalIndicators.PivotsHLVal
+OnlineTechnicalIndicators.SFXVal
+OnlineTechnicalIndicators.StochVal
+OnlineTechnicalIndicators.StochRSIVal
+OnlineTechnicalIndicators.SuperTrendVal
+OnlineTechnicalIndicators.TTMVal
+OnlineTechnicalIndicators.VTXVal
+```
+
+## Core Types
+```@docs
+OnlineTechnicalIndicators.OHLCV
+OnlineTechnicalIndicators.OHLCVFactory
+OnlineTechnicalIndicators.MAFactory
+OnlineTechnicalIndicators.SampleData.TabOHLCV
+OnlineTechnicalIndicators.TechnicalIndicatorWrapper
+OnlineTechnicalIndicators.TechnicalIndicatorResults
+OnlineTechnicalIndicators.Resample.SamplingPeriod
+OnlineTechnicalIndicators.Resample.Resampler
+OnlineTechnicalIndicators.Resample.TimedEvent
+OnlineTechnicalIndicators.Resample.AgregatedStat
+OnlineTechnicalIndicators.Resample.StatBuilder
+OnlineTechnicalIndicators.Resample.OHLC
+OnlineTechnicalIndicators.Resample.OHLCStat
+OnlineTechnicalIndicators.Resample.ResamplerBy
+```
+
 ## Other
 ```@docs
 OnlineTechnicalIndicators.StatLag

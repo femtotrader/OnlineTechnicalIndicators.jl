@@ -2,6 +2,18 @@ const SFX_ATR_PERIOD = 12
 const SFX_STD_DEV_PERIOD = 12
 const SFX_STD_DEV_SMOOTHING_PERIOD = 3
 
+"""
+    SFXVal{Tval}
+
+Return value type for SFX indicator.
+
+# Fields
+- `atr::Union{Missing,Tval}`: Average True Range
+- `std_dev::Tval`: Standard deviation of price
+- `ma_std_dev::Union{Missing,Tval}`: Moving average of standard deviation
+
+See also: [`SFX`](@ref)
+"""
 struct SFXVal{Tval}
     atr::Union{Missing,Tval}
     std_dev::Tval
@@ -12,6 +24,9 @@ end
     SFX{Tohlcv}(; atr_period = SFX_ATR_PERIOD, std_dev_period = SFX_STD_DEV_PERIOD, std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD, ma = SMA, , input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
 The `SFX` type implements a SFX indicator.
+
+# Output
+- [`SFXVal`](@ref): A value containing `atr`, `std_dev`, and `ma_std_dev` values
 """
 mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SFXVal}

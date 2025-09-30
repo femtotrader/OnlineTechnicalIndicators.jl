@@ -1,5 +1,16 @@
 const Aroon_PERIOD = 10
 
+"""
+    AroonVal{Tval}
+
+Return value type for Aroon indicator.
+
+# Fields
+- `up::Tval`: Aroon Up (time since highest high)
+- `down::Tval`: Aroon Down (time since lowest low)
+
+See also: [`Aroon`](@ref)
+"""
 struct AroonVal{Tval}
     up::Tval
     down::Tval
@@ -9,6 +20,9 @@ end
     Aroon{Tohlcv}(; period = Aroon_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
 
 The `Aroon` type implements an Aroon indicator.
+
+# Output
+- [`AroonVal`](@ref): A value containing `up` and `down` values
 """
 mutable struct Aroon{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,AroonVal}

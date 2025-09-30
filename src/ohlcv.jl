@@ -1,3 +1,16 @@
+"""
+    OHLCV{Ttime,Tprice,Tvol}
+
+Represents OHLCV (Open, High, Low, Close, Volume) candlestick data with optional timestamp.
+
+# Fields
+- `open::Tprice`: Opening price of the period
+- `high::Tprice`: Highest price during the period
+- `low::Tprice`: Lowest price during the period
+- `close::Tprice`: Closing price of the period
+- `volume::Tvol`: Trading volume during the period (optional, defaults to `missing`)
+- `time::Ttime`: Timestamp of the candlestick (optional, defaults to `missing`)
+"""
 struct OHLCV{Ttime,Tprice,Tvol}
     open::Tprice
     high::Tprice
@@ -19,6 +32,21 @@ struct OHLCV{Ttime,Tprice,Tvol}
 
 end
 
+"""
+    OHLCVFactory{Ttime,Tprice,Tvol}
+
+Factory for creating multiple OHLCV candlesticks from vectors of price data.
+
+# Fields
+- `open::Vector{Tprice}`: Vector of opening prices
+- `high::Vector{Tprice}`: Vector of high prices
+- `low::Vector{Tprice}`: Vector of low prices
+- `close::Vector{Tprice}`: Vector of closing prices
+- `volume::Vector{Tvol}`: Vector of volumes (optional)
+- `time::Vector{Ttime}`: Vector of timestamps (optional)
+
+Use `Base.collect(factory)` to generate a vector of `OHLCV` instances.
+"""
 struct OHLCVFactory{Ttime,Tprice,Tvol}
     open::Vector{Tprice}
     high::Vector{Tprice}
