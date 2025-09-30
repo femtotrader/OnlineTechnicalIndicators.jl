@@ -73,6 +73,23 @@ mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv
     end
 end
 
+function ParabolicSAR(;
+    init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
+    accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
+    max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ParabolicSAR{input_modifier_return_type}(;
+        init_accel_factor=init_accel_factor,
+        accel_factor_inc=accel_factor_inc,
+        max_accel_factor=max_accel_factor,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ParabolicSAR)
     if ind.n < SAR_INIT_LEN
         return missing

@@ -98,6 +98,25 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
+function TTM(;
+    period = TTM_PERIOD,
+    bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
+    kc_atr_mult = TTM_KC_ATR_MULT,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    TTM{input_modifier_return_type}(;
+        period=period,
+        bb_std_dev_mult=bb_std_dev_mult,
+        kc_atr_mult=kc_atr_mult,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::TTM{T,IN,S}) where {T,IN,S}
     if has_output_value(ind.bb) && has_output_value(ind.kc)
 

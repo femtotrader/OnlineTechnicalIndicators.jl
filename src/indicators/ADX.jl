@@ -93,6 +93,21 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
+function ADX(;
+    di_period = ADX_DI_PERIOD,
+    adx_period = ADX_PERIOD,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    ADX{input_modifier_return_type}(;
+        di_period=di_period,
+        adx_period=adx_period,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::ADX{T,IN,S}) where {T,IN,S}
     if ind.n > 1
 

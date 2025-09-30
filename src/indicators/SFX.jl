@@ -73,6 +73,25 @@ mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     end
 end
 
+function SFX(;
+    atr_period = SFX_ATR_PERIOD,
+    std_dev_period = SFX_STD_DEV_PERIOD,
+    std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD,
+    ma = SMA,
+    input_filter = always_true,
+    input_modifier = identity,
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
+    SFX{input_modifier_return_type}(;
+        atr_period=atr_period,
+        std_dev_period=std_dev_period,
+        std_dev_smoothing_period=std_dev_smoothing_period,
+        ma=ma,
+        input_filter=input_filter,
+        input_modifier=input_modifier,
+        input_modifier_return_type=input_modifier_return_type)
+end
+
 function _calculate_new_value(ind::SFX)
     if has_output_value(ind.std_dev)
         fit!(ind.ma_std_dev, value(ind.std_dev))

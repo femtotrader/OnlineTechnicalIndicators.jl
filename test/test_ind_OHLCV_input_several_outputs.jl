@@ -3,7 +3,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
 @testset "OHLC input - several output values" begin
 
     @testset "Stoch" begin
-        ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 14, smoothing_period = 3)
+        #ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 14, smoothing_period = 3)
+        ind = Stoch(period = 14, smoothing_period = 3)
         @test expected_return_type(ind) == StochVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
@@ -18,7 +19,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "SuperTrend" begin
-        ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
+        #ind = SuperTrend{OHLCV{Missing,Float64,Float64}}(atr_period = 10, mult = 3)
+        ind = SuperTrend(atr_period = 10, mult = 3)
         @test expected_return_type(ind) == SuperTrendVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 16)
@@ -42,7 +44,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "VTX" begin
-        ind = VTX{OHLCV{Missing,Float64,Float64}}(period = 14)
+        #ind = VTX{OHLCV{Missing,Float64,Float64}}(period = 14)
+        ind = VTX(period = 14)
         @test expected_return_type(ind) == VTXVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
@@ -60,7 +63,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "DonchianChannels" begin
-        ind = DonchianChannels{OHLCV{Missing,Float64,Float64}}(period = 5)
+        #ind = DonchianChannels{OHLCV{Missing,Float64,Float64}}(period = 5)
+        ind = DonchianChannels(period = 5)
         @test expected_return_type(ind) == DonchianChannelsVal{Float64}
         @test nobs(ind) == 0
         ind = StatLag(ind, 3)
@@ -81,7 +85,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "KeltnerChannels" begin
-        ind = KeltnerChannels{OHLCV{Missing,Float64,Float64}}(
+        #ind = KeltnerChannels{OHLCV{Missing,Float64,Float64}}(
+        ind = KeltnerChannels(
             ma_period = 10,
             atr_period = 10,
             atr_mult_up = 2,
@@ -108,7 +113,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "ADX" begin
-        ind = ADX{OHLCV{Missing,Float64,Float64}}(di_period = 14, adx_period = 14)
+        #ind = ADX{OHLCV{Missing,Float64,Float64}}(di_period = 14, adx_period = 14)
+        ind = ADX(di_period = 14, adx_period = 14)
         @test expected_return_type(ind) == ADXVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
@@ -129,7 +135,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "Aroon" begin
-        ind = Aroon{OHLCV{Missing,Float64,Float64}}(period = 10)
+        #ind = Aroon{OHLCV{Missing,Float64,Float64}}(period = 10)
+        ind = Aroon(period = 10)
         @test expected_return_type(ind) == AroonVal{Float64}
         ind = StatLag(ind, 3)
         @test nobs(ind) == 0
@@ -147,7 +154,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "ChandeKrollStop" begin
-        ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64}}(
+        #ind = ChandeKrollStop{OHLCV{Missing,Float64,Float64}}(
+        ind = ChandeKrollStop(
             atr_period = 5,
             atr_mult = 2.0,
             period = 3,
@@ -169,7 +177,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "ParabolicSAR" begin
-        ind = ParabolicSAR{OHLCV{Missing,Float64,Float64}}(
+        #ind = ParabolicSAR{OHLCV{Missing,Float64,Float64}}(
+        ind = ParabolicSAR(
             init_accel_factor = 0.02,
             accel_factor_inc = 0.02,
             max_accel_factor = 0.2,
@@ -197,7 +206,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "SFX" begin
-        ind = SFX{OHLCV{Missing,Float64,Float64}}(
+        #ind = SFX{OHLCV{Missing,Float64,Float64}}(
+        ind = SFX(
             atr_period = 12,
             std_dev_period = 12,
             std_dev_smoothing_period = 3,
@@ -222,7 +232,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "TTM" begin
-        ind = TTM{OHLCV{Missing,Float64,Float64}}(
+        #ind = TTM{OHLCV{Missing,Float64,Float64}}(
+        ind = TTM(
             period = 20,
             bb_std_dev_mult = 2.0,
             kc_atr_mult = 2.0,
@@ -247,7 +258,8 @@ using OnlineTechnicalIndicators: PivotsHLVal
     end
 
     @testset "PivotsHL" begin
-        ind = PivotsHL{OHLCV{Missing,Float64,Float64}}(
+        #ind = PivotsHL{OHLCV{Missing,Float64,Float64}}(
+        ind = PivotsHL(
             high_period = 7,
             low_period = 7,
             memory = 10,
