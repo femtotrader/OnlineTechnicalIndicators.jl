@@ -103,7 +103,7 @@ for ind in ALL_INDICATORS
     @eval export $ind
 end
 export SARTrend, Trend, HLType
-export GannHiloVal, GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
+export GannHiloActivatorVal, GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
 
 # Export pattern recognition types and modules
 export SingleCandlePatternType,
