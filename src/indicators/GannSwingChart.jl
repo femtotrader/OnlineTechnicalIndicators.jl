@@ -146,24 +146,38 @@ function _calculate_new_value(ind::GannSwingChart)
     
     # REQ-020: Upswing detection (two consecutive higher highs)
     if ind.consecutive_higher_highs >= ind.min_bars
+        # Store previous swing high before updating
+        previous_swing_high = ind.last_swing_high
         ind.last_swing_high = ind.last_high
-        
+
         # REQ-030: Change to uptrend if breaking previous peak and was downtrend
-        if ind.current_trend == :downtrend && !ismissing(ind.last_swing_high)
-            if current_bar.high > ind.last_swing_high
+        # OR establish initial uptrend if no previous swing exists
+        if ismissing(previous_swing_high)
+            # First swing detected, establish uptrend
+            ind.current_trend = :uptrend
+            trend_changed = true
+        elseif ind.current_trend == :downtrend
+            if current_bar.high > previous_swing_high
                 ind.current_trend = :uptrend
                 trend_changed = true
             end
         end
     end
-    
+
     # REQ-021: Downswing detection (two consecutive lower lows)
     if ind.consecutive_lower_lows >= ind.min_bars
+        # Store previous swing low before updating
+        previous_swing_low = ind.last_swing_low
         ind.last_swing_low = ind.last_low
-        
+
         # REQ-031: Change to downtrend if breaking previous valley and was uptrend
-        if ind.current_trend == :uptrend && !ismissing(ind.last_swing_low)
-            if current_bar.low < ind.last_swing_low
+        # OR establish initial downtrend if no previous swing exists
+        if ismissing(previous_swing_low)
+            # First swing detected, establish downtrend
+            ind.current_trend = :downtrend
+            trend_changed = true
+        elseif ind.current_trend == :uptrend
+            if current_bar.low < previous_swing_low
                 ind.current_trend = :downtrend
                 trend_changed = true
             end
