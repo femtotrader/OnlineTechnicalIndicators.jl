@@ -11,6 +11,11 @@ makedocs(
         "Install" => "install.md",
         "Usage" => "usage.md",
         "Indicators support" => "indicators_support.md",
+        "Pattern Recognition" => [
+            "Overview" => "patterns/index.md",
+            "Quick Start" => "patterns/quickstart.md",
+            "Implementation" => "patterns/implementation.md",
+        ],
         "Learn more about usage" => "usage_more.md",
         "Examples" => "examples.md",
         "Internals" => "internals.md",

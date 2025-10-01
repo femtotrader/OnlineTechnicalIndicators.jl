@@ -383,8 +383,30 @@ for (i, candle) in enumerate(candles)
 end
 ```
 
+## API Reference
+
+```@docs
+SingleCandlePatternVal
+TwoCandlePatternVal
+ThreeCandlePatternVal
+AllPatternsVal
+Doji
+Hammer
+ShootingStar
+Marubozu
+SpinningTop
+Engulfing
+Harami
+PiercingDarkCloud
+Tweezer
+Star
+ThreeSoldiersCrows
+ThreeInside
+CandlestickPatternDetector
+```
+
 ## See Also
 
-- [OHLCV Data Structure](ohlcv.md)
-- [Technical Indicators](indicators.md)
-- [Examples](../examples/pattern_recognition_example.jl)
+- OHLCV Data Structure (see Usage documentation)
+- Technical Indicators (see Indicators Support documentation)
+- Pattern Recognition Examples (see examples directory in repository)
