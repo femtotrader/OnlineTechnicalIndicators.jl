@@ -66,12 +66,30 @@ MIMO_INDICATORS = [
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
 
+# Pattern Recognition Indicators
+PATTERN_INDICATORS = [
+    "Doji",
+    "Hammer",
+    "ShootingStar",
+    "Marubozu",
+    "SpinningTop",
+    "Engulfing",
+    "Harami",
+    "PiercingDarkCloud",
+    "Tweezer",
+    "Star",
+    "ThreeSoldiersCrows",
+    "ThreeInside",
+    "CandlestickPatternDetector",
+]
+
 ALL_INDICATORS = [
     SISO_INDICATORS...,
     SIMO_INDICATORS...,
     MISO_INDICATORS...,
     MIMO_INDICATORS...,
     OTHERS_INDICATORS...,
+    PATTERN_INDICATORS...,
 ]
 
 # Export indicators
@@ -80,6 +98,11 @@ for ind in ALL_INDICATORS
     @eval export $ind
 end
 export SARTrend, Trend, HLType
+
+# Export pattern recognition types and modules
+export SingleCandlePatternType,
+    TwoCandlePatternType, ThreeCandlePatternType, PatternDirection
+export SingleCandlePatternVal, TwoCandlePatternVal, ThreeCandlePatternVal, AllPatternsVal
 
 export add_input_indicator!
 
@@ -229,6 +252,15 @@ function Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)
     end
 end
 
+# include pattern types first
+include("patterns/PatternTypes.jl")
+using .SingleCandlePatternType
+using .TwoCandlePatternType
+using .ThreeCandlePatternType
+using .PatternDirection
+
+include("patterns/PatternValues.jl")
+
 # include SISO, SIMO, MISO, MIMO and OTHERS indicators
 for ind in [
     SISO_INDICATORS...,
@@ -238,6 +270,11 @@ for ind in [
     OTHERS_INDICATORS...,
 ]
     include("indicators/$(ind).jl")
+end
+
+# include pattern indicators
+for ind in PATTERN_INDICATORS
+    include("patterns/$(ind).jl")
 end
 
 # ismultiinput
@@ -302,6 +339,20 @@ ismultiinput(::Type{TTM}) = true
 ismultiinput(::Type{PivotsHL}) = true
 # Other
 ismultiinput(::Type{STC}) = false
+# Pattern Recognition
+ismultiinput(::Type{Doji}) = true
+ismultiinput(::Type{Hammer}) = true
+ismultiinput(::Type{ShootingStar}) = true
+ismultiinput(::Type{Marubozu}) = true
+ismultiinput(::Type{SpinningTop}) = true
+ismultiinput(::Type{Engulfing}) = true
+ismultiinput(::Type{Harami}) = true
+ismultiinput(::Type{PiercingDarkCloud}) = true
+ismultiinput(::Type{Tweezer}) = true
+ismultiinput(::Type{Star}) = true
+ismultiinput(::Type{ThreeSoldiersCrows}) = true
+ismultiinput(::Type{ThreeInside}) = true
+ismultiinput(::Type{CandlestickPatternDetector}) = true
 
 # Other stuff
 include("ma.jl")  # Moving Average Factory
