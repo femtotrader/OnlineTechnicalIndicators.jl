@@ -1,4 +1,4 @@
-using OnlineTechnicalIndicators: PivotsHLVal
+using OnlineTechnicalIndicators: PivotsHLVal, GannHiloActivatorVal
 
 @testset "OHLC input - several output values" begin
 
@@ -304,6 +304,25 @@ using OnlineTechnicalIndicators: PivotsHLVal
         @test isapprox(ind.output_values[end].ohlcv.close, 10.590000; atol = ATOL)
         @test isapprox(ind.output_values[end].ohlcv.volume, 108.270000; atol = ATOL)
         @test ind.output_values[end].type == HLType.HIGH
+    end
+
+    @testset "GannHiloActivator" begin
+        ind = GannHiloActivator{OHLCV{Missing,Float64,Float64}}(period = 10)
+        @test expected_return_type(ind) == GannHiloActivatorVal{Float64}
+        @test nobs(ind) == 0
+        ind = StatLag(ind, 3)
+        fit!(ind, V_OHLCV)
+        @test nobs(ind) == length(V_OHLCV)
+
+        # to be checked
+        @test isapprox(value(ind.lag[end-2]).high, 10.256000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-2]).low, 8.089000; atol = ATOL)
+
+        @test isapprox(value(ind.lag[end-1]).high, 10.332000; atol = ATOL)
+        @test isapprox(value(ind.lag[end-1]).low, 8.194000; atol = ATOL)
+
+        @test isapprox(value(ind).high, 10.408000; atol = ATOL)
+        @test isapprox(value(ind).low, 8.298000; atol = ATOL)
     end
 
 end

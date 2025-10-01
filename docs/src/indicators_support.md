@@ -22,6 +22,8 @@
 | `EMV` | Ease of Movement | 🕯️ | 🔢 | `CircBuff`, `SMA` | ✔️
 | `FibRetracement` | Fibonacci Retracement | ❓ | ❓ |  | Simple class with standard Fibonacci levels (0.236, 0.382, 0.5, 0.618, 0.786)
 | `ForceIndex` | Force Index | 🕯️ | 🔢 | prev input val, `EMA` | ✔️
+| `GannHiloActivator` | Gann HiLo Activator | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | ✔️
+| `GannSwingChart` | Gann Swing Chart Analyzer | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `HMA` | Hull Moving Average | 🔢 | 🔢 | `WMA` | ✔️
 | `Ichimoku` | Ichimoku Clouds | 🔢  | Ⓜ️ | `CircBuff` | 5 managed sequences (unit tests not available in [reference implementation](https://github.com/nardew/talipp/issues/87))
 | `KAMA` | Kaufman's Adaptive Moving Average | 🔢 | 🔢 | `CircBuff` | ✔️
@@ -35,7 +37,9 @@
 | `NATR` | Normalized Average True Range | 🕯️ | 🔢 | `ATR` | ✔️
 | `OBV` | On Balance Volume | 🕯️ | 🔢 | prev input val | ✔️
 | `ParabolicSAR` | Parabolic Stop And Reverse | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
+| `PeakValleyDetector` | Peak Valley Detection | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `PivotsHL` | High/Low Pivots | 🕯️ | Ⓜ️ | `-` | ✔️ (unit tests [missing](https://github.com/nardew/talipp/issues/85) in reference implementation)
+| `RetracementCalculator` | Retracement Level Calculator | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `ROC` | Rate Of Change | 🔢 | 🔢 | `CircBuff` | ✔️
 | `RSI` | Relative Strength Index | 🔢 | 🔢 | `CircBuff`, `SMMA` | ✔️
 | `SFX` | SFX | 🕯️ | Ⓜ️ | `ATR`, `StdDev`, `SMA` and `input_modifier` (to extract `close`) | ✔️
@@ -47,6 +51,7 @@
 | `Stoch` | Stochastic | 🕯️ | Ⓜ️ | `CircBuff`, `SMA` | ✔️ [🎄](https://discourse.julialang.org/t/incremental-technical-analysis-indicators/107844/5)
 | `StochRSI` | Stochastic RSI | 🔢 | Ⓜ️ | `RSI`, `SMA` | ✔️
 | `SuperTrend` | Super Trend | 🕯️ | Ⓜ️ | `CircBuff`, `ATR` | ✔️
+| `SupportResistanceLevel` | Support Resistance Levels | 🕯️ | Ⓜ️ | `CircBuff` | ✔️
 | `T3` | T3 Moving Average | 🔢 | 🔢 | `EMA` with indicator chaining and input filter | ✔️
 | `TEMA` | Triple Exponential Moving Average | 🔢 | 🔢 | `EMA` | ✔️
 | `TRIX` | TRIX | 🕯️ | Ⓜ️ | `EMA`, indicator chaining | ✔️
