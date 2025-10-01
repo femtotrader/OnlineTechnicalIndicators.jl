@@ -62,6 +62,11 @@ MIMO_INDICATORS = [
     "SFX",
     "TTM",
     "PivotsHL",
+    "GannHiloActivator",
+    "GannSwingChart",
+    "PeakValleyDetector",
+    "RetracementCalculator", 
+    "SupportResistanceLevel"
 ]
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
@@ -98,6 +103,7 @@ for ind in ALL_INDICATORS
     @eval export $ind
 end
 export SARTrend, Trend, HLType
+export GannHiloVal, GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
 
 # Export pattern recognition types and modules
 export SingleCandlePatternType,
@@ -337,6 +343,11 @@ ismultiinput(::Type{ParabolicSAR}) = true
 ismultiinput(::Type{SFX}) = true
 ismultiinput(::Type{TTM}) = true
 ismultiinput(::Type{PivotsHL}) = true
+ismultiinput(::Type{GannHiloActivator}) = true
+ismultiinput(::Type{GannSwingChart}) = true
+ismultiinput(::Type{PeakValleyDetector}) = true
+ismultiinput(::Type{RetracementCalculator}) = true
+ismultiinput(::Type{SupportResistanceLevel}) = true
 # Other
 ismultiinput(::Type{STC}) = false
 # Pattern Recognition

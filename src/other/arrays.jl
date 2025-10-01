@@ -137,6 +137,21 @@ SFX(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicat
 
 TTM(x::AbstractArray, args...; kwargs...) = apply_func(x, OnlineTechnicalIndicators.TTM, args...; kwargs...)
 
+GannHiloActivator(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.GannHiloActivator, args...; kwargs...)
+
+GannSwingChart(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.GannSwingChart, args...; kwargs...)
+
+PeakValleyDetector(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.PeakValleyDetector, args...; kwargs...)
+
+RetracementCalculator(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.RetracementCalculator, args...; kwargs...)
+
+SupportResistanceLevel(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.SupportResistanceLevel, args...; kwargs...)
+
 function PivotsHL(x::AbstractArray, args...; kwargs...)
     ind = PivotsHL{eltype(x)}(memory = length(x), args...; kwargs...)
     for val in x
