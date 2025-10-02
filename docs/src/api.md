@@ -18,6 +18,8 @@ OnlineTechnicalIndicators.DEMA
 OnlineTechnicalIndicators.DPO
 OnlineTechnicalIndicators.DonchianChannels
 OnlineTechnicalIndicators.EMA
+OnlineTechnicalIndicators.GannHiloActivator
+OnlineTechnicalIndicators.GannSwingChart
 OnlineTechnicalIndicators.EMV
 OnlineTechnicalIndicators.ForceIndex
 OnlineTechnicalIndicators.HMA
@@ -32,6 +34,7 @@ OnlineTechnicalIndicators.MeanDev
 OnlineTechnicalIndicators.NATR
 OnlineTechnicalIndicators.OBV
 OnlineTechnicalIndicators.ParabolicSAR
+OnlineTechnicalIndicators.PeakValleyDetector
 OnlineTechnicalIndicators.PivotsHL
 OnlineTechnicalIndicators.ROC
 OnlineTechnicalIndicators.RSI
@@ -39,6 +42,8 @@ OnlineTechnicalIndicators.SFX
 OnlineTechnicalIndicators.SMA
 OnlineTechnicalIndicators.SMMA
 OnlineTechnicalIndicators.SOBV
+OnlineTechnicalIndicators.SupportResistanceLevel
+OnlineTechnicalIndicators.RetracementCalculator
 OnlineTechnicalIndicators.STC
 OnlineTechnicalIndicators.StdDev
 OnlineTechnicalIndicators.Stoch
@@ -65,12 +70,17 @@ OnlineTechnicalIndicators.AroonVal
 OnlineTechnicalIndicators.BBVal
 OnlineTechnicalIndicators.ChandeKrollStopVal
 OnlineTechnicalIndicators.DonchianChannelsVal
+OnlineTechnicalIndicators.GannHiloActivatorVal
+OnlineTechnicalIndicators.GannSwingChartVal
 OnlineTechnicalIndicators.KSTVal
 OnlineTechnicalIndicators.KeltnerChannelsVal
 OnlineTechnicalIndicators.MACDVal
 OnlineTechnicalIndicators.ParabolicSARVal
+OnlineTechnicalIndicators.PeakValleyVal
 OnlineTechnicalIndicators.PivotsHLVal
+OnlineTechnicalIndicators.RetracementVal
 OnlineTechnicalIndicators.SFXVal
+OnlineTechnicalIndicators.SupportResistanceLevelVal
 OnlineTechnicalIndicators.StochVal
 OnlineTechnicalIndicators.StochRSIVal
 OnlineTechnicalIndicators.SuperTrendVal
@@ -100,4 +110,5 @@ OnlineTechnicalIndicators.Resample.ResamplerBy
 ```@docs
 OnlineTechnicalIndicators.StatLag
 OnlineTechnicalIndicators.TechnicalIndicatorIterator
+OnlineTechnicalIndicators.update_levels!
 ```
