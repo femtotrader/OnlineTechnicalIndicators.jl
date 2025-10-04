@@ -22,7 +22,7 @@ struct KeltnerChannelsVal{Tval}
 end
 
 """
-    KeltnerChannels{Tohlcv}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    KeltnerChannels{Tohlcv}(; ma_period = KeltnerChannels_MA_PERIOD, atr_period = KeltnerChannels_ATR_PERIOD, atr_mult_up = KeltnerChannels_ATR_MULT_UP, atr_mult_down = KeltnerChannels_ATR_MULT_DOWN, ma = EMA, input_modifier_return_type = Tohlcv)
 
 The `KeltnerChannels` type implements a Keltner Channels indicator.
 
@@ -31,9 +31,7 @@ The `KeltnerChannels` type implements a Keltner Channels indicator.
 """
 mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,KeltnerChannelsVal{S}}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     ma_period::Integer
     atr_period::Integer
@@ -42,10 +40,7 @@ mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
 
     sub_indicators::Series
     atr::ATR
-    cb::MovingAverageIndicator  # EMA default
-
-    input_modifier::Function
-    input_filter::Function
+    cb::MovingAverageIndicator  # EMA default
 
     function KeltnerChannels{Tohlcv}(;
         ma_period = KeltnerChannels_MA_PERIOD,
@@ -53,31 +48,24 @@ mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
         atr_mult_up = KeltnerChannels_ATR_MULT_UP,
         atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
         ma = EMA,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
         _cb = MAFactory(S)(
             ma,
-            period = ma_period,
-            input_modifier = ValueExtractor.extract_close,
-        )
-        sub_indicators = Series(atr, _cb)
+            period = ma_period)
+        sub_indicators = Series(atr)  # Only ATR receives OHLCV data, cb is fed manually
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             ma_period,
             atr_period,
             atr_mult_up,
             atr_mult_down,
             sub_indicators,
             atr,
-            _cb,
-            input_modifier,
-            input_filter,
-        )
+            _cb)
     end
 end
 
@@ -87,19 +75,22 @@ function KeltnerChannels(;
     atr_mult_up = KeltnerChannels_ATR_MULT_UP,
     atr_mult_down = KeltnerChannels_ATR_MULT_DOWN,
     ma = EMA,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     KeltnerChannels{input_modifier_return_type}(;
         ma_period=ma_period,
         atr_period=atr_period,
         atr_mult_up=atr_mult_up,
         atr_mult_down=atr_mult_down,
         ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
+end
+
+function OnlineStatsBase._fit!(ind::KeltnerChannels, data)
+    # Feed ATR with full OHLCV
+    fit!(ind.atr, data)
+    # Feed central band MA with close price only
+    fit!(ind.cb, ValueExtractor.extract_close(data))
+    nothing
 end
 
 function _calculate_new_value(ind::KeltnerChannels)
@@ -107,8 +98,7 @@ function _calculate_new_value(ind::KeltnerChannels)
         return KeltnerChannelsVal(
             value(ind.cb) - ind.atr_mult_down * value(ind.atr),
             value(ind.cb),
-            value(ind.cb) + ind.atr_mult_up * value(ind.atr),
-        )
+            value(ind.cb) + ind.atr_mult_up * value(ind.atr))
     else
         return missing
     end

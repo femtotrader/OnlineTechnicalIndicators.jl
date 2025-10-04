@@ -28,7 +28,7 @@ end
 # isnew(val::PivotsHLVal) = val.isnew
 
 """
-    PivotsHL{Tohlcv}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    PivotsHL{Tohlcv}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `PivotsHL` type implements a High/Low Pivots Indicator.
 
@@ -37,9 +37,7 @@ The `PivotsHL` type implements a High/Low Pivots Indicator.
 """
 mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Missing
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     output_values::CircBuff
 
@@ -47,20 +45,14 @@ mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
     low_period::Integer
 
     high_input_values::CircBuff
-    low_input_values::CircBuff
-
-    input_modifier::Function
-    input_filter::Function
+    low_input_values::CircBuff
     input_values::CircBuff
 
     function PivotsHL{Tohlcv}(;
         high_period = PivotsHL_HIGH_PERIOD,
         low_period = PivotsHL_LOW_PERIOD,
         memory = PivotsHL_MEMORY,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         output_values = CircBuff(PivotsHLVal, memory, rev = false)
@@ -68,16 +60,14 @@ mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
         low_input_values = CircBuff(S, low_period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)  # could also be of size max(high_period, low_period) and avoid creation of 2 other CircBuff (high_input_values, low_input_values)
         new{Tohlcv,true}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             output_values,
             high_period,
             low_period,
             high_input_values,
-            low_input_values,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            low_input_values,
+            input_values)
     end
 end
 
@@ -85,16 +75,11 @@ function PivotsHL(;
     high_period = PivotsHL_HIGH_PERIOD,
     low_period = PivotsHL_LOW_PERIOD,
     memory = PivotsHL_MEMORY,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     PivotsHL{input_modifier_return_type}(;
         high_period=high_period,
         low_period=low_period,
         memory=memory,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 
@@ -117,8 +102,7 @@ function _calculate_new_value(ind::PivotsHL)
             if !has_output_value(ind) || ind.output_values[end].type == HLType.LOW
                 fit!(
                     ind.output_values,
-                    PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false),
-                )
+                    PivotsHLVal(ind.input_values[end-1], HLType.HIGH, false))
             else
                 ind.output_values[end] =
                     PivotsHLVal(ind.input_values[end-1], HLType.HIGH, true)
@@ -127,8 +111,7 @@ function _calculate_new_value(ind::PivotsHL)
             if !has_output_value(ind) || ind.output_values[end].type == HLType.HIGH
                 fit!(
                     ind.output_values,
-                    PivotsHLVal(ind.input_values[end-1], HLType.LOW, false),
-                )
+                    PivotsHLVal(ind.input_values[end-1], HLType.LOW, false))
             else
                 ind.output_values[end] =
                     PivotsHLVal(ind.input_values[end-1], HLType.LOW, true)

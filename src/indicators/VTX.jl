@@ -17,7 +17,7 @@ struct VTXVal{Tval}
 end
 
 """
-    VTX{Tohlcv}(; period = VTX_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    VTX{Tohlcv}(; period = VTX_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `VTX` type implements a Vortex Indicator.
 
@@ -26,9 +26,7 @@ The `VTX` type implements a Vortex Indicator.
 """
 mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,VTXVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     period::Integer
 
@@ -38,18 +36,12 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     tr_values::CircBuff
 
     plus_vm::CircBuff
-    minus_vm::CircBuff
-
-    input_modifier::Function
-    input_filter::Function
+    minus_vm::CircBuff
     input_values::CircBuff
 
     function VTX{Tohlcv}(;
         period = VTX_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         tr = TrueRange{T2}()
@@ -59,30 +51,23 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         minus_vm = CircBuff(S, period, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             sub_indicators,
             tr,
             tr_values,
             plus_vm,
-            minus_vm,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            minus_vm,
+            input_values)
     end
 end
 
 function VTX(;
     period = VTX_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     VTX{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

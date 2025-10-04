@@ -38,14 +38,15 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 
                 @test fieldtype(O, :n) == Int
                 # TechnicalIndicator
-                ## Filter/Transform : each indicator should have `input_filter` (`Function`), `input_modifier` (`Function`)
-                #@test hasfield(O, :input_filter)
-                @test fieldtype(O, :input_filter) == Function
-                #@test hasfield(O, :input_modifier)
-                @test fieldtype(O, :input_modifier) == Function
+                ## Filter/Transform : removed from indicators (handled by OnlineStatsChains for StatDAG-based indicators)
                 ## Chaining : each indicator should have an `output_listeners` field (`Series`) and `input_indicator` (`Union{Missing,TechnicalIndicator}`)
-                @test fieldtype(O, :output_listeners) == Series
-                @test fieldtype(O, :input_indicator) == Union{Missing,TechnicalIndicator}
+                ## Except for StatDAG-based indicators which handle chaining internally
+                if hasfield(O, :output_listeners)
+                    @test fieldtype(O, :output_listeners) == Series
+                end
+                if hasfield(O, :input_indicator)
+                    @test fieldtype(O, :input_indicator) == Union{Missing,TechnicalIndicator}
+                end
             end
         end
     end
@@ -113,96 +114,9 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 
 
 
-    @testset "input filter/modifier" begin
-        @testset "SISO" begin
-            # SISO indicator with OHLCV input but with an input_modifier which extract close value
-            for IND in SISO_INDICATORS
-                @testset "$(IND)" begin
-                    IND = eval(Meta.parse(IND))
-                    ind = IND{OHLCV{Missing,Float64,Float64}}(
-                        input_filter = always_true,
-                        input_modifier = ValueExtractor.extract_close,
-                        input_modifier_return_type = Float64,
-                    )
-                    candle = OHLCV(2.0, 4.0, 1.0, 3.0)
-                    @test ind.input_filter(candle) == true
-                    @test ind.input_modifier(candle) == 3.0
-                    fit!(ind, V_OHLCV)
-                    @test 1 == 1
-                end
-            end
-        end
-        @testset "SIMO" begin
-            # SIMO indicator with OHLCV input but with an input_modifier which extract close value
-            for IND in SIMO_INDICATORS
-                @testset "$(IND)" begin
-                    IND = eval(Meta.parse(IND))
-                    ind = IND{OHLCV{Missing,Float64,Float64}}(
-                        input_filter = always_true,
-                        input_modifier = ValueExtractor.extract_close,
-                        input_modifier_return_type = Float64,
-                    )
-                    candle = OHLCV(2.0, 4.0, 1.0, 3.0)
-                    @test ind.input_filter(candle) == true
-                    @test ind.input_modifier(candle) == 3.0
-                    fit!(ind, V_OHLCV)
-                    @test 1 == 1
-                end
-            end
-        end
-        @testset "MISO" begin
-            # MISO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
-            for IND in MISO_INDICATORS
-                @testset "$(IND)" begin
-                    IND = eval(Meta.parse(IND))
-                    ind = IND{MACDVal}(
-                        input_filter = always_true,
-                        input_modifier = macd_to_ohlcv,
-                        input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-                    )
-                    macd_val = MACDVal(0.0, 0.0, 0.0)
-                    @test ind.input_filter(macd_val) == true
-                    @test ind.input_modifier(macd_val) ==
-                          OHLCV(0.0, 0.0, 0.0, 0.0, volume = 0.0)
-                    fit!(ind, macd_val)
-                    @test 1 == 1
-                end
-            end
-        end
-
-        @testset "MIMO" begin
-            # MIMO indicator with MACDVal input but with an input_modifier which return OHLCV from MACDVal
-            for IND in MIMO_INDICATORS
-                @testset "$(IND)" begin
-                    IND = eval(Meta.parse(IND))
-                    ind = IND{MACDVal}(
-                        input_filter = always_true,
-                        input_modifier = macd_to_ohlcv,
-                        input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-                    )
-                    macd_val = MACDVal(0.0, 0.0, 0.0)
-                    @test ind.input_filter(macd_val) == true
-                    @test ind.input_modifier(macd_val) ==
-                          OHLCV(0.0, 0.0, 0.0, 0.0, volume = 0.0)
-                    fit!(ind, macd_val)
-                    @test 1 == 1
-                end
-            end
-        end
-
-        @testset "Others" begin
-            # others indicators (ie more complex indicators which are of one category SISO, SIMO, MISO, MIMO but are using indicators of an other one category)
-            @testset "STC" begin
-                ind = STC{OHLCV}(
-                    input_filter = always_true,
-                    input_modifier = ValueExtractor.extract_close,
-                    input_modifier_return_type = Float64,
-                )
-                fit!(ind, OHLCV(0.0, 0.0, 0.0, 0.0, volume = 0.0))
-            end
-        end
-
-    end
+    # Note: Tests for input_filter/input_modifier have been removed as these fields
+    # no longer exist in indicators. The functionality has been moved to OnlineStatsChains
+    # for StatDAG-based indicators (DEMA, TEMA, T3, TRIX).
 
     @testset "input as vector" begin
         @testset "SISO" begin

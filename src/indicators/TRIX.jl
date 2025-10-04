@@ -3,7 +3,7 @@ using OnlineStatsChains
 const TRIX_PERIOD = 10
 
 """
-    TRIX{T}(; period = TRIX_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    TRIX{T}(; period = TRIX_PERIOD, ma = EMA, input_modifier_return_type = T)
 
 The `TRIX` type implements a TRIX Moving Average indicator using OnlineStatsChains v0.2.0 with filtered edges.
 
@@ -34,25 +34,19 @@ The result is expressed as a percentage rate of change (* 10000 for basis points
 mutable struct TRIX{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     output_history::CircBuff
 
     period::Int
 
-    dag::StatDAG  # Stores EMAs with filtered edges for automatic propagation
+    dag::StatDAG  # Stores MAs with filtered edges for automatic propagation
     sub_indicators::DAGWrapper  # Wraps DAG for compatibility with fit! infrastructure
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function TRIX{Tval}(;
         period = TRIX_PERIOD,
         ma = EMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -76,13 +70,12 @@ mutable struct TRIX{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         output_history = CircBuff(T2, 2, rev = false)
 
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,  # value
+            0,        # n
             output_history,
             period,
             dag,
             sub_indicators,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -91,15 +84,11 @@ end
 function TRIX(;
     period = TRIX_PERIOD,
     ma = EMA,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     TRIX{input_modifier_return_type}(;
         period=period,
         ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

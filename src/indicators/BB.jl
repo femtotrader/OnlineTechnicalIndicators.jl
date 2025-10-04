@@ -20,7 +20,7 @@ struct BBVal{Tval}
 end
 
 """
-    BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA, input_modifier_return_type = T)
 
 The `BB` type implements Bollinger Bands indicator.
 
@@ -29,42 +29,32 @@ The `BB` type implements Bollinger Bands indicator.
 """
 mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     value::Union{Missing,BBVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     period::Integer
     std_dev_mult::T2
 
     sub_indicators::Series
     central_band::MovingAverageIndicator  # default SMA
-    std_dev::StdDev
-
-    input_modifier::Function
-    input_filter::Function
+    std_dev::StdDev
 
     function BB{T1}(;
         period = BB_PERIOD,
         std_dev_mult = BB_STD_DEV_MULT,
         ma = SMA,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = T1,
-    ) where {T1}
+        input_modifier_return_type = T1) where {T1}
         T2 = input_modifier_return_type
         _central_band = MAFactory(T2)(ma, period = period)
         _std_dev = StdDev{T2}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
         new{T1,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             std_dev_mult,
             sub_indicators,
             _central_band,
-            _std_dev,
-            input_modifier,
-            input_filter,
-        )
+            _std_dev)
     end
 end
 
@@ -72,16 +62,11 @@ function BB(;
     period = BB_PERIOD,
     std_dev_mult = BB_STD_DEV_MULT,
     ma = SMA,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = Float64,
-)
+    input_modifier_return_type = Float64)
     BB{input_modifier_return_type}(;
         period=period,
         std_dev_mult=std_dev_mult,
         ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

@@ -1,7 +1,7 @@
 const DOJI_BODY_TOLERANCE = 0.1
 
 """
-    Doji{Tohlcv}(; body_tolerance = DOJI_BODY_TOLERANCE, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Doji{Tohlcv}(; body_tolerance = DOJI_BODY_TOLERANCE, input_modifier_return_type = Tohlcv)
 
 The `Doji` type implements a Doji candlestick pattern detector.
 
@@ -17,29 +17,22 @@ indicating indecision in the market.
 mutable struct Doji{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,SingleCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     body_tolerance::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function Doji{Tohlcv}(;
         body_tolerance = DOJI_BODY_TOLERANCE,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             body_tolerance,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

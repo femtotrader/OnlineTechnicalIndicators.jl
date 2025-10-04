@@ -1,52 +1,37 @@
 const CCI_PERIOD = 3
 
 """
-    CCI{Tohlcv}(; period=CCI_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    CCI{Tohlcv}(; period=CCI_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `CCI` type implements a Commodity Channel Index.
 """
 mutable struct CCI{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     period::Integer
 
-    mean_dev::MeanDev
-
-    input_modifier::Function
-    input_filter::Function
+    mean_dev::MeanDev
 
     function CCI{Tohlcv}(;
         period = CCI_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         mean_dev = MeanDev{S}(period = period)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
-            mean_dev,
-            input_modifier,
-            input_filter,
-        )
+            mean_dev)
     end
 end
 
 function CCI(;
     period = CCI_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     CCI{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

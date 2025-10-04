@@ -31,7 +31,7 @@ struct GannSwingChartVal{T}
 end
 
 """
-    GannSwingChart{T}(; min_bars=GANN_SWING_MIN_BARS, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    GannSwingChart{T}(; min_bars=GANN_SWING_MIN_BARS, input_modifier_return_type = T)
 
 The `GannSwingChart` type implements Gann Swing Chart analysis for trend detection.
 
@@ -48,9 +48,7 @@ This indicator identifies:
 """
 mutable struct GannSwingChart{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,GannSwingChartVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     min_bars::Int
     current_trend::Symbol
@@ -63,24 +61,19 @@ mutable struct GannSwingChart{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     
     # Consecutive tracking for swing detection
     consecutive_higher_highs::Int
-    consecutive_lower_lows::Int
-    
-    input_modifier::Function
-    input_filter::Function
+    consecutive_lower_lows::Int
     input_values::CircBuff
 
     function GannSwingChart{Tval}(;
         min_bars = GANN_SWING_MIN_BARS,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+        input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, min_bars + 2, rev = false)
         
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             min_bars,
             :downtrend,  # Default start with downtrend
             missing,     # last_swing_high
@@ -88,11 +81,8 @@ mutable struct GannSwingChart{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
             missing,     # last_high
             missing,     # last_low
             0,           # consecutive_higher_highs
-            0,           # consecutive_lower_lows
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            0,           # consecutive_lower_lows
+            input_values)
     end
 end
 

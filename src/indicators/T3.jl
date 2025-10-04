@@ -4,7 +4,7 @@ const T3_PERIOD = 5
 const T3_FACTOR = 0.7
 
 """
-    T3{T}(; period = T3_PERIOD, factor = T3_FACTOR, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    T3{T}(; period = T3_PERIOD, factor = T3_FACTOR, input_modifier_return_type = T)
 
 The `T3` type implements a T3 Moving Average indicator using OnlineStatsChains v0.2.0 with filtered edges.
 
@@ -28,8 +28,6 @@ Benefits over manual chaining:
 mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
 
@@ -41,15 +39,11 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     c3::T2
     c4::T2
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function T3{Tval}(;
         period = T3_PERIOD,
         factor = T3_FACTOR,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -80,7 +74,8 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         c3 = -6 * factor^2 - 3 * factor - 3 * factor^3
         c4 = 1 + 3 * factor + factor^3 + 3 * factor^2
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,  # value
+            0,        # n
             period,
             dag,
             sub_indicators,
@@ -88,8 +83,6 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
             c2,
             c3,
             c4,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -98,15 +91,11 @@ end
 function T3(;
     period = T3_PERIOD,
     factor = T3_FACTOR,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     T3{input_modifier_return_type}(;
         period=period,
         factor=factor,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

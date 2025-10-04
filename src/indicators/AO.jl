@@ -2,42 +2,32 @@ const AO_FAST_PERIOD = 3
 const AO_SLOW_PERIOD = 21
 
 """
-    AO{Tohlcv}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    AO{Tohlcv}(; fast_period = AO_FAST_PERIOD, slow_period = AO_SLOW_PERIOD, fast_ma = SMA, slow_ma = SMA, input_modifier_return_type = Tohlcv)
 
 The `AO` type implements an Awesome Oscillator indicator.
 """
 mutable struct AO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     fast_ma::MovingAverageIndicator  # default SMA
-    slow_ma::MovingAverageIndicator  # default SMA
-
-    input_modifier::Function
-    input_filter::Function
+    slow_ma::MovingAverageIndicator  # default SMA
 
     function AO{Tohlcv}(;
         fast_period = AO_FAST_PERIOD,
         slow_period = AO_SLOW_PERIOD,
         fast_ma = SMA,
         slow_ma = SMA,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         S = fieldtype(input_modifier_return_type, :close)
         _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
         _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             _fast_ma,
-            _slow_ma,
-            input_modifier,
-            input_filter,
-        )
+            _slow_ma)
     end
 end
 
@@ -46,17 +36,12 @@ function AO(;
     slow_period = AO_SLOW_PERIOD,
     fast_ma = SMA,
     slow_ma = SMA,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     AO{input_modifier_return_type}(;
         fast_period=fast_period,
         slow_period=slow_period,
         fast_ma=fast_ma,
         slow_ma=slow_ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

@@ -2,7 +2,7 @@ const SPINNING_TOP_BODY_RATIO = 0.25
 const SPINNING_TOP_MIN_SHADOW_RATIO = 0.3
 
 """
-    SpinningTop{Tohlcv}(; body_ratio = SPINNING_TOP_BODY_RATIO, min_shadow_ratio = SPINNING_TOP_MIN_SHADOW_RATIO, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    SpinningTop{Tohlcv}(; body_ratio = SPINNING_TOP_BODY_RATIO, min_shadow_ratio = SPINNING_TOP_MIN_SHADOW_RATIO, input_modifier_return_type = Tohlcv)
 
 The `SpinningTop` type implements Spinning Top candlestick pattern detector.
 
@@ -19,32 +19,25 @@ indecision with buying and selling pressure roughly equal.
 mutable struct SpinningTop{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,SingleCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     body_ratio::S
     min_shadow_ratio::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function SpinningTop{Tohlcv}(;
         body_ratio = SPINNING_TOP_BODY_RATIO,
         min_shadow_ratio = SPINNING_TOP_MIN_SHADOW_RATIO,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             body_ratio,
             min_shadow_ratio,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

@@ -28,7 +28,7 @@ struct RetracementVal{T}
 end
 
 """
-    RetracementCalculator{T}(; retracement_pct=0.38, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    RetracementCalculator{T}(; retracement_pct=0.38, input_modifier_return_type = T)
 
 The `RetracementCalculator` type calculates retracement levels for swing trading.
 
@@ -47,9 +47,7 @@ Implements REQ-310 to REQ-313: Calculate and monitor 38% retracement levels
 """
 mutable struct RetracementCalculator{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,RetracementVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     retracement_pct::Float64
     
@@ -60,34 +58,26 @@ mutable struct RetracementCalculator{Tval,IN,T2} <: TechnicalIndicatorMultiOutpu
     
     # Retracement tracking
     max_retracement::Union{Missing,T2}
-    retracement_38_hit::Bool
-    
-    input_modifier::Function
-    input_filter::Function
+    retracement_38_hit::Bool
     input_values::CircBuff
 
     function RetracementCalculator{Tval}(;
         retracement_pct = 0.38,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+        input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 3, rev = false)  # Need minimal data for swing detection
         
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             retracement_pct,
             missing,     # swing_start_price
             missing,     # swing_end_price  
             :up,         # swing_direction
             missing,     # max_retracement
-            false,       # retracement_38_hit
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            false,       # retracement_38_hit
+            input_values)
     end
 end
 

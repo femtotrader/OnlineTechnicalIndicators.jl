@@ -3,7 +3,7 @@ const HAMMER_SHADOW_RATIO = 2.0
 const HAMMER_UPPER_SHADOW_TOLERANCE = 0.1
 
 """
-    Hammer{Tohlcv}(; body_ratio = HAMMER_BODY_RATIO, shadow_ratio = HAMMER_SHADOW_RATIO, upper_shadow_tolerance = HAMMER_UPPER_SHADOW_TOLERANCE, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Hammer{Tohlcv}(; body_ratio = HAMMER_BODY_RATIO, shadow_ratio = HAMMER_SHADOW_RATIO, upper_shadow_tolerance = HAMMER_UPPER_SHADOW_TOLERANCE, input_modifier_return_type = Tohlcv)
 
 The `Hammer` type implements Hammer and Hanging Man candlestick pattern detectors.
 
@@ -21,35 +21,28 @@ A Hanging Man is the same pattern but appears at the end of an uptrend (bearish)
 mutable struct Hammer{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,SingleCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     body_ratio::S
     shadow_ratio::S
     upper_shadow_tolerance::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function Hammer{Tohlcv}(;
         body_ratio = HAMMER_BODY_RATIO,
         shadow_ratio = HAMMER_SHADOW_RATIO,
         upper_shadow_tolerance = HAMMER_UPPER_SHADOW_TOLERANCE,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             body_ratio,
             shadow_ratio,
             upper_shadow_tolerance,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

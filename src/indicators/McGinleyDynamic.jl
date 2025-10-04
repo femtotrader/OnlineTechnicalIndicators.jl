@@ -2,53 +2,38 @@ const McGinleyDynamic_PERIOD = 14
 
 
 """
-    McGinleyDynamic{T}(; period = McGinleyDynamic_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    McGinleyDynamic{T}(; period = McGinleyDynamic_PERIOD, input_modifier_return_type = T)
 
 The `McGinleyDynamic` type implements a McGinley Dynamic indicator.
 """
 mutable struct McGinleyDynamic{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     period::Int
 
-    rolling::Bool
-
-    input_modifier::Function
-    input_filter::Function
+    rolling::Bool
     input_values::CircBuff
 
     function McGinleyDynamic{Tval}(;
         period = McGinleyDynamic_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+        input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
-            false,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            false,
+            input_values)
     end
 end
 
 function McGinleyDynamic(;
     period = McGinleyDynamic_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = Float64,
-)
+    input_modifier_return_type = Float64)
     McGinleyDynamic{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

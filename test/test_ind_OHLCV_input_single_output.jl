@@ -1,9 +1,8 @@
 @testset "OHLC input - single output" begin
 
-    @testset "SMA with input_modifier" begin
+    @testset "SMA with OHLCV input" begin
         ind = SMA{OHLCV{Missing,Float64,Float64}}(
             period = P,
-            input_modifier = ValueExtractor.extract_close,
             input_modifier_return_type = Float64,
         )
         @test nobs(ind) == 0

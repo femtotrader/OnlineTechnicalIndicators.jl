@@ -26,7 +26,7 @@ struct SupportResistanceLevelVal{T}
 end
 
 """
-    SupportResistanceLevel{T}(; input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    SupportResistanceLevel{T}(; input_modifier_return_type = T)
 
 The `SupportResistanceLevel` type calculates and monitors support and resistance levels.
 
@@ -42,9 +42,7 @@ Implements REQ-040 to REQ-043: Support/Resistance level calculation and monitori
 """
 mutable struct SupportResistanceLevel{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,SupportResistanceLevelVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     # Current support/resistance levels
     current_support::Union{Missing,T2}
@@ -56,33 +54,24 @@ mutable struct SupportResistanceLevel{Tval,IN,T2} <: TechnicalIndicatorMultiOutp
     
     # State tracking
     support_active::Bool
-    resistance_active::Bool
-    
-    input_modifier::Function
-    input_filter::Function
+    resistance_active::Bool
     input_values::CircBuff
 
-    function SupportResistanceLevel{Tval}(;
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+    function SupportResistanceLevel{Tval}(; input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 3, rev = false)
         
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             missing,     # current_support
             missing,     # current_resistance
             missing,     # prev_support
             missing,     # prev_resistance
             true,        # support_active (assume active until broken)
-            true,        # resistance_active (assume active until broken)
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            true,        # resistance_active (assume active until broken)
+            input_values)
     end
 end
 

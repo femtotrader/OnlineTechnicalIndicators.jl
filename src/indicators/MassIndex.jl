@@ -4,48 +4,38 @@ const MassIndex_MA_RATIO_PERIOD = 10
 
 
 """
-    MassIndex{T}(; ma_period = MassIndex_MA_PERIOD, ma_ma_period = MassIndex_MA_MA_PERIOD, ma_ratio_period = MassIndex_MA_RATIO_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    MassIndex{T}(; ma_period = MassIndex_MA_PERIOD, ma_ma_period = MassIndex_MA_MA_PERIOD, ma_ratio_period = MassIndex_MA_RATIO_PERIOD, ma = EMA, input_modifier_return_type = T)
 
 The `MassIndex` type implements a Commodity Channel Index.
 """
 mutable struct MassIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     ma_ratio_period::Integer
 
     ma::MovingAverageIndicator  # EMA
     ma_ma::MovingAverageIndicator  # EMA
-    ma_ratio::CircBuff{S}
-
-    input_modifier::Function
-    input_filter::Function
+    ma_ratio::CircBuff{S}
 
     function MassIndex{Tohlcv}(;
         ma_period = MassIndex_MA_PERIOD,
         ma_ma_period = MassIndex_MA_MA_PERIOD,
         ma_ratio_period = MassIndex_MA_RATIO_PERIOD,
         ma = EMA,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         _ma = MAFactory(S)(ma, period = ma_period)
         _ma_ma = MAFactory(S)(ma, period = ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             ma_ratio_period,
             _ma,
             _ma_ma,
-            _ma_ratio,
-            input_modifier,
-            input_filter,
-        )
+            _ma_ratio)
     end
 end
 
@@ -54,17 +44,12 @@ function MassIndex(;
     ma_ma_period = MassIndex_MA_MA_PERIOD,
     ma_ratio_period = MassIndex_MA_RATIO_PERIOD,
     ma = EMA,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     MassIndex{input_modifier_return_type}(;
         ma_period=ma_period,
         ma_ma_period=ma_ma_period,
         ma_ratio_period=ma_ratio_period,
         ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

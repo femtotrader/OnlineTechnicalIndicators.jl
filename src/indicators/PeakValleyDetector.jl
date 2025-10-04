@@ -28,7 +28,7 @@ struct PeakValleyVal{T}
 end
 
 """
-    PeakValleyDetector{T}(; lookback=PEAK_VALLEY_LOOKBACK, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    PeakValleyDetector{T}(; lookback=PEAK_VALLEY_LOOKBACK, input_modifier_return_type = T)
 
 The `PeakValleyDetector` type identifies significant peaks and valleys in price data.
 
@@ -47,9 +47,7 @@ Implements REQ-003: Identify peaks and valleys of each swing
 """
 mutable struct PeakValleyDetector{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,PeakValleyVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     lookback::Int
     
@@ -61,36 +59,28 @@ mutable struct PeakValleyDetector{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{T
     
     # Previous state for change detection
     prev_peak::Union{Missing,T2}
-    prev_valley::Union{Missing,T2}
-    
-    input_modifier::Function
-    input_filter::Function
+    prev_valley::Union{Missing,T2}
     input_values::CircBuff
 
     function PeakValleyDetector{Tval}(;
         lookback = PEAK_VALLEY_LOOKBACK,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+        input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         buffer_size = lookback * 2 + 3  # Need enough data for lookback analysis
         input_values = CircBuff(T2, buffer_size, rev = false)
         
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             lookback,
             missing,     # current_peak
             missing,     # current_valley
             missing,     # peak_bar_index
             missing,     # valley_bar_index
             missing,     # prev_peak
-            missing,     # prev_valley
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            missing,     # prev_valley
+            input_values)
     end
 end
 

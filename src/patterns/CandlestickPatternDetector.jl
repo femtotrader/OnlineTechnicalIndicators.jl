@@ -15,7 +15,7 @@ struct AllPatternsVal{S}
 end
 
 """
-    CandlestickPatternDetector{Tohlcv}(; enable_single = true, enable_two = true, enable_three = true, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    CandlestickPatternDetector{Tohlcv}(; enable_single = true, enable_two = true, enable_three = true, input_modifier_return_type = Tohlcv)
 
 The `CandlestickPatternDetector` type implements a comprehensive candlestick pattern detector
 that aggregates all available pattern detection algorithms.
@@ -31,8 +31,6 @@ that aggregates all available pattern detection algorithms.
 mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,AllPatternsVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     enable_single::Bool
     enable_two::Bool
@@ -56,16 +54,12 @@ mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <: TechnicalIndicatorSing
     three_soldiers_crows::Union{Missing,ThreeSoldiersCrows}
     three_inside::Union{Missing,ThreeInside}
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function CandlestickPatternDetector{Tohlcv}(;
         enable_single = true,
         enable_two = true,
         enable_three = true,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -94,7 +88,8 @@ mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <: TechnicalIndicatorSing
         input_values = CircBuff(T2, max_lookback, rev = false)
 
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             enable_single,
             enable_two,
             enable_three,
@@ -110,8 +105,6 @@ mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <: TechnicalIndicatorSing
             star,
             three_soldiers_crows,
             three_inside,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

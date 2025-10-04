@@ -1,51 +1,36 @@
 const VWMA_PERIOD = 3
 
 """
-    VWMA{Tohlcv}(; period = VWMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    VWMA{Tohlcv}(; period = VWMA_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `VWMA` type implements a Volume Weighted Moving Average indicator.
 """
 mutable struct VWMA{Tohlcv,IN,S} <: MovingAverageIndicator{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
-    period::Integer
-
-    input_modifier::Function
-    input_filter::Function
+    period::Integer
     input_values::CircBuff
 
     function VWMA{Tohlcv}(;
         period = VWMA_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            period,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            missing,
+            0,
+            period,
+            input_values)
     end
 end
 
 function VWMA(;
     period = VWMA_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     VWMA{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

@@ -17,7 +17,7 @@ struct AroonVal{Tval}
 end
 
 """
-    Aroon{Tohlcv}(; period = Aroon_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Aroon{Tohlcv}(; period = Aroon_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `Aroon` type implements an Aroon indicator.
 
@@ -26,45 +26,30 @@ The `Aroon` type implements an Aroon indicator.
 """
 mutable struct Aroon{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,AroonVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
-    period::Integer
-
-    input_modifier::Function
-    input_filter::Function
+    period::Integer
     input_values::CircBuff
 
     function Aroon{Tohlcv}(;
         period = Aroon_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period + 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            period,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            missing,
+            0,
+            period,
+            input_values)
     end
 end
 
 function Aroon(;
     period = Aroon_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     Aroon{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 
@@ -78,6 +63,5 @@ function _calculate_new_value(ind::Aroon)
 
     return AroonVal(
         100 * (ind.period - days_high) / ind.period,
-        100 * (ind.period - days_low) / ind.period,
-    )
+        100 * (ind.period - days_low) / ind.period)
 end

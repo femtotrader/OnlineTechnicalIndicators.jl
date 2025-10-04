@@ -42,14 +42,10 @@
     @testset "Indicator chaining (SMA)" begin
         values = collect(1.0:10.0)
         # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
-        #ind1 = SMA{Float64}(period = 3)
-        #ind2 = SMA{Float64}(period = 3, input_filter = !ismissing)
-        #ind3 = SMA{Float64}(period = 3, input_filter = !ismissing)
-        #ind4 = SMA{Float64}(period = 3, input_filter = !ismissing)
         ind1 = SMA(period = 3)
-        ind2 = SMA(period = 3, input_filter = !ismissing)
-        ind3 = SMA(period = 3, input_filter = !ismissing)
-        ind4 = SMA(period = 3, input_filter = !ismissing)
+        ind2 = SMA(period = 3)
+        ind3 = SMA(period = 3)
+        ind4 = SMA(period = 3)
         add_input_indicator!(ind2, ind1)  # <---
         add_input_indicator!(ind3, ind2)
         add_input_indicator!(ind4, ind3)

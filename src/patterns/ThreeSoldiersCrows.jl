@@ -1,7 +1,7 @@
 const THREE_SOLDIERS_MIN_PROGRESS = 0.2
 
 """
-    ThreeSoldiersCrows{Tohlcv}(; min_progress = THREE_SOLDIERS_MIN_PROGRESS, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ThreeSoldiersCrows{Tohlcv}(; min_progress = THREE_SOLDIERS_MIN_PROGRESS, input_modifier_return_type = Tohlcv)
 
 The `ThreeSoldiersCrows` type implements Three White Soldiers and Three Black Crows candlestick pattern detectors.
 
@@ -17,29 +17,22 @@ The `ThreeSoldiersCrows` type implements Three White Soldiers and Three Black Cr
 mutable struct ThreeSoldiersCrows{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,ThreeCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     min_progress::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ThreeSoldiersCrows{Tohlcv}(;
         min_progress = THREE_SOLDIERS_MIN_PROGRESS,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 3, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             min_progress,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

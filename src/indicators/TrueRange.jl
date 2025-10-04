@@ -1,23 +1,14 @@
 """
-    TrueRange{Tohlcv}(; input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    TrueRange{Tohlcv}(; input_modifier_return_type = Tohlcv)
 
 The `TrueRange` type implements a True Range indicator.
 """
 mutable struct TrueRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
-
-    input_modifier::Function
-    input_filter::Function
+    n::Int
     input_values::CircBuff
 
-    function TrueRange{Tohlcv}(;
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+    function TrueRange{Tohlcv}(; input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         if hasfield(T2, :close)
             S = fieldtype(T2, :close)
@@ -26,22 +17,14 @@ mutable struct TrueRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         end
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            missing,
+            0,
+            input_values)
     end
 end
 
-function TrueRange(;
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+function TrueRange(; input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     TrueRange{input_modifier_return_type}(;
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

@@ -2,15 +2,13 @@ const EMA_PERIOD = 3
 
 
 """
-    EMA{T}(; period = EMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    EMA{T}(; period = EMA_PERIOD, input_modifier_return_type = T)
 
 The `EMA` type implements an Exponential Moving Average indicator.
 """
 mutable struct EMA{T1,IN,T2} <: MovingAverageIndicator{T1}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
     mult::T2
@@ -18,14 +16,10 @@ mutable struct EMA{T1,IN,T2} <: MovingAverageIndicator{T1}
 
     rolling::Bool
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function EMA{T1}(;
         period = EMA_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
@@ -33,13 +27,12 @@ mutable struct EMA{T1,IN,T2} <: MovingAverageIndicator{T1}
         mult = 2 * one(T2) / (period + one(T2))
         mult_complement = one(T2) - mult
         new{T1,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             mult,
             mult_complement,
             false,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -47,14 +40,10 @@ end
 
 function EMA(;
     period = EMA_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     EMA{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

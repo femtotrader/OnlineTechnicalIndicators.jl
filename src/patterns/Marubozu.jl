@@ -1,7 +1,7 @@
 const MARUBOZU_SHADOW_TOLERANCE = 0.05
 
 """
-    Marubozu{Tohlcv}(; shadow_tolerance = MARUBOZU_SHADOW_TOLERANCE, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Marubozu{Tohlcv}(; shadow_tolerance = MARUBOZU_SHADOW_TOLERANCE, input_modifier_return_type = Tohlcv)
 
 The `Marubozu` type implements Marubozu candlestick pattern detector.
 
@@ -17,29 +17,22 @@ directional momentum. A bullish Marubozu closes at/near the high, a bearish one 
 mutable struct Marubozu{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,SingleCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     shadow_tolerance::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function Marubozu{Tohlcv}(;
         shadow_tolerance = MARUBOZU_SHADOW_TOLERANCE,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             shadow_tolerance,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

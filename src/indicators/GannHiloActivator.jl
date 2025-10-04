@@ -13,30 +13,22 @@ struct GannHiloActivatorVal{T}
 end
 
 """
-    GannHiloActivator{T}(; period=GANN_HILO_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    GannHiloActivator{T}(; period=GANN_HILO_PERIOD, input_modifier_return_type = T)
 
 The `GannHiloActivator` type implements a Gann HiLo Activator indicator.
 """
 mutable struct GannHiloActivator{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,GannHiloActivatorVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     period::Int
     sma_high::SMA
-    sma_low::SMA
-
-    input_modifier::Function
-    input_filter::Function
+    sma_low::SMA
     input_values::CircBuff
 
     function GannHiloActivator{Tval}(;
         period = GANN_HILO_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tval,
-    ) where {Tval}
+        input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
@@ -44,14 +36,12 @@ mutable struct GannHiloActivator{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tv
         sma_low = SMA{S}(period = period)
 
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             sma_high,
-            sma_low,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            sma_low,
+            input_values)
     end
 end
 

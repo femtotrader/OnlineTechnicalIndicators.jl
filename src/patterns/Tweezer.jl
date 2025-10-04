@@ -1,7 +1,7 @@
 const TWEEZER_TOLERANCE = 0.001
 
 """
-    Tweezer{Tohlcv}(; tolerance = TWEEZER_TOLERANCE, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Tweezer{Tohlcv}(; tolerance = TWEEZER_TOLERANCE, input_modifier_return_type = Tohlcv)
 
 The `Tweezer` type implements Tweezer Top and Tweezer Bottom candlestick pattern detectors.
 
@@ -17,29 +17,22 @@ The `Tweezer` type implements Tweezer Top and Tweezer Bottom candlestick pattern
 mutable struct Tweezer{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,TwoCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     tolerance::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function Tweezer{Tohlcv}(;
         tolerance = TWEEZER_TOLERANCE,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             tolerance,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

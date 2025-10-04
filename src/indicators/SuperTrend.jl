@@ -23,7 +23,7 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_modifier_return_type = T)
 
 The `SuperTrend` type implements a Super Trend indicator.
 
@@ -32,9 +32,7 @@ The `SuperTrend` type implements a Super Trend indicator.
 """
 mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SuperTrendVal}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
+    n::Int
 
     atr_period::Integer
     mult::Integer
@@ -43,19 +41,13 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     atr::ATR
 
     fub::CircBuff  # final upper band
-    flb::CircBuff  # final lower band
-
-    input_modifier::Function
-    input_filter::Function
+    flb::CircBuff  # final lower band
     input_values::CircBuff
 
     function SuperTrend{Tohlcv}(;
         atr_period = SuperTrend_ATR_PERIOD,
         mult = SuperTrend_MULT,
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+        input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
@@ -64,32 +56,25 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         flb = CircBuff(S, 2, rev = false)
         input_values = CircBuff(T2, atr_period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             atr_period,
             mult,
             sub_indicators,
             atr,
             fub,
-            flb,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            flb,
+            input_values)
     end
 end
 
 function SuperTrend(;
     atr_period = SuperTrend_ATR_PERIOD,
     mult = SuperTrend_MULT,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     SuperTrend{input_modifier_return_type}(;
         atr_period=atr_period,
         mult=mult,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

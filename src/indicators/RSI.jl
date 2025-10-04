@@ -1,29 +1,23 @@
 const RSI_PERIOD = 3
 
 """
-    RSI{T}(; period = SMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    RSI{T}(; period = SMA_PERIOD, input_modifier_return_type = T)
 
 The `RSI` type implements a Relative Strength Index indicator.
 """
 mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
     gains::SMMA
     losses::SMMA
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function RSI{Tval}(;
         period = RSI_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -32,12 +26,11 @@ mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         gains = SMMA{T2}(period = period)
         losses = SMMA{T2}(period = period)
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             gains,
             losses,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -45,14 +38,10 @@ end
 
 function RSI(;
     period = RSI_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     RSI{input_modifier_return_type}(;
         period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

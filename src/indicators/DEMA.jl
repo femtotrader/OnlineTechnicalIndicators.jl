@@ -3,7 +3,7 @@ using OnlineStatsChains
 const DEMA_PERIOD = 20
 
 """
-    DEMA{T}(; period = DEMA_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    DEMA{T}(; period = DEMA_PERIOD, ma = EMA, input_modifier_return_type = T)
 
 The `DEMA` type implements a Double Exponential Moving Average indicator using OnlineStatsChains v0.2.0 with filtered edges.
 
@@ -33,23 +33,17 @@ The type of moving average (EMA, SMA, etc.) is specified by the `ma` parameter.
 mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
     dag::StatDAG  # Stores MAs with filtered edges for automatic propagation
     sub_indicators::DAGWrapper  # Wraps DAG for compatibility with fit! infrastructure
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function DEMA{Tval}(;
         period = DEMA_PERIOD,
         ma = EMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -69,12 +63,11 @@ mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         sub_indicators = DAGWrapper(dag, :ma1, [dag.nodes[:ma1].stat])
 
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,  # value
+            0,        # n
             period,
             dag,
             sub_indicators,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -83,15 +76,11 @@ end
 function DEMA(;
     period = DEMA_PERIOD,
     ma = EMA,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     DEMA{input_modifier_return_type}(;
         period=period,
         ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

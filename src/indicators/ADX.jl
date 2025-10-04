@@ -20,7 +20,7 @@ struct ADXVal{Tval}
 end
 
 """
-    ADX{Tohlcv}(; di_period = 14, adx_period = 14, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ADX{Tohlcv}(; di_period = 14, adx_period = 14, input_modifier_return_type = Tohlcv)
 
 The `ADX` type implements an Average Directional Index indicator.
 
@@ -30,8 +30,6 @@ The `ADX` type implements an Average Directional Index indicator.
 mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ADXVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     di_period::Integer
     adx_period::Integer
@@ -50,15 +48,11 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
 
     dx::CircBuff  # directional index
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ADX{Tohlcv}(;
         di_period = ADX_DI_PERIOD,
         adx_period = ADX_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -74,7 +68,8 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         dx = CircBuff(S, adx_period + 1, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             di_period,
             adx_period,
             sub_indicators,
@@ -86,8 +81,6 @@ mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             pdi,
             mdi,
             dx,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -96,15 +89,11 @@ end
 function ADX(;
     di_period = ADX_DI_PERIOD,
     adx_period = ADX_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     ADX{input_modifier_return_type}(;
         di_period=di_period,
         adx_period=adx_period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

@@ -1,43 +1,26 @@
 """
-    OBV{Tohlcv}(input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    OBV{Tohlcv}(input_modifier_return_type = Tohlcv)
 
 The `OBV` type implements On Balance Volume indicator.
 """
 mutable struct OBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
-
-    input_modifier::Function
-    input_filter::Function
+    n::Int
     input_values::CircBuff
 
-    function OBV{Tohlcv}(;
-        input_filter = always_true,
-        input_modifier = identity,
-        input_modifier_return_type = Tohlcv,
-    ) where {Tohlcv}
+    function OBV{Tohlcv}(; input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+            missing,
+            0,
+            input_values)
     end
 end
 
-function OBV(;
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
-)
+function OBV(; input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     OBV{input_modifier_return_type}(;
-        input_filter=input_filter,
-        input_modifier=input_modifier,
         input_modifier_return_type=input_modifier_return_type)
 end
 

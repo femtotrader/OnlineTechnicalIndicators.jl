@@ -1,7 +1,7 @@
 const THREE_INSIDE_MAX_HARAMI_RATIO = 0.5
 
 """
-    ThreeInside{Tohlcv}(; max_harami_ratio = THREE_INSIDE_MAX_HARAMI_RATIO, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ThreeInside{Tohlcv}(; max_harami_ratio = THREE_INSIDE_MAX_HARAMI_RATIO, input_modifier_return_type = Tohlcv)
 
 The `ThreeInside` type implements Three Inside Up and Three Inside Down candlestick pattern detectors.
 
@@ -17,29 +17,22 @@ The `ThreeInside` type implements Three Inside Up and Three Inside Down candlest
 mutable struct ThreeInside{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,ThreeCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     max_harami_ratio::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ThreeInside{Tohlcv}(;
         max_harami_ratio = THREE_INSIDE_MAX_HARAMI_RATIO,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 3, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             max_harami_ratio,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
