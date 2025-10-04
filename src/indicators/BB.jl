@@ -29,20 +29,21 @@ The `BB` type implements Bollinger Bands indicator.
 """
 mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     value::Union{Missing,BBVal}
-    n::Int
+    n::Int
 
     period::Integer
     std_dev_mult::T2
 
     sub_indicators::Series
     central_band::MovingAverageIndicator  # default SMA
-    std_dev::StdDev
+    std_dev::StdDev
 
     function BB{T1}(;
         period = BB_PERIOD,
         std_dev_mult = BB_STD_DEV_MULT,
         ma = SMA,
-        input_modifier_return_type = T1) where {T1}
+        input_modifier_return_type = T1,
+    ) where {T1}
         T2 = input_modifier_return_type
         _central_band = MAFactory(T2)(ma, period = period)
         _std_dev = StdDev{T2}(period = period)
@@ -54,7 +55,8 @@ mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
             std_dev_mult,
             sub_indicators,
             _central_band,
-            _std_dev)
+            _std_dev,
+        )
     end
 end
 
@@ -62,12 +64,14 @@ function BB(;
     period = BB_PERIOD,
     std_dev_mult = BB_STD_DEV_MULT,
     ma = SMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     BB{input_modifier_return_type}(;
-        period=period,
-        std_dev_mult=std_dev_mult,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        std_dev_mult = std_dev_mult,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::BB)

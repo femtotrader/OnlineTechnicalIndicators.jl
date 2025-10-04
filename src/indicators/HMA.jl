@@ -7,7 +7,7 @@ The `HMA` type implements a Hull Moving Average indicator.
 """
 mutable struct HMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
-    n::Int
+    n::Int
 
     period::Integer
 
@@ -15,33 +15,26 @@ mutable struct HMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     wma::WMA
     wma2::WMA
 
-    hma::WMA
+    hma::WMA
 
     function HMA{Tval}(;
         period = HMA_PERIOD,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         wma = WMA{T2}(period = period)
         wma2 = WMA{T2}(period = floor(Int, period / 2))
         sub_indicators = Series(wma, wma2)
         hma = WMA{T2}(period = floor(Int, sqrt(period)))
-        new{Tval,false,T2}(
-            missing,
-            0,
-            period,
-            sub_indicators,
-            wma,
-            wma2,
-            hma)
+        new{Tval,false,T2}(missing, 0, period, sub_indicators, wma, wma2, hma)
     end
 end
 
-function HMA(;
-    period = DPO_PERIOD,
-    input_modifier_return_type = Float64)
+function HMA(; period = DPO_PERIOD, input_modifier_return_type = Float64)
     HMA{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::HMA)

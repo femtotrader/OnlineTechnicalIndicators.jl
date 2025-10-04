@@ -2,7 +2,8 @@ using TSFrames
 
 using OnlineTechnicalIndicators
 using OnlineTechnicalIndicators: TechnicalIndicator, expected_return_type
-using OnlineTechnicalIndicators.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
+using OnlineTechnicalIndicators.SampleData:
+    OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 
 using TSFrames
 using TSFrames: Not, select!
@@ -91,17 +92,35 @@ SMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
 EMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.EMA, input_field, :EMA, args...; kwargs...)
 
-SMMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.SMMA, input_field, :SMMA, args...; kwargs...)
+SMMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.SMMA,
+    input_field,
+    :SMMA,
+    args...;
+    kwargs...,
+)
 
 RSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.RSI, input_field, :RSI, args...; kwargs...)
 
-MeanDev(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.MeanDev, input_field, :MeanDev, args...; kwargs...)
+MeanDev(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.MeanDev,
+    input_field,
+    :MeanDev,
+    args...;
+    kwargs...,
+)
 
-StdDev(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.StdDev, input_field, :StdDev, args...; kwargs...)
+StdDev(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.StdDev,
+    input_field,
+    :StdDev,
+    args...;
+    kwargs...,
+)
 
 ROC(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.ROC, input_field, :ROC, args...; kwargs...)
@@ -109,8 +128,14 @@ ROC(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
 WMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.WMA, input_field, :WMA, args...; kwargs...)
 
-KAMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.KAMA, input_field, :KAMA, args...; kwargs...)
+KAMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.KAMA,
+    input_field,
+    :KAMA,
+    args...;
+    kwargs...,
+)
 
 HMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.HMA, input_field, :HMA, args...; kwargs...)
@@ -118,17 +143,41 @@ HMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
 DPO(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.DPO, input_field, :DPO, args...; kwargs...)
 
-CoppockCurve(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.CoppockCurve, input_field, :CoppockCurve, args...; kwargs...)
+CoppockCurve(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.CoppockCurve,
+    input_field,
+    :CoppockCurve,
+    args...;
+    kwargs...,
+)
 
-DEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.DEMA, input_field, :DEMA, args...; kwargs...)
+DEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.DEMA,
+    input_field,
+    :DEMA,
+    args...;
+    kwargs...,
+)
 
-TEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.TEMA, input_field, :TEMA, args...; kwargs...)
+TEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.TEMA,
+    input_field,
+    :TEMA,
+    args...;
+    kwargs...,
+)
 
-ALMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.ALMA, input_field, :ALMA, args...; kwargs...)
+ALMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.ALMA,
+    input_field,
+    :ALMA,
+    args...;
+    kwargs...,
+)
 
 McGinleyDynamic(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(
@@ -140,14 +189,26 @@ McGinleyDynamic(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
         kwargs...,
     )
 
-ZLEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.ZLEMA, input_field, :ZLEMA, args...; kwargs...)
+ZLEMA(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.ZLEMA,
+    input_field,
+    :ZLEMA,
+    args...;
+    kwargs...,
+)
 
 T3(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.T3, input_field, :T3, args...; kwargs...)
 
-TRIX(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SISO(x, OnlineTechnicalIndicators.TRIX, input_field, :TRIX, args...; kwargs...)
+TRIX(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SISO(
+    x,
+    OnlineTechnicalIndicators.TRIX,
+    input_field,
+    :TRIX,
+    args...;
+    kwargs...,
+)
 
 TSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SISO(x, OnlineTechnicalIndicators.TSI, input_field, :TSI, args...; kwargs...)
@@ -155,10 +216,22 @@ TSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
 # SIMO
 BB(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, OnlineTechnicalIndicators.BB, input_field, :BB, args...; kwargs...)
-MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SIMO(x, OnlineTechnicalIndicators.MACD, input_field, :MACD, args...; kwargs...)
-StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
-    apply_func_SIMO(x, OnlineTechnicalIndicators.StochRSI, input_field, :StochRSI, args...; kwargs...)
+MACD(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(
+    x,
+    OnlineTechnicalIndicators.MACD,
+    input_field,
+    :MACD,
+    args...;
+    kwargs...,
+)
+StochRSI(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) = apply_func_SIMO(
+    x,
+    OnlineTechnicalIndicators.StochRSI,
+    input_field,
+    :StochRSI,
+    args...;
+    kwargs...,
+)
 KST(x::TSFrame, input_field = INPUT_FIELD, args...; kwargs...) =
     apply_func_SIMO(x, OnlineTechnicalIndicators.KST, input_field, :KST, args...; kwargs...)
 

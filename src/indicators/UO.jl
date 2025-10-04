@@ -9,14 +9,14 @@ The `UO` type implements an Ultimate Oscillator.
 """
 mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     fast_period::Integer
     mid_period::Integer
     slow_period::Integer
 
     buy_press::CircBuff
-    true_range::CircBuff
+    true_range::CircBuff
 
     input_values::CircBuff
 
@@ -24,7 +24,8 @@ mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         fast_period = UO_FAST_PERIOD,
         mid_period = UO_MID_PERIOD,
         slow_period = UO_SLOW_PERIOD,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
@@ -38,8 +39,9 @@ mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
             mid_period,
             slow_period,
             buy_press,
-            true_range,
-            input_values)
+            true_range,
+            input_values,
+        )
     end
 end
 
@@ -47,12 +49,14 @@ function UO(;
     fast_period = UO_FAST_PERIOD,
     mid_period = UO_MID_PERIOD,
     slow_period = UO_SLOW_PERIOD,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     UO{input_modifier_return_type}(;
-        fast_period=fast_period,
-        mid_period=mid_period,
-        slow_period=slow_period,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        mid_period = mid_period,
+        slow_period = slow_period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::UO)
@@ -66,7 +70,8 @@ function _calculate_new_value(ind::UO)
     fit!(ind.buy_press, candle.close - min(candle.low, candle_prev.close))
     fit!(
         ind.true_range,
-        max(candle.high, candle_prev.close) - min(candle.low, candle_prev.close))
+        max(candle.high, candle_prev.close) - min(candle.low, candle_prev.close),
+    )
 
     # if length(ind.buy_press.value) < ind.slow_period
     if ind.n <= ind.slow_period

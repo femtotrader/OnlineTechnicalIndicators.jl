@@ -81,15 +81,12 @@ mutable struct TRIX{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
-function TRIX(;
-    period = TRIX_PERIOD,
-    ma = EMA,
-    input_modifier_return_type = Float64,
-)
+function TRIX(; period = TRIX_PERIOD, ma = EMA, input_modifier_return_type = Float64)
     TRIX{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::TRIX)

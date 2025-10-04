@@ -5,20 +5,19 @@ The `AccuDist` type implements an Accumulation and Distribution indicator.
 """
 mutable struct AccuDist{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     function AccuDist{Tohlcv}(; input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        new{Tohlcv,true,S}(
-            missing,
-            0)
+        new{Tohlcv,true,S}(missing, 0)
     end
 end
 
 function AccuDist(; input_modifier_return_type = OHLCV{Missing,Float64})
     AccuDist{input_modifier_return_type}(;
-        input_modifier_return_type=input_modifier_return_type)
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value_only_from_incoming_data(ind::AccuDist, candle)

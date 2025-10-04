@@ -61,7 +61,8 @@ mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
         k_smoothing_period = StochRSI_K_SMOOTHING_PERIOD,
         d_smoothing_period = StochRSI_D_SMOOTHING_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         rsi = RSI{T2}(period = rsi_period)
         sub_indicators = Series(rsi)
@@ -79,7 +80,8 @@ mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
             rsi,
             recent_rsi,
             smoothed_k,
-            values_d)
+            values_d,
+        )
     end
 end
 
@@ -89,14 +91,16 @@ function StochRSI(;
     k_smoothing_period = StochRSI_K_SMOOTHING_PERIOD,
     d_smoothing_period = StochRSI_D_SMOOTHING_PERIOD,
     ma = SMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     StochRSI{input_modifier_return_type}(;
-        rsi_period=rsi_period,
-        stoch_period=stoch_period,
-        k_smoothing_period=k_smoothing_period,
-        d_smoothing_period=d_smoothing_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        rsi_period = rsi_period,
+        stoch_period = stoch_period,
+        k_smoothing_period = k_smoothing_period,
+        d_smoothing_period = d_smoothing_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 expected_return_type(ind::StochRSI) = StochRSIVal{typeof(ind).parameters[end]}

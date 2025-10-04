@@ -4,7 +4,8 @@
       "Bash(julia:*)",
       "Read(//c/Users/scell/.julia/dev/OnlineStatsChains/**)",
       "Bash(cat:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(Select-String -Pattern \"(Test Failed|Error During Test|ERROR:|TSI|KeltnerChannels|SFX|TTM|SMA with OHLCV)\" -Context 3,3)"
     ],
     "deny": [],
     "ask": []

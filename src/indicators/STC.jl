@@ -40,7 +40,8 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         stoch_period = STC_STOCH_PERIOD,
         stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         @assert fast_macd_period < slow_macd_period "fast_macd_period < slow_macd_period is not respected"
         T2 = input_modifier_return_type
 
@@ -48,7 +49,8 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         macd = MACD{T2}(
             fast_period = fast_macd_period,
             slow_period = slow_macd_period,
-            signal_period = slow_macd_period)
+            signal_period = slow_macd_period,
+        )
         sub_indicators = Series(macd)
 
         # Create two Stochastics (manually chained)
@@ -57,20 +59,17 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-            input_modifier_return_type = OHLCV{Missing,Tval,Tval})
+            input_modifier_return_type = OHLCV{Missing,Tval,Tval},
+        )
 
         stoch_d = Stoch{OHLCV{Missing,Tval,Tval}}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
-            input_modifier_return_type = OHLCV{Missing,Tval,Tval})
+            input_modifier_return_type = OHLCV{Missing,Tval,Tval},
+        )
 
-        new{Tval,false,T2}(
-            missing,
-            0,
-            sub_indicators,
-            stoch_macd,
-            stoch_d)
+        new{Tval,false,T2}(missing, 0, sub_indicators, stoch_macd, stoch_d)
     end
 end
 
@@ -80,14 +79,16 @@ function STC(;
     stoch_period = STC_STOCH_PERIOD,
     stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD,
     ma = SMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     STC{input_modifier_return_type}(;
-        fast_macd_period=fast_macd_period,
-        slow_macd_period=slow_macd_period,
-        stoch_period=stoch_period,
-        stoch_smoothing_period=stoch_smoothing_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_macd_period = fast_macd_period,
+        slow_macd_period = slow_macd_period,
+        stoch_period = stoch_period,
+        stoch_smoothing_period = stoch_smoothing_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::STC)
@@ -95,16 +96,26 @@ function _calculate_new_value(ind::STC)
     macd_val = value(ind.sub_indicators.stats[1])
     if !ismissing(macd_val)
         # Convert MACD to OHLCV and feed to stoch_macd
-        ohlcv_macd = OHLCV(macd_val.macd, macd_val.macd, macd_val.macd, macd_val.macd,
-                           volume = zero(typeof(macd_val.macd)))
+        ohlcv_macd = OHLCV(
+            macd_val.macd,
+            macd_val.macd,
+            macd_val.macd,
+            macd_val.macd,
+            volume = zero(typeof(macd_val.macd)),
+        )
         fit!(ind.stoch_macd, ohlcv_macd)
 
         # Get stoch_macd result and feed to second Stochastic
         stoch_macd_val = value(ind.stoch_macd)
         if !ismissing(stoch_macd_val) && !ismissing(stoch_macd_val.d)
             # Convert Stoch.d to OHLCV and feed to stoch_d
-            ohlcv_d = OHLCV(stoch_macd_val.d, stoch_macd_val.d, stoch_macd_val.d, stoch_macd_val.d,
-                           volume = zero(typeof(stoch_macd_val.d)))
+            ohlcv_d = OHLCV(
+                stoch_macd_val.d,
+                stoch_macd_val.d,
+                stoch_macd_val.d,
+                stoch_macd_val.d,
+                volume = zero(typeof(stoch_macd_val.d)),
+            )
             fit!(ind.stoch_d, ohlcv_d)
 
             # Get final result

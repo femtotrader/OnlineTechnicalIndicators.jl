@@ -26,7 +26,7 @@ The `VTX` type implements a Vortex Indicator.
 """
 mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,VTXVal}
-    n::Int
+    n::Int
 
     period::Integer
 
@@ -36,12 +36,13 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     tr_values::CircBuff
 
     plus_vm::CircBuff
-    minus_vm::CircBuff
+    minus_vm::CircBuff
     input_values::CircBuff
 
     function VTX{Tohlcv}(;
         period = VTX_PERIOD,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         tr = TrueRange{T2}()
@@ -58,17 +59,20 @@ mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             tr,
             tr_values,
             plus_vm,
-            minus_vm,
-            input_values)
+            minus_vm,
+            input_values,
+        )
     end
 end
 
 function VTX(;
     period = VTX_PERIOD,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     VTX{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::VTX)

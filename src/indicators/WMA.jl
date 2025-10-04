@@ -7,41 +7,34 @@ The `WMA` type implements a Weighted Moving Average indicator.
 """
 mutable struct WMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
-    n::Int
+    n::Int
 
     period::Integer
 
     total::T2
     numerator::T2
-    denominator::T2
+    denominator::T2
     input_values::CircBuff
 
     function WMA{Tval}(;
         period = WMA_PERIOD,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
         total = zero(T2)
         numerator = zero(T2)
         denominator = period * (period + one(T2)) / (2 * one(T2))
 
-        new{Tval,false,T2}(
-            missing,
-            0,
-            period,
-            total,
-            numerator,
-            denominator,
-            input_values)
+        new{Tval,false,T2}(missing, 0, period, total, numerator, denominator, input_values)
     end
 end
 
-function WMA(;
-    period = WMA_PERIOD,
-    input_modifier_return_type = Float64)
+function WMA(; period = WMA_PERIOD, input_modifier_return_type = Float64)
     WMA{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::WMA)

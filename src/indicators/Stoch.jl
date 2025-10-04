@@ -31,30 +31,25 @@ The `Stoch` type implements the Stochastic indicator.
 """
 mutable struct Stoch{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,StochVal}
-    n::Int
+    n::Int
 
     period::Integer
     smoothing_period::Integer
 
-    values_d::SMA
+    values_d::SMA
     input_values::CircBuff
 
     function Stoch{Tohlcv}(;
         period = STOCH_PERIOD,
         smoothing_period = STOCH_SMOOTHING_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         values_d = MAFactory(S)(ma, period = smoothing_period)
         input_values = CircBuff(T2, period, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            period,
-            smoothing_period,
-            values_d,
-            input_values)
+        new{Tohlcv,true,S}(missing, 0, period, smoothing_period, values_d, input_values)
     end
 end
 
@@ -62,12 +57,14 @@ function Stoch(;
     period = STOCH_PERIOD,
     smoothing_period = STOCH_SMOOTHING_PERIOD,
     ma = SMA,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     Stoch{input_modifier_return_type}(;
-        period=period,
-        smoothing_period=smoothing_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        smoothing_period = smoothing_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::Stoch{T,IN,S}) where {T,IN,S}

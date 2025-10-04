@@ -25,23 +25,15 @@ mutable struct SMMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         value = missing
         rolling = false
         input_values = CircBuff(T2, period, rev = false)
-        new{Tval,false,T2}(
-            missing,
-            0,
-            period,
-            rolling,
-            input_values,
-        )
+        new{Tval,false,T2}(missing, 0, period, rolling, input_values)
     end
 end
 
-function SMMA(;
-    period = SMMA_PERIOD,
-    input_modifier_return_type = Float64,
-)
+function SMMA(; period = SMMA_PERIOD, input_modifier_return_type = Float64)
     SMMA{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::SMMA)

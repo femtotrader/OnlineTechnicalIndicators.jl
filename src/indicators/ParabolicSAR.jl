@@ -38,18 +38,19 @@ The `ParabolicSAR` type implements a Super Trend indicator.
 """
 mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ParabolicSARVal}
-    n::Int
+    n::Int
 
     init_accel_factor::S
     accel_factor_inc::S
-    max_accel_factor::S
+    max_accel_factor::S
     input_values::CircBuff
 
     function ParabolicSAR{Tohlcv}(;
         init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
         accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
         max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, SAR_INIT_LEN, rev = false)
@@ -58,8 +59,9 @@ mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv
             0,
             init_accel_factor,
             accel_factor_inc,
-            max_accel_factor,
-            input_values)
+            max_accel_factor,
+            input_values,
+        )
     end
 end
 
@@ -67,12 +69,14 @@ function ParabolicSAR(;
     init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
     accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
     max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     ParabolicSAR{input_modifier_return_type}(;
-        init_accel_factor=init_accel_factor,
-        accel_factor_inc=accel_factor_inc,
-        max_accel_factor=max_accel_factor,
-        input_modifier_return_type=input_modifier_return_type)
+        init_accel_factor = init_accel_factor,
+        accel_factor_inc = accel_factor_inc,
+        max_accel_factor = max_accel_factor,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ParabolicSAR)

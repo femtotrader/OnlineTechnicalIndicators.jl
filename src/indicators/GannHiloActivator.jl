@@ -19,29 +19,24 @@ The `GannHiloActivator` type implements a Gann HiLo Activator indicator.
 """
 mutable struct GannHiloActivator{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,GannHiloActivatorVal}
-    n::Int
+    n::Int
 
     period::Int
     sma_high::SMA
-    sma_low::SMA
+    sma_low::SMA
     input_values::CircBuff
 
     function GannHiloActivator{Tval}(;
         period = GANN_HILO_PERIOD,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
         sma_high = SMA{S}(period = period)
         sma_low = SMA{S}(period = period)
 
-        new{Tval,false,S}(
-            missing,
-            0,
-            period,
-            sma_high,
-            sma_low,
-            input_values)
+        new{Tval,false,S}(missing, 0, period, sma_high, sma_low, input_values)
     end
 end
 

@@ -8,20 +8,21 @@ The `KVO` type implements a Klinger Volume Oscillator.
 """
 mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     fast_ma::MovingAverageIndicator  # EMA by default
     slow_ma::MovingAverageIndicator  # EMA by default
 
     trend::CircBuff
-    cumulative_measurement::CircBuff
+    cumulative_measurement::CircBuff
     input_values::CircBuff
 
     function KVO{Tohlcv}(;
         fast_period = KVO_FAST_PERIOD,
         slow_period = KVO_SLOW_PERIOD,
         ma = EMA,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         _fast_ma = MAFactory(S)(ma, period = fast_period)
@@ -35,8 +36,9 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
             _fast_ma,
             _slow_ma,
             trend,
-            cumulative_measurement,
-            input_values)
+            cumulative_measurement,
+            input_values,
+        )
     end
 end
 
@@ -44,12 +46,14 @@ function KVO(;
     fast_period = KVO_FAST_PERIOD,
     slow_period = KVO_SLOW_PERIOD,
     ma = EMA,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     KVO{input_modifier_return_type}(;
-        fast_period=fast_period,
-        slow_period=slow_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        slow_period = slow_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::KVO{T,IN,S}) where {T,IN,S}

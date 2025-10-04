@@ -28,7 +28,7 @@ The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 """
 mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal}
-    n::Int
+    n::Int
 
     atr_period::Integer
     atr_mult::S
@@ -38,14 +38,15 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
     atr::ATR
 
     high_stop_list::CircBuff
-    low_stop_list::CircBuff
+    low_stop_list::CircBuff
     input_values::CircBuff
 
     function ChandeKrollStop{Tohlcv}(;
         atr_period = ChandeKrollStop_ATR_PERIOD,
         atr_mult = ChandeKrollStop_ATR_MULT,
         period = ChandeKrollStop_PERIOD,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, atr_period, rev = false)
@@ -62,8 +63,9 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
             sub_indicators,
             atr,
             high_stop_list,
-            low_stop_list,
-            input_values)
+            low_stop_list,
+            input_values,
+        )
     end
 end
 
@@ -71,12 +73,14 @@ function ChandeKrollStop(;
     atr_period = ChandeKrollStop_ATR_PERIOD,
     atr_mult = ChandeKrollStop_ATR_MULT,
     period = ChandeKrollStop_PERIOD,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     ChandeKrollStop{input_modifier_return_type}(;
-        atr_period=atr_period,
-        atr_mult=atr_mult,
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        atr_period = atr_period,
+        atr_mult = atr_mult,
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ChandeKrollStop)
@@ -86,10 +90,12 @@ function _calculate_new_value(ind::ChandeKrollStop)
 
     fit!(
         ind.high_stop_list,
-        max([cdl.high for cdl in ind.input_values.value]...) - value(ind.atr) * ind.atr_mult)
+        max([cdl.high for cdl in ind.input_values.value]...) - value(ind.atr) * ind.atr_mult,
+    )
     fit!(
         ind.low_stop_list,
-        min([cdl.low for cdl in ind.input_values.value]...) + value(ind.atr) * ind.atr_mult)
+        min([cdl.low for cdl in ind.input_values.value]...) + value(ind.atr) * ind.atr_mult,
+    )
 
     if ind.n < ind.period
         return missing
@@ -97,5 +103,6 @@ function _calculate_new_value(ind::ChandeKrollStop)
 
     return ChandeKrollStopVal(
         max(ind.high_stop_list.value...),
-        min(ind.low_stop_list.value...))
+        min(ind.low_stop_list.value...),
+    )
 end

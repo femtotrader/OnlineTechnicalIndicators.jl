@@ -7,17 +7,18 @@ The `NATR` type implements a Normalized Average True Range indicator.
 """
 mutable struct NATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     period::Number
 
-    atr::ATR
+    atr::ATR
     input_values::CircBuff
 
     function NATR{Tohlcv}(;
         period = ATR_PERIOD,
         ma = SMMA,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         if hasfield(T2, :close)
             S = fieldtype(T2, :close)
@@ -26,23 +27,20 @@ mutable struct NATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         end
         atr = ATR{input_modifier_return_type}(period = period, ma = ma)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            period,
-            atr,
-            input_values)
+        new{Tohlcv,true,S}(missing, 0, period, atr, input_values)
     end
 end
 
 function NATR(;
     period = ATR_PERIOD,
     ma = SMMA,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     NATR{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::NATR)

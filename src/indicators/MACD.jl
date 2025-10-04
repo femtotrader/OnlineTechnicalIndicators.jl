@@ -36,7 +36,7 @@ The `MACD` type implements Moving Average Convergence Divergence indicator.
 """
 mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,MACDVal}
-    n::Int
+    n::Int
 
     sub_indicators::Series
     fast_ma::MovingAverageIndicator  # EMA
@@ -49,19 +49,14 @@ mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
         slow_period = MACD_SLOW_PERIOD,
         signal_period = MACD_SIGNAL_PERIOD,
         ma = EMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         fast_ma = MAFactory(T2)(ma, period = fast_period)
         slow_ma = MAFactory(T2)(ma, period = slow_period)
         sub_indicators = Series(fast_ma, slow_ma)
         signal_line = MAFactory(T2)(ma, period = signal_period)
-        new{Tval,false,T2}(
-            missing,
-            0,
-            sub_indicators,
-            fast_ma,
-            slow_ma,
-            signal_line)
+        new{Tval,false,T2}(missing, 0, sub_indicators, fast_ma, slow_ma, signal_line)
     end
 end
 
@@ -70,13 +65,15 @@ function MACD(;
     slow_period = MACD_SLOW_PERIOD,
     signal_period = MACD_SIGNAL_PERIOD,
     ma = EMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     MACD{input_modifier_return_type}(;
-        fast_period=fast_period,
-        slow_period=slow_period,
-        signal_period=signal_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        slow_period = slow_period,
+        signal_period = signal_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::MACD)

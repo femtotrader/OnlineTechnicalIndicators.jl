@@ -28,7 +28,8 @@ that aggregates all available pattern detection algorithms.
 # Output
 - [`AllPatternsVal`](@ref): A value containing all detected patterns
 """
-mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
+mutable struct CandlestickPatternDetector{Tohlcv,IN,S} <:
+               TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,AllPatternsVal}
     n::Int
 
@@ -209,6 +210,7 @@ function has_patterns(val::AllPatternsVal)
 end
 
 function count_patterns(val::AllPatternsVal)
-    return length(val.single_patterns) + length(val.two_patterns) +
+    return length(val.single_patterns) +
+           length(val.two_patterns) +
            length(val.three_patterns)
 end

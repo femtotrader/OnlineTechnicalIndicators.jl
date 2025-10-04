@@ -16,12 +16,24 @@ struct SupportResistanceLevelVal{T}
     resistance_active::Bool
     support_broken::Bool
     resistance_broken::Bool
-    
+
     # Inner constructor that allows specifying type explicitly
-    function SupportResistanceLevelVal{T}(support_level::Union{Missing,T}, resistance_level::Union{Missing,T},
-                                          support_active::Bool, resistance_active::Bool, 
-                                          support_broken::Bool, resistance_broken::Bool) where T
-        new{T}(support_level, resistance_level, support_active, resistance_active, support_broken, resistance_broken)
+    function SupportResistanceLevelVal{T}(
+        support_level::Union{Missing,T},
+        resistance_level::Union{Missing,T},
+        support_active::Bool,
+        resistance_active::Bool,
+        support_broken::Bool,
+        resistance_broken::Bool,
+    ) where {T}
+        new{T}(
+            support_level,
+            resistance_level,
+            support_active,
+            resistance_active,
+            support_broken,
+            resistance_broken,
+        )
     end
 end
 
@@ -42,26 +54,26 @@ Implements REQ-040 to REQ-043: Support/Resistance level calculation and monitori
 """
 mutable struct SupportResistanceLevel{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,SupportResistanceLevelVal}
-    n::Int
+    n::Int
 
     # Current support/resistance levels
     current_support::Union{Missing,T2}
     current_resistance::Union{Missing,T2}
-    
+
     # Previous levels for break detection
     prev_support::Union{Missing,T2}
     prev_resistance::Union{Missing,T2}
-    
+
     # State tracking
     support_active::Bool
-    resistance_active::Bool
+    resistance_active::Bool
     input_values::CircBuff
 
     function SupportResistanceLevel{Tval}(; input_modifier_return_type = Tval) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 3, rev = false)
-        
+
         new{Tval,false,S}(
             missing,
             0,
@@ -71,7 +83,8 @@ mutable struct SupportResistanceLevel{Tval,IN,T2} <: TechnicalIndicatorMultiOutp
             missing,     # prev_resistance
             true,        # support_active (assume active until broken)
             true,        # resistance_active (assume active until broken)
-            input_values)
+            input_values,
+        )
     end
 end
 
@@ -79,17 +92,17 @@ function _calculate_new_value(ind::SupportResistanceLevel{Tval,IN,S}) where {Tva
     if length(ind.input_values) < 1
         return missing
     end
-    
+
     bars = value(ind.input_values)
     current_bar = bars[end]
-    
+
     support_broken = false
     resistance_broken = false
-    
+
     # Store previous levels for break detection
     ind.prev_support = ind.current_support
     ind.prev_resistance = ind.current_resistance
-    
+
     # REQ-041: Check if support is broken (prices penetrate under valley point)
     if !ismissing(ind.current_support) && ind.support_active
         if current_bar.low < ind.current_support
@@ -97,7 +110,7 @@ function _calculate_new_value(ind::SupportResistanceLevel{Tval,IN,S}) where {Tva
             ind.support_active = false
         end
     end
-    
+
     # REQ-043: Check if resistance is broken (prices exceed peak point)  
     if !ismissing(ind.current_resistance) && ind.resistance_active
         if current_bar.high > ind.current_resistance
@@ -105,20 +118,21 @@ function _calculate_new_value(ind::SupportResistanceLevel{Tval,IN,S}) where {Tva
             ind.resistance_active = false
         end
     end
-    
+
     # Update support and resistance levels from input data
     # This would typically be connected to a PeakValleyDetector or similar
     # For now, we'll use a simple approach based on recent highs/lows
     if length(bars) >= 1
         # Update resistance (peak detection) - only if not broken or new high
-        if current_bar.high > (ismissing(ind.current_resistance) ? 0.0 : ind.current_resistance)
+        if current_bar.high >
+           (ismissing(ind.current_resistance) ? 0.0 : ind.current_resistance)
             ind.current_resistance = current_bar.high
             # Only reactivate if it wasn't just broken
             if !resistance_broken
                 ind.resistance_active = true
             end
         end
-        
+
         # Update support (valley detection) - only if not broken or new low  
         if current_bar.low < (ismissing(ind.current_support) ? Inf : ind.current_support)
             ind.current_support = current_bar.low
@@ -128,7 +142,7 @@ function _calculate_new_value(ind::SupportResistanceLevel{Tval,IN,S}) where {Tva
             end
         end
     end
-    
+
     # Extract price type from the OHLCV input
     PriceType = typeof(current_bar.high)
     return SupportResistanceLevelVal{PriceType}(
@@ -137,7 +151,7 @@ function _calculate_new_value(ind::SupportResistanceLevel{Tval,IN,S}) where {Tva
         ind.support_active,
         ind.resistance_active,
         support_broken,
-        resistance_broken
+        resistance_broken,
     )
 end
 
@@ -152,9 +166,9 @@ function update_levels!(sr::SupportResistanceLevel, peak_valley_val)
         sr.current_support = peak_valley_val.valley
         sr.support_active = true
     end
-    
+
     if !ismissing(peak_valley_val.peak) && peak_valley_val.is_new_peak
-        sr.current_resistance = peak_valley_val.peak  
+        sr.current_resistance = peak_valley_val.peak
         sr.resistance_active = true
     end
 end

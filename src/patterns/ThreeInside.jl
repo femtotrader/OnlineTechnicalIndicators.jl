@@ -29,12 +29,7 @@ mutable struct ThreeInside{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 3, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            max_harami_ratio,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, max_harami_ratio, input_values)
     end
 end
 

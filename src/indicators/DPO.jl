@@ -7,7 +7,7 @@ The `DPO` type implements a Detrended Price Oscillator indicator.
 """
 mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
-    n::Int
+    n::Int
 
     period::Int
     semi_period::Int
@@ -19,7 +19,8 @@ mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     function DPO{Tval}(;
         period = DPO_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
         _ma = MAFactory(T2)(ma, period = period)
@@ -31,19 +32,18 @@ mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
             period,
             semi_period,
             sub_indicators,
-            _ma,
-            input_values)
+            _ma,
+            input_values,
+        )
     end
 end
 
-function DPO(;
-    period = DPO_PERIOD,
-    ma = SMA,
-    input_modifier_return_type = Float64)
+function DPO(; period = DPO_PERIOD, ma = SMA, input_modifier_return_type = Float64)
     DPO{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::DPO)

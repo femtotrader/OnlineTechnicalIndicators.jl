@@ -5,23 +5,21 @@ The `OBV` type implements On Balance Volume indicator.
 """
 mutable struct OBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
     input_values::CircBuff
 
     function OBV{Tohlcv}(; input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            input_values)
+        new{Tohlcv,true,S}(missing, 0, input_values)
     end
 end
 
 function OBV(; input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     OBV{input_modifier_return_type}(;
-        input_modifier_return_type=input_modifier_return_type)
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::OBV)

@@ -25,24 +25,15 @@ mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         value = missing
         gains = SMMA{T2}(period = period)
         losses = SMMA{T2}(period = period)
-        new{Tval,false,T2}(
-            missing,
-            0,
-            period,
-            gains,
-            losses,
-            input_values,
-        )
+        new{Tval,false,T2}(missing, 0, period, gains, losses, input_values)
     end
 end
 
-function RSI(;
-    period = RSI_PERIOD,
-    input_modifier_return_type = Float64,
-)
+function RSI(; period = RSI_PERIOD, input_modifier_return_type = Float64)
     RSI{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::RSI{T,IN,S}) where {T,IN,S}

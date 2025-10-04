@@ -8,19 +8,20 @@ The `CHOP` type implements a Choppiness Index indicator.
 """
 mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     period::Integer
 
     sub_indicators::Series
     atr::ATR
 
-    atr_values::CircBuff
+    atr_values::CircBuff
     input_values::CircBuff
 
     function CHOP{Tohlcv}(;
         period = CHOP_PERIOD,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = 1)
@@ -33,17 +34,20 @@ mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
             period,
             sub_indicators,
             atr,
-            atr_values,
-            input_values)
+            atr_values,
+            input_values,
+        )
     end
 end
 
 function CHOP(;
     period = CHOP_PERIOD,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     CHOP{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::CHOP)

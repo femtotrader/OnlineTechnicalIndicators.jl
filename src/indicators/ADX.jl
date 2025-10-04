@@ -92,9 +92,10 @@ function ADX(;
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     ADX{input_modifier_return_type}(;
-        di_period=di_period,
-        adx_period=adx_period,
-        input_modifier_return_type=input_modifier_return_type)
+        di_period = di_period,
+        adx_period = adx_period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ADX{T,IN,S}) where {T,IN,S}

@@ -30,12 +30,7 @@ mutable struct Engulfing{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            min_body_ratio,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, min_body_ratio, input_values)
     end
 end
 
@@ -105,9 +100,5 @@ function _calculate_new_value(ind::Engulfing{T,IN,S}) where {T,IN,S}
         end
     end
 
-    return TwoCandlePatternVal(
-        TwoCandlePatternType.NONE,
-        zero(S),
-        PatternDirection.NEUTRAL,
-    )
+    return TwoCandlePatternVal(TwoCandlePatternType.NONE, zero(S), PatternDirection.NEUTRAL)
 end

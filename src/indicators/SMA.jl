@@ -24,29 +24,18 @@ mutable struct SMA{T1,IN,T2} <: MovingAverageIndicator{T1}
 
     input_values::CircBuff
 
-    function SMA{T1}(;
-        period = SMA_PERIOD,
-        input_modifier_return_type = T1,
-    ) where {T1}
+    function SMA{T1}(; period = SMA_PERIOD, input_modifier_return_type = T1) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{T1,false,T2}(
-            missing,
-            0,
-            period,
-            false,
-            input_values,
-        )
+        new{T1,false,T2}(missing, 0, period, false, input_values)
     end
 end
 
-function SMA(;
-    period = SMA_PERIOD,
-    input_modifier_return_type = Float64,
-)
+function SMA(; period = SMA_PERIOD, input_modifier_return_type = Float64)
     SMA{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::SMA)

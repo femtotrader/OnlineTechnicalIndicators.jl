@@ -7,32 +7,31 @@ The `CCI` type implements a Commodity Channel Index.
 """
 mutable struct CCI{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     period::Integer
 
-    mean_dev::MeanDev
+    mean_dev::MeanDev
 
     function CCI{Tohlcv}(;
         period = CCI_PERIOD,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         mean_dev = MeanDev{S}(period = period)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            period,
-            mean_dev)
+        new{Tohlcv,true,S}(missing, 0, period, mean_dev)
     end
 end
 
 function CCI(;
     period = CCI_PERIOD,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     CCI{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value_only_from_incoming_data(ind::CCI, candle)

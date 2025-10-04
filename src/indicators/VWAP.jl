@@ -7,27 +7,24 @@ The `VWAP` type implements a Volume Weighted Moving Average indicator.
 """
 mutable struct VWAP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
-    n::Int
+    n::Int
 
     sum_price_vol::S
-    sum_vol::S
+    sum_vol::S
 
     function VWAP{Tohlcv}(; input_modifier_return_type = Tohlcv) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         sum_price_vol = zero(S)
         sum_vol = zero(S)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            sum_price_vol,
-            sum_vol)
+        new{Tohlcv,true,S}(missing, 0, sum_price_vol, sum_vol)
     end
 end
 
 function VWAP(; input_modifier_return_type = OHLCV{Missing,Float64,Float64})
     VWAP{input_modifier_return_type}(;
-        input_modifier_return_type=input_modifier_return_type)
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value_only_from_incoming_data(ind::VWAP, candle)

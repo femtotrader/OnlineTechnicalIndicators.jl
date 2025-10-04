@@ -29,12 +29,7 @@ mutable struct Marubozu{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            shadow_tolerance,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, shadow_tolerance, input_values)
     end
 end
 

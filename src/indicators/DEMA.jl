@@ -73,15 +73,12 @@ mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
-function DEMA(;
-    period = DEMA_PERIOD,
-    ma = EMA,
-    input_modifier_return_type = Float64,
-)
+function DEMA(; period = DEMA_PERIOD, ma = EMA, input_modifier_return_type = Float64)
     DEMA{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::DEMA)

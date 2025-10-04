@@ -14,7 +14,7 @@ println("=== Candlestick Pattern Recognition Examples ===\n")
 
 # Example 1: Detecting a Doji pattern
 println("Example 1: Doji Pattern Detection")
-println("-" ^ 50)
+println("-"^50)
 
 doji_detector = Doji{OHLCV{Missing,Float64,Missing}}()
 
@@ -34,14 +34,16 @@ println()
 
 # Example 2: Detecting Engulfing patterns
 println("Example 2: Bullish Engulfing Pattern")
-println("-" ^ 50)
+println("-"^50)
 
 engulfing_detector = Engulfing{OHLCV{Missing,Float64,Missing}}()
 
 # First candle: bearish
 candle1 = OHLCV(110.0, 111.0, 105.0, 106.0)
 fit!(engulfing_detector, candle1)
-println("Candle 1: O=$( candle1.open) H=$(candle1.high) L=$(candle1.low) C=$(candle1.close)")
+println(
+    "Candle 1: O=$( candle1.open) H=$(candle1.high) L=$(candle1.low) C=$(candle1.close)",
+)
 
 # Second candle: bullish engulfing
 candle2 = OHLCV(105.0, 115.0, 104.0, 114.0)
@@ -60,7 +62,7 @@ println()
 
 # Example 3: Detecting Three Soldiers pattern
 println("Example 3: Three White Soldiers Pattern")
-println("-" ^ 50)
+println("-"^50)
 
 soldiers_detector = ThreeSoldiersCrows{OHLCV{Missing,Float64,Missing}}()
 
@@ -73,7 +75,9 @@ candles = [
 
 for (i, candle) in enumerate(candles)
     fit!(soldiers_detector, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 end
 
 result = value(soldiers_detector)
@@ -88,7 +92,7 @@ println()
 
 # Example 4: Using the comprehensive pattern detector
 println("Example 4: Comprehensive Pattern Detection")
-println("-" ^ 50)
+println("-"^50)
 
 pattern_detector = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}()
 
@@ -101,28 +105,36 @@ candle_sequence = [
 
 for (i, candle) in enumerate(candle_sequence)
     fit!(pattern_detector, candle)
-    println("\nAfter candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "\nAfter candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 
     result = value(pattern_detector)
     if !ismissing(result)
         if length(result.single_patterns) > 0
             println("  Single-candle patterns:")
             for pattern in result.single_patterns
-                println("    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))")
+                println(
+                    "    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))",
+                )
             end
         end
 
         if length(result.two_patterns) > 0
             println("  Two-candle patterns:")
             for pattern in result.two_patterns
-                println("    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))")
+                println(
+                    "    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))",
+                )
             end
         end
 
         if length(result.three_patterns) > 0
             println("  Three-candle patterns:")
             for pattern in result.three_patterns
-                println("    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))")
+                println(
+                    "    - $(pattern.pattern) (confidence: $(round(pattern.confidence, digits=3)), direction: $(pattern.direction))",
+                )
             end
         end
 
@@ -137,7 +149,7 @@ println()
 
 # Example 5: Selective pattern detection
 println("Example 5: Selective Pattern Detection")
-println("-" ^ 50)
+println("-"^50)
 println("Detecting only three-candle patterns:\n")
 
 selective_detector = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}(
@@ -155,7 +167,9 @@ morning_star_candles = [
 
 for (i, candle) in enumerate(morning_star_candles)
     fit!(selective_detector, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 end
 
 result = value(selective_detector)

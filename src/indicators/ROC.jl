@@ -7,30 +7,26 @@ The `ROC` type implements a Rate Of Change indicator.
 """
 mutable struct ROC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
-    n::Int
+    n::Int
 
-    period::Integer
+    period::Integer
     input_values::CircBuff
 
     function ROC{Tval}(;
         period = ROC_PERIOD,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period + 1, rev = false)
-        new{Tval,false,T2}(
-            missing,
-            0,
-            period,
-            input_values)
+        new{Tval,false,T2}(missing, 0, period, input_values)
     end
 end
 
-function ROC(;
-    period = ROC_PERIOD,
-    input_modifier_return_type = Float64)
+function ROC(; period = ROC_PERIOD, input_modifier_return_type = Float64)
     ROC{input_modifier_return_type}(;
-        period=period,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ROC{T,IN,S}) where {T,IN,S}

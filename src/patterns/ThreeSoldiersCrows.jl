@@ -29,12 +29,7 @@ mutable struct ThreeSoldiersCrows{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 3, rev = false)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            min_progress,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, min_progress, input_values)
     end
 end
 

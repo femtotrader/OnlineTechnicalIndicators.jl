@@ -65,8 +65,8 @@ MIMO_INDICATORS = [
     "GannHiloActivator",
     "GannSwingChart",
     "PeakValleyDetector",
-    "RetracementCalculator", 
-    "SupportResistanceLevel"
+    "RetracementCalculator",
+    "SupportResistanceLevel",
 ]
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
@@ -103,7 +103,8 @@ for ind in ALL_INDICATORS
     @eval export $ind
 end
 export SARTrend, Trend, HLType
-export GannHiloActivatorVal, GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
+export GannHiloActivatorVal,
+    GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
 
 # Export pattern recognition types and modules
 export SingleCandlePatternType,
@@ -261,7 +262,9 @@ function add_input_indicator!(
     ind2::O1,
     ind1::O2,
 ) where {O1<:TechnicalIndicator,O2<:TechnicalIndicator}
-    error("add_input_indicator! is no longer functional as the required fields (input_indicator, output_listeners) have been removed. Use OnlineStatsChains.StatDAG to chain indicators. See documentation for migration guide.")
+    error(
+        "add_input_indicator! is no longer functional as the required fields (input_indicator, output_listeners) have been removed. Use OnlineStatsChains.StatDAG to chain indicators. See documentation for migration guide.",
+    )
 end
 
 always_true(x) = true

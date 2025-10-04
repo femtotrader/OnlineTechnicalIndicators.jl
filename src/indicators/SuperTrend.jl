@@ -32,7 +32,7 @@ The `SuperTrend` type implements a Super Trend indicator.
 """
 mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SuperTrendVal}
-    n::Int
+    n::Int
 
     atr_period::Integer
     mult::Integer
@@ -47,7 +47,8 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     function SuperTrend{Tohlcv}(;
         atr_period = SuperTrend_ATR_PERIOD,
         mult = SuperTrend_MULT,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
@@ -63,19 +64,22 @@ mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             sub_indicators,
             atr,
             fub,
-            flb,
-            input_values)
+            flb,
+            input_values,
+        )
     end
 end
 
 function SuperTrend(;
     atr_period = SuperTrend_ATR_PERIOD,
     mult = SuperTrend_MULT,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     SuperTrend{input_modifier_return_type}(;
-        atr_period=atr_period,
-        mult=mult,
-        input_modifier_return_type=input_modifier_return_type)
+        atr_period = atr_period,
+        mult = mult,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::SuperTrend{T,IN,S}) where {T,IN,S}

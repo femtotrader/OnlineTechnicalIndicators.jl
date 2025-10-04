@@ -83,7 +83,8 @@ mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
         roc4_ma_period = KST_ROC4_MA_PERIOD,
         signal_period = KST_SIGNAL_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         T2 = input_modifier_return_type
 
         # Create sub_indicators for ROCs (receive data from main fit!)
@@ -109,7 +110,8 @@ mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
             roc2_ma,
             roc3_ma,
             roc4_ma,
-            signal_line)
+            signal_line,
+        )
     end
 end
 
@@ -124,19 +126,21 @@ function KST(;
     roc4_ma_period = KST_ROC4_MA_PERIOD,
     signal_period = KST_SIGNAL_PERIOD,
     ma = SMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     KST{input_modifier_return_type}(;
-        roc1_period=roc1_period,
-        roc1_ma_period=roc1_ma_period,
-        roc2_period=roc2_period,
-        roc2_ma_period=roc2_ma_period,
-        roc3_period=roc3_period,
-        roc3_ma_period=roc3_ma_period,
-        roc4_period=roc4_period,
-        roc4_ma_period=roc4_ma_period,
-        signal_period=signal_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        roc1_period = roc1_period,
+        roc1_ma_period = roc1_ma_period,
+        roc2_period = roc2_period,
+        roc2_ma_period = roc2_ma_period,
+        roc3_period = roc3_period,
+        roc3_ma_period = roc3_ma_period,
+        roc4_period = roc4_period,
+        roc4_ma_period = roc4_ma_period,
+        signal_period = signal_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::KST)
@@ -160,11 +164,16 @@ function _calculate_new_value(ind::KST)
     end
 
     # Check if all MAs have produced values
-    if has_output_value(ind.roc1_ma) && has_output_value(ind.roc2_ma) &&
-       has_output_value(ind.roc3_ma) && has_output_value(ind.roc4_ma)
+    if has_output_value(ind.roc1_ma) &&
+       has_output_value(ind.roc2_ma) &&
+       has_output_value(ind.roc3_ma) &&
+       has_output_value(ind.roc4_ma)
         # Compute weighted KST
-        kst = value(ind.roc1_ma) + 2 * value(ind.roc2_ma) +
-              3 * value(ind.roc3_ma) + 4 * value(ind.roc4_ma)
+        kst =
+            value(ind.roc1_ma) +
+            2 * value(ind.roc2_ma) +
+            3 * value(ind.roc3_ma) +
+            4 * value(ind.roc4_ma)
         fit!(ind.signal_line, kst)
 
         if has_output_value(ind.signal_line)
