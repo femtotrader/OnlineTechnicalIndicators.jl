@@ -128,6 +128,7 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 include("stats.jl")
 include("ohlcv.jl")
 include("sample_data.jl")
+include("dag_wrapper.jl")
 
 function initialize_indicator_common_fields()
     value = missing

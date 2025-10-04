@@ -1,9 +1,34 @@
+using OnlineStatsChains
+
 const DEMA_PERIOD = 20
 
 """
-    DEMA{T}(; period = DEMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    DEMA{T}(; period = DEMA_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
-The `DEMA` type implements a Double Exponential Moving Average indicator.
+The `DEMA` type implements a Double Exponential Moving Average indicator using OnlineStatsChains v0.2.0 with filtered edges.
+
+# Implementation Details
+Uses OnlineStatsChains.StatDAG with filtered edges (v0.2.0 feature) to organize the 2-stage MA chain.
+Each connection uses `filter = !ismissing` to automatically skip missing values during propagation,
+eliminating the need for nested conditional logic.
+
+The DAG structure provides:
+- Clear organization of the 2-stage MA pipeline (:ma1 → :ma2)
+- Automatic propagation through filtered edges
+- Named access to each stage for debugging and inspection
+- Clean separation of concerns (structure vs computation)
+- Support for any moving average type via MAFactory (EMA, SMA, WMA, etc.)
+
+Benefits over manual chaining:
+- No nested if statements for missing value handling
+- No manual fit! calls in _calculate_new_value
+- Clear visualization of data flow
+- Easier to modify (add/remove stages, change filters)
+
+# Formula
+DEMA = 2 * MA1 - MA2
+where MA1 is the MA of price and MA2 is the MA of MA1.
+The type of moving average (EMA, SMA, etc.) is specified by the `ma` parameter.
 """
 mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
@@ -13,12 +38,12 @@ mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
 
     period::Integer
 
-    sub_indicators::Series
-    ma::MovingAverageIndicator  # EMA
-    ma_ma::MovingAverageIndicator  # EMA
+    dag::StatDAG  # Stores MAs with filtered edges for automatic propagation
+    sub_indicators::DAGWrapper  # Wraps DAG for compatibility with fit! infrastructure
 
     input_modifier::Function
     input_filter::Function
+    input_values::CircBuff
 
     function DEMA{Tval}(;
         period = DEMA_PERIOD,
@@ -28,17 +53,29 @@ mutable struct DEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
-        _ma = MAFactory(T2)(ma, period = period)
-        _ma_ma = MAFactory(T2)(ma, period = period)
-        sub_indicators = Series(_ma)
+        input_values = CircBuff(T2, 2, rev = false)
+
+        # Create DAG structure for the 2-stage MA chain with filtered edges
+        # Use MAFactory to support any moving average type (EMA, SMA, WMA, etc.)
+        dag = StatDAG()
+        add_node!(dag, :ma1, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma2, MAFactory(T2)(ma, period = period))
+
+        # Connect with filtered edges - only propagate non-missing values
+        # This enables automatic propagation without nested conditionals!
+        connect!(dag, :ma1, :ma2, filter = !ismissing)
+
+        # Wrap DAG for compatibility with existing fit! infrastructure
+        sub_indicators = DAGWrapper(dag, :ma1, [dag.nodes[:ma1].stat])
+
         new{Tval,false,T2}(
             initialize_indicator_common_fields()...,
             period,
+            dag,
             sub_indicators,
-            _ma,
-            _ma_ma,
             input_modifier,
             input_filter,
+            input_values,
         )
     end
 end
@@ -59,14 +96,16 @@ function DEMA(;
 end
 
 function _calculate_new_value(ind::DEMA)
-    if has_output_value(ind.ma)
-        fit!(ind.ma_ma, value(ind.ma))
-        if has_output_value(ind.ma_ma)
-            return 2 * value(ind.ma) - value(ind.ma_ma)
-        else
-            return missing
-        end
+    # With OnlineStatsChains v0.2.0 filtered edges, propagation is fully automatic!
+    # The DAG has already propagated values through the chain via filtered edges.
+    # We just read the final values and compute the DEMA result.
+
+    val2 = value(ind.dag, :ma2)
+    if !ismissing(val2)
+        # Both MAs have values - compute DEMA: 2*MA1 - MA2
+        return 2.0 * value(ind.dag, :ma1) - val2
     else
+        # Not enough data yet - chain hasn't fully warmed up
         return missing
     end
 end

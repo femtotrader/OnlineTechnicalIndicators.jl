@@ -3,20 +3,6 @@ using OnlineStatsChains
 const T3_PERIOD = 5
 const T3_FACTOR = 0.7
 
-# Wrapper to integrate StatDAG with OnlineTechnicalIndicators' Series-based infrastructure
-mutable struct DAGWrapper
-    dag::StatDAG
-    source_node::Symbol
-    stats::Vector{OnlineStat}  # For compatibility checks
-end
-
-# Forward fit! calls to the DAG, which automatically propagates through filtered edges
-function OnlineStatsBase.fit!(wrapper::DAGWrapper, data)
-    fit!(wrapper.dag, wrapper.source_node => data)
-end
-
-Base.length(wrapper::DAGWrapper) = length(wrapper.stats)
-
 """
     T3{T}(; period = T3_PERIOD, factor = T3_FACTOR, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
 
