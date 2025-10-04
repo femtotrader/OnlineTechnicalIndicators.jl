@@ -40,22 +40,37 @@
     =#
 
     @testset "Indicator chaining (SMA)" begin
+        using OnlineStatsChains
+
         values = collect(1.0:10.0)
-        # data -> (ind1) -> ... (ind2) -> ... -> (ind3) -> ... -> (ind4) -> ...
+        # data -> (ind1) -> (ind2) -> (ind3) -> (ind4)
+        # Using StatDAG to chain 4 SMAs
+
         ind1 = SMA(period = 3)
         ind2 = SMA(period = 3)
         ind3 = SMA(period = 3)
         ind4 = SMA(period = 3)
-        add_input_indicator!(ind2, ind1)  # <---
-        add_input_indicator!(ind3, ind2)
-        add_input_indicator!(ind4, ind3)
+
+        # Create DAG chain: ind1 -> ind2 -> ind3 -> ind4
+        dag = StatDAG()
+        add_node!(dag, :ind1, ind1)
+        add_node!(dag, :ind2, ind2)
+        add_node!(dag, :ind3, ind3)
+        add_node!(dag, :ind4, ind4)
+
+        connect!(dag, :ind1, :ind2, filter = !ismissing)
+        connect!(dag, :ind2, :ind3, filter = !ismissing)
+        connect!(dag, :ind3, :ind4, filter = !ismissing)
+
+        # Feed data into the DAG
         for val in values
-            fit!(ind1, val)
+            fit!(dag, :ind1 => val)
         end
-        @test isapprox(value(ind1), 9.0; atol = ATOL)
-        @test isapprox(value(ind2), 8.0; atol = ATOL)
-        @test isapprox(value(ind3), 7.0; atol = ATOL)
-        @test isapprox(value(ind4), 6.0; atol = ATOL)
+
+        @test isapprox(value(dag, :ind1), 9.0; atol = ATOL)
+        @test isapprox(value(dag, :ind2), 8.0; atol = ATOL)
+        @test isapprox(value(dag, :ind3), 7.0; atol = ATOL)
+        @test isapprox(value(dag, :ind4), 6.0; atol = ATOL)
     end
 
     @testset "SMA with Vector as input" begin
