@@ -4,20 +4,21 @@ const T3_PERIOD = 5
 const T3_FACTOR = 0.7
 
 """
-    T3{T}(; period = T3_PERIOD, factor = T3_FACTOR, input_modifier_return_type = T)
+    T3{T}(; period = T3_PERIOD, factor = T3_FACTOR, ma = EMA, input_modifier_return_type = T)
 
 The `T3` type implements a T3 Moving Average indicator using OnlineStatsChains v0.2.0 with filtered edges.
 
 # Implementation Details
-Uses OnlineStatsChains.StatDAG with filtered edges (v0.2.0 feature) to organize the 6-stage EMA chain.
+Uses OnlineStatsChains.StatDAG with filtered edges (v0.2.0 feature) to organize the 6-stage MA chain.
 Each connection uses `filter = !ismissing` to automatically skip missing values during propagation,
 eliminating the need for nested conditional logic.
 
 The DAG structure provides:
-- Clear organization of the 6-stage EMA pipeline (:ema1 → :ema2 → ... → :ema6)
+- Clear organization of the 6-stage MA pipeline (:ma1 → :ma2 → ... → :ma6)
 - Automatic propagation through filtered edges
 - Named access to each stage for debugging and inspection
 - Clean separation of concerns (structure vs computation)
+- Support for any moving average type via MAFactory (EMA, SMA, WMA, etc.)
 
 Benefits over manual chaining:
 - No nested if statements for missing value handling
@@ -31,7 +32,7 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
 
     period::Int
 
-    dag::StatDAG  # Stores EMAs with filtered edges for automatic propagation
+    dag::StatDAG  # Stores MAs with filtered edges for automatic propagation
     sub_indicators::DAGWrapper  # Wraps DAG for compatibility with fit! infrastructure
 
     c1::T2
@@ -44,30 +45,32 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     function T3{Tval}(;
         period = T3_PERIOD,
         factor = T3_FACTOR,
+        ma = EMA,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, 2, rev = false)
 
-        # Create DAG structure for the 6-stage EMA chain with filtered edges
+        # Create DAG structure for the 6-stage MA chain with filtered edges
+        # Use MAFactory to support any moving average type (EMA, SMA, WMA, etc.)
         dag = StatDAG()
-        add_node!(dag, :ema1, EMA{T2}(period = period))
-        add_node!(dag, :ema2, EMA{T2}(period = period))
-        add_node!(dag, :ema3, EMA{T2}(period = period))
-        add_node!(dag, :ema4, EMA{T2}(period = period))
-        add_node!(dag, :ema5, EMA{T2}(period = period))
-        add_node!(dag, :ema6, EMA{T2}(period = period))
+        add_node!(dag, :ma1, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma2, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma3, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma4, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma5, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma6, MAFactory(T2)(ma, period = period))
 
         # Connect with filtered edges - only propagate non-missing values
         # This enables automatic propagation without nested conditionals!
-        connect!(dag, :ema1, :ema2, filter = !ismissing)
-        connect!(dag, :ema2, :ema3, filter = !ismissing)
-        connect!(dag, :ema3, :ema4, filter = !ismissing)
-        connect!(dag, :ema4, :ema5, filter = !ismissing)
-        connect!(dag, :ema5, :ema6, filter = !ismissing)
+        connect!(dag, :ma1, :ma2, filter = !ismissing)
+        connect!(dag, :ma2, :ma3, filter = !ismissing)
+        connect!(dag, :ma3, :ma4, filter = !ismissing)
+        connect!(dag, :ma4, :ma5, filter = !ismissing)
+        connect!(dag, :ma5, :ma6, filter = !ismissing)
 
         # Wrap DAG for compatibility with existing fit! infrastructure
-        sub_indicators = DAGWrapper(dag, :ema1, [dag.nodes[:ema1].stat])
+        sub_indicators = DAGWrapper(dag, :ma1, [dag.nodes[:ma1].stat])
 
         c1 = -(factor^3)
         c2 = 3 * factor^2 + 3 * factor^3
@@ -88,15 +91,13 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     end
 end
 
-function T3(;
-    period = T3_PERIOD,
-    factor = T3_FACTOR,
-    input_modifier_return_type = Float64,
-)
+function T3(; period = T3_PERIOD, factor = T3_FACTOR, ma = EMA, input_modifier_return_type = Float64)
     T3{input_modifier_return_type}(;
-        period=period,
-        factor=factor,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        factor = factor,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::T3)
@@ -104,13 +105,13 @@ function _calculate_new_value(ind::T3)
     # The DAG has already propagated values through the chain via filtered edges.
     # We just read the final values and compute the T3 result.
 
-    val6 = value(ind.dag, :ema6)
+    val6 = value(ind.dag, :ma6)
     if !ismissing(val6)
-        # All EMAs have values - compute T3 from stages 3-6
+        # All MAs have values - compute T3 from stages 3-6
         return ind.c1 * val6 +
-               ind.c2 * value(ind.dag, :ema5) +
-               ind.c3 * value(ind.dag, :ema4) +
-               ind.c4 * value(ind.dag, :ema3)
+               ind.c2 * value(ind.dag, :ma5) +
+               ind.c3 * value(ind.dag, :ma4) +
+               ind.c4 * value(ind.dag, :ma3)
     else
         # Not enough data yet - chain hasn't fully warmed up
         return missing
