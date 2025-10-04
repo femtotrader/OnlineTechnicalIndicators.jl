@@ -1,51 +1,32 @@
 const StdDev_PERIOD = 3
 
 """
-    StdDev{T}(; period = StdDev_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    StdDev{T}(; period = StdDev_PERIOD, input_modifier_return_type = T)
 
 The `StdDev` type implements a Standard Deviation indicator.
 """
 mutable struct StdDev{T1,IN,T2} <: TechnicalIndicatorSingleOutput{T1}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function StdDev{T1}(;
         period = StdDev_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        new{T1,false,T2}(
-            initialize_indicator_common_fields()...,
-            period,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{T1,false,T2}(missing, 0, period, input_values)
     end
 end
 
-function StdDev(;
-    period = StdDev_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = Float64,
-)
+function StdDev(; period = StdDev_PERIOD, input_modifier_return_type = Float64)
     StdDev{input_modifier_return_type}(;
-        period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::StdDev)

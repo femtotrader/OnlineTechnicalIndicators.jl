@@ -1,7 +1,7 @@
 const PIERCING_MIN_PENETRATION = 0.5
 
 """
-    PiercingDarkCloud{Tohlcv}(; min_penetration = PIERCING_MIN_PENETRATION, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    PiercingDarkCloud{Tohlcv}(; min_penetration = PIERCING_MIN_PENETRATION, input_modifier_return_type = Tohlcv)
 
 The `PiercingDarkCloud` type implements Piercing Line and Dark Cloud Cover candlestick pattern detectors.
 
@@ -19,31 +19,19 @@ The `PiercingDarkCloud` type implements Piercing Line and Dark Cloud Cover candl
 mutable struct PiercingDarkCloud{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,TwoCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     min_penetration::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function PiercingDarkCloud{Tohlcv}(;
         min_penetration = PIERCING_MIN_PENETRATION,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            min_penetration,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, min_penetration, input_values)
     end
 end
 
@@ -119,9 +107,5 @@ function _calculate_new_value(ind::PiercingDarkCloud{T,IN,S}) where {T,IN,S}
         end
     end
 
-    return TwoCandlePatternVal(
-        TwoCandlePatternType.NONE,
-        zero(S),
-        PatternDirection.NEUTRAL,
-    )
+    return TwoCandlePatternVal(TwoCandlePatternType.NONE, zero(S), PatternDirection.NEUTRAL)
 end

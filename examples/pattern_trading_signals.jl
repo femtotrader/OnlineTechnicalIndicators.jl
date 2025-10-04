@@ -102,7 +102,7 @@ end
 
 # Simulated price data for a bullish reversal scenario
 println("Scenario 1: Bullish Reversal Detection")
-println("-" ^ 70)
+println("-"^70)
 
 candles_bullish = [
     # Downtrend
@@ -121,7 +121,9 @@ detector = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}()
 
 for (i, candle) in enumerate(candles_bullish)
     fit!(detector, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 
     result = value(detector)
     signals = generate_signal(result, 0.5)  # 50% minimum confidence
@@ -140,7 +142,7 @@ println()
 
 # Simulated price data for a bearish reversal scenario
 println("Scenario 2: Bearish Reversal Detection")
-println("-" ^ 70)
+println("-"^70)
 
 candles_bearish = [
     # Uptrend
@@ -159,7 +161,9 @@ detector2 = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}()
 
 for (i, candle) in enumerate(candles_bearish)
     fit!(detector2, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 
     result = value(detector2)
     signals = generate_signal(result, 0.5)
@@ -178,7 +182,7 @@ println()
 
 # Simulated consolidation/indecision scenario
 println("Scenario 3: Market Indecision Detection")
-println("-" ^ 70)
+println("-"^70)
 
 candles_indecision = [
     OHLCV(105.0, 107.0, 103.0, 105.5),
@@ -194,7 +198,9 @@ detector3 = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}()
 
 for (i, candle) in enumerate(candles_indecision)
     fit!(detector3, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 
     result = value(detector3)
     signals = generate_signal(result, 0.5)
@@ -213,7 +219,7 @@ println()
 
 # Advanced: Signal aggregation and consensus
 println("Scenario 4: Signal Consensus Analysis")
-println("-" ^ 70)
+println("-"^70)
 
 # Morning star pattern (strong bullish reversal)
 morning_star = [
@@ -227,7 +233,9 @@ all_signals = TradingSignal[]
 
 for (i, candle) in enumerate(morning_star)
     fit!(detector4, candle)
-    println("Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)")
+    println(
+        "Candle $i: O=$(candle.open) H=$(candle.high) L=$(candle.low) C=$(candle.close)",
+    )
 
     result = value(detector4)
     signals = generate_signal(result, 0.5)
@@ -250,7 +258,8 @@ buy_signals = count(s -> s.signal == BUY, all_signals)
 sell_signals = count(s -> s.signal == SELL, all_signals)
 hold_signals = count(s -> s.signal == HOLD, all_signals)
 avg_confidence =
-    isempty(all_signals) ? 0.0 : sum(s.confidence for s in all_signals) / length(all_signals)
+    isempty(all_signals) ? 0.0 :
+    sum(s.confidence for s in all_signals) / length(all_signals)
 
 println("     Total Signals: $(length(all_signals))")
 println("     BUY signals: $buy_signals")

@@ -325,9 +325,11 @@ struct TabOHLCV
 end
 Tables.istable(::Type{<:TabOHLCV}) = true
 Base.names(table::TabOHLCV) = [:Index, :Open, :High, :Low, :Close, :Volume]
-Tables.schema(table::TabOHLCV) = Tables.Schema(names(table), [Dates.Date, Float64, Float64, Float64, Float64, Float64])
+Tables.schema(table::TabOHLCV) =
+    Tables.Schema(names(table), [Dates.Date, Float64, Float64, Float64, Float64, Float64])
 Tables.columnaccess(::Type{<:TabOHLCV}) = true
-Tables.columns(table::TabOHLCV) = (; (colname => getfield(table, colname) for colname in fieldnames(typeof(table)))...)
+Tables.columns(table::TabOHLCV) =
+    (; (colname => getfield(table, colname) for colname in fieldnames(typeof(table)))...)
 
 const TAB_OHLCV = TabOHLCV()
 

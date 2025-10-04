@@ -3,7 +3,7 @@ const SHOOTING_STAR_SHADOW_RATIO = 2.0
 const SHOOTING_STAR_LOWER_SHADOW_TOLERANCE = 0.1
 
 """
-    ShootingStar{Tohlcv}(; body_ratio = SHOOTING_STAR_BODY_RATIO, shadow_ratio = SHOOTING_STAR_SHADOW_RATIO, lower_shadow_tolerance = SHOOTING_STAR_LOWER_SHADOW_TOLERANCE, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ShootingStar{Tohlcv}(; body_ratio = SHOOTING_STAR_BODY_RATIO, shadow_ratio = SHOOTING_STAR_SHADOW_RATIO, lower_shadow_tolerance = SHOOTING_STAR_LOWER_SHADOW_TOLERANCE, input_modifier_return_type = Tohlcv)
 
 The `ShootingStar` type implements Shooting Star and Inverted Hammer candlestick pattern detectors.
 
@@ -21,35 +21,28 @@ An Inverted Hammer is the same pattern but appears at the end of a downtrend (bu
 mutable struct ShootingStar{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,SingleCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     body_ratio::S
     shadow_ratio::S
     lower_shadow_tolerance::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ShootingStar{Tohlcv}(;
         body_ratio = SHOOTING_STAR_BODY_RATIO,
         shadow_ratio = SHOOTING_STAR_SHADOW_RATIO,
         lower_shadow_tolerance = SHOOTING_STAR_LOWER_SHADOW_TOLERANCE,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             body_ratio,
             shadow_ratio,
             lower_shadow_tolerance,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end

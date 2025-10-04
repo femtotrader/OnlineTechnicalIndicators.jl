@@ -1,29 +1,22 @@
 #const ATR_PERIOD = 3
 
 """
-    NATR{Tohlcv}(; period = ATR_PERIOD, ma = SMMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    NATR{Tohlcv}(; period = ATR_PERIOD, ma = SMMA, input_modifier_return_type = Tohlcv)
 
 The `NATR` type implements a Normalized Average True Range indicator.
 """
 mutable struct NATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Number
 
     atr::ATR
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function NATR{Tohlcv}(;
         period = ATR_PERIOD,
         ma = SMMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -34,30 +27,20 @@ mutable struct NATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         end
         atr = ATR{input_modifier_return_type}(period = period, ma = ma)
         input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            period,
-            atr,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, period, atr, input_values)
     end
 end
 
 function NATR(;
     period = ATR_PERIOD,
     ma = SMMA,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     NATR{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::NATR)

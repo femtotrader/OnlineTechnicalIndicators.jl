@@ -1,31 +1,24 @@
 const DPO_PERIOD = 20
 
 """
-    DPO{T}(; period = DPO_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    DPO{T}(; period = DPO_PERIOD, input_modifier_return_type = T)
 
 The `DPO` type implements a Detrended Price Oscillator indicator.
 """
 mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
     semi_period::Int
 
     sub_indicators::Series
-    ma::MovingAverageIndicator # SMA
-
-    input_modifier::Function
-    input_filter::Function
+    ma::MovingAverageIndicator # SMA
     input_values::CircBuff
 
     function DPO{Tval}(;
         period = DPO_PERIOD,
         ma = SMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -34,31 +27,23 @@ mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
         new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             semi_period,
             sub_indicators,
             _ma,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
 end
 
-function DPO(;
-    period = DPO_PERIOD,
-    ma = SMA,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = Float64,
-)
+function DPO(; period = DPO_PERIOD, ma = SMA, input_modifier_return_type = Float64)
     DPO{input_modifier_return_type}(;
-        period=period,
-        ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::DPO)

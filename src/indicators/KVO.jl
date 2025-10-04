@@ -2,32 +2,25 @@ const KVO_FAST_PERIOD = 5
 const KVO_SLOW_PERIOD = 10
 
 """
-    KVO{Tohlcv}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    KVO{Tohlcv}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA, input_modifier_return_type = Tohlcv)
 
 The `KVO` type implements a Klinger Volume Oscillator.
 """
 mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     fast_ma::MovingAverageIndicator  # EMA by default
     slow_ma::MovingAverageIndicator  # EMA by default
 
     trend::CircBuff
     cumulative_measurement::CircBuff
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function KVO{Tohlcv}(;
         fast_period = KVO_FAST_PERIOD,
         slow_period = KVO_SLOW_PERIOD,
         ma = EMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -38,13 +31,12 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         cumulative_measurement = CircBuff(S, 2, rev = false)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             _fast_ma,
             _slow_ma,
             trend,
             cumulative_measurement,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -54,17 +46,14 @@ function KVO(;
     fast_period = KVO_FAST_PERIOD,
     slow_period = KVO_SLOW_PERIOD,
     ma = EMA,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     KVO{input_modifier_return_type}(;
-        fast_period=fast_period,
-        slow_period=slow_period,
-        ma=ma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        slow_period = slow_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::KVO{T,IN,S}) where {T,IN,S}

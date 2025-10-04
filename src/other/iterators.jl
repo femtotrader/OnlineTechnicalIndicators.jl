@@ -1,7 +1,8 @@
 using OnlineStatsBase
 using OnlineTechnicalIndicators
 using OnlineTechnicalIndicators: TechnicalIndicator, expected_return_type
-using OnlineTechnicalIndicators.SampleData: OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
+using OnlineTechnicalIndicators.SampleData:
+    OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 
 
 """
@@ -89,4 +90,4 @@ function Iterators.reset!(itr::TechnicalIndicatorIterator)
         itr.indicator_type{eltype(itr.iterable_input)}(itr.args...; itr.kwargs...)
 end
 
-Base.length(itr::TechnicalIndicatorIterator{T,I}) where {T, I} = length(itr.iterable_input) 
+Base.length(itr::TechnicalIndicatorIterator{T,I}) where {T,I} = length(itr.iterable_input)
