@@ -30,7 +30,6 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     n::Int
 
     dag::StatDAG  # Stores parallel MA chains with filtered edges
-    sub_indicators::DAGWrapper  # Wraps DAG for compatibility
 
     input_values::CircBuff
 
@@ -38,7 +37,8 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         fast_period = TSI_FAST_PERIOD,
         slow_period = TSI_SLOW_PERIOD,
         ma = EMA,
-        input_modifier_return_type = Tval) where {Tval}
+        input_modifier_return_type = Tval,
+    ) where {Tval}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, 2, rev = false)
@@ -48,23 +48,15 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
 
         # Momentum chain: slow_ma → fast_ma
         add_node!(dag, :slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :fast_ma, MAFactory(Union{Missing,T2})(ma, period = fast_period))
+        add_node!(dag, :fast_ma, MAFactory(T2)(ma, period = fast_period))
         connect!(dag, :slow_ma, :fast_ma, filter = !ismissing)
 
         # Absolute momentum chain: abs_slow_ma → abs_fast_ma
         add_node!(dag, :abs_slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :abs_fast_ma, MAFactory(Union{Missing,T2})(ma, period = fast_period))
+        add_node!(dag, :abs_fast_ma, MAFactory(T2)(ma, period = fast_period))
         connect!(dag, :abs_slow_ma, :abs_fast_ma, filter = !ismissing)
 
-        # Wrap DAG - we'll feed both chains manually in _calculate_new_value
-        sub_indicators = DAGWrapper(dag, :slow_ma, [dag.nodes[:slow_ma].stat])
-
-        new{Tval,false,T2}(
-            missing,
-            0,
-            dag,
-            sub_indicators,
-            input_values)
+        new{Tval,false,T2}(missing, 0, dag, input_values)
     end
 end
 
@@ -72,12 +64,14 @@ function TSI(;
     fast_period = TSI_FAST_PERIOD,
     slow_period = TSI_SLOW_PERIOD,
     ma = EMA,
-    input_modifier_return_type = Float64)
+    input_modifier_return_type = Float64,
+)
     TSI{input_modifier_return_type}(;
-        fast_period=fast_period,
-        slow_period=slow_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        slow_period = slow_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::TSI)

@@ -30,34 +30,26 @@ The `SFX` type implements a SFX indicator.
 """
 mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SFXVal}
-    n::Int
+    n::Int
 
-    sub_indicators::Series
     atr::ATR
     std_dev::StdDev
 
-    ma_std_dev::MovingAverageIndicator
+    ma_std_dev::MovingAverageIndicator
 
     function SFX{Tohlcv}(;
         atr_period = SFX_ATR_PERIOD,
         std_dev_period = SFX_STD_DEV_PERIOD,
         std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD,
         ma = SMA,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
-        std_dev = StdDev{Float64}(
-            period = std_dev_period)
-        sub_indicators = Series(atr)  # Only ATR receives OHLCV data, std_dev is fed manually
+        std_dev = StdDev{Float64}(period = std_dev_period)
         ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
-        new{Tohlcv,true,S}(
-            missing,
-            0,
-            sub_indicators,
-            atr,
-            std_dev,
-            ma_std_dev)
+        new{Tohlcv,true,S}(missing, 0, atr, std_dev, ma_std_dev)
     end
 end
 
@@ -66,13 +58,15 @@ function SFX(;
     std_dev_period = SFX_STD_DEV_PERIOD,
     std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD,
     ma = SMA,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     SFX{input_modifier_return_type}(;
-        atr_period=atr_period,
-        std_dev_period=std_dev_period,
-        std_dev_smoothing_period=std_dev_smoothing_period,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        atr_period = atr_period,
+        std_dev_period = std_dev_period,
+        std_dev_smoothing_period = std_dev_smoothing_period,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function OnlineStatsBase._fit!(ind::SFX, data)
@@ -80,6 +74,9 @@ function OnlineStatsBase._fit!(ind::SFX, data)
     fit!(ind.atr, data)
     # Feed std_dev with close price only
     fit!(ind.std_dev, ValueExtractor.extract_close(data))
+    # Update the indicator state
+    ind.n += 1
+    ind.value = _calculate_new_value(ind)
     nothing
 end
 

@@ -28,7 +28,7 @@ The `TTM` type implements a TTM indicator.
 """
 mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,TTMVal}
-    n::Int
+    n::Int
 
     period::Int
     sub_indicators::Series
@@ -39,7 +39,7 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
 
     deltas::CircBuff
     mean_x::S
-    denom::S
+    denom::S
     input_values::CircBuff
 
     function TTM{Tohlcv}(;
@@ -47,21 +47,20 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
         kc_atr_mult = TTM_KC_ATR_MULT,
         ma = SMA,
-        input_modifier_return_type = Tohlcv) where {Tohlcv}
+        input_modifier_return_type = Tohlcv,
+    ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, 1, rev = false)  # (maybe) a bit overkilled! but that's to keep the same interface
-        _bb = BB{S}(;
-            period = period,
-            std_dev_mult = bb_std_dev_mult)
+        _bb = BB{S}(; period = period, std_dev_mult = bb_std_dev_mult)
         _dc = DonchianChannels{T2}(; period = period)
         _kc = KeltnerChannels{T2}(;
             ma_period = period,
             atr_period = period,
             atr_mult_up = kc_atr_mult,
-            atr_mult_down = kc_atr_mult)  # ma = EMA by default
-        _ma =
-            MAFactory(S)(ma, period = period)
+            atr_mult_down = kc_atr_mult,
+        )  # ma = EMA by default
+        _ma = MAFactory(S)(ma, period = period)
         sub_indicators = Series(_dc, _kc)  # _bb and _ma receive close price, fed manually
         deltas = CircBuff(S, period, rev = false)
         mean_x = sum(1:period-1) / period
@@ -80,8 +79,9 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             _ma,
             deltas,
             mean_x,
-            denom,
-            input_values)
+            denom,
+            input_values,
+        )
     end
 end
 
@@ -90,22 +90,29 @@ function TTM(;
     bb_std_dev_mult = TTM_BB_STD_DEV_MULT,
     kc_atr_mult = TTM_KC_ATR_MULT,
     ma = SMA,
-    input_modifier_return_type = OHLCV{Missing,Float64,Float64})
+    input_modifier_return_type = OHLCV{Missing,Float64,Float64},
+)
     TTM{input_modifier_return_type}(;
-        period=period,
-        bb_std_dev_mult=bb_std_dev_mult,
-        kc_atr_mult=kc_atr_mult,
-        ma=ma,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        bb_std_dev_mult = bb_std_dev_mult,
+        kc_atr_mult = kc_atr_mult,
+        ma = ma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function OnlineStatsBase._fit!(ind::TTM, data)
+    # Store input data
+    fit!(ind.input_values, data)
     # Feed DC and KC with full OHLCV (via sub_indicators)
     fit!(ind.sub_indicators, data)
     # Feed BB and MA with close price only
     close_price = ValueExtractor.extract_close(data)
     fit!(ind.bb, close_price)
     fit!(ind.ma, close_price)
+    # Update the indicator state
+    ind.n += 1
+    ind.value = _calculate_new_value(ind)
     nothing
 end
 
