@@ -48,12 +48,12 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
 
         # Momentum chain: slow_ma → fast_ma
         add_node!(dag, :slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :fast_ma, MAFactory(T2)(ma, period = fast_period))
+        add_node!(dag, :fast_ma, MAFactory(Union{Missing,T2})(ma, period = fast_period))
         connect!(dag, :slow_ma, :fast_ma, filter = !ismissing)
 
         # Absolute momentum chain: abs_slow_ma → abs_fast_ma
         add_node!(dag, :abs_slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :abs_fast_ma, MAFactory(T2)(ma, period = fast_period))
+        add_node!(dag, :abs_fast_ma, MAFactory(Union{Missing,T2})(ma, period = fast_period))
         connect!(dag, :abs_slow_ma, :abs_fast_ma, filter = !ismissing)
 
         # Wrap DAG - we'll feed both chains manually in _calculate_new_value

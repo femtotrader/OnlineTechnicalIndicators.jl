@@ -52,13 +52,14 @@ mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         sub_indicators = Series(macd)
 
         # Create two Stochastics (manually chained)
-        stoch_macd = Stoch{MACDVal}(
+        # Both receive OHLCV data (converted from MACD and Stoch values)
+        stoch_macd = Stoch{OHLCV{Missing,Tval,Tval}}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
             input_modifier_return_type = OHLCV{Missing,Tval,Tval})
 
-        stoch_d = Stoch{StochVal}(
+        stoch_d = Stoch{OHLCV{Missing,Tval,Tval}}(
             period = stoch_period,
             smoothing_period = stoch_smoothing_period,
             ma = ma,
