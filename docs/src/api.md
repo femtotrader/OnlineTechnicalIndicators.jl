@@ -108,6 +108,7 @@ OnlineTechnicalIndicators.Resample.ResamplerBy
 
 ## Other
 ```@docs
+OnlineTechnicalIndicators.add_input_indicator!
 OnlineTechnicalIndicators.StatLag
 OnlineTechnicalIndicators.TechnicalIndicatorIterator
 OnlineTechnicalIndicators.update_levels!
