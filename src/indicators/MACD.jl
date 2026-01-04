@@ -75,10 +75,10 @@ mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
-        fast_ma = MAFactory(T2)(ma, period = fast_period)
-        slow_ma = MAFactory(T2)(ma, period = slow_period)
+        fast_ma = MovingAverage(T2)(ma, period = fast_period)
+        slow_ma = MovingAverage(T2)(ma, period = slow_period)
         sub_indicators = Series(fast_ma, slow_ma)
-        signal_line = MAFactory(T2)(ma, period = signal_period)
+        signal_line = MovingAverage(T2)(ma, period = signal_period)
         new{Tval,false,T2}(missing, 0, sub_indicators, fast_ma, slow_ma, signal_line)
     end
 end

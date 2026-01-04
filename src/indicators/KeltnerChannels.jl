@@ -79,7 +79,7 @@ mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
-        _cb = MAFactory(S)(ma, period = ma_period)
+        _cb = MovingAverage(S)(ma, period = ma_period)
         new{Tohlcv,true,S}(
             missing,
             0,

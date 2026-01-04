@@ -54,8 +54,8 @@ mutable struct MassIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        _ma = MAFactory(S)(ma, period = ma_period)
-        _ma_ma = MAFactory(S)(ma, period = ma_ma_period)
+        _ma = MovingAverage(S)(ma, period = ma_period)
+        _ma_ma = MovingAverage(S)(ma, period = ma_ma_period)
         _ma_ratio = CircBuff(S, ma_ratio_period, rev = false)
         new{Tohlcv,true,S}(missing, 0, ma_ratio_period, _ma, _ma_ma, _ma_ratio)
     end

@@ -53,8 +53,8 @@ mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        _fast_ma = MAFactory(S)(ma, period = fast_period)
-        _slow_ma = MAFactory(S)(ma, period = slow_period)
+        _fast_ma = MovingAverage(S)(ma, period = fast_period)
+        _slow_ma = MovingAverage(S)(ma, period = slow_period)
         trend = CircBuff(S, 2, rev = false)
         cumulative_measurement = CircBuff(S, 2, rev = false)
         input_values = CircBuff(T2, 2, rev = false)

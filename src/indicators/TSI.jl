@@ -19,7 +19,7 @@ The DAG structure provides:
 - Clear organization of parallel MA pipelines
 - Automatic propagation through filtered edges
 - Named access to each stage for debugging
-- Support for any moving average type via MAFactory
+- Support for any moving average type via MovingAverage factory
 
 # Formula
 TSI = 100 * (double_smoothed_momentum / double_smoothed_absolute_momentum)
@@ -47,13 +47,13 @@ mutable struct TSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
         dag = StatDAG()
 
         # Momentum chain: slow_ma → fast_ma
-        add_node!(dag, :slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :fast_ma, MAFactory(T2)(ma, period = fast_period))
+        add_node!(dag, :slow_ma, MovingAverage(T2)(ma, period = slow_period))
+        add_node!(dag, :fast_ma, MovingAverage(T2)(ma, period = fast_period))
         connect!(dag, :slow_ma, :fast_ma, filter = !ismissing)
 
         # Absolute momentum chain: abs_slow_ma → abs_fast_ma
-        add_node!(dag, :abs_slow_ma, MAFactory(T2)(ma, period = slow_period))
-        add_node!(dag, :abs_fast_ma, MAFactory(T2)(ma, period = fast_period))
+        add_node!(dag, :abs_slow_ma, MovingAverage(T2)(ma, period = slow_period))
+        add_node!(dag, :abs_fast_ma, MovingAverage(T2)(ma, period = fast_period))
         connect!(dag, :abs_slow_ma, :abs_fast_ma, filter = !ismissing)
 
         new{Tval,false,T2}(missing, 0, dag, input_values)
