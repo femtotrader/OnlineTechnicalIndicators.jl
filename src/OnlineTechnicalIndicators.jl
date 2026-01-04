@@ -65,8 +65,8 @@ MIMO_INDICATORS = [
     "GannHiloActivator",
     "GannSwingChart",
     "PeakValleyDetector",
-    "RetracementCalculator", 
-    "SupportResistanceLevel"
+    "RetracementCalculator",
+    "SupportResistanceLevel",
 ]
 # More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
 OTHERS_INDICATORS = ["STC"]
@@ -103,7 +103,8 @@ for ind in ALL_INDICATORS
     @eval export $ind
 end
 export SARTrend, Trend, HLType
-export GannHiloActivatorVal, GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
+export GannHiloActivatorVal,
+    GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
 
 # Export pattern recognition types and modules
 export SingleCandlePatternType,
@@ -128,14 +129,7 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 include("stats.jl")
 include("ohlcv.jl")
 include("sample_data.jl")
-
-function initialize_indicator_common_fields()
-    value = missing
-    n = 0
-    output_listeners = Series()
-    input_indicator = missing
-    return value, n, output_listeners, input_indicator
-end
+include("dag_wrapper.jl")
 
 
 ismultioutput(ind::Type{O}) where {O<:TechnicalIndicator} =
@@ -156,13 +150,15 @@ end
 
 function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
     _fieldnames = fieldnames(O)
-    #if :input_filter in _fieldnames && :input_modifier in _fieldnames  # input_filter/input_modifier is like FilterTransform
-    if ind.input_filter(data)
-        data = ind.input_modifier(data)
-    else
-        return nothing
+    # Only apply input_filter/input_modifier if they exist (legacy indicators)
+    # StatDAG-based indicators (DEMA, TEMA, T3, TRIX) don't have these fields
+    if :input_filter in _fieldnames && :input_modifier in _fieldnames
+        if ind.input_filter(data)
+            data = ind.input_modifier(data)
+        else
+            return nothing
+        end
     end
-    #end
     has_input_values = :input_values in _fieldnames
     if has_input_values
         fit!(ind.input_values, data)
@@ -221,28 +217,54 @@ function has_valid_values(sequence::CircBuff, window; exact = false)
 end
 
 function fit_listeners!(ind::O) where {O<:TechnicalIndicator}
-    if :output_listeners in fieldnames(typeof(ind))
-        if length(ind.output_listeners.stats) == 0
-            return
-        end
-        for listener in ind.output_listeners.stats
-            if listener.input_filter(ind.value)
-                fit!(listener, ind.value)
-            end
-        end
-    end
+    # Legacy function - no longer used with StatDAG-based indicators
+    # Kept for backward compatibility but does nothing
+    return
 end
 
+"""
+    add_input_indicator!(ind2, ind1)
+
+**DEPRECATED**: This function is deprecated. Use `OnlineStatsChains.StatDAG` to chain indicators instead.
+
+# Migration Guide
+Instead of using `add_input_indicator!` to chain indicators:
+
+```julia
+# Old way (deprecated):
+ema1 = EMA(period=10)
+ema2 = EMA(period=10)
+add_input_indicator!(ema2, ema1)
+```
+
+Use `OnlineStatsChains.StatDAG` with filtered edges:
+
+```julia
+# New way (recommended):
+using OnlineStatsChains
+
+dag = StatDAG()
+add_node!(dag, :ema1, EMA(period=10))
+add_node!(dag, :ema2, EMA(period=10))
+connect!(dag, :ema1, :ema2, filter = !ismissing)
+
+# Feed data to the first node
+fit!(dag, :ema1 => data)
+
+# Get values from any node
+value(dag, :ema1)  # First EMA
+value(dag, :ema2)  # Second EMA (automatically updated)
+```
+
+See the implementations of DEMA, TEMA, T3, and TRIX for complete examples.
+"""
 function add_input_indicator!(
     ind2::O1,
     ind1::O2,
 ) where {O1<:TechnicalIndicator,O2<:TechnicalIndicator}
-    ind2.input_indicator = ind1
-    if length(ind1.output_listeners.stats) > 0
-        ind1.output_listeners = merge(ind1.output_listeners, ind2)
-    else
-        ind1.output_listeners = Series(ind2)
-    end
+    error(
+        "add_input_indicator! is no longer functional as the required fields (input_indicator, output_listeners) have been removed. Use OnlineStatsChains.StatDAG to chain indicators. See documentation for migration guide.",
+    )
 end
 
 always_true(x) = true

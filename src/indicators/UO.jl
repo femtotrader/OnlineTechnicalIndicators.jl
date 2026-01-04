@@ -3,15 +3,13 @@ const UO_MID_PERIOD = 5
 const UO_SLOW_PERIOD = 7
 
 """
-    UO{Tohlcv}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    UO{Tohlcv}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `UO` type implements an Ultimate Oscillator.
 """
 mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     fast_period::Integer
     mid_period::Integer
@@ -20,17 +18,12 @@ mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     buy_press::CircBuff
     true_range::CircBuff
 
-    input_modifier::Function
-    input_filter::Function
-
     input_values::CircBuff
 
     function UO{Tohlcv}(;
         fast_period = UO_FAST_PERIOD,
         mid_period = UO_MID_PERIOD,
         slow_period = UO_SLOW_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         @assert fast_period < mid_period < slow_period "fast_period < mid_period < slow_period is not respected"
@@ -40,14 +33,13 @@ mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         buy_press = CircBuff(S, slow_period, rev = false)
         true_range = CircBuff(S, slow_period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             fast_period,
             mid_period,
             slow_period,
             buy_press,
             true_range,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -57,17 +49,14 @@ function UO(;
     fast_period = UO_FAST_PERIOD,
     mid_period = UO_MID_PERIOD,
     slow_period = UO_SLOW_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     UO{input_modifier_return_type}(;
-        fast_period=fast_period,
-        mid_period=mid_period,
-        slow_period=slow_period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        fast_period = fast_period,
+        mid_period = mid_period,
+        slow_period = slow_period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::UO)

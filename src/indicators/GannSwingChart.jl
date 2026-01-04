@@ -14,24 +14,39 @@ struct GannSwingChartVal{T}
     swing_high::Union{Missing,T}
     swing_low::Union{Missing,T}
     trend_changed::Bool
-    
+
     # Inner constructor that allows specifying type explicitly
-    function GannSwingChartVal{T}(trend::Symbol, swing_high::Union{Missing,T}, swing_low::Union{Missing,T}, trend_changed::Bool) where T
+    function GannSwingChartVal{T}(
+        trend::Symbol,
+        swing_high::Union{Missing,T},
+        swing_low::Union{Missing,T},
+        trend_changed::Bool,
+    ) where {T}
         new{T}(trend, swing_high, swing_low, trend_changed)
     end
-    
+
     # Outer constructor that infers type from non-missing values
-    function GannSwingChartVal(trend::Symbol, swing_high::T, swing_low::Union{Missing,T}, trend_changed::Bool) where T
+    function GannSwingChartVal(
+        trend::Symbol,
+        swing_high::T,
+        swing_low::Union{Missing,T},
+        trend_changed::Bool,
+    ) where {T}
         new{T}(trend, swing_high, swing_low, trend_changed)
     end
-    
-    function GannSwingChartVal(trend::Symbol, swing_high::Union{Missing,T}, swing_low::T, trend_changed::Bool) where T
+
+    function GannSwingChartVal(
+        trend::Symbol,
+        swing_high::Union{Missing,T},
+        swing_low::T,
+        trend_changed::Bool,
+    ) where {T}
         new{T}(trend, swing_high, swing_low, trend_changed)
     end
 end
 
 """
-    GannSwingChart{T}(; min_bars=GANN_SWING_MIN_BARS, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    GannSwingChart{T}(; min_bars=GANN_SWING_MIN_BARS, input_modifier_return_type = T)
 
 The `GannSwingChart` type implements Gann Swing Chart analysis for trend detection.
 
@@ -49,38 +64,32 @@ This indicator identifies:
 mutable struct GannSwingChart{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,GannSwingChartVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     min_bars::Int
     current_trend::Symbol
-    
+
     # Swing tracking
     last_swing_high::Union{Missing,T2}
     last_swing_low::Union{Missing,T2}
     last_high::Union{Missing,T2}
     last_low::Union{Missing,T2}
-    
+
     # Consecutive tracking for swing detection
     consecutive_higher_highs::Int
     consecutive_lower_lows::Int
-    
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function GannSwingChart{Tval}(;
         min_bars = GANN_SWING_MIN_BARS,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, min_bars + 2, rev = false)
-        
+
         new{Tval,false,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             min_bars,
             :downtrend,  # Default start with downtrend
             missing,     # last_swing_high
@@ -88,9 +97,7 @@ mutable struct GannSwingChart{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
             missing,     # last_high
             missing,     # last_low
             0,           # consecutive_higher_highs
-            0,           # consecutive_lower_lows
-            input_modifier,
-            input_filter,
+            0,           # consecutive_lower_lows
             input_values,
         )
     end
@@ -100,12 +107,12 @@ function _calculate_new_value(ind::GannSwingChart)
     # Always update state, even if we don't have enough data for a result yet
     bars = value(ind.input_values)
     current_bar = bars[end]
-    
+
     # Need at least one bar to update state
     if length(bars) < 1
         return missing
     end
-    
+
     # For the first bar, initialize tracking
     if length(bars) == 1
         ind.last_high = current_bar.high
@@ -114,11 +121,11 @@ function _calculate_new_value(ind::GannSwingChart)
         ind.consecutive_lower_lows = 1
         return missing  # Need more data for swing analysis
     end
-    
+
     # For subsequent bars, compare to previous bars
     prev_bar = bars[end-1]
     trend_changed = false
-    
+
     # Update last high/low tracking
     if ismissing(ind.last_high) || current_bar.high > ind.last_high
         if !ismissing(ind.last_high) && current_bar.high > ind.last_high
@@ -131,7 +138,7 @@ function _calculate_new_value(ind::GannSwingChart)
     elseif current_bar.high < prev_bar.high
         ind.consecutive_higher_highs = 0
     end
-    
+
     if ismissing(ind.last_low) || current_bar.low < ind.last_low
         if !ismissing(ind.last_low) && current_bar.low < ind.last_low
             ind.consecutive_lower_lows += 1
@@ -143,7 +150,7 @@ function _calculate_new_value(ind::GannSwingChart)
     elseif current_bar.low > prev_bar.low
         ind.consecutive_lower_lows = 0
     end
-    
+
     # REQ-020: Upswing detection (two consecutive higher highs)
     if ind.consecutive_higher_highs >= ind.min_bars
         # Store previous swing high before updating
@@ -183,19 +190,19 @@ function _calculate_new_value(ind::GannSwingChart)
             end
         end
     end
-    
+
     # Only return a result if we have enough data for swing analysis
     if length(bars) < ind.min_bars + 1
         return missing
     end
-    
+
     # Extract price type from the OHLCV input
     PriceType = typeof(current_bar.high)
     return GannSwingChartVal{PriceType}(
         ind.current_trend,
         ind.last_swing_high,
         ind.last_swing_low,
-        trend_changed
+        trend_changed,
     )
 end
 

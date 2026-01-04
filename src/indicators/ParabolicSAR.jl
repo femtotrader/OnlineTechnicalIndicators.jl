@@ -29,7 +29,7 @@ struct ParabolicSARVal{Tval}
 end
 
 """
-    ParabolicSAR{Tohlcv}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ParabolicSAR{Tohlcv}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT, input_modifier_return_type = Tohlcv)
 
 The `ParabolicSAR` type implements a Super Trend indicator.
 
@@ -39,35 +39,27 @@ The `ParabolicSAR` type implements a Super Trend indicator.
 mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ParabolicSARVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     init_accel_factor::S
     accel_factor_inc::S
     max_accel_factor::S
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ParabolicSAR{Tohlcv}(;
         init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
         accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
         max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, SAR_INIT_LEN, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             init_accel_factor,
             accel_factor_inc,
             max_accel_factor,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -77,17 +69,14 @@ function ParabolicSAR(;
     init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR,
     accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC,
     max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     ParabolicSAR{input_modifier_return_type}(;
-        init_accel_factor=init_accel_factor,
-        accel_factor_inc=accel_factor_inc,
-        max_accel_factor=max_accel_factor,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        init_accel_factor = init_accel_factor,
+        accel_factor_inc = accel_factor_inc,
+        max_accel_factor = max_accel_factor,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ParabolicSAR)

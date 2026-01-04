@@ -2,7 +2,7 @@ const STAR_DOJI_TOLERANCE = 0.1
 const STAR_MIN_GAP_RATIO = 0.1
 
 """
-    Star{Tohlcv}(; doji_tolerance = STAR_DOJI_TOLERANCE, min_gap_ratio = STAR_MIN_GAP_RATIO, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    Star{Tohlcv}(; doji_tolerance = STAR_DOJI_TOLERANCE, min_gap_ratio = STAR_MIN_GAP_RATIO, input_modifier_return_type = Tohlcv)
 
 The `Star` type implements Morning Star and Evening Star candlestick pattern detectors.
 
@@ -19,34 +19,21 @@ The `Star` type implements Morning Star and Evening Star candlestick pattern det
 mutable struct Star{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,ThreeCandlePatternVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     doji_tolerance::S
     min_gap_ratio::S
 
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function Star{Tohlcv}(;
         doji_tolerance = STAR_DOJI_TOLERANCE,
         min_gap_ratio = STAR_MIN_GAP_RATIO,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = hasfield(T2, :close) ? fieldtype(T2, :close) : Float64
         input_values = CircBuff(T2, 3, rev = false)
-        new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            doji_tolerance,
-            min_gap_ratio,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, doji_tolerance, min_gap_ratio, input_values)
     end
 end
 

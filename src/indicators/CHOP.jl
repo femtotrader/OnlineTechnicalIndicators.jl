@@ -2,15 +2,13 @@ const CHOP_PERIOD = 14
 
 
 """
-    CHOP{Tohlcv}(; period = CHOP_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    CHOP{Tohlcv}(; period = CHOP_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `CHOP` type implements a Choppiness Index indicator.
 """
 mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
 
@@ -18,15 +16,10 @@ mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     atr::ATR
 
     atr_values::CircBuff
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function CHOP{Tohlcv}(;
         period = CHOP_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -36,13 +29,12 @@ mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         atr_values = CircBuff(Union{Missing,S}, period, rev = false)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             period,
             sub_indicators,
             atr,
             atr_values,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -50,15 +42,12 @@ end
 
 function CHOP(;
     period = CHOP_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     CHOP{input_modifier_return_type}(;
-        period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::CHOP)

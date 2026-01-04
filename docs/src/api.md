@@ -107,7 +107,14 @@ OnlineTechnicalIndicators.Resample.ResamplerBy
 ```
 
 ## Other
+
+!!! warning "Deprecated Function"
+    `add_input_indicator!` is **deprecated** and will throw an error if called.
+    Use `OnlineStatsChains.StatDAG` to chain indicators instead.
+    See the [Migration Guide](@ref) for detailed examples and migration instructions.
+
 ```@docs
+OnlineTechnicalIndicators.add_input_indicator!
 OnlineTechnicalIndicators.StatLag
 OnlineTechnicalIndicators.TechnicalIndicatorIterator
 OnlineTechnicalIndicators.update_levels!

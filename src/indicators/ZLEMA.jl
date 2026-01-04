@@ -2,28 +2,21 @@ const ZLEMA_PERIOD = 20
 
 
 """
-    ZLEMA{T}(; period=ZLEMA_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    ZLEMA{T}(; period=ZLEMA_PERIOD, input_modifier_return_type = T)
 
 The `ZLEMA` type implements a Zero Lag Exponential Moving Average indicator.
 """
 mutable struct ZLEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Int
     lag::Int
     ema::EMA
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ZLEMA{Tval}(;
         period = ZLEMA_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -31,29 +24,15 @@ mutable struct ZLEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         input_values = CircBuff(T2, lag + 1, rev = false)
         ema = EMA{T2}(period = period)
 
-        new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
-            period,
-            lag,
-            ema,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tval,false,T2}(missing, 0, period, lag, ema, input_values)
     end
 end
 
-function ZLEMA(;
-    period = ZLEMA_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
-    input_modifier_return_type = Float64,
-)
+function ZLEMA(; period = ZLEMA_PERIOD, input_modifier_return_type = Float64)
     ZLEMA{input_modifier_return_type}(;
-        period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ZLEMA)

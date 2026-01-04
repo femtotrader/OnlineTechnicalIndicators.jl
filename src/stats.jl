@@ -13,13 +13,13 @@ Track a moving window (previous `b` copies) of `ind`.
     fit!(ind, prices)
     ind.lag[end-1]
 """
-struct StatLag{T, O<:OnlineStat{T}} <: OnlineStatsBase.StatWrapper{T}
+struct StatLag{T,O<:OnlineStat{T}} <: OnlineStatsBase.StatWrapper{T}
     lag::CircBuff{O}
     stat::O
 end
 
-function StatLag(stat::O, b::Integer) where {T, O<:OnlineStat{T}}
-    StatLag{T,O}(CircBuff(O,b), stat)
+function StatLag(stat::O, b::Integer) where {T,O<:OnlineStat{T}}
+    StatLag{T,O}(CircBuff(O, b), stat)
 end
 
 function OnlineStatsBase._fit!(o::StatLag, y)

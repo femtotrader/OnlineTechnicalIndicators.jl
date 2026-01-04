@@ -19,7 +19,7 @@ struct DonchianChannelsVal{Tval}
 end
 
 """
-    DonchianChannels{Tohlcv}(; period = DonchianChannels_ATR_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    DonchianChannels{Tohlcv}(; period = DonchianChannels_ATR_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 
@@ -29,45 +29,29 @@ The `DonchianChannels` type implements a Donchian Channels indicator.
 mutable struct DonchianChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,DonchianChannelsVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function DonchianChannels{Tohlcv}(;
         period = DonchianChannels_ATR_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
         input_values = CircBuff(T2, period, rev = false)
-        new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
-            period,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tohlcv,true,S}(missing, 0, period, input_values)
     end
 end
 
 function DonchianChannels(;
     period = DonchianChannels_ATR_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     DonchianChannels{input_modifier_return_type}(;
-        period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::DonchianChannels)

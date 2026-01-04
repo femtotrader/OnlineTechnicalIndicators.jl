@@ -5,7 +5,8 @@ using Markdown
 using InteractiveUtils
 
 # ╔═╡ e5bc1ac4-415c-40e8-b27c-0af01c834ede
-import Pkg; Pkg.activate("..")
+import Pkg;
+Pkg.activate("..");
 
 # ╔═╡ 931da9b9-2de4-425b-8a7a-14934d81b033
 using OnlineTechnicalIndicators
@@ -51,14 +52,14 @@ md"""### Calculate SMA (simple moving average)"""
 
 # ╔═╡ 13aff320-c058-4436-86e3-b9465ea93b20
 begin
-	function show_sma1()
-		ind = SMA{Float64}(period = 3)  # this is a SISO indicator
-		for p in CLOSE_TMPL
-		    fit!(ind, p)
-		    println(value(ind))
-		end
-	end
-	show_sma1()
+    function show_sma1()
+        ind = SMA{Float64}(period = 3)  # this is a SISO indicator
+        for p in CLOSE_TMPL
+            fit!(ind, p)
+            println(value(ind))
+        end
+    end
+    show_sma1()
 end
 
 # ╔═╡ 28e0fb3a-f5fa-407f-981a-84ccc80b074d
@@ -66,14 +67,14 @@ md"""### Calculate BB (Bollinger bands)"""
 
 # ╔═╡ 8c44d1db-f905-4621-b0e9-ca21d5b85ebb
 begin
-	function show_bb1()
-		ind = BB{Float64}(period = 3)  # this is a SIMO indicator
-		for p in CLOSE_TMPL
-		    fit!(ind, p)
-		    println(value(ind))
-		end
-	end
-	show_bb1()
+    function show_bb1()
+        ind = BB{Float64}(period = 3)  # this is a SIMO indicator
+        for p in CLOSE_TMPL
+            fit!(ind, p)
+            println(value(ind))
+        end
+    end
+    show_bb1()
 end
 
 # ╔═╡ 2f8045ca-97ae-4c07-9a46-74be7cfd6632
@@ -87,14 +88,14 @@ md"""### Calculate ATR (Average true range)"""
 
 # ╔═╡ fa335c82-947d-477e-ae72-bd627061ed21
 begin
-	function show_atr1()
-		ind = ATR{OHLCV}(period = 3)  # this is a MISO indicator
-		for candle in V_OHLCV
-		    fit!(ind, candle)
-		    println(value(ind))
-		end
-	end
-	show_atr1()
+    function show_atr1()
+        ind = ATR{OHLCV}(period = 3)  # this is a MISO indicator
+        for candle in V_OHLCV
+            fit!(ind, candle)
+            println(value(ind))
+        end
+    end
+    show_atr1()
 end
 
 # ╔═╡ 0944670f-06c2-4135-9383-b73af60e7386
@@ -102,14 +103,14 @@ md"""### Calculate Stoch (Stochastic)"""
 
 # ╔═╡ 07a3c533-b3f4-40e9-a1a8-0f2560fc5f41
 begin
-	function show_stoch1()
-		ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 3)  # this is a MIMO indicator
-		for candle in V_OHLCV
-		    fit!(ind, candle)
-		    println(value(ind))
-		end
-	end
-	show_stoch1()
+    function show_stoch1()
+        ind = Stoch{OHLCV{Missing,Float64,Float64}}(period = 3)  # this is a MIMO indicator
+        for candle in V_OHLCV
+            fit!(ind, candle)
+            println(value(ind))
+        end
+    end
+    show_stoch1()
 end
 
 # ╔═╡ 77e61b06-39a9-41c2-a2bc-6e00f83b49d0
@@ -132,8 +133,8 @@ Get a `TimeSeries.TimeArray` with random prices and volume
 
 # ╔═╡ dc2dd86f-4b8f-4d92-8ff4-e2db51c6cfab
 begin
-	ta = random_ohlcv()
-	ta
+    ta = random_ohlcv()
+    ta
 end
 
 # ╔═╡ d5171332-5c3a-45b1-bb11-baf021aecc99

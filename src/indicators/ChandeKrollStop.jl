@@ -19,7 +19,7 @@ struct ChandeKrollStopVal{Tval}
 end
 
 """
-    ChandeKrollStop{Tohlcv}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD, input_filter = always_true, input_modifier = identity, input_modifier_return_type = Tohlcv)
+    ChandeKrollStop{Tohlcv}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 
@@ -29,8 +29,6 @@ The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
 mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     atr_period::Integer
     atr_mult::S
@@ -41,17 +39,12 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
 
     high_stop_list::CircBuff
     low_stop_list::CircBuff
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ChandeKrollStop{Tohlcv}(;
         atr_period = ChandeKrollStop_ATR_PERIOD,
         atr_mult = ChandeKrollStop_ATR_MULT,
         period = ChandeKrollStop_PERIOD,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tohlcv,
     ) where {Tohlcv}
         T2 = input_modifier_return_type
@@ -62,7 +55,8 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
         high_stop_list = CircBuff(S, period, rev = false)
         low_stop_list = CircBuff(S, period, rev = false)
         new{Tohlcv,true,S}(
-            initialize_indicator_common_fields()...,
+            missing,
+            0,
             atr_period,
             atr_mult,
             period,
@@ -70,8 +64,6 @@ mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Toh
             atr,
             high_stop_list,
             low_stop_list,
-            input_modifier,
-            input_filter,
             input_values,
         )
     end
@@ -81,17 +73,14 @@ function ChandeKrollStop(;
     atr_period = ChandeKrollStop_ATR_PERIOD,
     atr_mult = ChandeKrollStop_ATR_MULT,
     period = ChandeKrollStop_PERIOD,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = OHLCV{Missing,Float64,Float64},
 )
     ChandeKrollStop{input_modifier_return_type}(;
-        atr_period=atr_period,
-        atr_mult=atr_mult,
-        period=period,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        atr_period = atr_period,
+        atr_mult = atr_mult,
+        period = period,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ChandeKrollStop)

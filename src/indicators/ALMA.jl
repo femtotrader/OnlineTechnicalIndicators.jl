@@ -4,15 +4,13 @@ const ALMA_SIGMA = 6.0
 
 
 """
-    ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA, input_filter = always_true, input_modifier = identity, input_modifier_return_type = T)
+    ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA, input_modifier_return_type = T)
 
 The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
 """
 mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}
     n::Int
-    output_listeners::Series
-    input_indicator::Union{Missing,TechnicalIndicator}
 
     period::Integer
     offset::T2
@@ -20,17 +18,12 @@ mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
 
     w::Vector
     w_sum::T2
-
-    input_modifier::Function
-    input_filter::Function
     input_values::CircBuff
 
     function ALMA{Tval}(;
         period = ALMA_PERIOD,
         offset = ALMA_OFFSET,
         sigma = ALMA_SIGMA,
-        input_filter = always_true,
-        input_modifier = identity,
         input_modifier_return_type = Tval,
     ) where {Tval}
         T2 = input_modifier_return_type
@@ -44,17 +37,7 @@ mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
             w_sum += w_val
         end
         input_values = CircBuff(T2, period, rev = false)
-        new{Tval,false,T2}(
-            initialize_indicator_common_fields()...,
-            period,
-            offset,
-            sigma,
-            w,
-            w_sum,
-            input_modifier,
-            input_filter,
-            input_values,
-        )
+        new{Tval,false,T2}(missing, 0, period, offset, sigma, w, w_sum, input_values)
     end
 end
 
@@ -62,17 +45,14 @@ function ALMA(;
     period = ALMA_PERIOD,
     offset = ALMA_OFFSET,
     sigma = ALMA_SIGMA,
-    input_filter = always_true,
-    input_modifier = identity,
     input_modifier_return_type = Float64,
 )
     ALMA{input_modifier_return_type}(;
-        period=period,
-        offset=offset,
-        sigma=sigma,
-        input_filter=input_filter,
-        input_modifier=input_modifier,
-        input_modifier_return_type=input_modifier_return_type)
+        period = period,
+        offset = offset,
+        sigma = sigma,
+        input_modifier_return_type = input_modifier_return_type,
+    )
 end
 
 function _calculate_new_value(ind::ALMA{T,IN,S}) where {T,IN,S}
