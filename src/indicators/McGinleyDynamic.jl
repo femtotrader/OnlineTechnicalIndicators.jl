@@ -5,6 +5,26 @@ const McGinleyDynamic_PERIOD = 14
     McGinleyDynamic{T}(; period = McGinleyDynamic_PERIOD, input_modifier_return_type = T)
 
 The `McGinleyDynamic` type implements a McGinley Dynamic indicator.
+
+The McGinley Dynamic is an adaptive moving average that automatically adjusts its speed
+based on market volatility. It speeds up in trending markets and slows down in ranging
+markets, reducing whipsaws compared to traditional moving averages.
+
+# Parameters
+- `period::Integer = $McGinleyDynamic_PERIOD`: The base period for the calculation
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+MD = MD_prev + (price - MD_prev) / (period × (price / MD_prev)^4)
+```
+The first value is calculated as a simple average of the first `period` prices.
+
+# Returns
+`Union{Missing,T}` - The McGinley Dynamic value, or `missing` during the warm-up period
+(first `period - 1` observations).
+
+See also: [`EMA`](@ref), [`KAMA`](@ref), [`ZLEMA`](@ref)
 """
 mutable struct McGinleyDynamic{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

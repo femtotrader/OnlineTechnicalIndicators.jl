@@ -21,8 +21,31 @@ end
 
 The `Aroon` type implements an Aroon indicator.
 
+The Aroon indicator measures the time since the most recent high and low within a period.
+It helps identify trend strength and potential reversals. Aroon Up near 100 indicates a
+strong uptrend (recent high), while Aroon Down near 100 indicates a strong downtrend.
+
+# Parameters
+- `period::Integer = $Aroon_PERIOD`: The lookback period for the calculation
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Aroon Up = 100 × (period - days_since_high) / period
+Aroon Down = 100 × (period - days_since_low) / period
+```
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
+
 # Output
-- [`AroonVal`](@ref): A value containing `up` and `down` values
+- [`AroonVal`](@ref): Contains `up` and `down` values (0-100 scale)
+
+# Returns
+`Union{Missing,AroonVal}` - The Aroon values, or `missing` during warm-up
+(first `period` observations).
+
+See also: [`ADX`](@ref), [`VTX`](@ref), [`MACD`](@ref)
 """
 mutable struct Aroon{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,AroonVal}

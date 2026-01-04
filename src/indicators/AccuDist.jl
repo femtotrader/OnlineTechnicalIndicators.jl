@@ -1,7 +1,32 @@
 """
-    AccuDist{Tohlcv}()
+    AccuDist{Tohlcv}(; input_modifier_return_type = Tohlcv)
 
-The `AccuDist` type implements an Accumulation and Distribution indicator.
+The `AccuDist` type implements an Accumulation/Distribution Line (ADL) indicator.
+
+The Accumulation/Distribution Line measures the cumulative flow of money into and out of
+a security. It uses the relationship between the close price and the trading range,
+weighted by volume. Rising ADL suggests accumulation (buying), falling ADL suggests
+distribution (selling).
+
+# Parameters
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+MFI = ((close - low) - (high - close)) / (high - low)  # Money Flow Multiplier
+MFV = MFI × volume                                      # Money Flow Volume
+ADL = ADL_prev + MFV                                    # Cumulative sum
+```
+Returns previous value if high equals low (avoids division by zero).
+
+# Input
+Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The cumulative accumulation/distribution value. Available from
+the first observation.
+
+See also: [`ChaikinOsc`](@ref), [`OBV`](@ref), [`ForceIndex`](@ref)
 """
 mutable struct AccuDist{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

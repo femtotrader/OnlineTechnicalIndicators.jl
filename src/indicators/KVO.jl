@@ -5,6 +5,34 @@ const KVO_SLOW_PERIOD = 10
     KVO{Tohlcv}(; fast_period = KVO_FAST_PERIOD, slow_period = KVO_SLOW_PERIOD, ma = EMA, input_modifier_return_type = Tohlcv)
 
 The `KVO` type implements a Klinger Volume Oscillator.
+
+The Klinger Volume Oscillator measures the long-term trend of money flow while remaining
+sensitive to short-term fluctuations. It uses volume and price to determine if money is
+flowing into or out of a security. Crossovers of the fast and slow EMAs generate signals.
+
+# Parameters
+- `fast_period::Integer = $KVO_FAST_PERIOD`: Period for the fast moving average
+- `slow_period::Integer = $KVO_SLOW_PERIOD`: Period for the slow moving average
+- `ma::Type = EMA`: Moving average type used for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+HLC = high + low + close
+Trend = +1 if HLC > HLC_prev, -1 otherwise
+dm = high - low
+cm = dm + cm_prev (if trend unchanged) or dm + dm_prev (if trend changes)
+VF = volume × |2 × (dm/cm) - 1| × trend × 100
+KVO = EMA(VF, fast_period) - EMA(VF, slow_period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The Klinger Volume Oscillator value, or `missing` during warm-up.
+
+See also: [`OBV`](@ref), [`ChaikinOsc`](@ref), [`ForceIndex`](@ref)
 """
 mutable struct KVO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

@@ -4,6 +4,30 @@ const SOBV_PERIOD = 20
     SOBV{Tohlcv}(; period = SOBV_PERIOD, ma = SMA, input_modifier_return_type = Tohlcv)
 
 The `SOBV` type implements a Smoothed On Balance Volume indicator.
+
+SOBV applies a moving average to the On Balance Volume (OBV) indicator, reducing noise
+and making the trend clearer. This helps filter out short-term fluctuations in the
+cumulative volume measure.
+
+# Parameters
+- `period::Integer = $SOBV_PERIOD`: The number of periods for smoothing the OBV
+- `ma::Type = SMA`: The moving average type used for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+SOBV = MA(OBV, period)
+```
+Where OBV is the On Balance Volume indicator.
+
+# Input
+Requires OHLCV data with `close` and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The smoothed on-balance volume value, or `missing` during the warm-up
+period (first `period - 1` observations after OBV becomes available).
+
+See also: [`OBV`](@ref), [`SMA`](@ref), [`EMA`](@ref)
 """
 mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

@@ -29,10 +29,33 @@ end
 """
     MACD{T}(; fast_period = MACD_FAST_PERIOD, slow_period = MACD_SLOW_PERIOD, signal_period = MACD_SIGNAL_PERIOD, ma = EMA, input_modifier_return_type = T)
 
-The `MACD` type implements Moving Average Convergence Divergence indicator.
+The `MACD` type implements a Moving Average Convergence Divergence indicator.
+
+MACD shows the relationship between two moving averages. The MACD line crossing above
+the signal line is a bullish signal, while crossing below is bearish. The histogram
+visualizes the difference between MACD and signal for easier trend identification.
+
+# Parameters
+- `fast_period::Integer = $MACD_FAST_PERIOD`: Period for the fast moving average
+- `slow_period::Integer = $MACD_SLOW_PERIOD`: Period for the slow moving average
+- `signal_period::Integer = $MACD_SIGNAL_PERIOD`: Period for the signal line
+- `ma::Type = EMA`: Moving average type (typically EMA)
+- `input_modifier_return_type::Type = T`: Output value type
+
+# Formula
+```
+MACD Line = EMA(fast_period) - EMA(slow_period)
+Signal Line = EMA(MACD Line, signal_period)
+Histogram = MACD Line - Signal Line
+```
 
 # Output
-- [`MACDVal`](@ref): A value containing `macd`, `signal`, and `histogram` values
+- [`MACDVal`](@ref): Contains `macd`, `signal`, and `histogram` values
+
+# Returns
+`Union{Missing,MACDVal}` - The MACD values, or `missing` during warm-up.
+
+See also: [`EMA`](@ref), [`RSI`](@ref), [`Aroon`](@ref)
 """
 mutable struct MACD{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,MACDVal}

@@ -29,12 +29,38 @@ struct ParabolicSARVal{Tval}
 end
 
 """
-    ParabolicSAR{Tohlcv}(; atr_period = ParabolicSAR_ATR_PERIOD, mult = ParabolicSAR_MULT, input_modifier_return_type = Tohlcv)
+    ParabolicSAR{Tohlcv}(; init_accel_factor = ParabolicSAR_INIT_ACCEL_FACTOR, accel_factor_inc = ParabolicSAR_ACCEL_FACTOR_INC, max_accel_factor = ParabolicSAR_MAX_ACCEL_FACTOR, input_modifier_return_type = Tohlcv)
 
-The `ParabolicSAR` type implements a Super Trend indicator.
+The `ParabolicSAR` type implements a Parabolic Stop and Reverse indicator.
+
+Parabolic SAR provides potential entry and exit points by trailing price with an
+accelerating curve. The SAR value acts as a trailing stop: below price in uptrends
+(support) and above price in downtrends (resistance). When price crosses SAR, trend reverses.
+
+# Parameters
+- `init_accel_factor::Number = $ParabolicSAR_INIT_ACCEL_FACTOR`: Initial acceleration factor
+- `accel_factor_inc::Number = $ParabolicSAR_ACCEL_FACTOR_INC`: AF increment on new extreme
+- `max_accel_factor::Number = $ParabolicSAR_MAX_ACCEL_FACTOR`: Maximum acceleration factor
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+SAR = SAR_prev + AF × (EP - SAR_prev)
+AF increases by accel_factor_inc each time EP updates (capped at max_accel_factor)
+EP = highest high (uptrend) or lowest low (downtrend)
+```
+Trend reverses when price crosses SAR.
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
 
 # Output
-- [`ParabolicSARVal`](@ref): A value containing `value`, `trend`, `ep`, and `accel_factor` values
+- [`ParabolicSARVal`](@ref): Contains `value` (SAR level), `trend` (UP/DOWN), `ep`, and `accel_factor`
+
+# Returns
+`Union{Missing,ParabolicSARVal}` - The SAR values, or `missing` during initialization.
+
+See also: [`SuperTrend`](@ref), [`ChandeKrollStop`](@ref), [`ATR`](@ref)
 """
 mutable struct ParabolicSAR{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ParabolicSARVal}

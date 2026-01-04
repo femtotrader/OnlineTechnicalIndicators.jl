@@ -23,12 +23,38 @@ struct SuperTrendVal{Tval}
 end
 
 """
-    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_modifier_return_type = T)
+    SuperTrend{Tohlcv}(; atr_period = SuperTrend_ATR_PERIOD, mult = SuperTrend_MULT, input_modifier_return_type = Tohlcv)
 
 The `SuperTrend` type implements a Super Trend indicator.
 
+SuperTrend is a trend-following indicator that uses ATR to create dynamic support and
+resistance levels. It flips between acting as support (in uptrends) and resistance
+(in downtrends), making it useful for trailing stops and trend identification.
+
+# Parameters
+- `atr_period::Integer = $SuperTrend_ATR_PERIOD`: Period for ATR calculation
+- `mult::Integer = $SuperTrend_MULT`: ATR multiplier for band width
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+HLA = (high + low) / 2
+Upper Band = HLA + (mult × ATR)
+Lower Band = HLA - (mult × ATR)
+SuperTrend = Lower Band (in uptrend) or Upper Band (in downtrend)
+```
+The indicator switches bands when price crosses through.
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
 # Output
-- [`SuperTrendVal`](@ref): A value containing `value` and `trend` values
+- [`SuperTrendVal`](@ref): Contains `value` (the SuperTrend level) and `trend` (UP or DOWN)
+
+# Returns
+`Union{Missing,SuperTrendVal}` - The SuperTrend value and direction, or `missing` during warm-up.
+
+See also: [`ATR`](@ref), [`ParabolicSAR`](@ref), [`ChandeKrollStop`](@ref)
 """
 mutable struct SuperTrend{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SuperTrendVal}

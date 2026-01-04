@@ -4,6 +4,29 @@ const ForceIndex_PERIOD = 3
     ForceIndex{Tohlcv}(; period = ForceIndex_PERIOD, ma = EMA, input_modifier_return_type = Tohlcv)
 
 The `ForceIndex` type implements a Force Index indicator.
+
+The Force Index combines price change and volume to measure the strength behind price
+movements. Large positive values indicate strong buying pressure, while large negative
+values indicate strong selling pressure. The raw values are smoothed with a moving average.
+
+# Parameters
+- `period::Integer = $ForceIndex_PERIOD`: The period for the moving average smoothing
+- `ma::Type = EMA`: The moving average type used for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Raw Force = (close - close_prev) × volume
+Force Index = MA(Raw Force, period)
+```
+
+# Input
+Requires OHLCV data with `close` and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The smoothed force index value, or `missing` during warm-up.
+
+See also: [`OBV`](@ref), [`AccuDist`](@ref), [`KVO`](@ref)
 """
 mutable struct ForceIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

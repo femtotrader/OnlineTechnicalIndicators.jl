@@ -2,18 +2,27 @@ const SMA_PERIOD = 3
 
 
 """
-    SMA{T1}(; period = SMA_PERIOD, input_modifier_return_type = T2)
+    SMA{T}(; period = SMA_PERIOD, input_modifier_return_type = T)
 
 The `SMA` type implements a Simple Moving Average indicator.
 
-`fit!(o, val)` with `o` of type `SMA` will catch `val` of type `T1`
+SMA calculates the arithmetic mean of prices over a specified period. It gives equal
+weight to all prices in the period, providing a smooth representation of price trends.
 
-`input_modifier_return_type` is the type `T2` of return of the `input_modifier` function it's also type of indicator value
+# Parameters
+- `period::Integer = $SMA_PERIOD`: The number of periods for the moving average
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
 
-by default `T2 = T1`
+# Formula
+`SMA = (P1 + P2 + ... + Pn) / n`
 
-IN = false means that indicator is of "single input" type
-IN = true means that indicator is of "multiple input" (candle) type
+where n is the period and P1...Pn are the prices in the window.
+
+# Returns
+`Union{Missing,T}` - The simple moving average value, or `missing` during the warm-up period
+(first `period - 1` observations).
+
+See also: [`EMA`](@ref), [`WMA`](@ref), [`SMMA`](@ref)
 """
 mutable struct SMA{T1,IN,T2} <: MovingAverageIndicator{T1}
     value::Union{Missing,T2}

@@ -21,10 +21,36 @@ end
 """
     ChandeKrollStop{Tohlcv}(; atr_period = ChandeKrollStop_ATR_PERIOD, atr_mult = ChandeKrollStop_ATR_MULT, period = ChandeKrollStop_PERIOD, input_modifier_return_type = Tohlcv)
 
-The `ChandeKrollStop` type implements a ChandeKrollStop indicator.
+The `ChandeKrollStop` type implements a Chande Kroll Stop indicator.
+
+The Chande Kroll Stop is a volatility-based trailing stop indicator that adapts to market
+conditions using ATR. It calculates stop levels for both long and short positions,
+helping traders set protective stops that account for normal price fluctuations.
+
+# Parameters
+- `atr_period::Integer = $ChandeKrollStop_ATR_PERIOD`: Period for ATR calculation
+- `atr_mult::Number = $ChandeKrollStop_ATR_MULT`: Multiplier for ATR (controls stop distance)
+- `period::Integer = $ChandeKrollStop_PERIOD`: Period for stop level smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+High Stop = max(high, atr_period) - ATR × atr_mult
+Low Stop = min(low, atr_period) + ATR × atr_mult
+Short Stop = max(High Stop, period)
+Long Stop = min(Low Stop, period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
 
 # Output
-- [`ChandeKrollStopVal`](@ref): A value containing `short_stop` and `long_stop` values
+- [`ChandeKrollStopVal`](@ref): Contains `short_stop` and `long_stop` levels
+
+# Returns
+`Union{Missing,ChandeKrollStopVal}` - The stop levels, or `missing` during warm-up.
+
+See also: [`ATR`](@ref), [`SuperTrend`](@ref), [`ParabolicSAR`](@ref)
 """
 mutable struct ChandeKrollStop{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ChandeKrollStopVal}

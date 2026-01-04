@@ -1,7 +1,29 @@
 """
-    OBV{Tohlcv}(input_modifier_return_type = Tohlcv)
+    OBV{Tohlcv}(; input_modifier_return_type = Tohlcv)
 
-The `OBV` type implements On Balance Volume indicator.
+The `OBV` type implements an On Balance Volume indicator.
+
+OBV is a momentum indicator that uses volume flow to predict changes in stock price.
+It adds volume on up days and subtracts volume on down days, creating a cumulative
+total that can confirm price trends or warn of potential reversals.
+
+# Parameters
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type (must have `close` and `volume` fields)
+
+# Formula
+```
+If close > close_prev: OBV = OBV_prev + volume
+If close < close_prev: OBV = OBV_prev - volume
+If close = close_prev: OBV = OBV_prev
+```
+
+# Input
+Requires OHLCV data with `close` and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The cumulative on-balance volume value. Available from the first observation.
+
+See also: [`SOBV`](@ref), [`AccuDist`](@ref), [`ChaikinOsc`](@ref)
 """
 mutable struct OBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

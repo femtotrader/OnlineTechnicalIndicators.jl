@@ -28,12 +28,31 @@ end
 # isnew(val::PivotsHLVal) = val.isnew
 
 """
-    PivotsHL{Tohlcv}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, input_modifier_return_type = Tohlcv)
+    PivotsHL{Tohlcv}(; high_period = PivotsHL_HIGH_PERIOD, low_period = PivotsHL_LOW_PERIOD, memory = PivotsHL_MEMORY, input_modifier_return_type = Tohlcv)
 
-The `PivotsHL` type implements a High/Low Pivots Indicator.
+The `PivotsHL` type implements a High/Low Pivots indicator.
+
+PivotsHL identifies significant high and low pivot points in price data. A pivot high
+occurs when price makes a local maximum, and a pivot low occurs when price makes a
+local minimum within the lookback period.
+
+# Parameters
+- `high_period::Integer = $PivotsHL_HIGH_PERIOD`: Lookback period for identifying pivot highs
+- `low_period::Integer = $PivotsHL_LOW_PERIOD`: Lookback period for identifying pivot lows
+- `memory::Integer = $PivotsHL_MEMORY`: Number of pivot points to store
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
 
 # Output
-- [`PivotsHLVal`](@ref): A value containing `ohlcv`, `type`, and `isnew` values
+- [`PivotsHLVal`](@ref): Contains `ohlcv` (data at pivot), `type` (HIGH/LOW), `isnew` (Bool)
+
+# Returns
+Always returns `missing` (pivot values stored in `output_values` CircBuff). Use
+`has_output_value(ind)` to check if pivots exist and access via `ind.output_values`.
+
+See also: [`DonchianChannels`](@ref), [`SuperTrend`](@ref)
 """
 mutable struct PivotsHL{Tohlcv,IN} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Missing

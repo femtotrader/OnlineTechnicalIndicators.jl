@@ -4,7 +4,32 @@ const EMV_VOLUME_DIV = 10000
 """
     EMV{Tohlcv}(; period = EMV_PERIOD, volume_div = EMV_VOLUME_DIV, ma = SMA, input_modifier_return_type = Tohlcv)
 
-The `EMV` type implements a Ease of Movement indicator.
+The `EMV` type implements an Ease of Movement indicator.
+
+EMV relates price change to volume, showing how easily a price can move. High positive values
+indicate the price is moving up on low volume (easy upward movement), while high negative
+values indicate easy downward movement. The indicator is smoothed with a moving average.
+
+# Parameters
+- `period::Integer = $EMV_PERIOD`: The number of periods for the moving average smoothing
+- `volume_div::Integer = $EMV_VOLUME_DIV`: Divisor for volume normalization (typically 10000)
+- `ma::Type = SMA`: The moving average type used for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Distance = ((high + low) / 2) - ((high_prev + low_prev) / 2)
+Box Ratio = (volume / volume_div) / (high - low)
+EMV = MA(Distance / Box Ratio, period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The smoothed ease of movement value, or `missing` during warm-up.
+
+See also: [`OBV`](@ref), [`AccuDist`](@ref)
 """
 mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

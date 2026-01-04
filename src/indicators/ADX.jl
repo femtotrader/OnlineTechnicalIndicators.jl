@@ -20,12 +20,39 @@ struct ADXVal{Tval}
 end
 
 """
-    ADX{Tohlcv}(; di_period = 14, adx_period = 14, input_modifier_return_type = Tohlcv)
+    ADX{Tohlcv}(; di_period = ADX_DI_PERIOD, adx_period = ADX_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `ADX` type implements an Average Directional Index indicator.
 
+ADX measures trend strength regardless of direction. Values above 25 suggest a strong trend,
+while values below 20 indicate a weak or non-trending market. The +DI and -DI lines show
+directional movement: +DI > -DI suggests uptrend, -DI > +DI suggests downtrend.
+
+# Parameters
+- `di_period::Integer = $ADX_DI_PERIOD`: Period for directional indicator calculation
+- `adx_period::Integer = $ADX_PERIOD`: Period for ADX smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
++DM = high - high_prev (if positive and > -DM, else 0)
+-DM = low_prev - low (if positive and > +DM, else 0)
++DI = 100 × smoothed(+DM) / ATR
+-DI = 100 × smoothed(-DM) / ATR
+DX = 100 × |+DI - -DI| / (+DI + -DI)
+ADX = smoothed(DX)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
 # Output
-- [`ADXVal`](@ref): A value containing `adx`, `plus_di`, and `minus_di` values
+- [`ADXVal`](@ref): Contains `adx` (trend strength 0-100), `plus_di`, and `minus_di`
+
+# Returns
+`Union{Missing,ADXVal}` - The ADX values, or `missing` during warm-up.
+
+See also: [`ATR`](@ref), [`Aroon`](@ref), [`VTX`](@ref)
 """
 mutable struct ADX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,ADXVal}

@@ -21,12 +21,38 @@ struct SFXVal{Tval}
 end
 
 """
-    SFX{Tohlcv}(; atr_period = SFX_ATR_PERIOD, std_dev_period = SFX_STD_DEV_PERIOD, std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD, ma = SMA, input_modifier_return_type = T)
+    SFX{Tohlcv}(; atr_period = SFX_ATR_PERIOD, std_dev_period = SFX_STD_DEV_PERIOD, std_dev_smoothing_period = SFX_STD_DEV_SMOOTHING_PERIOD, ma = SMA, input_modifier_return_type = Tohlcv)
 
-The `SFX` type implements a SFX indicator.
+The `SFX` type implements an SFX (Smoothed Forex) volatility indicator.
+
+SFX combines Average True Range with standard deviation to measure market volatility.
+Comparing ATR to smoothed standard deviation helps identify when volatility is expanding
+or contracting, useful for timing entries and setting stop losses.
+
+# Parameters
+- `atr_period::Integer = $SFX_ATR_PERIOD`: Period for ATR calculation
+- `std_dev_period::Integer = $SFX_STD_DEV_PERIOD`: Period for standard deviation
+- `std_dev_smoothing_period::Integer = $SFX_STD_DEV_SMOOTHING_PERIOD`: Period for smoothing std dev
+- `ma::Type = SMA`: Moving average type for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+ATR = Average True Range over atr_period
+StdDev = Standard Deviation of close over std_dev_period
+MA_StdDev = SMA(StdDev, std_dev_smoothing_period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
 
 # Output
-- [`SFXVal`](@ref): A value containing `atr`, `std_dev`, and `ma_std_dev` values
+- [`SFXVal`](@ref): Contains `atr`, `std_dev`, and `ma_std_dev` values
+
+# Returns
+`Union{Missing,SFXVal}` - The SFX values. `std_dev` available early, others after warm-up.
+
+See also: [`ATR`](@ref), [`StdDev`](@ref), [`BB`](@ref)
 """
 mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,SFXVal}

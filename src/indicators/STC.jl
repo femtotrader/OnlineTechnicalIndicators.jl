@@ -8,22 +8,32 @@ const STC_STOCH_SMOOTHING_PERIOD = 3
 """
     STC{T}(; fast_macd_period = STC_FAST_MACD_PERIOD, slow_macd_period = STC_SLOW_MACD_PERIOD, stoch_period = STC_STOCH_PERIOD, stoch_smoothing_period = STC_STOCH_SMOOTHING_PERIOD, ma = SMA, input_modifier_return_type = T)
 
-The `STC` type implements a Schaff Trend Cycle indicator using OnlineStatsChains with filtered edges.
+The `STC` type implements a Schaff Trend Cycle indicator.
 
-# Implementation Details
-Uses OnlineStatsChains.StatDAG with filtered edges to organize the chain:
-MACD → Stoch(MACD) → Stoch(Stoch.d)
+STC combines MACD with double Stochastic smoothing to identify cyclical trends.
+It oscillates between 0 and 100, with values above 75 indicating overbought conditions
+and below 25 indicating oversold conditions. It often leads price reversals.
 
-The DAG structure provides:
-- Clear organization of the MACD→Stoch→Stoch pipeline
-- Automatic propagation through filtered edges
-- Named access to each stage for debugging
+# Parameters
+- `fast_macd_period::Integer = $STC_FAST_MACD_PERIOD`: Fast EMA period for MACD
+- `slow_macd_period::Integer = $STC_SLOW_MACD_PERIOD`: Slow EMA period for MACD
+- `stoch_period::Integer = $STC_STOCH_PERIOD`: Lookback period for Stochastic
+- `stoch_smoothing_period::Integer = $STC_STOCH_SMOOTHING_PERIOD`: Smoothing for Stochastic %D
+- `ma::Type = SMA`: Moving average type for Stochastic smoothing
+- `input_modifier_return_type::Type = T`: Output value type
 
 # Formula
-1. Compute MACD
-2. Apply Stochastic to MACD values
-3. Apply Stochastic to the %D line of the first Stochastic
-4. Final STC = bounded %D value from second Stochastic
+```
+1. MACD = EMA(fast) - EMA(slow)
+2. Stoch1 = Stochastic(MACD)
+3. Stoch2 = Stochastic(Stoch1.%D)
+4. STC = clamp(Stoch2.%D, 0, 100)
+```
+
+# Returns
+`Union{Missing,T}` - The STC value (0-100), or `missing` during warm-up.
+
+See also: [`MACD`](@ref), [`Stoch`](@ref), [`RSI`](@ref)
 """
 mutable struct STC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

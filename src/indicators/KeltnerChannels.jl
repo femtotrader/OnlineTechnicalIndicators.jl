@@ -26,8 +26,35 @@ end
 
 The `KeltnerChannels` type implements a Keltner Channels indicator.
 
+Keltner Channels are volatility-based envelopes set above and below a moving average.
+They use ATR to determine channel width. Price touching the upper channel suggests
+overbought conditions, while touching the lower channel suggests oversold conditions.
+
+# Parameters
+- `ma_period::Integer = $KeltnerChannels_MA_PERIOD`: Period for the central moving average
+- `atr_period::Integer = $KeltnerChannels_ATR_PERIOD`: Period for ATR calculation
+- `atr_mult_up::Number = $KeltnerChannels_ATR_MULT_UP`: ATR multiplier for upper channel
+- `atr_mult_down::Number = $KeltnerChannels_ATR_MULT_DOWN`: ATR multiplier for lower channel
+- `ma::Type = EMA`: Moving average type for central band
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Central = EMA(close, ma_period)
+Upper = Central + (atr_mult_up × ATR)
+Lower = Central - (atr_mult_down × ATR)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
 # Output
-- [`KeltnerChannelsVal`](@ref): A value containing `lower`, `central`, and `upper` channel values
+- [`KeltnerChannelsVal`](@ref): Contains `upper`, `central`, and `lower` channel values
+
+# Returns
+`Union{Missing,KeltnerChannelsVal}` - The channel values, or `missing` during warm-up.
+
+See also: [`BB`](@ref), [`DonchianChannels`](@ref), [`ATR`](@ref)
 """
 mutable struct KeltnerChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,KeltnerChannelsVal{S}}

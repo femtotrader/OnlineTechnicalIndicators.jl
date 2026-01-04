@@ -1,9 +1,31 @@
 const VWAP_MEMORY = 3
 
 """
-    VWAP{Tohlcv}(input_modifier_return_type = T)
+    VWAP{Tohlcv}(; input_modifier_return_type = Tohlcv)
 
-The `VWAP` type implements a Volume Weighted Moving Average indicator.
+The `VWAP` type implements a Volume Weighted Average Price indicator.
+
+VWAP calculates the average price weighted by volume from the beginning of the trading
+session. It represents the average price a security has traded at throughout the day,
+and is commonly used as a trading benchmark by institutional investors.
+
+# Parameters
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Typical Price = (high + low + close) / 3
+VWAP = cumsum(Typical Price × volume) / cumsum(volume)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The cumulative VWAP value. Available from the first observation.
+Returns `missing` if total volume is zero.
+
+See also: [`VWMA`](@ref), [`SMA`](@ref)
 """
 mutable struct VWAP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

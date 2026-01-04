@@ -19,12 +19,38 @@ struct TTMVal{Tval}
 end
 
 """
-    TTM{Tohlcv}(; atr_period = TTM_ATR_PERIOD, std_dev_period = TTM_STD_DEV_PERIOD, std_dev_smoothing_period = TTM_STD_DEV_SMOOTHING_PERIOD, ma = SMA)
+    TTM{Tohlcv}(; period = TTM_PERIOD, bb_std_dev_mult = TTM_BB_STD_DEV_MULT, kc_atr_mult = TTM_KC_ATR_MULT, ma = SMA, input_modifier_return_type = Tohlcv)
 
-The `TTM` type implements a TTM indicator.
+The `TTM` type implements a TTM Squeeze indicator.
+
+The TTM Squeeze identifies periods of low volatility (squeeze) that often precede
+significant price moves. When Bollinger Bands move inside Keltner Channels, volatility
+is contracting (squeeze on). The histogram shows momentum direction for trade timing.
+
+# Parameters
+- `period::Integer = $TTM_PERIOD`: Period for BB, KC, and linear regression
+- `bb_std_dev_mult::Number = $TTM_BB_STD_DEV_MULT`: Standard deviation multiplier for Bollinger Bands
+- `kc_atr_mult::Number = $TTM_KC_ATR_MULT`: ATR multiplier for Keltner Channels
+- `ma::Type = SMA`: Moving average type for calculations
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Squeeze = BB.upper < KC.upper AND BB.lower > KC.lower
+Delta = close - (Donchian.central + MA) / 2
+Histogram = Linear regression of Delta over period
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
 
 # Output
-- [`TTMVal`](@ref): A value containing `squeeze` and `histogram` values
+- [`TTMVal`](@ref): Contains `squeeze` (Bool) and `histogram` (momentum value)
+
+# Returns
+`Union{Missing,TTMVal}` - The squeeze status and momentum, or `missing` during warm-up.
+
+See also: [`BB`](@ref), [`KeltnerChannels`](@ref), [`DonchianChannels`](@ref)
 """
 mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,TTMVal}

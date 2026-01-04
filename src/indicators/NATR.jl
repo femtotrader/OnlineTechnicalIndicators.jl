@@ -4,6 +4,29 @@
     NATR{Tohlcv}(; period = ATR_PERIOD, ma = SMMA, input_modifier_return_type = Tohlcv)
 
 The `NATR` type implements a Normalized Average True Range indicator.
+
+NATR expresses the Average True Range as a percentage of the closing price, making it
+easier to compare volatility across different securities regardless of their price levels.
+Higher NATR values indicate higher volatility relative to the price.
+
+# Parameters
+- `period::Integer = $ATR_PERIOD`: The number of periods for the ATR calculation
+- `ma::Type = SMMA`: The moving average type used for smoothing (default is Wilder's SMMA)
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type (must have `high`, `low`, `close` fields)
+
+# Formula
+```
+NATR = (ATR / close) × 100
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
+# Returns
+`Union{Missing,T}` - The normalized ATR as a percentage, or `missing` during the warm-up
+period (first `period - 1` observations). Returns `missing` if close price is zero.
+
+See also: [`ATR`](@ref), [`TrueRange`](@ref)
 """
 mutable struct NATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

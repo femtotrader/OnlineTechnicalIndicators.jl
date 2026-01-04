@@ -6,6 +6,33 @@ const UO_SLOW_PERIOD = 7
     UO{Tohlcv}(; fast_period = UO_FAST_PERIOD, mid_period = UO_MID_PERIOD, slow_period = UO_SLOW_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `UO` type implements an Ultimate Oscillator.
+
+The Ultimate Oscillator combines short, medium, and long-term price momentum into a single
+oscillator. By using three timeframes, it aims to reduce false signals and better capture
+momentum across market cycles. Values above 70 suggest overbought, below 30 oversold.
+
+# Parameters
+- `fast_period::Integer = $UO_FAST_PERIOD`: The period for the fast average
+- `mid_period::Integer = $UO_MID_PERIOD`: The period for the medium average
+- `slow_period::Integer = $UO_SLOW_PERIOD`: The period for the slow average
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+BP = close - min(low, close_prev)           # Buying Pressure
+TR = max(high, close_prev) - min(low, close_prev)  # True Range
+Avg = sum(BP, period) / sum(TR, period)
+UO = 100 × (4 × Avg_fast + 2 × Avg_mid + Avg_slow) / 7
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
+# Returns
+`Union{Missing,T}` - The ultimate oscillator value (0-100), or `missing` during warm-up
+(first `slow_period` observations).
+
+See also: [`RSI`](@ref), [`Stoch`](@ref), [`CCI`](@ref)
 """
 mutable struct UO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

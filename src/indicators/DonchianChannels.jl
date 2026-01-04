@@ -23,8 +23,31 @@ end
 
 The `DonchianChannels` type implements a Donchian Channels indicator.
 
+Donchian Channels plot the highest high and lowest low over a period, with a central line
+at the midpoint. Breakouts above the upper channel signal potential uptrends, while breaks
+below the lower channel signal potential downtrends. Also known as price channels.
+
+# Parameters
+- `period::Integer = $DonchianChannels_ATR_PERIOD`: The lookback period for channel calculation
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Upper = highest_high(period)
+Lower = lowest_low(period)
+Central = (Upper + Lower) / 2
+```
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
+
 # Output
-- [`DonchianChannelsVal`](@ref): A value containing `lower`, `central`, and `upper` channel values
+- [`DonchianChannelsVal`](@ref): Contains `upper`, `central`, and `lower` channel values
+
+# Returns
+`Union{Missing,DonchianChannelsVal}` - The channel values, or `missing` during warm-up.
+
+See also: [`KeltnerChannels`](@ref), [`BB`](@ref), [`GannHiloActivator`](@ref)
 """
 mutable struct DonchianChannels{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,DonchianChannelsVal}

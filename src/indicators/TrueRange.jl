@@ -2,6 +2,31 @@
     TrueRange{Tohlcv}(; input_modifier_return_type = Tohlcv)
 
 The `TrueRange` type implements a True Range indicator.
+
+True Range measures the greatest of the following:
+- Current high minus current low
+- Absolute value of current high minus previous close
+- Absolute value of current low minus previous close
+
+This captures the full range of price movement including any gaps from the previous close.
+True Range is the building block for the Average True Range (ATR) indicator.
+
+# Parameters
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type (must have `high`, `low`, `close` fields)
+
+# Formula
+```
+TR = max(high - low, |high - close_prev|, |low - close_prev|)
+```
+For the first observation, TR = high - low (no previous close available).
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
+# Returns
+`Union{Missing,T}` - The true range value. Available from the first observation.
+
+See also: [`ATR`](@ref), [`NATR`](@ref)
 """
 mutable struct TrueRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

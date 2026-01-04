@@ -21,8 +21,33 @@ end
 
 The `VTX` type implements a Vortex Indicator.
 
+The Vortex Indicator identifies trend direction and trend reversals by analyzing the
+relationship between price movement and true range. +VI rising above -VI suggests an
+uptrend, while -VI rising above +VI suggests a downtrend.
+
+# Parameters
+- `period::Integer = $VTX_PERIOD`: The lookback period for the calculation
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
++VM = |high - low_prev|
+-VM = |low - high_prev|
++VI = sum(+VM, period) / sum(TR, period)
+-VI = sum(-VM, period) / sum(TR, period)
+```
+Where TR is the True Range.
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
 # Output
-- [`VTXVal`](@ref): A value containing `plus_vtx` and `minus_vtx` values
+- [`VTXVal`](@ref): Contains `plus_vtx` (+VI) and `minus_vtx` (-VI) values
+
+# Returns
+`Union{Missing,VTXVal}` - The vortex indicator values, or `missing` during warm-up.
+
+See also: [`TrueRange`](@ref), [`ADX`](@ref), [`Aroon`](@ref)
 """
 mutable struct VTX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     value::Union{Missing,VTXVal}

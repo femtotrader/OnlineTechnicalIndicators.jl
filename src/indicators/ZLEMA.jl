@@ -2,9 +2,30 @@ const ZLEMA_PERIOD = 20
 
 
 """
-    ZLEMA{T}(; period=ZLEMA_PERIOD, input_modifier_return_type = T)
+    ZLEMA{T}(; period = ZLEMA_PERIOD, input_modifier_return_type = T)
 
 The `ZLEMA` type implements a Zero Lag Exponential Moving Average indicator.
+
+ZLEMA reduces the lag inherent in traditional moving averages by adding a momentum term
+that compensates for the lag. This makes it more responsive to recent price changes
+while still providing smoothing.
+
+# Parameters
+- `period::Integer = $ZLEMA_PERIOD`: The number of periods for the ZLEMA calculation
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+lag = (period - 1) / 2
+adjusted_price = price + (price - price[lag])
+ZLEMA = EMA(adjusted_price, period)
+```
+
+# Returns
+`Union{Missing,T}` - The zero lag exponential moving average value, or `missing` during
+the warm-up period (first `lag` observations).
+
+See also: [`EMA`](@ref), [`DEMA`](@ref), [`TEMA`](@ref)
 """
 mutable struct ZLEMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

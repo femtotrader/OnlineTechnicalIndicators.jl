@@ -7,6 +7,30 @@ const ALMA_SIGMA = 6.0
     ALMA{T}(; period = ALMA_PERIOD, offset = ALMA_OFFSET, sigma = ALMA_SIGMA, input_modifier_return_type = T)
 
 The `ALMA` type implements an Arnaud Legoux Moving Average indicator.
+
+ALMA uses a Gaussian distribution to weight prices, providing a smooth moving average
+that can be tuned to emphasize either recent or older data. The offset parameter controls
+where the curve peaks (1 = recent, 0 = older), and sigma controls the width.
+
+# Parameters
+- `period::Integer = $ALMA_PERIOD`: The number of periods for the moving average
+- `offset::Number = $ALMA_OFFSET`: Controls the Gaussian peak location (0 to 1, higher = more recent)
+- `sigma::Number = $ALMA_SIGMA`: Controls the Gaussian curve width (higher = smoother)
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+m = floor((period - 1) × offset)
+s = period / sigma
+w[i] = exp(-((i - 1 - m)²) / (2 × s²))
+ALMA = sum(price[i] × w[i]) / sum(w)
+```
+
+# Returns
+`Union{Missing,T}` - The ALMA value, or `missing` during the warm-up period
+(first `period - 1` observations).
+
+See also: [`SMA`](@ref), [`EMA`](@ref), [`WMA`](@ref)
 """
 mutable struct ALMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

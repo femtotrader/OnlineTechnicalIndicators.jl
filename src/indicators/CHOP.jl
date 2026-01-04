@@ -5,6 +5,28 @@ const CHOP_PERIOD = 14
     CHOP{Tohlcv}(; period = CHOP_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `CHOP` type implements a Choppiness Index indicator.
+
+The Choppiness Index measures whether the market is trending or trading sideways (choppy).
+Values near 100 indicate a very choppy, range-bound market, while values near 0 indicate
+a strong trend. The indicator is useful for timing trend-following strategies.
+
+# Parameters
+- `period::Integer = $CHOP_PERIOD`: The number of periods for the calculation
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+CHOP = 100 × log10(sum(ATR, period) / (highest_high - lowest_low)) / log10(period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, and `close` fields.
+
+# Returns
+`Union{Missing,T}` - The choppiness index value (0-100), or `missing` during the warm-up
+period.
+
+See also: [`ATR`](@ref), [`ADX`](@ref)
 """
 mutable struct CHOP{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

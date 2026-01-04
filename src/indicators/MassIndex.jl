@@ -4,9 +4,36 @@ const MassIndex_MA_RATIO_PERIOD = 10
 
 
 """
-    MassIndex{T}(; ma_period = MassIndex_MA_PERIOD, ma_ma_period = MassIndex_MA_MA_PERIOD, ma_ratio_period = MassIndex_MA_RATIO_PERIOD, ma = EMA, input_modifier_return_type = T)
+    MassIndex{Tohlcv}(; ma_period = MassIndex_MA_PERIOD, ma_ma_period = MassIndex_MA_MA_PERIOD, ma_ratio_period = MassIndex_MA_RATIO_PERIOD, ma = EMA, input_modifier_return_type = Tohlcv)
 
-The `MassIndex` type implements a Commodity Channel Index.
+The `MassIndex` type implements a Mass Index indicator.
+
+The Mass Index identifies potential reversals by measuring the range between high and low
+prices. It looks for "reversal bulges" where the index rises above 27 and then falls
+below 26.5, which often precedes a price reversal regardless of direction.
+
+# Parameters
+- `ma_period::Integer = $MassIndex_MA_PERIOD`: Period for the first EMA of the high-low range
+- `ma_ma_period::Integer = $MassIndex_MA_MA_PERIOD`: Period for the second EMA (of the first EMA)
+- `ma_ratio_period::Integer = $MassIndex_MA_RATIO_PERIOD`: Period to sum the EMA ratio
+- `ma::Type = EMA`: Moving average type used for smoothing
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Single EMA = EMA(high - low, ma_period)
+Double EMA = EMA(Single EMA, ma_ma_period)
+EMA Ratio = Single EMA / Double EMA
+Mass Index = sum(EMA Ratio, ma_ratio_period)
+```
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
+
+# Returns
+`Union{Missing,T}` - The Mass Index value, or `missing` during warm-up.
+
+See also: [`ATR`](@ref), [`ADX`](@ref)
 """
 mutable struct MassIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

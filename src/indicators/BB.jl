@@ -22,10 +22,32 @@ end
 """
     BB{T}(; period = BB_PERIOD, std_dev_mult = BB_STD_DEV_MULT, ma = SMA, input_modifier_return_type = T)
 
-The `BB` type implements Bollinger Bands indicator.
+The `BB` type implements a Bollinger Bands indicator.
+
+Bollinger Bands consist of a middle band (moving average) with upper and lower bands
+at standard deviation intervals. They adapt to volatility: widening during volatile
+periods and contracting during calm periods. Price touching bands may signal reversals.
+
+# Parameters
+- `period::Integer = $BB_PERIOD`: Period for the moving average and standard deviation
+- `std_dev_mult::Number = $BB_STD_DEV_MULT`: Multiplier for standard deviation bands
+- `ma::Type = SMA`: Moving average type for central band
+- `input_modifier_return_type::Type = T`: Output value type
+
+# Formula
+```
+Central = SMA(close, period)
+Upper = Central + (std_dev_mult × StdDev(close, period))
+Lower = Central - (std_dev_mult × StdDev(close, period))
+```
 
 # Output
-- [`BBVal`](@ref): A value containing `lower`, `central`, and `upper` band values
+- [`BBVal`](@ref): Contains `upper`, `central`, and `lower` band values
+
+# Returns
+`Union{Missing,BBVal}` - The band values, or `missing` during warm-up.
+
+See also: [`KeltnerChannels`](@ref), [`DonchianChannels`](@ref), [`StdDev`](@ref)
 """
 mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
     value::Union{Missing,BBVal}

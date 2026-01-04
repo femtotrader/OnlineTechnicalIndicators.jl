@@ -6,6 +6,26 @@ const CoppockCurve_WMA_PERIOD = 10
     CoppockCurve{T}(; fast_roc_period = CoppockCurve_FAST_ROC_PERIOD, slow_roc_period = CoppockCurve_SLOW_ROC_PERIOD, wma_period = CoppockCurve_WMA_PERIOD, input_modifier_return_type = T)
 
 The `CoppockCurve` type implements a Coppock Curve indicator.
+
+The Coppock Curve is a long-term momentum indicator originally designed to identify major
+buying opportunities in stock market indices. It combines two Rate of Change indicators
+smoothed with a Weighted Moving Average. Buy signals occur when the curve crosses above zero.
+
+# Parameters
+- `fast_roc_period::Integer = $CoppockCurve_FAST_ROC_PERIOD`: Period for the fast ROC
+- `slow_roc_period::Integer = $CoppockCurve_SLOW_ROC_PERIOD`: Period for the slow ROC
+- `wma_period::Integer = $CoppockCurve_WMA_PERIOD`: Period for the WMA smoothing
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+CoppockCurve = WMA(ROC(fast_period) + ROC(slow_period), wma_period)
+```
+
+# Returns
+`Union{Missing,T}` - The Coppock Curve value, or `missing` during the warm-up period.
+
+See also: [`ROC`](@ref), [`WMA`](@ref), [`MACD`](@ref)
 """
 mutable struct CoppockCurve{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

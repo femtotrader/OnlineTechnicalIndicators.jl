@@ -13,9 +13,37 @@ struct GannHiloActivatorVal{T}
 end
 
 """
-    GannHiloActivator{T}(; period=GANN_HILO_PERIOD, input_modifier_return_type = T)
+    GannHiloActivator{Tohlcv}(; period = GANN_HILO_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `GannHiloActivator` type implements a Gann HiLo Activator indicator.
+
+The Gann HiLo Activator helps identify trend direction and potential entry/exit points.
+It calculates simple moving averages of the highest highs and lowest lows over a period.
+When price closes above the high line, it signals an uptrend; below the low line signals
+a downtrend.
+
+# Parameters
+- `period::Integer = $GANN_HILO_PERIOD`: The lookback period for calculating highs/lows
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+Highest High = max(high, period)
+Lowest Low = min(low, period)
+High Line = SMA(Highest High, period)
+Low Line = SMA(Lowest Low, period)
+```
+
+# Input
+Requires OHLCV data with `high` and `low` fields.
+
+# Output
+- [`GannHiloActivatorVal`](@ref): Contains `high` (resistance) and `low` (support) values
+
+# Returns
+`Union{Missing,GannHiloActivatorVal}` - The high and low lines, or `missing` during warm-up.
+
+See also: [`SMA`](@ref), [`DonchianChannels`](@ref), [`SuperTrend`](@ref)
 """
 mutable struct GannHiloActivator{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
     value::Union{Missing,GannHiloActivatorVal}

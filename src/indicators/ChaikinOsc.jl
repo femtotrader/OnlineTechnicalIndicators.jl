@@ -5,6 +5,31 @@ const ChaikinOsc_SLOW_PERIOD = 7
     ChaikinOsc{Tohlcv}(; fast_period = ChaikinOsc_FAST_PERIOD, slow_period = ChaikinOsc_SLOW_PERIOD, fast_ma = EMA, slow_ma = EMA, input_modifier_return_type = Tohlcv)
 
 The `ChaikinOsc` type implements a Chaikin Oscillator.
+
+The Chaikin Oscillator measures the momentum of the Accumulation/Distribution Line (ADL)
+by calculating the difference between fast and slow moving averages of the ADL. It helps
+identify buying or selling pressure in the market. Positive values suggest accumulation,
+negative values suggest distribution.
+
+# Parameters
+- `fast_period::Integer = $ChaikinOsc_FAST_PERIOD`: Period for the fast moving average
+- `slow_period::Integer = $ChaikinOsc_SLOW_PERIOD`: Period for the slow moving average
+- `fast_ma::Type = EMA`: Moving average type for the fast period
+- `slow_ma::Type = EMA`: Moving average type for the slow period
+- `input_modifier_return_type::Type = Tohlcv`: Input OHLCV type
+
+# Formula
+```
+ChaikinOsc = EMA(AccuDist, fast_period) - EMA(AccuDist, slow_period)
+```
+
+# Input
+Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
+
+# Returns
+`Union{Missing,T}` - The Chaikin Oscillator value, or `missing` during warm-up.
+
+See also: [`AccuDist`](@ref), [`OBV`](@ref), [`KVO`](@ref)
 """
 mutable struct ChaikinOsc{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
