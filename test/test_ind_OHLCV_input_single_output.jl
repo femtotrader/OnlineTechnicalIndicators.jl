@@ -481,3 +481,156 @@ end
         @test v >= 0.0 && v <= 100.0
     end
 end
+
+@testitem "MISO - IntradayRange" begin
+    using OnlineTechnicalIndicators: IntradayRange, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    ind = IntradayRange()
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # Reference values: High - Low for last 3 bars
+    # Bar 48: 10.86 - 10.19 = 0.67
+    # Bar 49: 10.77 - 10.15 = 0.62
+    # Bar 50: 10.39 - 9.62 = 0.77
+    @test isapprox(value(ind.lag[end-2]), 0.67; atol = ATOL)
+    @test isapprox(value(ind.lag[end-1]), 0.62; atol = ATOL)
+    @test isapprox(value(ind), 0.77; atol = ATOL)
+end
+
+@testitem "MISO - IntradayRange interface" begin
+    using OnlineTechnicalIndicators: IntradayRange, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test basic interface
+    ind = IntradayRange()
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Test immediate output (no warm-up)
+    candle = OHLCV(10.0, 12.0, 9.0, 11.0, volume=100.0)
+    fit!(ind, candle)
+    @test nobs(ind) == 1
+    @test !ismissing(value(ind))
+    @test value(ind) == 3.0  # 12.0 - 9.0
+
+    # Test constructor with type parameter
+    ind2 = IntradayRange{OHLCV{Missing,Float64,Float64}}()
+    @test nobs(ind2) == 0
+end
+
+@testitem "MISO - IntradayRange StatLag integration" begin
+    using OnlineTechnicalIndicators: IntradayRange, StatLag, OHLCV
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test StatLag integration
+    ind = IntradayRange()
+    ind = StatLag(ind, 5)
+
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # All lag values should be accessible (no warm-up period)
+    for i in 0:4
+        @test !ismissing(value(ind.lag[end-i]))
+        @test value(ind.lag[end-i]) >= 0.0  # Range is always non-negative
+    end
+
+    @test value(ind) == value(ind.lag[end])
+end
+
+@testitem "MISO - RelativeIntradayRange" begin
+    using OnlineTechnicalIndicators: RelativeIntradayRange, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    ind = RelativeIntradayRange()
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # Reference values: (High - Low) * 100 / Open for last 3 bars
+    # Bar 48: (10.86 - 10.19) * 100 / 10.29 = 6.511175898931001
+    # Bar 49: (10.77 - 10.15) * 100 / 10.77 = 5.756731662024134
+    # Bar 50: (10.39 - 9.62) * 100 / 10.28 = 7.49027237354087
+    @test isapprox(value(ind.lag[end-2]), 6.511175898931001; atol = ATOL)
+    @test isapprox(value(ind.lag[end-1]), 5.756731662024134; atol = ATOL)
+    @test isapprox(value(ind), 7.49027237354087; atol = ATOL)
+end
+
+@testitem "MISO - RelativeIntradayRange edge cases" begin
+    using OnlineTechnicalIndicators: RelativeIntradayRange, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test zero Open returns missing
+    ind = RelativeIntradayRange()
+    candle_zero_open = OHLCV(0.0, 10.0, 5.0, 8.0, volume=100.0)
+    fit!(ind, candle_zero_open)
+    @test ismissing(value(ind))
+
+    # Test zero range returns 0.0
+    ind2 = RelativeIntradayRange()
+    candle_zero_range = OHLCV(10.0, 10.0, 10.0, 10.0, volume=100.0)
+    fit!(ind2, candle_zero_range)
+    @test !ismissing(value(ind2))
+    @test value(ind2) == 0.0
+
+    # Test normal case
+    ind3 = RelativeIntradayRange()
+    candle = OHLCV(100.0, 110.0, 90.0, 105.0, volume=100.0)
+    fit!(ind3, candle)
+    @test !ismissing(value(ind3))
+    @test value(ind3) == 20.0  # (110 - 90) * 100 / 100 = 20%
+end
+
+@testitem "MISO - RelativeIntradayRange interface" begin
+    using OnlineTechnicalIndicators: RelativeIntradayRange, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test basic interface
+    ind = RelativeIntradayRange()
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Test immediate output (no warm-up)
+    candle = OHLCV(50.0, 55.0, 45.0, 52.0, volume=100.0)
+    fit!(ind, candle)
+    @test nobs(ind) == 1
+    @test !ismissing(value(ind))
+    @test value(ind) == 20.0  # (55 - 45) * 100 / 50 = 20%
+
+    # Test constructor with type parameter
+    ind2 = RelativeIntradayRange{OHLCV{Missing,Float64,Float64}}()
+    @test nobs(ind2) == 0
+end
+
+@testitem "MISO - RelativeIntradayRange StatLag integration" begin
+    using OnlineTechnicalIndicators: RelativeIntradayRange, StatLag, OHLCV
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test StatLag integration
+    ind = RelativeIntradayRange()
+    ind = StatLag(ind, 5)
+
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # All lag values should be accessible (no warm-up period)
+    for i in 0:4
+        @test !ismissing(value(ind.lag[end-i]))
+        @test value(ind.lag[end-i]) >= 0.0  # Percentage is always non-negative
+    end
+
+    @test value(ind) == value(ind.lag[end])
+end

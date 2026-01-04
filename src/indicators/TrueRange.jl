@@ -26,7 +26,7 @@ Requires OHLCV data with `high`, `low`, and `close` fields.
 # Returns
 `Union{Missing,T}` - The true range value. Available from the first observation.
 
-See also: [`ATR`](@ref), [`NATR`](@ref)
+See also: [`ATR`](@ref), [`NATR`](@ref), [`IntradayRange`](@ref), [`RelativeIntradayRange`](@ref)
 """
 mutable struct TrueRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

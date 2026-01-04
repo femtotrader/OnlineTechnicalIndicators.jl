@@ -49,6 +49,8 @@ MISO_INDICATORS = [
     "UO",
     "NATR",
     "MFI",
+    "IntradayRange",
+    "RelativeIntradayRange",
 ]
 MIMO_INDICATORS = [
     "Stoch",
@@ -359,6 +361,8 @@ ismultiinput(::Type{KVO}) = true
 ismultiinput(::Type{UO}) = true
 ismultiinput(::Type{NATR}) = true
 ismultiinput(::Type{MFI}) = true
+ismultiinput(::Type{IntradayRange}) = true
+ismultiinput(::Type{RelativeIntradayRange}) = true
 # MIMO
 ismultiinput(::Type{Stoch}) = true
 ismultiinput(::Type{ADX}) = true
