@@ -2,10 +2,18 @@ module OnlineTechnicalIndicators
 
 export OHLCV, OHLCVFactory, ValueExtractor
 export fit!
-export Smoother
+
+# Re-export from Wrappers submodule
+export Smoother, DAGWrapper
+
+# Re-export from Factories submodule
+export MovingAverage, MAFactory
 
 export SampleData
 export ArraysInterface
+
+# Export submodules for direct access
+export Wrappers, Factories
 
 SISO_INDICATORS = [
     "SMA",
@@ -135,8 +143,12 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 include("stats.jl")
 include("ohlcv.jl")
 include("sample_data.jl")
-include("dag_wrapper.jl")
 
+# Include MovingAverage factory (needed by SISO indicators like DEMA)
+include("factories/MovingAverage.jl")
+
+# Include DAGWrapper (needed by SISO indicators like DEMA, TEMA, T3, TRIX)
+include("wrappers/dag.jl")
 
 ismultioutput(ind::Type{O}) where {O<:TechnicalIndicator} =
     ind <: TechnicalIndicatorMultiOutput
@@ -308,8 +320,8 @@ for ind in [
     include("indicators/$(ind).jl")
 end
 
-# include utility types (Smoother must be included before MISO indicators that use it)
-include("indicators/Smoother.jl")
+# Include Smoother (after MA indicators are defined, before MISO indicators that use it)
+include("wrappers/smoother.jl")
 
 # include MISO, MIMO and OTHERS indicators
 for ind in [
@@ -415,12 +427,15 @@ ismultiinput(::Type{ThreeInside}) = true
 ismultiinput(::Type{CandlestickPatternDetector}) = true
 
 # Other stuff
-include("ma.jl")  # Moving Average Factory
 include("resample.jl")
 
 # Integration with Julia ecosystem (Arrays, Iterators...)
 include("other/arrays.jl")
 include("other/iterators.jl")
 include("other/tables.jl")
+
+# Include re-export modules (must be at the end after all types are defined)
+include("wrappers/Wrappers.jl")
+include("factories/Factories.jl")
 
 end

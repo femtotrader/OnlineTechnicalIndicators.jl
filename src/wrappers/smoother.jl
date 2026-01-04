@@ -70,7 +70,7 @@ mutable struct Smoother{Tohlcv,IN,S,Inner<:TechnicalIndicator} <: TechnicalIndic
             S = Float64
         end
         inner = InnerType{input_modifier_return_type}()
-        _ma = MAFactory(S)(ma, period = period)
+        _ma = MovingAverage(S)(ma, period = period)
         input_values = CircBuff(T2, 1, rev = false)
         new{Tohlcv,true,S,typeof(inner)}(missing, 0, period, inner, _ma, input_values)
     end
