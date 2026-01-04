@@ -25,7 +25,7 @@ ATR = MA(True Range, period)
 # Returns
 `Union{Missing,T}` - The average true range value, or `missing` during the warm-up period.
 
-See also: [`TrueRange`](@ref), [`NATR`](@ref), [`IntradayRange`](@ref), [`RelativeIntradayRange`](@ref), [`ADR`](@ref), [`ARDR`](@ref), [`OHLCV`](@ref)
+See also: [`Smoother`](@ref), [`TrueRange`](@ref), [`NATR`](@ref), [`IntradayRange`](@ref), [`RelativeIntradayRange`](@ref), [`ADR`](@ref), [`ARDR`](@ref), [`OHLCV`](@ref)
 """
 mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
@@ -33,10 +33,8 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     period::Number
 
-    tr::TrueRange
-    tr_average::MovingAverageIndicator
+    smoother::Smoother
 
-    rolling::Bool
     input_values::CircBuff
 
     function ATR{Tohlcv}(;
@@ -50,10 +48,9 @@ mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         else
             S = Float64
         end
-        tr = TrueRange{input_modifier_return_type}()
-        tr_average = MAFactory(S)(ma, period = period)
-        input_values = CircBuff(T2, 2, rev = false)
-        new{Tohlcv,true,S}(missing, 0, period, tr, tr_average, false, input_values)
+        smoother = Smoother{T2}(TrueRange; period = period, ma = ma, input_modifier_return_type = T2)
+        input_values = CircBuff(T2, 1, rev = false)
+        new{Tohlcv,true,S}(missing, 0, period, smoother, input_values)
     end
 end
 
@@ -71,7 +68,6 @@ end
 
 function _calculate_new_value(ind::ATR)
     candle = ind.input_values[end]
-    fit!(ind.tr, candle)
-    fit!(ind.tr_average, value(ind.tr))
-    return value(ind.tr_average)
+    fit!(ind.smoother, candle)
+    return value(ind.smoother)
 end

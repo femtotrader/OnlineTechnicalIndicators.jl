@@ -161,6 +161,32 @@ ADR(x::AbstractArray, args...; kwargs...) =
 ARDR(x::AbstractArray, args...; kwargs...) =
     apply_func(x, OnlineTechnicalIndicators.ARDR, args...; kwargs...)
 
+# Utility types
+
+"""
+    Smoother(x::AbstractArray, InnerType::Type{<:TechnicalIndicator}; period, ma, kwargs...)
+
+Apply a Smoother to an array of OHLCV data.
+
+# Arguments
+- `x::AbstractArray`: Input array of OHLCV data
+- `InnerType::Type{<:TechnicalIndicator}`: The inner indicator type to smooth (e.g., TrueRange, IntradayRange)
+- `period::Integer`: The number of periods for the moving average
+- `ma::Type`: The moving average type (e.g., SMA, EMA, SMMA)
+
+# Example
+```julia
+using OnlineTechnicalIndicators
+ohlcv_data = [OHLCV(10.0, 11.0, 9.0, 10.5, volume=100.0), ...]
+result = Smoother(ohlcv_data, TrueRange; period=14, ma=SMMA)
+```
+"""
+function Smoother(x::AbstractArray, InnerType::Type{<:TechnicalIndicator}, args...; kwargs...)
+    ind = Smoother{eltype(x)}(InnerType, args...; kwargs...)
+    mapped = map(val -> value(fit!(ind, val)), x)
+    return collect(mapped)
+end
+
 # MIMO indicators
 
 SuperTrend(x::AbstractArray, args...; kwargs...) =
