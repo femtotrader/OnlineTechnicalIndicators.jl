@@ -4,6 +4,23 @@ const StdDev_PERIOD = 3
     StdDev{T}(; period = StdDev_PERIOD, input_modifier_return_type = T)
 
 The `StdDev` type implements a Standard Deviation indicator.
+
+Standard Deviation measures the dispersion of data points from their mean.
+Higher values indicate greater volatility. Often used with Bollinger Bands.
+
+# Parameters
+- `period::Integer = $StdDev_PERIOD`: The lookback period for the calculation
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+`StdDev = sqrt(Σ(price_i - mean)² / period)`
+
+This is the population standard deviation (divides by n, not n-1).
+
+# Returns
+`Union{Missing,T}` - The standard deviation value, or `missing` during the warm-up period.
+
+See also: [`MeanDev`](@ref), [`BB`](@ref)
 """
 mutable struct StdDev{T1,IN,T2} <: TechnicalIndicatorSingleOutput{T1}
     value::Union{Missing,T2}

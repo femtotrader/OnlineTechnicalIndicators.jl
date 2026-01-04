@@ -4,6 +4,27 @@ const HMA_PERIOD = 20
     HMA{T}(; period = HMA_PERIOD, input_modifier_return_type = T)
 
 The `HMA` type implements a Hull Moving Average indicator.
+
+HMA was developed by Alan Hull to reduce lag while maintaining smoothness. It combines
+multiple WMAs at different periods to achieve this goal, using square root of period
+for the final smoothing.
+
+# Parameters
+- `period::Integer = $HMA_PERIOD`: The base period for the Hull Moving Average
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+WMA1 = WMA(price, period)
+WMA2 = WMA(price, period/2)
+Raw_HMA = 2 * WMA2 - WMA1
+HMA = WMA(Raw_HMA, sqrt(period))
+```
+
+# Returns
+`Union{Missing,T}` - The Hull Moving Average value, or `missing` during the warm-up period.
+
+See also: [`WMA`](@ref), [`EMA`](@ref), [`SMA`](@ref)
 """
 mutable struct HMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

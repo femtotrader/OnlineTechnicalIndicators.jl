@@ -4,6 +4,26 @@ const WMA_PERIOD = 3
     WMA{T}(; period = WMA_PERIOD, input_modifier_return_type = T)
 
 The `WMA` type implements a Weighted Moving Average indicator.
+
+WMA assigns linearly increasing weights to more recent data points, giving them greater
+influence on the average. The most recent observation has weight `period`, the second
+most recent has weight `period - 1`, and so on.
+
+# Parameters
+- `period::Integer = $WMA_PERIOD`: The number of periods for the weighted average
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+`WMA = Σ(weight_i * price_i) / Σ(weight_i)`
+
+where `weight_i = period - i + 1` for i from 1 to period, and the denominator
+equals `period * (period + 1) / 2`.
+
+# Returns
+`Union{Missing,T}` - The weighted moving average value. Returns values immediately
+as this indicator has no warm-up period.
+
+See also: [`SMA`](@ref), [`EMA`](@ref), [`HMA`](@ref)
 """
 mutable struct WMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

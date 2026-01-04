@@ -1,9 +1,29 @@
 const RSI_PERIOD = 3
 
 """
-    RSI{T}(; period = SMA_PERIOD, input_modifier_return_type = T)
+    RSI{T}(; period = RSI_PERIOD, input_modifier_return_type = T)
 
 The `RSI` type implements a Relative Strength Index indicator.
+
+RSI is a momentum oscillator that measures the speed and magnitude of recent price changes
+to evaluate overbought or oversold conditions. Developed by J. Welles Wilder Jr.
+
+# Parameters
+- `period::Integer = $RSI_PERIOD`: The lookback period for calculating average gains and losses
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+RS = Average Gain / Average Loss
+RSI = 100 - (100 / (1 + RS))
+```
+where Average Gain and Average Loss are calculated using SMMA (Smoothed Moving Average).
+
+# Returns
+`Union{Missing,T}` - RSI value between 0 and 100, or `missing` during the warm-up period.
+Values above 70 typically indicate overbought conditions, below 30 indicate oversold.
+
+See also: [`SMMA`](@ref)
 """
 mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

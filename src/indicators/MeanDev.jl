@@ -4,6 +4,23 @@ const MeanDev_PERIOD = 3
     MeanDev{T}(; period = MeanDev_PERIOD, ma = SMA, input_modifier_return_type = T)
 
 The `MeanDev` type implements a Mean Deviation indicator.
+
+Mean Deviation (also called Mean Absolute Deviation) measures the average distance
+of data points from their mean. It's a measure of dispersion similar to standard
+deviation but uses absolute values instead of squares.
+
+# Parameters
+- `period::Integer = $MeanDev_PERIOD`: The lookback period for the calculation
+- `ma::Type = SMA`: The moving average type to use for the mean
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+`MeanDev = Σ|price_i - MA(price)| / period`
+
+# Returns
+`Union{Missing,T}` - The mean deviation value, or `missing` during the warm-up period.
+
+See also: [`StdDev`](@ref), [`CCI`](@ref), [`SMA`](@ref)
 """
 mutable struct MeanDev{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

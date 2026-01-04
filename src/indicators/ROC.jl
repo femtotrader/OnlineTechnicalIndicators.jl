@@ -4,6 +4,22 @@ const ROC_PERIOD = 3
     ROC{T}(; period = ROC_PERIOD, input_modifier_return_type = T)
 
 The `ROC` type implements a Rate Of Change indicator.
+
+ROC measures the percentage change in price between the current price and the price
+`period` bars ago. It oscillates above and below zero, indicating bullish or bearish momentum.
+
+# Parameters
+- `period::Integer = $ROC_PERIOD`: The lookback period for calculating the rate of change
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+`ROC = 100 * (current_price - price_n_periods_ago) / price_n_periods_ago`
+
+# Returns
+`Union{Missing,T}` - Rate of change as a percentage, or `missing` during the warm-up period
+(first `period` observations).
+
+See also: [`RSI`](@ref), [`TRIX`](@ref)
 """
 mutable struct ROC{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

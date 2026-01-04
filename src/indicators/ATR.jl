@@ -4,6 +4,28 @@ const ATR_PERIOD = 3
     ATR{Tohlcv}(; period = ATR_PERIOD, ma = SMMA, input_modifier_return_type = Tohlcv)
 
 The `ATR` type implements an Average True Range indicator.
+
+ATR measures market volatility by calculating the average of True Range values over a period.
+Developed by J. Welles Wilder Jr., it's commonly used for position sizing and stop-loss placement.
+
+# Parameters
+- `period::Integer = $ATR_PERIOD`: The number of periods for averaging the True Range
+- `ma::Type = SMMA`: The moving average type to use (default: Smoothed Moving Average)
+- `input_modifier_return_type::Type = Tohlcv`: Input type (must be OHLCV-compatible)
+
+# Input
+[`OHLCV`](@ref) candlestick data with `high`, `low`, and `close` fields.
+
+# Formula
+```
+True Range = max(High - Low, |High - Close_prev|, |Low - Close_prev|)
+ATR = MA(True Range, period)
+```
+
+# Returns
+`Union{Missing,T}` - The average true range value, or `missing` during the warm-up period.
+
+See also: [`TrueRange`](@ref), [`NATR`](@ref), [`OHLCV`](@ref)
 """
 mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
