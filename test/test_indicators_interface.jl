@@ -14,7 +14,7 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
     using OnlineTechnicalIndicators
 
     files = readdir("../src/indicators")
-    @test length(files) == 65  # number of indicators
+    @test length(files) == 66  # number of indicators (includes Smoother utility type)
 
     _exported = names(OnlineTechnicalIndicators)
 

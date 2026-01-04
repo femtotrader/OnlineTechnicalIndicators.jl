@@ -27,7 +27,7 @@ ARDR = MA(RelativeIntradayRange, period)
 `Union{Missing,T}` - The average relative day range as a percentage, or `missing` during
 the warm-up period. Bars with Open=0 are skipped in the average.
 
-See also: [`ADR`](@ref), [`RelativeIntradayRange`](@ref), [`ATR`](@ref), [`NATR`](@ref), [`OHLCV`](@ref)
+See also: [`Smoother`](@ref), [`ADR`](@ref), [`RelativeIntradayRange`](@ref), [`ATR`](@ref), [`NATR`](@ref), [`OHLCV`](@ref)
 """
 mutable struct ARDR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
@@ -35,8 +35,7 @@ mutable struct ARDR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     period::Number
 
-    rir::RelativeIntradayRange
-    rir_average::MovingAverageIndicator
+    smoother::Smoother
 
     input_values::CircBuff
 
@@ -51,10 +50,9 @@ mutable struct ARDR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         else
             S = Float64
         end
-        rir = RelativeIntradayRange{input_modifier_return_type}()
-        rir_average = MAFactory(S)(ma, period = period)
+        smoother = Smoother{T2}(RelativeIntradayRange; period = period, ma = ma, input_modifier_return_type = T2)
         input_values = CircBuff(T2, 1, rev = false)
-        new{Tohlcv,true,S}(missing, 0, period, rir, rir_average, input_values)
+        new{Tohlcv,true,S}(missing, 0, period, smoother, input_values)
     end
 end
 
@@ -72,10 +70,6 @@ end
 
 function _calculate_new_value(ind::ARDR)
     candle = ind.input_values[end]
-    fit!(ind.rir, candle)
-    rir_val = value(ind.rir)
-    if !ismissing(rir_val)
-        fit!(ind.rir_average, rir_val)
-    end
-    return value(ind.rir_average)
+    fit!(ind.smoother, candle)
+    return value(ind.smoother)
 end

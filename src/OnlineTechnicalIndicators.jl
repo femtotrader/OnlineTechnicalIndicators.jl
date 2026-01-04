@@ -2,6 +2,7 @@ module OnlineTechnicalIndicators
 
 export OHLCV, OHLCVFactory, ValueExtractor
 export fit!
+export Smoother
 
 export SampleData
 export ArraysInterface
@@ -299,10 +300,19 @@ using .PatternDirection
 
 include("patterns/PatternValues.jl")
 
-# include SISO, SIMO, MISO, MIMO and OTHERS indicators
+# include SISO and SIMO indicators first (no dependencies on Smoother)
 for ind in [
     SISO_INDICATORS...,
     SIMO_INDICATORS...,
+]
+    include("indicators/$(ind).jl")
+end
+
+# include utility types (Smoother must be included before MISO indicators that use it)
+include("indicators/Smoother.jl")
+
+# include MISO, MIMO and OTHERS indicators
+for ind in [
     MISO_INDICATORS...,
     MIMO_INDICATORS...,
     OTHERS_INDICATORS...,
@@ -367,6 +377,8 @@ ismultiinput(::Type{IntradayRange}) = true
 ismultiinput(::Type{RelativeIntradayRange}) = true
 ismultiinput(::Type{ADR}) = true
 ismultiinput(::Type{ARDR}) = true
+# Utility types (not in indicator lists)
+ismultiinput(::Type{Smoother}) = true
 # MIMO
 ismultiinput(::Type{Stoch}) = true
 ismultiinput(::Type{ADX}) = true

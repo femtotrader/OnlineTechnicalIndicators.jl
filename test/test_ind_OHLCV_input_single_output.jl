@@ -856,3 +856,80 @@ end
 
     @test value(ind) == value(ind.lag[end])
 end
+
+# ===== Smoother Tests =====
+
+@testitem "Smoother - basic with TrueRange" begin
+    using OnlineTechnicalIndicators: Smoother, TrueRange, SMA, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    # Create a Smoother with TrueRange and SMA(5)
+    ind = Smoother(TrueRange; period = 5, ma = SMA)
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # The smoother should produce values after warm-up
+    @test !ismissing(value(ind))
+    @test !ismissing(value(ind.lag[end-1]))
+    @test !ismissing(value(ind.lag[end-2]))
+
+    # Values should be positive (TrueRange is always positive)
+    @test value(ind) > 0
+end
+
+@testitem "Smoother - MA type variation" begin
+    using OnlineTechnicalIndicators: Smoother, IntradayRange, SMA, EMA
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Create two smoothers with different MA types
+    smoother_sma = Smoother(IntradayRange; period = 5, ma = SMA)
+    smoother_ema = Smoother(IntradayRange; period = 5, ma = EMA)
+
+    fit!(smoother_sma, V_OHLCV)
+    fit!(smoother_ema, V_OHLCV)
+
+    # Both should have values
+    @test !ismissing(value(smoother_sma))
+    @test !ismissing(value(smoother_ema))
+
+    # Values should be different (EMA weights recent values more)
+    @test value(smoother_sma) != value(smoother_ema)
+end
+
+@testitem "Smoother - missing value handling" begin
+    using OnlineTechnicalIndicators: Smoother, IntradayRange, SMA, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Create a Smoother with period 3
+    ind = Smoother(IntradayRange; period = 3, ma = SMA)
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Test warm-up period
+    candle1 = OHLCV(10.0, 11.0, 9.0, 10.5, volume=100.0)
+    candle2 = OHLCV(10.5, 12.0, 10.0, 11.0, volume=150.0)
+    candle3 = OHLCV(11.0, 11.5, 10.5, 10.8, volume=120.0)
+
+    fit!(ind, candle1)
+    @test nobs(ind) == 1
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle2)
+    @test nobs(ind) == 2
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle3)
+    @test nobs(ind) == 3
+    @test !ismissing(value(ind))  # Now should have value
+
+    # Verify the value is the average of the 3 ranges
+    # Range1 = 11-9 = 2, Range2 = 12-10 = 2, Range3 = 11.5-10.5 = 1
+    # SMA = (2 + 2 + 1) / 3 = 1.666...
+    @test isapprox(value(ind), 5.0 / 3.0; atol = 0.00001)
+end

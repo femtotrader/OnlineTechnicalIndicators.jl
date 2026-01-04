@@ -26,7 +26,7 @@ ADR = MA(IntradayRange, period)
 # Returns
 `Union{Missing,T}` - The average day range value, or `missing` during the warm-up period.
 
-See also: [`ARDR`](@ref), [`IntradayRange`](@ref), [`ATR`](@ref), [`TrueRange`](@ref), [`OHLCV`](@ref)
+See also: [`Smoother`](@ref), [`ARDR`](@ref), [`IntradayRange`](@ref), [`ATR`](@ref), [`TrueRange`](@ref), [`OHLCV`](@ref)
 """
 mutable struct ADR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
@@ -34,8 +34,7 @@ mutable struct ADR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     period::Number
 
-    ir::IntradayRange
-    ir_average::MovingAverageIndicator
+    smoother::Smoother
 
     input_values::CircBuff
 
@@ -50,10 +49,9 @@ mutable struct ADR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         else
             S = Float64
         end
-        ir = IntradayRange{input_modifier_return_type}()
-        ir_average = MAFactory(S)(ma, period = period)
+        smoother = Smoother{T2}(IntradayRange; period = period, ma = ma, input_modifier_return_type = T2)
         input_values = CircBuff(T2, 1, rev = false)
-        new{Tohlcv,true,S}(missing, 0, period, ir, ir_average, input_values)
+        new{Tohlcv,true,S}(missing, 0, period, smoother, input_values)
     end
 end
 
@@ -71,7 +69,6 @@ end
 
 function _calculate_new_value(ind::ADR)
     candle = ind.input_values[end]
-    fit!(ind.ir, candle)
-    fit!(ind.ir_average, value(ind.ir))
-    return value(ind.ir_average)
+    fit!(ind.smoother, candle)
+    return value(ind.smoother)
 end

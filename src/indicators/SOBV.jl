@@ -27,7 +27,7 @@ Requires OHLCV data with `close` and `volume` fields.
 `Union{Missing,T}` - The smoothed on-balance volume value, or `missing` during the warm-up
 period (first `period - 1` observations after OBV becomes available).
 
-See also: [`OBV`](@ref), [`SMA`](@ref), [`EMA`](@ref)
+See also: [`Smoother`](@ref), [`OBV`](@ref), [`SMA`](@ref), [`EMA`](@ref)
 """
 mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
@@ -35,9 +35,9 @@ mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
 
     period::Integer
 
-    sub_indicators::Series
-    obv::OBV
-    obv_ma::MovingAverageIndicator
+    smoother::Smoother
+
+    input_values::CircBuff
 
     function SOBV{Tohlcv}(;
         period = SOBV_PERIOD,
@@ -46,10 +46,9 @@ mutable struct SOBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        obv = OBV{T2}()
-        obv_ma = MAFactory(S)(ma, period = period)
-        sub_indicators = Series(obv)
-        new{Tohlcv,true,S}(missing, 0, period, sub_indicators, obv, obv_ma)
+        smoother = Smoother{T2}(OBV; period = period, ma = ma, input_modifier_return_type = T2)
+        input_values = CircBuff(T2, 1, rev = false)
+        new{Tohlcv,true,S}(missing, 0, period, smoother, input_values)
     end
 end
 
@@ -66,10 +65,7 @@ function SOBV(;
 end
 
 function _calculate_new_value(ind::SOBV)
-    fit!(ind.obv_ma, value(ind.obv))
-    if has_output_value(ind.obv_ma)
-        return value(ind.obv_ma)
-    else
-        return missing
-    end
+    candle = ind.input_values[end]
+    fit!(ind.smoother, candle)
+    return value(ind.smoother)
 end

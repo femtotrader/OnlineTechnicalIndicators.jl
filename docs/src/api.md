@@ -46,6 +46,7 @@ OnlineTechnicalIndicators.RSI
 OnlineTechnicalIndicators.SFX
 OnlineTechnicalIndicators.SMA
 OnlineTechnicalIndicators.SMMA
+OnlineTechnicalIndicators.Smoother
 OnlineTechnicalIndicators.SOBV
 OnlineTechnicalIndicators.SupportResistanceLevel
 OnlineTechnicalIndicators.RetracementCalculator
