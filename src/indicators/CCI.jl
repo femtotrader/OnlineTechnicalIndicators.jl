@@ -1,9 +1,32 @@
 const CCI_PERIOD = 3
 
 """
-    CCI{Tohlcv}(; period=CCI_PERIOD, input_modifier_return_type = Tohlcv)
+    CCI{Tohlcv}(; period = CCI_PERIOD, input_modifier_return_type = Tohlcv)
 
 The `CCI` type implements a Commodity Channel Index.
+
+CCI measures how far the current typical price deviates from its statistical mean.
+Developed by Donald Lambert, it's used to identify cyclical trends and overbought/oversold conditions.
+
+# Parameters
+- `period::Integer = $CCI_PERIOD`: The lookback period for the moving average and mean deviation
+- `input_modifier_return_type::Type = Tohlcv`: Input type (must be OHLCV-compatible)
+
+# Input
+[`OHLCV`](@ref) candlestick data with `high`, `low`, and `close` fields.
+
+# Formula
+```
+Typical Price = (High + Low + Close) / 3
+CCI = (Typical Price - SMA(Typical Price)) / (0.015 * Mean Deviation)
+```
+The constant 0.015 ensures that approximately 70-80% of CCI values fall between -100 and +100.
+
+# Returns
+`Union{Missing,T}` - The CCI value, or `missing` during the warm-up period.
+Values above +100 indicate overbought, below -100 indicate oversold.
+
+See also: [`MeanDev`](@ref), [`OHLCV`](@ref)
 """
 mutable struct CCI{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

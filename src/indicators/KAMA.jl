@@ -5,7 +5,29 @@ const KAMA_SLOW_EMA_CONSTANT_PERIOD = 30
 """
     KAMA{T}(; period = KAMA_PERIOD, fast_ema_constant_period = KAMA_FAST_EMA_CONSTANT_PERIOD, slow_ema_constant_period = KAMA_SLOW_EMA_CONSTANT_PERIOD, input_modifier_return_type = T)
 
-The `KAMA` type implements a Kaufman's Adaptive Moving Average indicator.
+The `KAMA` type implements Kaufman's Adaptive Moving Average indicator.
+
+KAMA adapts its smoothing based on market volatility using an Efficiency Ratio (ER).
+In trending markets (high ER), it moves quickly like a fast EMA. In sideways markets
+(low ER), it moves slowly like a slow EMA.
+
+# Parameters
+- `period::Integer = $KAMA_PERIOD`: The lookback period for the efficiency ratio calculation
+- `fast_ema_constant_period::Integer = $KAMA_FAST_EMA_CONSTANT_PERIOD`: Period for fast EMA smoothing constant
+- `slow_ema_constant_period::Integer = $KAMA_SLOW_EMA_CONSTANT_PERIOD`: Period for slow EMA smoothing constant
+- `input_modifier_return_type::Type = T`: Output value type (defaults to input type)
+
+# Formula
+```
+ER = |Price_change| / Σ|Price_i - Price_{i-1}|  (Efficiency Ratio)
+SC = (ER * (fast_SC - slow_SC) + slow_SC)²      (Smoothing Constant)
+KAMA = KAMA_prev + SC * (Price - KAMA_prev)
+```
+
+# Returns
+`Union{Missing,T}` - The adaptive moving average value, or `missing` during the warm-up period.
+
+See also: [`EMA`](@ref), [`SMA`](@ref)
 """
 mutable struct KAMA{Tval,IN,T2} <: MovingAverageIndicator{Tval}
     value::Union{Missing,T2}

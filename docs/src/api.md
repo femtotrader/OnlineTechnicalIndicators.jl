@@ -90,6 +90,7 @@ OnlineTechnicalIndicators.VTXVal
 
 ## Core Types
 ```@docs
+OnlineTechnicalIndicators.DAGWrapper
 OnlineTechnicalIndicators.OHLCV
 OnlineTechnicalIndicators.OHLCVFactory
 OnlineTechnicalIndicators.MAFactory
