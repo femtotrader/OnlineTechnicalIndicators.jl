@@ -23,6 +23,9 @@ docs/site/
 # environment.
 Manifest.toml
 
+# Temporary files created by editors
+.vscode/
+
 # AI-assisted code generation files
 .ai/
 AGENTS.md
