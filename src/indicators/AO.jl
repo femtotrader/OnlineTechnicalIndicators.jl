@@ -48,8 +48,8 @@ mutable struct AO{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         @assert fast_period < slow_period "slow_period must be greater than fast_period"
         S = fieldtype(input_modifier_return_type, :close)
-        _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
-        _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
+        _fast_ma = MovingAverage(S)(fast_ma, period = fast_period)
+        _slow_ma = MovingAverage(S)(slow_ma, period = slow_period)
         new{Tohlcv,true,S}(missing, 0, _fast_ma, _slow_ma)
     end
 end

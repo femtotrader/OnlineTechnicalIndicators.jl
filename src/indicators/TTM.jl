@@ -86,7 +86,7 @@ mutable struct TTM{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
             atr_mult_up = kc_atr_mult,
             atr_mult_down = kc_atr_mult,
         )  # ma = EMA by default
-        _ma = MAFactory(S)(ma, period = period)
+        _ma = MovingAverage(S)(ma, period = period)
         sub_indicators = Series(_dc, _kc)  # _bb and _ma receive close price, fed manually
         deltas = CircBuff(S, period, rev = false)
         mean_x = sum(1:period-1) / period

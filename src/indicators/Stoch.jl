@@ -72,7 +72,7 @@ mutable struct Stoch{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        values_d = MAFactory(S)(ma, period = smoothing_period)
+        values_d = MovingAverage(S)(ma, period = smoothing_period)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,true,S}(missing, 0, period, smoothing_period, values_d, input_values)
     end

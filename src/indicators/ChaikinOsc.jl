@@ -52,8 +52,8 @@ mutable struct ChaikinOsc{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
         S = fieldtype(T2, :close)
         accu_dist = AccuDist{T2}()
         sub_indicators = Series(accu_dist)
-        _fast_ma = MAFactory(S)(fast_ma, period = fast_period)
-        _slow_ma = MAFactory(S)(slow_ma, period = slow_period)
+        _fast_ma = MovingAverage(S)(fast_ma, period = fast_period)
+        _slow_ma = MovingAverage(S)(slow_ma, period = slow_period)
         new{Tohlcv,true,S}(missing, 0, sub_indicators, accu_dist, _fast_ma, _slow_ma)
     end
 end

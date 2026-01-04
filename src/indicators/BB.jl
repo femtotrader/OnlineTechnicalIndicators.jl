@@ -67,7 +67,7 @@ mutable struct BB{T1,IN,T2} <: TechnicalIndicatorMultiOutput{T1}
         input_modifier_return_type = T1,
     ) where {T1}
         T2 = input_modifier_return_type
-        _central_band = MAFactory(T2)(ma, period = period)
+        _central_band = MovingAverage(T2)(ma, period = period)
         _std_dev = StdDev{T2}(period = period)
         sub_indicators = Series(_central_band, _std_dev)
         new{T1,false,T2}(

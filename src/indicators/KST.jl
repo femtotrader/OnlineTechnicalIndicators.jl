@@ -95,12 +95,12 @@ mutable struct KST{Tval,IN,S} <: TechnicalIndicatorMultiOutput{Tval}
         sub_indicators = Series(roc1, roc2, roc3, roc4)
 
         # Create 4 standalone MAs (not in DAG since each gets fed manually)
-        roc1_ma = MAFactory(T2)(ma, period = roc1_ma_period)
-        roc2_ma = MAFactory(T2)(ma, period = roc2_ma_period)
-        roc3_ma = MAFactory(T2)(ma, period = roc3_ma_period)
-        roc4_ma = MAFactory(T2)(ma, period = roc4_ma_period)
+        roc1_ma = MovingAverage(T2)(ma, period = roc1_ma_period)
+        roc2_ma = MovingAverage(T2)(ma, period = roc2_ma_period)
+        roc3_ma = MovingAverage(T2)(ma, period = roc3_ma_period)
+        roc4_ma = MovingAverage(T2)(ma, period = roc4_ma_period)
 
-        signal_line = MAFactory(T2)(ma, period = signal_period)
+        signal_line = MovingAverage(T2)(ma, period = signal_period)
 
         new{Tval,false,T2}(
             missing,

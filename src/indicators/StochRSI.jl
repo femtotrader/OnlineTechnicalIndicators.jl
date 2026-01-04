@@ -69,8 +69,8 @@ mutable struct StochRSI{Tval,IN,T2} <: TechnicalIndicatorMultiOutput{Tval}
         recent_rsi = CircBuff(Union{Missing,T2}, stoch_period, rev = false)
 
         # Create smoothing MAs
-        smoothed_k = MAFactory(T2)(ma, period = k_smoothing_period)
-        values_d = MAFactory(T2)(ma, period = d_smoothing_period)
+        smoothed_k = MovingAverage(T2)(ma, period = k_smoothing_period)
+        values_d = MovingAverage(T2)(ma, period = d_smoothing_period)
 
         new{Tval,false,T2}(
             missing,

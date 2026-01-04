@@ -49,7 +49,7 @@ mutable struct EMV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        _emv_ma = MAFactory(S)(ma, period = period)
+        _emv_ma = MovingAverage(S)(ma, period = period)
         input_values = CircBuff(T2, period, rev = false)
         new{Tohlcv,true,S}(missing, 0, period, volume_div, _emv_ma, input_values)
     end

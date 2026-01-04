@@ -18,7 +18,7 @@ The DAG structure provides:
 - Automatic propagation through filtered edges
 - Named access to each stage for debugging and inspection
 - Clean separation of concerns (structure vs computation)
-- Support for any moving average type via MAFactory (EMA, SMA, WMA, etc.)
+- Support for any moving average type via MovingAverage factory (EMA, SMA, WMA, etc.)
 
 Benefits over manual chaining:
 - No nested if statements for missing value handling
@@ -52,14 +52,14 @@ mutable struct T3{Tval,IN,T2} <: MovingAverageIndicator{Tval}
         input_values = CircBuff(T2, 2, rev = false)
 
         # Create DAG structure for the 6-stage MA chain with filtered edges
-        # Use MAFactory to support any moving average type (EMA, SMA, WMA, etc.)
+        # Use MovingAverage factory to support any moving average type (EMA, SMA, WMA, etc.)
         dag = StatDAG()
-        add_node!(dag, :ma1, MAFactory(T2)(ma, period = period))
-        add_node!(dag, :ma2, MAFactory(T2)(ma, period = period))
-        add_node!(dag, :ma3, MAFactory(T2)(ma, period = period))
-        add_node!(dag, :ma4, MAFactory(T2)(ma, period = period))
-        add_node!(dag, :ma5, MAFactory(T2)(ma, period = period))
-        add_node!(dag, :ma6, MAFactory(T2)(ma, period = period))
+        add_node!(dag, :ma1, MovingAverage(T2)(ma, period = period))
+        add_node!(dag, :ma2, MovingAverage(T2)(ma, period = period))
+        add_node!(dag, :ma3, MovingAverage(T2)(ma, period = period))
+        add_node!(dag, :ma4, MovingAverage(T2)(ma, period = period))
+        add_node!(dag, :ma5, MovingAverage(T2)(ma, period = period))
+        add_node!(dag, :ma6, MovingAverage(T2)(ma, period = period))
 
         # Connect with filtered edges - only propagate non-missing values
         # This enables automatic propagation without nested conditionals!

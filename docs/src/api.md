@@ -1,4 +1,25 @@
 # API Documentation
+
+## Wrappers Module
+
+The Wrappers module contains wrapper/decorator types for composing indicators.
+
+```@docs
+OnlineTechnicalIndicators.Wrappers
+OnlineTechnicalIndicators.Smoother
+OnlineTechnicalIndicators.DAGWrapper
+```
+
+## Factories Module
+
+The Factories module contains factory functions for creating indicator instances.
+
+```@docs
+OnlineTechnicalIndicators.Factories
+OnlineTechnicalIndicators.MovingAverage
+OnlineTechnicalIndicators.MAFactory
+```
+
 ## Indicators (alphabetically ordered)
 ```@docs
 OnlineTechnicalIndicators.ADR
@@ -46,7 +67,6 @@ OnlineTechnicalIndicators.RSI
 OnlineTechnicalIndicators.SFX
 OnlineTechnicalIndicators.SMA
 OnlineTechnicalIndicators.SMMA
-OnlineTechnicalIndicators.Smoother
 OnlineTechnicalIndicators.SOBV
 OnlineTechnicalIndicators.SupportResistanceLevel
 OnlineTechnicalIndicators.RetracementCalculator
@@ -96,10 +116,8 @@ OnlineTechnicalIndicators.VTXVal
 
 ## Core Types
 ```@docs
-OnlineTechnicalIndicators.DAGWrapper
 OnlineTechnicalIndicators.OHLCV
 OnlineTechnicalIndicators.OHLCVFactory
-OnlineTechnicalIndicators.MAFactory
 OnlineTechnicalIndicators.SampleData.TabOHLCV
 OnlineTechnicalIndicators.TechnicalIndicatorWrapper
 OnlineTechnicalIndicators.TechnicalIndicatorResults

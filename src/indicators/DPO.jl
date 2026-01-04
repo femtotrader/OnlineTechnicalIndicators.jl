@@ -43,7 +43,7 @@ mutable struct DPO{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     ) where {Tval}
         T2 = input_modifier_return_type
         input_values = CircBuff(T2, period, rev = false)
-        _ma = MAFactory(T2)(ma, period = period)
+        _ma = MovingAverage(T2)(ma, period = period)
         sub_indicators = Series(_ma)
         semi_period = floor(Int, period / 2)
         new{Tval,false,T2}(

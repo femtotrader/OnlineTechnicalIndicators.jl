@@ -74,7 +74,7 @@ mutable struct SFX{Tohlcv,IN,S} <: TechnicalIndicatorMultiOutput{Tohlcv}
         S = fieldtype(T2, :close)
         atr = ATR{T2}(period = atr_period)
         std_dev = StdDev{Float64}(period = std_dev_period)
-        ma_std_dev = MAFactory(S)(ma, period = std_dev_smoothing_period)
+        ma_std_dev = MovingAverage(S)(ma, period = std_dev_smoothing_period)
         new{Tohlcv,true,S}(missing, 0, atr, std_dev, ma_std_dev)
     end
 end

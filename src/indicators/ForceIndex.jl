@@ -45,7 +45,7 @@ mutable struct ForceIndex{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     ) where {Tohlcv}
         T2 = input_modifier_return_type
         S = fieldtype(T2, :close)
-        _ma = MAFactory(S)(ma, period = period)
+        _ma = MovingAverage(S)(ma, period = period)
         input_values = CircBuff(T2, 2, rev = false)
         new{Tohlcv,true,S}(missing, 0, period, _ma, input_values)
     end
