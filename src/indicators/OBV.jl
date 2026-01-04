@@ -23,7 +23,7 @@ Requires OHLCV data with `close` and `volume` fields.
 # Returns
 `Union{Missing,T}` - The cumulative on-balance volume value. Available from the first observation.
 
-See also: [`SOBV`](@ref), [`AccuDist`](@ref), [`ChaikinOsc`](@ref)
+See also: [`SOBV`](@ref), [`AccuDist`](@ref), [`ChaikinOsc`](@ref), [`MFI`](@ref)
 """
 mutable struct OBV{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

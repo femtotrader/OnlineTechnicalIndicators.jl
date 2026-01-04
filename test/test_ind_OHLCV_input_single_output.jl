@@ -349,3 +349,135 @@ end
     @test isapprox(value(ind.lag[end-1]), 6.501871; atol = ATOL)
     @test isapprox(value(ind), 6.861131; atol = ATOL)
 end
+
+@testitem "MISO - MFI" begin
+    using OnlineTechnicalIndicators: MFI, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    ind = MFI(period = 14)
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+    @test isapprox(value(ind.lag[end-2]), 74.139455; atol = ATOL)
+    @test isapprox(value(ind.lag[end-1]), 67.291047; atol = ATOL)
+    @test isapprox(value(ind), 56.996043; atol = ATOL)
+end
+
+@testitem "MISO - MFI edge cases" begin
+    using OnlineTechnicalIndicators: MFI, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test warm-up period (should return missing)
+    ind = MFI(period = 3)
+    # OHLCV(open, high, low, close; volume, time)
+    candle1 = OHLCV(10.0, 11.0, 9.0, 10.5; volume=100.0)
+    candle2 = OHLCV(10.5, 12.0, 10.0, 11.0; volume=150.0)
+    candle3 = OHLCV(11.0, 11.5, 10.5, 10.8; volume=120.0)
+    candle4 = OHLCV(10.8, 11.2, 10.2, 11.1; volume=130.0)
+
+    fit!(ind, candle1)
+    @test ismissing(value(ind))  # First candle - no comparison possible
+
+    fit!(ind, candle2)
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle3)
+    @test ismissing(value(ind))  # Still in warm-up (need period+1)
+
+    fit!(ind, candle4)
+    @test !ismissing(value(ind))  # Now should have value
+    @test value(ind) >= 0.0 && value(ind) <= 100.0  # MFI in valid range
+
+    # Test zero volume handling
+    ind2 = MFI(period = 2)
+    candle_zero_vol = OHLCV(10.0, 11.0, 9.0, 10.5; volume=0.0)
+    fit!(ind2, candle1)
+    fit!(ind2, candle_zero_vol)
+    fit!(ind2, candle2)
+    @test !ismissing(value(ind2))  # Should still calculate
+
+    # Test equal typical prices (neutral flow)
+    ind3 = MFI(period = 2)
+    candle_same_tp1 = OHLCV(10.0, 11.0, 9.0, 10.0; volume=100.0)  # TP = 10
+    candle_same_tp2 = OHLCV(10.0, 11.0, 9.0, 10.0; volume=100.0)  # TP = 10
+    candle_same_tp3 = OHLCV(10.0, 11.0, 9.0, 10.0; volume=100.0)  # TP = 10
+    fit!(ind3, candle_same_tp1)
+    fit!(ind3, candle_same_tp2)
+    fit!(ind3, candle_same_tp3)
+    @test !ismissing(value(ind3))  # Should return neutral (50)
+    @test isapprox(value(ind3), 50.0; atol = 0.00001)  # All neutral = 50
+end
+
+@testitem "MISO - MFI interface" begin
+    using OnlineTechnicalIndicators: MFI, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test basic interface (fit!, value, nobs)
+    ind = MFI(period = 3)
+
+    # Initial state
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Feed data one candle at a time
+    # OHLCV(open, high, low, close; volume, time)
+    candle1 = OHLCV(10.0, 11.0, 9.0, 10.5; volume=100.0)
+    fit!(ind, candle1)
+    @test nobs(ind) == 1
+
+    candle2 = OHLCV(10.5, 12.0, 10.0, 11.0; volume=150.0)
+    fit!(ind, candle2)
+    @test nobs(ind) == 2
+
+    candle3 = OHLCV(11.0, 11.5, 10.5, 10.8; volume=120.0)
+    fit!(ind, candle3)
+    @test nobs(ind) == 3
+
+    candle4 = OHLCV(10.8, 11.2, 10.2, 11.1; volume=130.0)
+    fit!(ind, candle4)
+    @test nobs(ind) == 4
+    @test !ismissing(value(ind))
+
+    # Test custom period
+    ind2 = MFI(period = 5)
+    @test ind2.period == 5
+
+    # Test default period
+    ind3 = MFI()
+    @test ind3.period == 14  # Default MFI period
+end
+
+@testitem "MISO - MFI StatLag integration" begin
+    using OnlineTechnicalIndicators: MFI, StatLag, OHLCV
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test StatLag integration - track historical values
+    ind = MFI(period = 14)
+    ind = StatLag(ind, 5)  # Keep last 5 values
+
+    # Feed all sample data
+    fit!(ind, V_OHLCV)
+
+    @test nobs(ind) == length(V_OHLCV)
+
+    # Check that lag values are accessible
+    @test !ismissing(value(ind.lag[end]))
+    @test !ismissing(value(ind.lag[end-1]))
+    @test !ismissing(value(ind.lag[end-2]))
+    @test !ismissing(value(ind.lag[end-3]))
+    @test !ismissing(value(ind.lag[end-4]))
+
+    # Check that current value matches last lag value
+    @test value(ind) == value(ind.lag[end])
+
+    # Verify all values are in valid range
+    for i in 0:4
+        v = value(ind.lag[end-i])
+        @test v >= 0.0 && v <= 100.0
+    end
+end

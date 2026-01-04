@@ -26,7 +26,7 @@ Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
 `Union{Missing,T}` - The cumulative accumulation/distribution value. Available from
 the first observation.
 
-See also: [`ChaikinOsc`](@ref), [`OBV`](@ref), [`ForceIndex`](@ref)
+See also: [`ChaikinOsc`](@ref), [`OBV`](@ref), [`ForceIndex`](@ref), [`MFI`](@ref)
 """
 mutable struct AccuDist{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

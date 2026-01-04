@@ -146,6 +146,9 @@ UO(x::AbstractArray, args...; kwargs...) =
 NATR(x::AbstractArray, args...; kwargs...) =
     apply_func(x, OnlineTechnicalIndicators.NATR, args...; kwargs...)
 
+MFI(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.MFI, args...; kwargs...)
+
 # MIMO indicators
 
 SuperTrend(x::AbstractArray, args...; kwargs...) =
