@@ -149,6 +149,12 @@ NATR(x::AbstractArray, args...; kwargs...) =
 MFI(x::AbstractArray, args...; kwargs...) =
     apply_func(x, OnlineTechnicalIndicators.MFI, args...; kwargs...)
 
+IntradayRange(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.IntradayRange, args...; kwargs...)
+
+RelativeIntradayRange(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.RelativeIntradayRange, args...; kwargs...)
+
 # MIMO indicators
 
 SuperTrend(x::AbstractArray, args...; kwargs...) =

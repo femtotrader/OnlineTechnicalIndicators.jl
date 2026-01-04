@@ -23,6 +23,7 @@ OnlineTechnicalIndicators.GannSwingChart
 OnlineTechnicalIndicators.EMV
 OnlineTechnicalIndicators.ForceIndex
 OnlineTechnicalIndicators.HMA
+OnlineTechnicalIndicators.IntradayRange
 OnlineTechnicalIndicators.KAMA
 OnlineTechnicalIndicators.KST
 OnlineTechnicalIndicators.KVO
@@ -37,6 +38,7 @@ OnlineTechnicalIndicators.OBV
 OnlineTechnicalIndicators.ParabolicSAR
 OnlineTechnicalIndicators.PeakValleyDetector
 OnlineTechnicalIndicators.PivotsHL
+OnlineTechnicalIndicators.RelativeIntradayRange
 OnlineTechnicalIndicators.ROC
 OnlineTechnicalIndicators.RSI
 OnlineTechnicalIndicators.SFX

@@ -25,7 +25,7 @@ ATR = MA(True Range, period)
 # Returns
 `Union{Missing,T}` - The average true range value, or `missing` during the warm-up period.
 
-See also: [`TrueRange`](@ref), [`NATR`](@ref), [`OHLCV`](@ref)
+See also: [`TrueRange`](@ref), [`NATR`](@ref), [`IntradayRange`](@ref), [`RelativeIntradayRange`](@ref), [`OHLCV`](@ref)
 """
 mutable struct ATR{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
