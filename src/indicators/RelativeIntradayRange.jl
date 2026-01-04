@@ -22,7 +22,7 @@ Requires OHLCV data with `open`, `high`, and `low` fields.
 `Union{Missing,T}` - The percentage bar range. Returns `missing` if Open is zero.
 Available from the first observation (no warm-up).
 
-See also: [`IntradayRange`](@ref), [`TrueRange`](@ref), [`ATR`](@ref), [`NATR`](@ref)
+See also: [`IntradayRange`](@ref), [`ARDR`](@ref), [`TrueRange`](@ref), [`ATR`](@ref), [`NATR`](@ref)
 """
 mutable struct RelativeIntradayRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

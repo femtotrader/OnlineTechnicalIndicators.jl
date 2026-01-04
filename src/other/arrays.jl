@@ -155,6 +155,12 @@ IntradayRange(x::AbstractArray, args...; kwargs...) =
 RelativeIntradayRange(x::AbstractArray, args...; kwargs...) =
     apply_func(x, OnlineTechnicalIndicators.RelativeIntradayRange, args...; kwargs...)
 
+ADR(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.ADR, args...; kwargs...)
+
+ARDR(x::AbstractArray, args...; kwargs...) =
+    apply_func(x, OnlineTechnicalIndicators.ARDR, args...; kwargs...)
+
 # MIMO indicators
 
 SuperTrend(x::AbstractArray, args...; kwargs...) =

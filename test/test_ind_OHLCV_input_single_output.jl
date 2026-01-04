@@ -634,3 +634,225 @@ end
 
     @test value(ind) == value(ind.lag[end])
 end
+
+@testitem "MISO - ADR" begin
+    using OnlineTechnicalIndicators: ADR, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    ind = ADR(period = 5)
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # Reference values: SMA of IntradayRange (High - Low) with period 5
+    # ADR[48] = 0.82, ADR[49] = 0.762, ADR[50] = 0.72
+    @test isapprox(value(ind.lag[end-2]), 0.82; atol = ATOL)
+    @test isapprox(value(ind.lag[end-1]), 0.762; atol = ATOL)
+    @test isapprox(value(ind), 0.72; atol = ATOL)
+end
+
+@testitem "MISO - ADR interface" begin
+    using OnlineTechnicalIndicators: ADR, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test basic interface
+    ind = ADR(period = 3)
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Test warm-up period
+    candle1 = OHLCV(10.0, 11.0, 9.0, 10.5, volume=100.0)
+    candle2 = OHLCV(10.5, 12.0, 10.0, 11.0, volume=150.0)
+    candle3 = OHLCV(11.0, 11.5, 10.5, 10.8, volume=120.0)
+
+    fit!(ind, candle1)
+    @test nobs(ind) == 1
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle2)
+    @test nobs(ind) == 2
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle3)
+    @test nobs(ind) == 3
+    @test !ismissing(value(ind))  # Now should have value
+
+    # Verify the value is the average of the 3 ranges
+    # Range1 = 11-9 = 2, Range2 = 12-10 = 2, Range3 = 11.5-10.5 = 1
+    # SMA = (2 + 2 + 1) / 3 = 1.666...
+    @test isapprox(value(ind), 5.0 / 3.0; atol = 0.00001)
+
+    # Test default period
+    ind2 = ADR()
+    @test ind2.period == 14
+
+    # Test with custom MA type
+    ind3 = ADR(period = 5, ma = EMA)
+    @test ind3.period == 5
+end
+
+@testitem "MISO - ADR with different MA types" begin
+    using OnlineTechnicalIndicators: ADR, SMA, EMA, SMMA
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test that different MA types produce different results
+    adr_sma = ADR(period = 5, ma = SMA)
+    adr_ema = ADR(period = 5, ma = EMA)
+
+    fit!(adr_sma, V_OHLCV)
+    fit!(adr_ema, V_OHLCV)
+
+    # Both should have values
+    @test !ismissing(value(adr_sma))
+    @test !ismissing(value(adr_ema))
+
+    # Values should be different (EMA weights recent values more)
+    @test value(adr_sma) != value(adr_ema)
+end
+
+@testitem "MISO - ADR StatLag integration" begin
+    using OnlineTechnicalIndicators: ADR, StatLag, OHLCV
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test StatLag integration
+    ind = ADR(period = 5)
+    ind = StatLag(ind, 5)
+
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # All lag values should be accessible after warm-up
+    for i in 0:4
+        @test !ismissing(value(ind.lag[end-i]))
+        @test value(ind.lag[end-i]) >= 0.0  # ADR is always non-negative
+    end
+
+    @test value(ind) == value(ind.lag[end])
+end
+
+@testitem "MISO - ARDR" begin
+    using OnlineTechnicalIndicators: ARDR, StatLag
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    const ATOL = 0.00001
+
+    ind = ARDR(period = 5)
+    @test nobs(ind) == 0
+    ind = StatLag(ind, 3)
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # Reference values: SMA of RelativeIntradayRange ((High - Low) * 100 / Open) with period 5
+    # ARDR[48] = 8.812618598428633, ARDR[49] = 8.015356793788495, ARDR[50] = 7.204812917495488
+    @test isapprox(value(ind.lag[end-2]), 8.812618598428633; atol = ATOL)
+    @test isapprox(value(ind.lag[end-1]), 8.015356793788495; atol = ATOL)
+    @test isapprox(value(ind), 7.204812917495488; atol = ATOL)
+end
+
+@testitem "MISO - ARDR interface" begin
+    using OnlineTechnicalIndicators: ARDR, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test basic interface
+    ind = ARDR(period = 3)
+    @test nobs(ind) == 0
+    @test ismissing(value(ind))
+
+    # Test warm-up period
+    candle1 = OHLCV(100.0, 110.0, 90.0, 105.0, volume=100.0)  # RIR = 20%
+    candle2 = OHLCV(105.0, 115.0, 95.0, 110.0, volume=150.0)  # RIR = 19.047...%
+    candle3 = OHLCV(110.0, 120.0, 100.0, 115.0, volume=120.0) # RIR = 18.181...%
+
+    fit!(ind, candle1)
+    @test nobs(ind) == 1
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle2)
+    @test nobs(ind) == 2
+    @test ismissing(value(ind))  # Still in warm-up
+
+    fit!(ind, candle3)
+    @test nobs(ind) == 3
+    @test !ismissing(value(ind))  # Now should have value
+
+    # Test default period
+    ind2 = ARDR()
+    @test ind2.period == 14
+
+    # Test with custom MA type
+    ind3 = ARDR(period = 5, ma = EMA)
+    @test ind3.period == 5
+end
+
+@testitem "MISO - ARDR edge cases" begin
+    using OnlineTechnicalIndicators: ARDR, OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test handling of zero Open in the data
+    ind = ARDR(period = 2)
+
+    # Normal candle
+    candle1 = OHLCV(100.0, 110.0, 90.0, 105.0, volume=100.0)
+    fit!(ind, candle1)
+    @test ismissing(value(ind))  # Still warming up
+
+    # Candle with zero Open (should be skipped in average)
+    candle_zero_open = OHLCV(0.0, 10.0, 5.0, 8.0, volume=100.0)
+    fit!(ind, candle_zero_open)
+    # Value should still be missing as we only have 1 valid RIR value
+    @test ismissing(value(ind))
+
+    # Another normal candle
+    candle2 = OHLCV(105.0, 115.0, 95.0, 110.0, volume=150.0)
+    fit!(ind, candle2)
+    # Now we should have a value (2 valid RIR values)
+    @test !ismissing(value(ind))
+end
+
+@testitem "MISO - ARDR with different MA types" begin
+    using OnlineTechnicalIndicators: ARDR, SMA, EMA, SMMA
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test that different MA types produce different results
+    ardr_sma = ARDR(period = 5, ma = SMA)
+    ardr_smma = ARDR(period = 5, ma = SMMA)
+
+    fit!(ardr_sma, V_OHLCV)
+    fit!(ardr_smma, V_OHLCV)
+
+    # Both should have values
+    @test !ismissing(value(ardr_sma))
+    @test !ismissing(value(ardr_smma))
+
+    # Values should be different (SMMA is smoothed differently)
+    @test value(ardr_sma) != value(ardr_smma)
+end
+
+@testitem "MISO - ARDR StatLag integration" begin
+    using OnlineTechnicalIndicators: ARDR, StatLag, OHLCV
+    using OnlineTechnicalIndicators.SampleData: V_OHLCV
+    using OnlineStatsBase: nobs
+
+    # Test StatLag integration
+    ind = ARDR(period = 5)
+    ind = StatLag(ind, 5)
+
+    fit!(ind, V_OHLCV)
+    @test nobs(ind) == length(V_OHLCV)
+
+    # All lag values should be accessible after warm-up
+    for i in 0:4
+        @test !ismissing(value(ind.lag[end-i]))
+        @test value(ind.lag[end-i]) >= 0.0  # ARDR is always non-negative
+    end
+
+    @test value(ind) == value(ind.lag[end])
+end

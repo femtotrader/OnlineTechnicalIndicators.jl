@@ -1,6 +1,8 @@
 # API Documentation
 ## Indicators (alphabetically ordered)
 ```@docs
+OnlineTechnicalIndicators.ADR
+OnlineTechnicalIndicators.ARDR
 OnlineTechnicalIndicators.ADX
 OnlineTechnicalIndicators.ALMA
 OnlineTechnicalIndicators.AO

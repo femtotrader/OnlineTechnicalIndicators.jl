@@ -22,7 +22,7 @@ Requires OHLCV data with `high` and `low` fields.
 # Returns
 `Union{Missing,T}` - The absolute bar range. Available from the first observation (no warm-up).
 
-See also: [`RelativeIntradayRange`](@ref), [`TrueRange`](@ref), [`ATR`](@ref)
+See also: [`RelativeIntradayRange`](@ref), [`ADR`](@ref), [`TrueRange`](@ref), [`ATR`](@ref)
 """
 mutable struct IntradayRange{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}
