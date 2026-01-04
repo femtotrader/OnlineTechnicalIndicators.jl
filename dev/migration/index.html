@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Migration Guide · OnlineTechnicalIndicators.jl</title><meta name="title" content="Migration Guide · OnlineTechnicalIndicators.jl"/><meta property="og:title" content="Migration Guide · OnlineTechnicalIndicators.jl"/><meta property="twitter:title" content="Migration Guide · OnlineTechnicalIndicators.jl"/><meta name="description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="og:description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="twitter:description" content="Documentation for OnlineTechnicalIndicators.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">OnlineTechnicalIndicators.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../features/">Package Features</a></li><li><a class="tocitem" href="../install/">Install</a></li><li><a class="tocitem" href="../usage/">Usage</a></li><li><a class="tocitem" href="../indicators_support/">Indicators support</a></li><li><span class="tocitem">Pattern Recognition</span><ul><li><a class="tocitem" href="../patterns/">Overview</a></li><li><a class="tocitem" href="../patterns/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../patterns/implementation/">Implementation</a></li></ul></li><li><a class="tocitem" href="../usage_more/">Learn more about usage</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><a class="tocitem" href="../internals/">Internals</a></li><li class="is-active"><a class="tocitem" href>Migration Guide</a><ul class="internal"><li><a class="tocitem" href="#Why-Migrate?"><span>Why Migrate?</span></a></li><li><a class="tocitem" href="#Background:-What-Changed"><span>Background: What Changed</span></a></li><li><a class="tocitem" href="#Before/After-Examples"><span>Before/After Examples</span></a></li><li><a class="tocitem" href="#Common-StatDAG-Patterns"><span>Common StatDAG Patterns</span></a></li><li><a class="tocitem" href="#Troubleshooting"><span>Troubleshooting</span></a></li><li><a class="tocitem" href="#Reference-Implementations"><span>Reference Implementations</span></a></li><li><a class="tocitem" href="#Need-Help?"><span>Need Help?</span></a></li></ul></li><li><a class="tocitem" href="../implementing_your_indic/">Implementing your own indicator</a></li><li><a class="tocitem" href="../api/">API</a></li><li><a class="tocitem" href="../projects/">Projects</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Migration Guide</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Migration Guide</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl/blob/main/docs/src/migration.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Migration-Guide"><a class="docs-heading-anchor" href="#Migration-Guide">Migration Guide</a><a id="Migration-Guide-1"></a><a class="docs-heading-anchor-permalink" href="#Migration-Guide" title="Permalink"></a></h1><p>This guide helps you migrate from the deprecated <code>add_input_indicator!</code> API to the new OnlineStatsChains-based approach using <code>StatDAG</code>.</p><h2 id="Why-Migrate?"><a class="docs-heading-anchor" href="#Why-Migrate?">Why Migrate?</a><a id="Why-Migrate?-1"></a><a class="docs-heading-anchor-permalink" href="#Why-Migrate?" title="Permalink"></a></h2><p>The library has migrated to use <a href="https://github.com/femtotrader/OnlineStatsChains.jl">OnlineStatsChains.jl</a> for composing indicators. This provides:</p><ul><li><strong>Cleaner architecture</strong>: Directed acyclic graph (DAG) structure for organizing indicator chains</li><li><strong>Automatic propagation</strong>: Filtered edges automatically skip missing values</li><li><strong>Better debugging</strong>: Named access to each stage for inspection</li><li><strong>Easier composition</strong>: Clear separation between structure and computation</li></ul><p>The old <code>add_input_indicator!</code> function has been deprecated and will throw an error if called.</p><h2 id="Background:-What-Changed"><a class="docs-heading-anchor" href="#Background:-What-Changed">Background: What Changed</a><a id="Background:-What-Changed-1"></a><a class="docs-heading-anchor-permalink" href="#Background:-What-Changed" title="Permalink"></a></h2><p>Previously, indicators could be chained using <code>add_input_indicator!</code> which manually managed <code>output_listeners</code> and <code>input_indicator</code> fields. These fields have been removed from all indicators.</p><p>The new approach uses <code>OnlineStatsChains.StatDAG</code> with filtered edges to create indicator chains. Built-in composed indicators like <code>DEMA</code>, <code>TEMA</code>, <code>T3</code>, and <code>TRIX</code> now use this architecture internally.</p><h2 id="Before/After-Examples"><a class="docs-heading-anchor" href="#Before/After-Examples">Before/After Examples</a><a id="Before/After-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Before/After-Examples" title="Permalink"></a></h2><h3 id="Simple-2-Indicator-Chain"><a class="docs-heading-anchor" href="#Simple-2-Indicator-Chain">Simple 2-Indicator Chain</a><a id="Simple-2-Indicator-Chain-1"></a><a class="docs-heading-anchor-permalink" href="#Simple-2-Indicator-Chain" title="Permalink"></a></h3><p><strong>Old approach (deprecated - will throw error):</strong></p><pre><code class="language-julia hljs"># This NO LONGER WORKS
+ema1 = EMA(period=10)
+ema2 = EMA(period=10)
+add_input_indicator!(ema2, ema1)  # ERROR!
+
+# Then fitting data
+for price in prices
+    fit!(ema1, price)
+    # ema2 would be automatically updated
+end</code></pre><p><strong>New approach (recommended):</strong></p><pre><code class="language-julia hljs">using OnlineStatsChains
+
+# Create a StatDAG to organize the chain
+dag = StatDAG()
+
+# Add indicator nodes
+add_node!(dag, :ema1, EMA(period=10))
+add_node!(dag, :ema2, EMA(period=10))
+
+# Connect with filtered edge - only propagates non-missing values
+connect!(dag, :ema1, :ema2, filter = !ismissing)
+
+# Fit data to the source node
+for price in prices
+    fit!(dag, :ema1 =&gt; price)
+end
+
+# Get values from any node
+value(dag, :ema1)  # First EMA value
+value(dag, :ema2)  # Second EMA value (automatically updated)</code></pre><h3 id="Complex-3-Stage-Chain-(like-TEMA)"><a class="docs-heading-anchor" href="#Complex-3-Stage-Chain-(like-TEMA)">Complex 3-Stage Chain (like TEMA)</a><a id="Complex-3-Stage-Chain-(like-TEMA)-1"></a><a class="docs-heading-anchor-permalink" href="#Complex-3-Stage-Chain-(like-TEMA)" title="Permalink"></a></h3><p><strong>New approach for a TEMA-like chain:</strong></p><pre><code class="language-julia hljs">using OnlineStatsChains
+
+dag = StatDAG()
+
+# Add three EMA stages
+add_node!(dag, :ma1, EMA(period=20))
+add_node!(dag, :ma2, EMA(period=20))
+add_node!(dag, :ma3, EMA(period=20))
+
+# Connect in sequence with filtered edges
+connect!(dag, :ma1, :ma2, filter = !ismissing)
+connect!(dag, :ma2, :ma3, filter = !ismissing)
+
+# Fit data
+for price in prices
+    fit!(dag, :ma1 =&gt; price)
+end
+
+# Access any stage
+val1 = value(dag, :ma1)
+val2 = value(dag, :ma2)
+val3 = value(dag, :ma3)
+
+# Compute TEMA: 3*MA1 - 3*MA2 + MA3
+if !ismissing(val3)
+    tema = 3.0 * val1 - 3.0 * val2 + val3
+end</code></pre><h2 id="Common-StatDAG-Patterns"><a class="docs-heading-anchor" href="#Common-StatDAG-Patterns">Common StatDAG Patterns</a><a id="Common-StatDAG-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-StatDAG-Patterns" title="Permalink"></a></h2><h3 id="Basic-Pattern"><a class="docs-heading-anchor" href="#Basic-Pattern">Basic Pattern</a><a id="Basic-Pattern-1"></a><a class="docs-heading-anchor-permalink" href="#Basic-Pattern" title="Permalink"></a></h3><pre><code class="language-julia hljs">using OnlineStatsChains
+
+# 1. Create the DAG
+dag = StatDAG()
+
+# 2. Add indicator nodes with symbolic names
+add_node!(dag, :source, SomeIndicator(...))
+add_node!(dag, :derived, AnotherIndicator(...))
+
+# 3. Connect nodes with filtered edges
+connect!(dag, :source, :derived, filter = !ismissing)
+
+# 4. Fit data to source node
+fit!(dag, :source =&gt; data)
+
+# 5. Read values from any node
+value(dag, :source)
+value(dag, :derived)</code></pre><h3 id="Using-MAFactory-for-Flexible-Moving-Averages"><a class="docs-heading-anchor" href="#Using-MAFactory-for-Flexible-Moving-Averages">Using MAFactory for Flexible Moving Averages</a><a id="Using-MAFactory-for-Flexible-Moving-Averages-1"></a><a class="docs-heading-anchor-permalink" href="#Using-MAFactory-for-Flexible-Moving-Averages" title="Permalink"></a></h3><p>The <code>MAFactory</code> allows you to parameterize which type of moving average is used:</p><pre><code class="language-julia hljs">using OnlineStatsChains
+
+dag = StatDAG()
+
+# Use MAFactory to support any MA type (EMA, SMA, WMA, etc.)
+add_node!(dag, :ma1, MAFactory(Float64)(EMA, period=10))
+add_node!(dag, :ma2, MAFactory(Float64)(EMA, period=10))
+
+connect!(dag, :ma1, :ma2, filter = !ismissing)</code></pre><h2 id="Troubleshooting"><a class="docs-heading-anchor" href="#Troubleshooting">Troubleshooting</a><a id="Troubleshooting-1"></a><a class="docs-heading-anchor-permalink" href="#Troubleshooting" title="Permalink"></a></h2><h3 id="Error:-&quot;add*input*indicator!-is-no-longer-functional&quot;"><a class="docs-heading-anchor" href="#Error:-&quot;add*input*indicator!-is-no-longer-functional&quot;">Error: &quot;add<em>input</em>indicator! is no longer functional&quot;</a><a id="Error:-&quot;add*input*indicator!-is-no-longer-functional&quot;-1"></a><a class="docs-heading-anchor-permalink" href="#Error:-&quot;add*input*indicator!-is-no-longer-functional&quot;" title="Permalink"></a></h3><p>If you see this error:</p><pre><code class="nohighlight hljs">ERROR: add_input_indicator! is no longer functional as the required fields
+(input_indicator, output_listeners) have been removed.
+Use OnlineStatsChains.StatDAG to chain indicators.</code></pre><p><strong>Solution:</strong> Replace <code>add_input_indicator!</code> with a StatDAG-based approach as shown in the Before/After examples above.</p><h3 id="Migrating-Custom-Indicators-with-input*filter/input*modifier"><a class="docs-heading-anchor" href="#Migrating-Custom-Indicators-with-input*filter/input*modifier">Migrating Custom Indicators with input<em>filter/input</em>modifier</a><a id="Migrating-Custom-Indicators-with-input*filter/input*modifier-1"></a><a class="docs-heading-anchor-permalink" href="#Migrating-Custom-Indicators-with-input*filter/input*modifier" title="Permalink"></a></h3><p>If you have custom indicators that use <code>input_filter</code> and <code>input_modifier</code> fields, you have two options:</p><p><strong>Option 1: Keep legacy fields</strong> (backward compatible)</p><p>The library still supports <code>input_filter</code> and <code>input_modifier</code> for custom indicators. If your indicator struct defines these fields, they will continue to work:</p><pre><code class="language-julia hljs">mutable struct MyCustomIndicator &lt;: TechnicalIndicator{Float64}
+    value::Union{Missing,Float64}
+    n::Int
+    input_filter::Function    # Legacy: still supported
+    input_modifier::Function  # Legacy: still supported
+    # ... other fields
+end</code></pre><p><strong>Option 2: Migrate to StatDAG</strong> (recommended)</p><p>For better architecture and maintainability, convert to StatDAG:</p><pre><code class="language-julia hljs"># Old approach with input_filter/input_modifier
+mutable struct OldIndicator &lt;: TechnicalIndicator{Float64}
+    value::Union{Missing,Float64}
+    n::Int
+    input_filter::Function     # e.g., x -&gt; x &gt; 0
+    input_modifier::Function   # e.g., x -&gt; log(x)
+    sub_indicator::SomeIndicator
+end
+
+# New approach with StatDAG
+mutable struct NewIndicator &lt;: TechnicalIndicator{Float64}
+    value::Union{Missing,Float64}
+    n::Int
+    dag::StatDAG
+    sub_indicators::DAGWrapper
+end
+
+function NewIndicator()
+    dag = StatDAG()
+    add_node!(dag, :source, SomeIndicator())
+
+    # Use custom filter and transform in the edge
+    connect!(dag, :source, :derived,
+        filter = x -&gt; !ismissing(x) &amp;&amp; x &gt; 0,  # Combined filter
+        transform = x -&gt; log(x)                 # Transform function
+    )
+
+    sub_indicators = DAGWrapper(dag, :source, [dag.nodes[:source].stat])
+    new(missing, 0, dag, sub_indicators)
+end</code></pre><h3 id="Common-Migration-Patterns"><a class="docs-heading-anchor" href="#Common-Migration-Patterns">Common Migration Patterns</a><a id="Common-Migration-Patterns-1"></a><a class="docs-heading-anchor-permalink" href="#Common-Migration-Patterns" title="Permalink"></a></h3><table><tr><th style="text-align: right">Old Pattern</th><th style="text-align: right">New Pattern</th></tr><tr><td style="text-align: right"><code>add_input_indicator!(ind2, ind1)</code></td><td style="text-align: right"><code>connect!(dag, :ind1, :ind2, filter = !ismissing)</code></td></tr><tr><td style="text-align: right"><code>input_filter = x -&gt; condition(x)</code></td><td style="text-align: right"><code>connect!(..., filter = x -&gt; !ismissing(x) &amp;&amp; condition(x))</code></td></tr><tr><td style="text-align: right"><code>input_modifier = x -&gt; transform(x)</code></td><td style="text-align: right"><code>connect!(..., transform = x -&gt; transform(x))</code></td></tr><tr><td style="text-align: right"><code>ind.output_listeners</code></td><td style="text-align: right">Not needed - edges handle propagation</td></tr><tr><td style="text-align: right"><code>ind.input_indicator</code></td><td style="text-align: right">Not needed - DAG tracks connections</td></tr></table><h2 id="Reference-Implementations"><a class="docs-heading-anchor" href="#Reference-Implementations">Reference Implementations</a><a id="Reference-Implementations-1"></a><a class="docs-heading-anchor-permalink" href="#Reference-Implementations" title="Permalink"></a></h2><p>See how built-in composed indicators use StatDAG:</p><ul><li><strong>DEMA</strong> (<code>src/indicators/DEMA.jl</code>): 2-stage MA chain</li><li><strong>TEMA</strong> (<code>src/indicators/TEMA.jl</code>): 3-stage MA chain</li><li><strong>T3</strong> (<code>src/indicators/T3.jl</code>): 6-stage MA chain with factor coefficients</li><li><strong>TRIX</strong> (<code>src/indicators/TRIX.jl</code>): 3-stage MA chain with ROC calculation</li></ul><p>These implementations demonstrate:</p><ul><li>DAG structure setup</li><li>Filtered edge connections</li><li>DAGWrapper integration with <code>fit!</code> infrastructure</li><li>Value computation from DAG nodes</li></ul><h2 id="Need-Help?"><a class="docs-heading-anchor" href="#Need-Help?">Need Help?</a><a id="Need-Help?-1"></a><a class="docs-heading-anchor-permalink" href="#Need-Help?" title="Permalink"></a></h2><p>If you encounter issues during migration:</p><ol><li>Check the reference implementations listed above</li><li>Review the <a href="../internals/#OnlineTechnicalIndicators-internals">OnlineTechnicalIndicators internals</a> documentation for architecture details</li><li>Open an issue on GitHub with your specific use case</li></ol></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../internals/">« Internals</a><a class="docs-footer-nextpage" href="../implementing_your_indic/">Implementing your own indicator »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Sunday 4 January 2026 14:15">Sunday 4 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
