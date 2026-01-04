@@ -29,7 +29,7 @@ Requires OHLCV data with `high`, `low`, `close`, and `volume` fields.
 # Returns
 `Union{Missing,T}` - The Chaikin Oscillator value, or `missing` during warm-up.
 
-See also: [`AccuDist`](@ref), [`OBV`](@ref), [`KVO`](@ref)
+See also: [`AccuDist`](@ref), [`OBV`](@ref), [`KVO`](@ref), [`MFI`](@ref)
 """
 mutable struct ChaikinOsc{Tohlcv,IN,S} <: TechnicalIndicatorSingleOutput{Tohlcv}
     value::Union{Missing,S}

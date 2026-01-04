@@ -23,7 +23,7 @@ where Average Gain and Average Loss are calculated using SMMA (Smoothed Moving A
 `Union{Missing,T}` - RSI value between 0 and 100, or `missing` during the warm-up period.
 Values above 70 typically indicate overbought conditions, below 30 indicate oversold.
 
-See also: [`SMMA`](@ref)
+See also: [`SMMA`](@ref), [`MFI`](@ref)
 """
 mutable struct RSI{Tval,IN,T2} <: TechnicalIndicatorSingleOutput{Tval}
     value::Union{Missing,T2}

@@ -48,6 +48,7 @@ MISO_INDICATORS = [
     "KVO",
     "UO",
     "NATR",
+    "MFI",
 ]
 MIMO_INDICATORS = [
     "Stoch",
@@ -357,6 +358,7 @@ ismultiinput(::Type{CHOP}) = true
 ismultiinput(::Type{KVO}) = true
 ismultiinput(::Type{UO}) = true
 ismultiinput(::Type{NATR}) = true
+ismultiinput(::Type{MFI}) = true
 # MIMO
 ismultiinput(::Type{Stoch}) = true
 ismultiinput(::Type{ADX}) = true
