@@ -37,9 +37,18 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 
         @test fieldtype(O, :n) == Int
         # TechnicalIndicator
-        ## Filter/Transform : removed from indicators (handled by OnlineStatsChains for StatDAG-based indicators)
-        ## Chaining : each indicator should have an `output_listeners` field (`Series`) and `input_indicator` (`Union{Missing,TechnicalIndicator}`)
-        ## Except for StatDAG-based indicators which handle chaining internally
+        # NOTE: The following fields have been REMOVED from built-in indicators
+        # as part of the OnlineStatsChains migration:
+        #   - output_listeners: No longer used - StatDAG handles propagation
+        #   - input_indicator: No longer used - StatDAG tracks connections
+        #   - input_filter: No longer used in built-in indicators - StatDAG filtered edges replace this
+        #   - input_modifier: No longer used in built-in indicators - StatDAG transform replaces this
+        #
+        # Legacy support for input_filter/input_modifier still exists for custom indicators
+        # that may define these fields, but built-in indicators use StatDAG.
+        #
+        # These conditional checks remain for backward compatibility with any
+        # user-defined indicators that might still use the old pattern.
         if hasfield(O, :output_listeners)
             @test fieldtype(O, :output_listeners) == Series
         end

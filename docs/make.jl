@@ -19,6 +19,7 @@ makedocs(
         "Learn more about usage" => "usage_more.md",
         "Examples" => "examples.md",
         "Internals" => "internals.md",
+        "Migration Guide" => "migration.md",
         "Implementing your own indicator" => "implementing_your_indic.md",
         "API" => "api.md",
         "Projects" => "projects.md",
