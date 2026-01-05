@@ -268,7 +268,7 @@ using Dates
 const DATE_TMPL =
     collect(range(Dates.Date(2020, 1, 1), step = Dates.Day(1), length = length(CLOSE_TMPL)))
 
-using OnlineTechnicalIndicators: OHLCVFactory
+using OnlineTechnicalIndicators.Candlesticks: OHLCVFactory
 const OHLCV_FACTORY =
     OHLCVFactory(OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL; volume = VOLUME_TMPL)  # time is missing here
 const V_OHLCV = collect(OHLCV_FACTORY)

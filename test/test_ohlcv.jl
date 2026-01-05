@@ -1,5 +1,5 @@
 @testitem "OHLCV with volume but missing time" begin
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
 
     ohlcv = OHLCV(10.81, 11.02, 9.9, 10.5; volume = 55.03)
     @test ohlcv.open == 10.81
@@ -11,7 +11,7 @@
 end
 
 @testitem "OHLCV factory" begin
-    using OnlineTechnicalIndicators: OHLCV, OHLCVFactory
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV, OHLCVFactory
     using OnlineTechnicalIndicators.SampleData:
         OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL
 

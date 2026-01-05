@@ -40,15 +40,21 @@ module Patterns
 using ..OnlineTechnicalIndicators:
     TechnicalIndicator,
     TechnicalIndicatorSingleOutput,
-    TechnicalIndicatorMultiOutput,
-    OHLCV,
+    TechnicalIndicatorMultiOutput
+
+# Import from Candlesticks submodule
+using ..OnlineTechnicalIndicators.Candlesticks: OHLCV
+
+# Import from Internals submodule
+using ..OnlineTechnicalIndicators.Internals:
     has_output_value,
     has_valid_values,
-    always_true
+    always_true,
+    is_valid
 
-# Import functions for extension (allows adding methods to parent's functions)
-import ..OnlineTechnicalIndicators: is_valid, ismultiinput
-import ..OnlineTechnicalIndicators: _calculate_new_value, _calculate_new_value_only_from_incoming_data
+# Import functions for extension (allows adding methods to Internals functions)
+import ..OnlineTechnicalIndicators.Internals: is_multi_input, is_valid
+import ..OnlineTechnicalIndicators.Internals: _calculate_new_value, _calculate_new_value_only_from_incoming_data
 
 using OnlineStatsBase
 using OnlineStatsBase: CircBuff, Series, nobs, value, fit!
@@ -105,19 +111,19 @@ export Star, ThreeSoldiersCrows, ThreeInside
 # Export composite detector
 export CandlestickPatternDetector
 
-# ismultiinput definitions for pattern detectors
-ismultiinput(::Type{Doji}) = true
-ismultiinput(::Type{Hammer}) = true
-ismultiinput(::Type{ShootingStar}) = true
-ismultiinput(::Type{Marubozu}) = true
-ismultiinput(::Type{SpinningTop}) = true
-ismultiinput(::Type{Engulfing}) = true
-ismultiinput(::Type{Harami}) = true
-ismultiinput(::Type{PiercingDarkCloud}) = true
-ismultiinput(::Type{Tweezer}) = true
-ismultiinput(::Type{Star}) = true
-ismultiinput(::Type{ThreeSoldiersCrows}) = true
-ismultiinput(::Type{ThreeInside}) = true
-ismultiinput(::Type{CandlestickPatternDetector}) = true
+# is_multi_input definitions for pattern detectors
+is_multi_input(::Type{Doji}) = true
+is_multi_input(::Type{Hammer}) = true
+is_multi_input(::Type{ShootingStar}) = true
+is_multi_input(::Type{Marubozu}) = true
+is_multi_input(::Type{SpinningTop}) = true
+is_multi_input(::Type{Engulfing}) = true
+is_multi_input(::Type{Harami}) = true
+is_multi_input(::Type{PiercingDarkCloud}) = true
+is_multi_input(::Type{Tweezer}) = true
+is_multi_input(::Type{Star}) = true
+is_multi_input(::Type{ThreeSoldiersCrows}) = true
+is_multi_input(::Type{ThreeInside}) = true
+is_multi_input(::Type{CandlestickPatternDetector}) = true
 
 end  # module Patterns

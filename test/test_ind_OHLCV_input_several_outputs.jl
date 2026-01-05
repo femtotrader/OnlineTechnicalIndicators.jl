@@ -1,12 +1,12 @@
-using OnlineTechnicalIndicators
 using OnlineTechnicalIndicators.Indicators: PivotsHLVal, GannHiloActivatorVal
 using OnlineTechnicalIndicators.SampleData: V_OHLCV
 
 @testitem "MIMO - Stoch" begin
     using OnlineTechnicalIndicators.Indicators: Stoch, StochVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -26,9 +26,10 @@ end
 
 @testitem "MIMO - SuperTrend" begin
     using OnlineTechnicalIndicators.Indicators: SuperTrend, SuperTrendVal, Trend
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -57,9 +58,10 @@ end
 
 @testitem "MIMO - VTX" begin
     using OnlineTechnicalIndicators.Indicators: VTX, VTXVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -82,9 +84,10 @@ end
 
 @testitem "MIMO - DonchianChannels" begin
     using OnlineTechnicalIndicators.Indicators: DonchianChannels, DonchianChannelsVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -110,9 +113,10 @@ end
 
 @testitem "MIMO - KeltnerChannels" begin
     using OnlineTechnicalIndicators.Indicators: KeltnerChannels, KeltnerChannelsVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -143,9 +147,10 @@ end
 
 @testitem "MIMO - ADX" begin
     using OnlineTechnicalIndicators.Indicators: ADX, ADXVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -171,9 +176,10 @@ end
 
 @testitem "MIMO - Aroon" begin
     using OnlineTechnicalIndicators.Indicators: Aroon, AroonVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -196,9 +202,10 @@ end
 
 @testitem "MIMO - ChandeKrollStop" begin
     using OnlineTechnicalIndicators.Indicators: ChandeKrollStop, ChandeKrollStopVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -221,9 +228,10 @@ end
 
 @testitem "MIMO - ParabolicSAR" begin
     using OnlineTechnicalIndicators.Indicators: ParabolicSAR, ParabolicSARVal, SARTrend
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -256,9 +264,10 @@ end
 
 @testitem "MIMO - SFX" begin
     using OnlineTechnicalIndicators.Indicators: SFX, SFXVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -284,9 +293,10 @@ end
 
 @testitem "MIMO - TTM" begin
     using OnlineTechnicalIndicators.Indicators: TTM, TTMVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -313,7 +323,7 @@ end
 @testitem "MIMO - PivotsHL" begin
     using OnlineTechnicalIndicators.Indicators: PivotsHL, HLType
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -351,9 +361,11 @@ end
 
 @testitem "MIMO - GannHiloActivator" begin
     using OnlineTechnicalIndicators.Indicators: GannHiloActivator, GannHiloActivatorVal
-    using OnlineTechnicalIndicators: OHLCV, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 

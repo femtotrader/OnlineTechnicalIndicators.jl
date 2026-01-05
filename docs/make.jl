@@ -1,12 +1,15 @@
 # Inside make.jl
 push!(LOAD_PATH, "../src/")
 using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.Candlesticks
+using OnlineTechnicalIndicators.Internals
 using OnlineTechnicalIndicators.Indicators
 using OnlineTechnicalIndicators.Patterns
 using Documenter
 makedocs(
     sitename = "OnlineTechnicalIndicators.jl",
-    modules = [OnlineTechnicalIndicators, OnlineTechnicalIndicators.Indicators, OnlineTechnicalIndicators.Patterns],
+    modules = [OnlineTechnicalIndicators, OnlineTechnicalIndicators.Candlesticks, OnlineTechnicalIndicators.Internals, OnlineTechnicalIndicators.Indicators, OnlineTechnicalIndicators.Patterns],
+    warnonly = [:missing_docs],  # Don't fail on missing docs (internal _fit! defined on OnlineStatsBase namespace)
     format = Documenter.HTML(
         size_threshold = 300_000,  # 300KB threshold for large API reference page
     ),

@@ -1,11 +1,10 @@
-using OnlineTechnicalIndicators
 using OnlineTechnicalIndicators.SampleData: V_OHLCV
 
 @testitem "MISO - SMA with OHLCV input" begin
     using OnlineTechnicalIndicators.Indicators: SMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -28,7 +27,7 @@ end
     using OnlineTechnicalIndicators.Indicators: AccuDist
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -46,7 +45,7 @@ end
     using OnlineTechnicalIndicators.Indicators: BOP
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -64,7 +63,7 @@ end
     using OnlineTechnicalIndicators.Indicators: CCI
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -82,7 +81,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ChaikinOsc
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -100,7 +99,7 @@ end
     using OnlineTechnicalIndicators.Indicators: VWMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -119,7 +118,7 @@ end
     using OnlineTechnicalIndicators.Indicators: VWAP
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -140,7 +139,7 @@ end
     using OnlineTechnicalIndicators.Indicators: AO
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -158,7 +157,7 @@ end
     using OnlineTechnicalIndicators.Indicators: TrueRange
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -176,7 +175,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ATR
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -194,7 +193,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ATR
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -212,7 +211,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ForceIndex
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -230,7 +229,7 @@ end
     using OnlineTechnicalIndicators.Indicators: OBV
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -248,7 +247,7 @@ end
     using OnlineTechnicalIndicators.Indicators: SOBV
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -266,7 +265,7 @@ end
     using OnlineTechnicalIndicators.Indicators: EMV
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -284,7 +283,7 @@ end
     using OnlineTechnicalIndicators.Indicators: MassIndex
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -302,7 +301,7 @@ end
     using OnlineTechnicalIndicators.Indicators: CHOP
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -320,7 +319,7 @@ end
     using OnlineTechnicalIndicators.Indicators: KVO
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -338,7 +337,7 @@ end
     using OnlineTechnicalIndicators.Indicators: UO
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -356,7 +355,7 @@ end
     using OnlineTechnicalIndicators.Indicators: NATR
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -374,7 +373,7 @@ end
     using OnlineTechnicalIndicators.Indicators: MFI
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -390,8 +389,8 @@ end
 
 @testitem "MISO - MFI edge cases" begin
     using OnlineTechnicalIndicators.Indicators: MFI
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test warm-up period (should return missing)
     ind = MFI(period = 3)
@@ -436,8 +435,8 @@ end
 
 @testitem "MISO - MFI interface" begin
     using OnlineTechnicalIndicators.Indicators: MFI
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test basic interface (fit!, value, nobs)
     ind = MFI(period = 3)
@@ -476,9 +475,10 @@ end
 
 @testitem "MISO - MFI StatLag integration" begin
     using OnlineTechnicalIndicators.Indicators: MFI
-    using OnlineTechnicalIndicators: StatLag, OHLCV
+    using OnlineTechnicalIndicators: StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test StatLag integration - track historical values
     ind = MFI(period = 14)
@@ -510,7 +510,7 @@ end
     using OnlineTechnicalIndicators.Indicators: IntradayRange
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -531,8 +531,8 @@ end
 
 @testitem "MISO - IntradayRange interface" begin
     using OnlineTechnicalIndicators.Indicators: IntradayRange
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test basic interface
     ind = IntradayRange()
@@ -553,9 +553,10 @@ end
 
 @testitem "MISO - IntradayRange StatLag integration" begin
     using OnlineTechnicalIndicators.Indicators: IntradayRange
-    using OnlineTechnicalIndicators: StatLag, OHLCV
+    using OnlineTechnicalIndicators: StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test StatLag integration
     ind = IntradayRange()
@@ -577,7 +578,7 @@ end
     using OnlineTechnicalIndicators.Indicators: RelativeIntradayRange
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -598,8 +599,8 @@ end
 
 @testitem "MISO - RelativeIntradayRange edge cases" begin
     using OnlineTechnicalIndicators.Indicators: RelativeIntradayRange
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test zero Open returns missing
     ind = RelativeIntradayRange()
@@ -624,8 +625,8 @@ end
 
 @testitem "MISO - RelativeIntradayRange interface" begin
     using OnlineTechnicalIndicators.Indicators: RelativeIntradayRange
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test basic interface
     ind = RelativeIntradayRange()
@@ -646,9 +647,10 @@ end
 
 @testitem "MISO - RelativeIntradayRange StatLag integration" begin
     using OnlineTechnicalIndicators.Indicators: RelativeIntradayRange
-    using OnlineTechnicalIndicators: StatLag, OHLCV
+    using OnlineTechnicalIndicators: StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test StatLag integration
     ind = RelativeIntradayRange()
@@ -670,7 +672,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ADR
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -689,8 +691,8 @@ end
 
 @testitem "MISO - ADR interface" begin
     using OnlineTechnicalIndicators.Indicators: ADR, EMA
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test basic interface
     ind = ADR(period = 3)
@@ -731,7 +733,7 @@ end
 @testitem "MISO - ADR with different MA types" begin
     using OnlineTechnicalIndicators.Indicators: ADR, SMA, EMA, SMMA
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test that different MA types produce different results
     adr_sma = ADR(period = 5, ma = SMA)
@@ -750,9 +752,10 @@ end
 
 @testitem "MISO - ADR StatLag integration" begin
     using OnlineTechnicalIndicators.Indicators: ADR
-    using OnlineTechnicalIndicators: StatLag, OHLCV
+    using OnlineTechnicalIndicators: StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test StatLag integration
     ind = ADR(period = 5)
@@ -774,7 +777,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ARDR
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -793,8 +796,8 @@ end
 
 @testitem "MISO - ARDR interface" begin
     using OnlineTechnicalIndicators.Indicators: ARDR, EMA
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test basic interface
     ind = ARDR(period = 3)
@@ -829,8 +832,8 @@ end
 
 @testitem "MISO - ARDR edge cases" begin
     using OnlineTechnicalIndicators.Indicators: ARDR
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test handling of zero Open in the data
     ind = ARDR(period = 2)
@@ -856,7 +859,7 @@ end
 @testitem "MISO - ARDR with different MA types" begin
     using OnlineTechnicalIndicators.Indicators: ARDR, SMA, EMA, SMMA
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test that different MA types produce different results
     ardr_sma = ARDR(period = 5, ma = SMA)
@@ -875,9 +878,10 @@ end
 
 @testitem "MISO - ARDR StatLag integration" begin
     using OnlineTechnicalIndicators.Indicators: ARDR
-    using OnlineTechnicalIndicators: StatLag, OHLCV
+    using OnlineTechnicalIndicators: StatLag
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test StatLag integration
     ind = ARDR(period = 5)
@@ -901,7 +905,7 @@ end
     using OnlineTechnicalIndicators.Indicators: Smoother, TrueRange, SMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -924,7 +928,7 @@ end
 @testitem "Smoother - MA type variation" begin
     using OnlineTechnicalIndicators.Indicators: Smoother, IntradayRange, SMA, EMA
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     # Create two smoothers with different MA types
     smoother_sma = Smoother(IntradayRange; period = 5, ma = SMA)
@@ -943,8 +947,8 @@ end
 
 @testitem "Smoother - missing value handling" begin
     using OnlineTechnicalIndicators.Indicators: Smoother, IntradayRange, SMA
-    using OnlineTechnicalIndicators: OHLCV
-    using OnlineStatsBase: nobs
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: nobs, fit!, value
 
     # Create a Smoother with period 3
     ind = Smoother(IntradayRange; period = 3, ma = SMA)

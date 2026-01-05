@@ -1,3 +1,4 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+OnlineStatsBase = "925886fa-5bf2-5e8e-b522-a9147a512338"
 OnlineTechnicalIndicators = "dc2d07fb-478f-4566-8417-81bb3e5a7af1"

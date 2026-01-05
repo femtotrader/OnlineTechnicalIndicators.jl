@@ -1,6 +1,7 @@
 using OnlineStatsBase
 using OnlineTechnicalIndicators
-using OnlineTechnicalIndicators: TechnicalIndicator, expected_return_type
+using OnlineTechnicalIndicators: TechnicalIndicator
+using OnlineTechnicalIndicators.Internals: expected_return_type
 using OnlineTechnicalIndicators.SampleData:
     OPEN_TMPL, HIGH_TMPL, LOW_TMPL, CLOSE_TMPL, VOLUME_TMPL, DATE_TMPL
 

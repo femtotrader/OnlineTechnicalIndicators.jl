@@ -1,5 +1,4 @@
-using OnlineTechnicalIndicators
-using OnlineTechnicalIndicators:
+using OnlineTechnicalIndicators.Indicators:
     GannSwingChart,
     GannSwingChartVal,
     PeakValleyDetector,
@@ -11,7 +10,8 @@ using OnlineTechnicalIndicators:
 
 @testitem "GannSwingChart" begin
     using OnlineTechnicalIndicators.Indicators: GannSwingChart, GannSwingChartVal
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: fit!, value
 
     # Test basic construction
     ind = GannSwingChart{OHLCV{Missing,Float64,Float64}}(min_bars = 2)
@@ -43,7 +43,8 @@ end
 
 @testitem "PeakValleyDetector" begin
     using OnlineTechnicalIndicators.Indicators: PeakValleyDetector, PeakValleyVal
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: fit!, value
 
     # Test construction
     ind = PeakValleyDetector{OHLCV{Missing,Float64,Float64}}(lookback = 2)
@@ -77,7 +78,8 @@ end
 
 @testitem "RetracementCalculator" begin
     using OnlineTechnicalIndicators.Indicators: RetracementCalculator, RetracementVal
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: fit!, value
 
     # Test construction
     ind = RetracementCalculator{OHLCV{Missing,Float64,Float64}}(retracement_pct = 0.38)
@@ -107,7 +109,8 @@ end
 
 @testitem "SupportResistanceLevel" begin
     using OnlineTechnicalIndicators.Indicators: SupportResistanceLevel, SupportResistanceLevelVal
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineStatsBase: fit!, value
 
     # Test construction
     ind = SupportResistanceLevel{OHLCV{Missing,Float64,Float64}}()
@@ -137,9 +140,10 @@ end
 end
 
 @testitem "Gann Integration - Multiple Indicators" begin
-    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
     using OnlineTechnicalIndicators.Indicators:
         GannSwingChart, PeakValleyDetector, RetracementCalculator
+    using OnlineStatsBase: nobs, fit!, value
 
     # Test using multiple indicators together
     swing_chart = GannSwingChart{OHLCV{Missing,Float64,Float64}}()

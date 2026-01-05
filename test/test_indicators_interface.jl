@@ -1,4 +1,5 @@
-using OnlineTechnicalIndicators: TechnicalIndicator, always_true, ismultiinput, ismultioutput, macd_to_ohlcv
+using OnlineTechnicalIndicators: TechnicalIndicator
+using OnlineTechnicalIndicators.Internals: always_true, is_multi_input, is_multi_output
 using OnlineTechnicalIndicators.Indicators:
     SISO_INDICATORS,
     SIMO_INDICATORS,
@@ -60,52 +61,54 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
 end
 
 @testitem "Indicators - SISO Expected Return Type" begin
-    using OnlineTechnicalIndicators: ismultiinput, ismultioutput, expected_return_type
+    using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
     using OnlineTechnicalIndicators.Indicators: SISO_INDICATORS
 
     for IND_name in SISO_INDICATORS
         IND = getfield(OnlineTechnicalIndicators.Indicators, Symbol(IND_name))
-        @test !ismultiinput(IND)
-        @test !ismultioutput(IND)
+        @test !is_multi_input(IND)
+        @test !is_multi_output(IND)
         ind = IND{Float64}()
         @test expected_return_type(ind) == Float64
     end
 end
 
 @testitem "Indicators - SIMO Expected Return Type" begin
-    using OnlineTechnicalIndicators: ismultiinput, ismultioutput
+    using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output
     using OnlineTechnicalIndicators.Indicators: SIMO_INDICATORS
 
     for IND_name in SIMO_INDICATORS
         IND = getfield(OnlineTechnicalIndicators.Indicators, Symbol(IND_name))
-        @test !ismultiinput(IND)
-        @test ismultioutput(IND)
+        @test !is_multi_input(IND)
+        @test is_multi_output(IND)
         ind = IND{Float64}()
         # @test expected_return_type(ind) == ...  # see in others tests
     end
 end
 
 @testitem "Indicators - MISO Expected Return Type" begin
-    using OnlineTechnicalIndicators: OHLCV, ismultiinput, ismultioutput, expected_return_type
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
     using OnlineTechnicalIndicators.Indicators: MISO_INDICATORS
 
     for IND_name in MISO_INDICATORS
         IND = getfield(OnlineTechnicalIndicators.Indicators, Symbol(IND_name))
-        @test ismultiinput(IND)
-        @test !ismultioutput(IND)
+        @test is_multi_input(IND)
+        @test !is_multi_output(IND)
         ind = IND{OHLCV{Missing,Float64,Float64}}()
         @test expected_return_type(ind) == Float64
     end
 end
 
 @testitem "Indicators - MIMO Expected Return Type" begin
-    using OnlineTechnicalIndicators: OHLCV, ismultiinput, ismultioutput
+    using OnlineTechnicalIndicators.Candlesticks: OHLCV
+    using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output
     using OnlineTechnicalIndicators.Indicators: MIMO_INDICATORS
 
     for IND_name in MIMO_INDICATORS
         IND = getfield(OnlineTechnicalIndicators.Indicators, Symbol(IND_name))
-        @test ismultiinput(IND)
-        @test ismultioutput(IND)
+        @test is_multi_input(IND)
+        @test is_multi_output(IND)
         ind = IND{OHLCV{Missing,Float64,Float64}}()
         # @test expected_return_type(ind) == ...  # see in others tests
     end
@@ -113,11 +116,11 @@ end
 
 @testitem "Indicators - STC Expected Return Type" begin
     using OnlineTechnicalIndicators.Indicators: STC
-    using OnlineTechnicalIndicators: ismultiinput, ismultioutput, expected_return_type
+    using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
 
     ind = STC{Float64}()  # SISO
-    @test !ismultiinput(STC)
-    @test !ismultioutput(STC)
+    @test !is_multi_input(STC)
+    @test !is_multi_output(STC)
     @test expected_return_type(ind) == Float64
 end
 

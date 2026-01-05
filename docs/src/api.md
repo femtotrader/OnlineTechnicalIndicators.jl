@@ -5,11 +5,55 @@
 OnlineTechnicalIndicators is organized into submodules for better code organization:
 
 ```@docs
+OnlineTechnicalIndicators.Candlesticks
+OnlineTechnicalIndicators.Internals
 OnlineTechnicalIndicators.Indicators
 OnlineTechnicalIndicators.Patterns
 OnlineTechnicalIndicators.Wrappers
 OnlineTechnicalIndicators.Factories
 ```
+
+## Candlesticks Module
+
+The Candlesticks module contains OHLCV (Open, High, Low, Close, Volume) types and related utilities.
+
+```@docs
+OnlineTechnicalIndicators.Candlesticks.OHLCV
+OnlineTechnicalIndicators.Candlesticks.OHLCVFactory
+```
+
+The `ValueExtractor` submodule provides helper functions for extracting values from candlesticks:
+- `extract_open(candle)` - Get the open price
+- `extract_high(candle)` - Get the high price
+- `extract_low(candle)` - Get the low price
+- `extract_close(candle)` - Get the close price
+- `extract_volume(candle)` - Get the volume
+
+## Internals Module
+
+The Internals module contains internal utility functions used by indicator implementations.
+These are exposed for users who want to implement custom indicators.
+
+```@docs
+OnlineTechnicalIndicators.Internals.is_multi_input
+OnlineTechnicalIndicators.Internals.is_multi_output
+OnlineTechnicalIndicators.Internals.expected_return_type
+OnlineTechnicalIndicators.Internals.has_output_value
+OnlineTechnicalIndicators.Internals.has_valid_values
+OnlineTechnicalIndicators.Internals.is_valid
+OnlineTechnicalIndicators.Internals.always_true
+OnlineTechnicalIndicators.Internals._calculate_new_value
+OnlineTechnicalIndicators.Internals._calculate_new_value_only_from_incoming_data
+```
+
+### Internal Fit Implementation
+
+The `OnlineStatsBase._fit!` method for `TechnicalIndicator` types is implemented in the Internals module. This function:
+
+1. Applies input filter and modifier (if present in legacy indicators)
+2. Updates the input values circular buffer (if present)
+3. Fits sub-indicators (if present)
+4. Calculates and stores the new indicator value
 
 ## Wrappers Module
 
@@ -150,8 +194,6 @@ OnlineTechnicalIndicators.Patterns.AllPatternsVal
 
 ## Core Types
 ```@docs
-OnlineTechnicalIndicators.OHLCV
-OnlineTechnicalIndicators.OHLCVFactory
 OnlineTechnicalIndicators.SampleData.TabOHLCV
 OnlineTechnicalIndicators.TechnicalIndicatorWrapper
 OnlineTechnicalIndicators.TechnicalIndicatorResults
@@ -167,13 +209,12 @@ OnlineTechnicalIndicators.Resample.ResamplerBy
 
 ## Other
 
-!!! warning "Deprecated Function"
-    `add_input_indicator!` is **deprecated** and will throw an error if called.
+!!! warning "Removed Function"
+    `add_input_indicator!` has been **removed**.
     Use `OnlineStatsChains.StatDAG` to chain indicators instead.
     See the [Migration Guide](@ref) for detailed examples and migration instructions.
 
 ```@docs
-OnlineTechnicalIndicators.add_input_indicator!
 OnlineTechnicalIndicators.StatLag
 OnlineTechnicalIndicators.TechnicalIndicatorIterator
 OnlineTechnicalIndicators.Indicators.update_levels!
