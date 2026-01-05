@@ -16,7 +16,7 @@ Pkg.add("OnlineTechnicalIndicators")
 ### Example 1: Detect a Single Pattern
 
 ```julia
-using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.Patterns
 
 # Create a Doji detector
 doji = Doji{OHLCV{Missing,Float64,Missing}}()
