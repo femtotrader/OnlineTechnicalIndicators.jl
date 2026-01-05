@@ -59,6 +59,9 @@ import ..OnlineTechnicalIndicators.Internals: _calculate_new_value, _calculate_n
 using OnlineStatsBase
 using OnlineStatsBase: CircBuff, Series, nobs, value, fit!
 
+# Re-export fit! and value for user convenience
+export fit!, value
+
 # Pattern type lists
 const SINGLE_CANDLE_PATTERNS = ["Doji", "Hammer", "ShootingStar", "Marubozu", "SpinningTop"]
 

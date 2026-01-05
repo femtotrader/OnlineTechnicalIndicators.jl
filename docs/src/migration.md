@@ -28,13 +28,18 @@ using OnlineTechnicalIndicators: ismultiinput, ismultioutput, expected_return_ty
 using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
 ```
 
-**`fit!` and `value`** are no longer re-exported from the main module. Import them from `OnlineStatsBase`:
+**`fit!` and `value`** are no longer re-exported from the main module. Import them from the submodules or `OnlineStatsBase`:
 
 ```julia
 # Old (no longer works)
 using OnlineTechnicalIndicators: fit!, value
 
-# New
+# New - Option 1: Import from Indicators or Patterns (recommended)
+using OnlineTechnicalIndicators.Indicators: fit!, value
+# or
+using OnlineTechnicalIndicators.Patterns: fit!, value
+
+# New - Option 2: Import from OnlineStatsBase directly
 using OnlineStatsBase: fit!, value
 ```
 
@@ -49,8 +54,7 @@ using OnlineStatsBase: fit!, value
 
 **Working with indicators:**
 ```julia
-using OnlineTechnicalIndicators.Indicators: SMA, EMA, RSI
-using OnlineStatsBase: fit!, value
+using OnlineTechnicalIndicators.Indicators: SMA, EMA, RSI, fit!, value
 
 ind = SMA{Float64}(period=10)
 fit!(ind, 100.0)
@@ -60,8 +64,7 @@ println(value(ind))
 **Working with OHLCV data:**
 ```julia
 using OnlineTechnicalIndicators.Candlesticks: OHLCV
-using OnlineTechnicalIndicators.Indicators: ATR
-using OnlineStatsBase: fit!, value
+using OnlineTechnicalIndicators.Indicators: ATR, fit!, value
 
 candle = OHLCV(100.0, 105.0, 95.0, 102.0, volume=1000.0)
 ind = ATR{OHLCV{Missing,Float64,Float64}}(period=14)
@@ -71,8 +74,7 @@ fit!(ind, candle)
 **Working with patterns:**
 ```julia
 using OnlineTechnicalIndicators.Candlesticks: OHLCV
-using OnlineTechnicalIndicators.Patterns: Doji, SingleCandlePatternType
-using OnlineStatsBase: fit!, value
+using OnlineTechnicalIndicators.Patterns: Doji, SingleCandlePatternType, fit!, value
 
 candle = OHLCV(100.0, 102.0, 98.0, 100.0)
 ind = Doji{OHLCV{Missing,Float64,Missing}}()

@@ -3,9 +3,8 @@
 ## Quick Start
 
 ```julia
-# Import indicators from the Indicators submodule
-using OnlineTechnicalIndicators.Indicators: SMA, EMA, RSI
-using OnlineStatsBase: fit!, value
+# Import indicators from the Indicators submodule (fit! and value are re-exported)
+using OnlineTechnicalIndicators.Indicators: SMA, EMA, RSI, fit!, value
 
 # Create an indicator
 ind = SMA{Float64}(period=10)
@@ -24,8 +23,7 @@ println(value(ind))  # 102.6
 
 ```julia
 using OnlineTechnicalIndicators.Candlesticks: OHLCV
-using OnlineTechnicalIndicators.Indicators: ATR
-using OnlineStatsBase: fit!, value
+using OnlineTechnicalIndicators.Indicators: ATR, fit!, value
 
 # Create OHLCV candle
 candle = OHLCV(100.0, 105.0, 95.0, 102.0, volume=1000.0)
@@ -40,12 +38,14 @@ fit!(ind, candle)
 OnlineTechnicalIndicators.jl exports only submodule names. Import types and functions from the appropriate submodule:
 
 - **`Candlesticks`**: OHLCV types (`OHLCV`, `OHLCVFactory`, `ValueExtractor`)
-- **`Indicators`**: All technical indicators (`SMA`, `EMA`, `RSI`, `MACD`, etc.)
-- **`Patterns`**: Candlestick pattern recognition (`Doji`, `Hammer`, `Engulfing`, etc.)
+- **`Indicators`**: All technical indicators (`SMA`, `EMA`, `RSI`, `MACD`, etc.) plus `fit!` and `value`
+- **`Patterns`**: Candlestick pattern recognition (`Doji`, `Hammer`, `Engulfing`, etc.) plus `fit!` and `value`
 - **`Internals`**: Utility functions for custom indicator implementation
 - **`Wrappers`**: Indicator composition utilities (`Smoother`, `DAGWrapper`)
 - **`Factories`**: Factory functions for creating indicators (`MovingAverage`)
 - **`SampleData`**: Sample data for testing
+
+**Note**: `fit!` and `value` are re-exported from `Indicators` and `Patterns` for convenience. You can also import them directly from `OnlineStatsBase`.
 
 See the [Migration Guide](@ref) for details on the new import patterns.
 

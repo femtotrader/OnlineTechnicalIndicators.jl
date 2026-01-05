@@ -63,6 +63,9 @@ using OnlineStatsBase
 using OnlineStatsBase: CircBuff, Series, nobs, value, fit!
 using OnlineStatsChains
 
+# Re-export fit! and value for user convenience
+export fit!, value
+
 # Indicator category lists (for reference)
 const SISO_INDICATORS = [
     "SMA",
