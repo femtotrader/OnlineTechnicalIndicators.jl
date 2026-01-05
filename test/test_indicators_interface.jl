@@ -13,8 +13,8 @@ using OnlineTechnicalIndicators.SampleData: RT_OHLCV, TAB_OHLCV
     using OnlineTechnicalIndicators.Indicators
 
     files = readdir("../src/indicators")
-    # Filter out the module file Indicators.jl
-    indicator_files = filter(f -> f != "Indicators.jl", files)
+    # Filter to only .jl files and exclude the module file Indicators.jl
+    indicator_files = filter(f -> endswith(f, ".jl") && f != "Indicators.jl", files)
     @test length(indicator_files) == 65  # number of indicators (Smoother moved to src/wrappers/)
 
     _exported = names(OnlineTechnicalIndicators.Indicators)
