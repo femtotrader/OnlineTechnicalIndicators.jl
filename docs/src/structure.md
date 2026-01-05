@@ -231,5 +231,5 @@ The main module includes files in a specific order to satisfy dependencies:
 
 ## See Also
 
-- [Architecture](@ref) for module relationships and type hierarchy
+- [Architecture](architecture.md) for module relationships and type hierarchy
 - [Data Flow](@ref) for how data flows through indicators

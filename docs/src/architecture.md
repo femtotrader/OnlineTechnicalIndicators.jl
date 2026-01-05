@@ -165,7 +165,7 @@ Internal utilities for indicator implementation. While exported for advanced use
 
 ### Indicators
 
-Contains 60+ technical indicators organized by input/output type. See [Indicators Support](@ref) for the complete list.
+Contains 60+ technical indicators organized by input/output type. See [Indicators support](@ref) for the complete list.
 
 **Categories:**
 - **SISO** (Single Input, Single Output): SMA, EMA, RSI, etc.
@@ -175,7 +175,7 @@ Contains 60+ technical indicators organized by input/output type. See [Indicator
 
 ### Patterns
 
-Contains 13 candlestick pattern detectors. See [Pattern Recognition](@ref) for details.
+Contains 13 candlestick pattern detectors. See [Candlestick Pattern Recognition](@ref) for details.
 
 **Categories:**
 - **Single Candle**: Doji, Hammer, ShootingStar, Marubozu, SpinningTop
@@ -207,7 +207,7 @@ end
 Factory functions for creating indicator instances.
 
 **Exports:**
-- [`MovingAverage`](@ref): Factory for creating typed moving average indicators
+- [`MovingAverage`](@ref OnlineTechnicalIndicators.Factories.MovingAverage): Factory for creating typed moving average indicators
 - `MAFactory`: Deprecated alias for `MovingAverage`
 
 ```julia

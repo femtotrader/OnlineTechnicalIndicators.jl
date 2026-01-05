@@ -311,6 +311,6 @@ Compare this to batch processing which would require storing all historical data
 
 ## See Also
 
-- [Architecture](@ref) for module organization
+- [Architecture](architecture.md) for module organization
 - [OnlineTechnicalIndicators internals](@ref) for implementation details
 - [Implementing your own indicator](@ref) for creating custom indicators
