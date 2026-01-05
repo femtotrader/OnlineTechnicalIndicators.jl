@@ -1,42 +1,40 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Data Flow · OnlineTechnicalIndicators.jl</title><meta name="title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta property="og:title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta property="twitter:title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta name="description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="og:description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="twitter:description" content="Documentation for OnlineTechnicalIndicators.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">OnlineTechnicalIndicators.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../features/">Package Features</a></li><li><a class="tocitem" href="../install/">Install</a></li><li><a class="tocitem" href="../usage/">Usage</a></li><li><a class="tocitem" href="../indicators_support/">Indicators support</a></li><li><span class="tocitem">Pattern Recognition</span><ul><li><a class="tocitem" href="../patterns/">Overview</a></li><li><a class="tocitem" href="../patterns/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../patterns/implementation/">Implementation</a></li></ul></li><li><a class="tocitem" href="../usage_more/">Learn more about usage</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><span class="tocitem">Architecture &amp; Internals</span><ul><li><a class="tocitem" href="../architecture/">Architecture</a></li><li><a class="tocitem" href="../structure/">Project Structure</a></li><li class="is-active"><a class="tocitem" href>Data Flow</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#The-fit!-Pipeline"><span>The <code>fit!</code> Pipeline</span></a></li><li><a class="tocitem" href="#Indicator-Lifecycle"><span>Indicator Lifecycle</span></a></li><li><a class="tocitem" href="#Data-Flow-Examples"><span>Data Flow Examples</span></a></li><li><a class="tocitem" href="#Circular-Buffer-Mechanics"><span>Circular Buffer Mechanics</span></a></li><li><a class="tocitem" href="#Memory-Efficiency"><span>Memory Efficiency</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../internals/">Internals</a></li></ul></li><li><a class="tocitem" href="../migration/">Migration Guide</a></li><li><a class="tocitem" href="../implementing_your_indic/">Implementing your own indicator</a></li><li><a class="tocitem" href="../api/">API</a></li><li><a class="tocitem" href="../projects/">Projects</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Architecture &amp; Internals</a></li><li class="is-active"><a href>Data Flow</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Data Flow</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl/blob/main/docs/src/dataflow.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Data-Flow"><a class="docs-heading-anchor" href="#Data-Flow">Data Flow</a><a id="Data-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Data-Flow" title="Permalink"></a></h1><p>This page explains how data flows through indicators in OnlineTechnicalIndicators.jl.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>OnlineTechnicalIndicators.jl uses <strong>online algorithms</strong> - indicators process data one observation at a time without requiring the entire dataset in memory. This is achieved through:</p><ol><li><strong>Circular buffers</strong> for fixed-size rolling windows</li><li><strong>Incremental calculations</strong> that update state efficiently</li><li><strong>Sub-indicator composition</strong> for complex calculations</li></ol><h2 id="The-fit!-Pipeline"><a class="docs-heading-anchor" href="#The-fit!-Pipeline">The <code>fit!</code> Pipeline</a><a id="The-fit!-Pipeline-1"></a><a class="docs-heading-anchor-permalink" href="#The-fit!-Pipeline" title="Permalink"></a></h2><p>When you call <code>fit!(indicator, data)</code>, the following sequence occurs:</p><pre class="mermaid">
-sequenceDiagram
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Data Flow · OnlineTechnicalIndicators.jl</title><meta name="title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta property="og:title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta property="twitter:title" content="Data Flow · OnlineTechnicalIndicators.jl"/><meta name="description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="og:description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="twitter:description" content="Documentation for OnlineTechnicalIndicators.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">OnlineTechnicalIndicators.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../features/">Package Features</a></li><li><a class="tocitem" href="../install/">Install</a></li><li><a class="tocitem" href="../usage/">Usage</a></li><li><a class="tocitem" href="../indicators_support/">Indicators support</a></li><li><span class="tocitem">Pattern Recognition</span><ul><li><a class="tocitem" href="../patterns/">Overview</a></li><li><a class="tocitem" href="../patterns/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../patterns/implementation/">Implementation</a></li></ul></li><li><a class="tocitem" href="../usage_more/">Learn more about usage</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><span class="tocitem">Architecture &amp; Internals</span><ul><li><a class="tocitem" href="../architecture/">Architecture</a></li><li><a class="tocitem" href="../structure/">Project Structure</a></li><li class="is-active"><a class="tocitem" href>Data Flow</a><ul class="internal"><li><a class="tocitem" href="#Overview"><span>Overview</span></a></li><li><a class="tocitem" href="#The-fit!-Pipeline"><span>The <code>fit!</code> Pipeline</span></a></li><li><a class="tocitem" href="#Indicator-Lifecycle"><span>Indicator Lifecycle</span></a></li><li><a class="tocitem" href="#Data-Flow-Examples"><span>Data Flow Examples</span></a></li><li><a class="tocitem" href="#Circular-Buffer-Mechanics"><span>Circular Buffer Mechanics</span></a></li><li><a class="tocitem" href="#Memory-Efficiency"><span>Memory Efficiency</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../internals/">Internals</a></li></ul></li><li><a class="tocitem" href="../migration/">Migration Guide</a></li><li><a class="tocitem" href="../implementing_your_indic/">Implementing your own indicator</a></li><li><a class="tocitem" href="../api/">API</a></li><li><a class="tocitem" href="../projects/">Projects</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Architecture &amp; Internals</a></li><li class="is-active"><a href>Data Flow</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Data Flow</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl/blob/main/docs/src/dataflow.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Data-Flow"><a class="docs-heading-anchor" href="#Data-Flow">Data Flow</a><a id="Data-Flow-1"></a><a class="docs-heading-anchor-permalink" href="#Data-Flow" title="Permalink"></a></h1><p>This page explains how data flows through indicators in OnlineTechnicalIndicators.jl.</p><h2 id="Overview"><a class="docs-heading-anchor" href="#Overview">Overview</a><a id="Overview-1"></a><a class="docs-heading-anchor-permalink" href="#Overview" title="Permalink"></a></h2><p>OnlineTechnicalIndicators.jl uses <strong>online algorithms</strong> - indicators process data one observation at a time without requiring the entire dataset in memory. This is achieved through:</p><ol><li><strong>Circular buffers</strong> for fixed-size rolling windows</li><li><strong>Incremental calculations</strong> that update state efficiently</li><li><strong>Sub-indicator composition</strong> for complex calculations</li></ol><h2 id="The-fit!-Pipeline"><a class="docs-heading-anchor" href="#The-fit!-Pipeline">The <code>fit!</code> Pipeline</a><a id="The-fit!-Pipeline-1"></a><a class="docs-heading-anchor-permalink" href="#The-fit!-Pipeline" title="Permalink"></a></h2><p>When you call <code>fit!(indicator, data)</code>, the following sequence occurs:</p><div class="mermaid">sequenceDiagram
     participant User
     participant Indicator
     participant CircBuff as CircularBuffer
     participant SubInd as Sub-Indicators
     participant Calc as _calculate_new_value
 
-    User->>Indicator: fit!(indicator, data)
+    User-&gt;&gt;Indicator: fit!(indicator, data)
 
     alt Has input_filter/input_modifier (legacy)
-        Indicator->>Indicator: Apply filter/modifier
+        Indicator-&gt;&gt;Indicator: Apply filter/modifier
     end
 
     alt Has input_values
-        Indicator->>CircBuff: fit!(input_values, data)
-        CircBuff-->>Indicator: Store in circular buffer
+        Indicator-&gt;&gt;CircBuff: fit!(input_values, data)
+        CircBuff--&gt;&gt;Indicator: Store in circular buffer
     end
 
     alt Has sub_indicators
-        Indicator->>SubInd: fit!(sub_indicators, data)
-        SubInd-->>Indicator: Update sub-indicator values
+        Indicator-&gt;&gt;SubInd: fit!(sub_indicators, data)
+        SubInd--&gt;&gt;Indicator: Update sub-indicator values
     end
 
-    Indicator->>Indicator: n += 1
+    Indicator-&gt;&gt;Indicator: n += 1
 
     alt Has input_values OR sub_indicators
-        Indicator->>Calc: _calculate_new_value(ind)
+        Indicator-&gt;&gt;Calc: _calculate_new_value(ind)
     else No stored state
-        Indicator->>Calc: _calculate_new_value_only_from_incoming_data(ind, data)
+        Indicator-&gt;&gt;Calc: _calculate_new_value_only_from_incoming_data(ind, data)
     end
 
-    Calc-->>Indicator: new_value
-    Indicator->>Indicator: value = new_value
+    Calc--&gt;&gt;Indicator: new_value
+    Indicator-&gt;&gt;Indicator: value = new_value
 
-    User->>Indicator: value(indicator)
-    Indicator-->>User: Current indicator value
-</pre><h3 id="Step-by-Step-Breakdown"><a class="docs-heading-anchor" href="#Step-by-Step-Breakdown">Step-by-Step Breakdown</a><a id="Step-by-Step-Breakdown-1"></a><a class="docs-heading-anchor-permalink" href="#Step-by-Step-Breakdown" title="Permalink"></a></h3><ol><li><p><strong>Input Filtering (Legacy)</strong>: If the indicator has <code>input_filter</code> and <code>input_modifier</code> fields, the data is first filtered and transformed. This is a legacy mechanism - new indicators use StatDAG filtered edges instead.</p></li><li><p><strong>Circular Buffer Update</strong>: If the indicator has an <code>input_values</code> field (a <code>CircBuff</code>), the incoming data is stored. The circular buffer automatically discards old values when full.</p></li><li><p><strong>Sub-indicator Update</strong>: If the indicator has <code>sub_indicators</code> (a <code>Series</code> or <code>DAGWrapper</code>), the data is propagated to all sub-indicators via their own <code>fit!</code> calls.</p></li><li><p><strong>Observation Count</strong>: The indicator&#39;s observation counter <code>n</code> is incremented.</p></li><li><p><strong>Value Calculation</strong>: The new indicator value is calculated:</p><ul><li>If the indicator maintains state (<code>input_values</code> or <code>sub_indicators</code>), <code>_calculate_new_value(ind)</code> is called</li><li>Otherwise, <code>_calculate_new_value_only_from_incoming_data(ind, data)</code> is called</li></ul></li><li><p><strong>Value Storage</strong>: The calculated value is stored in <code>ind.value</code></p></li></ol><h2 id="Indicator-Lifecycle"><a class="docs-heading-anchor" href="#Indicator-Lifecycle">Indicator Lifecycle</a><a id="Indicator-Lifecycle-1"></a><a class="docs-heading-anchor-permalink" href="#Indicator-Lifecycle" title="Permalink"></a></h2><h3 id="1.-Construction"><a class="docs-heading-anchor" href="#1.-Construction">1. Construction</a><a id="1.-Construction-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Construction" title="Permalink"></a></h3><p>When an indicator is created, it initializes:</p><ul><li><code>value = missing</code> (no output yet)</li><li><code>n = 0</code> (no observations)</li><li>Circular buffers with appropriate sizes</li><li>Sub-indicators (if any)</li></ul><pre><code class="language-julia hljs">sma = SMA{Float64}(period=14)
+    User-&gt;&gt;Indicator: value(indicator)
+    Indicator--&gt;&gt;User: Current indicator value</div><h3 id="Step-by-Step-Breakdown"><a class="docs-heading-anchor" href="#Step-by-Step-Breakdown">Step-by-Step Breakdown</a><a id="Step-by-Step-Breakdown-1"></a><a class="docs-heading-anchor-permalink" href="#Step-by-Step-Breakdown" title="Permalink"></a></h3><ol><li><p><strong>Input Filtering (Legacy)</strong>: If the indicator has <code>input_filter</code> and <code>input_modifier</code> fields, the data is first filtered and transformed. This is a legacy mechanism - new indicators use StatDAG filtered edges instead.</p></li><li><p><strong>Circular Buffer Update</strong>: If the indicator has an <code>input_values</code> field (a <code>CircBuff</code>), the incoming data is stored. The circular buffer automatically discards old values when full.</p></li><li><p><strong>Sub-indicator Update</strong>: If the indicator has <code>sub_indicators</code> (a <code>Series</code> or <code>DAGWrapper</code>), the data is propagated to all sub-indicators via their own <code>fit!</code> calls.</p></li><li><p><strong>Observation Count</strong>: The indicator&#39;s observation counter <code>n</code> is incremented.</p></li><li><p><strong>Value Calculation</strong>: The new indicator value is calculated:</p><ul><li>If the indicator maintains state (<code>input_values</code> or <code>sub_indicators</code>), <code>_calculate_new_value(ind)</code> is called</li><li>Otherwise, <code>_calculate_new_value_only_from_incoming_data(ind, data)</code> is called</li></ul></li><li><p><strong>Value Storage</strong>: The calculated value is stored in <code>ind.value</code></p></li></ol><h2 id="Indicator-Lifecycle"><a class="docs-heading-anchor" href="#Indicator-Lifecycle">Indicator Lifecycle</a><a id="Indicator-Lifecycle-1"></a><a class="docs-heading-anchor-permalink" href="#Indicator-Lifecycle" title="Permalink"></a></h2><h3 id="1.-Construction"><a class="docs-heading-anchor" href="#1.-Construction">1. Construction</a><a id="1.-Construction-1"></a><a class="docs-heading-anchor-permalink" href="#1.-Construction" title="Permalink"></a></h3><p>When an indicator is created, it initializes:</p><ul><li><code>value = missing</code> (no output yet)</li><li><code>n = 0</code> (no observations)</li><li>Circular buffers with appropriate sizes</li><li>Sub-indicators (if any)</li></ul><pre><code class="language-julia hljs">sma = SMA{Float64}(period=14)
 # sma.value = missing
 # sma.n = 0
 # sma.input_values = CircBuff(Float64, 15)</code></pre><h3 id="2.-Warm-up-Period"><a class="docs-heading-anchor" href="#2.-Warm-up-Period">2. Warm-up Period</a><a id="2.-Warm-up-Period-1"></a><a class="docs-heading-anchor-permalink" href="#2.-Warm-up-Period" title="Permalink"></a></h3><p>During the warm-up period, the indicator accumulates enough data to produce a valid output. Until then, <code>value()</code> returns <code>missing</code>.</p><pre><code class="language-julia hljs">sma = SMA{Float64}(period=3)
@@ -46,22 +44,20 @@ fit!(sma, 101.0)  # n=2, value=missing
 fit!(sma, 102.0)  # n=3, value=101.0 (warm-up complete)</code></pre><p>The warm-up period depends on the indicator:</p><ul><li><strong>SMA</strong>: <code>period</code> observations</li><li><strong>EMA</strong>: 1 observation (but stabilizes after ~<code>period</code> observations)</li><li><strong>RSI</strong>: <code>period + 1</code> observations</li><li><strong>MACD</strong>: <code>slow_period + signal_period - 1</code> observations</li></ul><h3 id="3.-Active-Period"><a class="docs-heading-anchor" href="#3.-Active-Period">3. Active Period</a><a id="3.-Active-Period-1"></a><a class="docs-heading-anchor-permalink" href="#3.-Active-Period" title="Permalink"></a></h3><p>After warm-up, each <code>fit!()</code> call produces a valid value:</p><pre><code class="language-julia hljs">fit!(sma, 103.0)  # n=4, value=102.0
 fit!(sma, 104.0)  # n=5, value=103.0</code></pre><h3 id="4.-Rolling-Computation"><a class="docs-heading-anchor" href="#4.-Rolling-Computation">4. Rolling Computation</a><a id="4.-Rolling-Computation-1"></a><a class="docs-heading-anchor-permalink" href="#4.-Rolling-Computation" title="Permalink"></a></h3><p>Circular buffers automatically manage the rolling window:</p><pre><code class="language-julia hljs"># For SMA with period=3, buffer stores 4 values
 # This enables efficient incremental calculation:
-# new_sma = old_sma + (new_value - oldest_value) / period</code></pre><h2 id="Data-Flow-Examples"><a class="docs-heading-anchor" href="#Data-Flow-Examples">Data Flow Examples</a><a id="Data-Flow-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Data-Flow-Examples" title="Permalink"></a></h2><h3 id="Single-Input-Indicator-(SMA)"><a class="docs-heading-anchor" href="#Single-Input-Indicator-(SMA)">Single Input Indicator (SMA)</a><a id="Single-Input-Indicator-(SMA)-1"></a><a class="docs-heading-anchor-permalink" href="#Single-Input-Indicator-(SMA)" title="Permalink"></a></h3><pre class="mermaid">
-flowchart LR
+# new_sma = old_sma + (new_value - oldest_value) / period</code></pre><h2 id="Data-Flow-Examples"><a class="docs-heading-anchor" href="#Data-Flow-Examples">Data Flow Examples</a><a id="Data-Flow-Examples-1"></a><a class="docs-heading-anchor-permalink" href="#Data-Flow-Examples" title="Permalink"></a></h2><h3 id="Single-Input-Indicator-(SMA)"><a class="docs-heading-anchor" href="#Single-Input-Indicator-(SMA)">Single Input Indicator (SMA)</a><a id="Single-Input-Indicator-(SMA)-1"></a><a class="docs-heading-anchor-permalink" href="#Single-Input-Indicator-(SMA)" title="Permalink"></a></h3><div class="mermaid">flowchart LR
     subgraph Input
         D[data: Float64]
     end
 
     subgraph SMA
-        CB[CircBuff<br/>stores period+1 values]
-        CALC[_calculate_new_value<br/>sum/period or<br/>rolling update]
+        CB[CircBuff&lt;br/&gt;stores period+1 values]
+        CALC[_calculate_new_value&lt;br/&gt;sum/period or&lt;br/&gt;rolling update]
         V[value: Float64]
     end
 
-    D --> CB
-    CB --> CALC
-    CALC --> V
-</pre><pre><code class="language-julia hljs">sma = SMA{Float64}(period=3)
+    D --&gt; CB
+    CB --&gt; CALC
+    CALC --&gt; V</div><pre><code class="language-julia hljs">sma = SMA{Float64}(period=3)
 for price in [100.0, 101.0, 102.0, 103.0]
     fit!(sma, price)
     println(&quot;n=$(sma.n), value=$(value(sma))&quot;)
@@ -69,74 +65,68 @@ end
 # n=1, value=missing
 # n=2, value=missing
 # n=3, value=101.0
-# n=4, value=102.0</code></pre><h3 id="Multi-Input-Indicator-(ATR)"><a class="docs-heading-anchor" href="#Multi-Input-Indicator-(ATR)">Multi-Input Indicator (ATR)</a><a id="Multi-Input-Indicator-(ATR)-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Input-Indicator-(ATR)" title="Permalink"></a></h3><pre class="mermaid">
-flowchart LR
+# n=4, value=102.0</code></pre><h3 id="Multi-Input-Indicator-(ATR)"><a class="docs-heading-anchor" href="#Multi-Input-Indicator-(ATR)">Multi-Input Indicator (ATR)</a><a id="Multi-Input-Indicator-(ATR)-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Input-Indicator-(ATR)" title="Permalink"></a></h3><div class="mermaid">flowchart LR
     subgraph Input
         OHLCV[candle: OHLCV]
     end
 
     subgraph ATR
-        TR[TrueRange<br/>sub-indicator]
-        SMMA_IND[SMMA<br/>sub-indicator]
+        TR[TrueRange&lt;br/&gt;sub-indicator]
+        SMMA_IND[SMMA&lt;br/&gt;sub-indicator]
         V[value: Float64]
     end
 
-    OHLCV --> TR
-    TR --> SMMA_IND
-    SMMA_IND --> V
-</pre><pre><code class="language-julia hljs">atr = ATR{OHLCV{Missing,Float64,Float64}}(period=14)
+    OHLCV --&gt; TR
+    TR --&gt; SMMA_IND
+    SMMA_IND --&gt; V</div><pre><code class="language-julia hljs">atr = ATR{OHLCV{Missing,Float64,Float64}}(period=14)
 for candle in candles
     fit!(atr, candle)
     # Internally: TrueRange calculates TR, SMMA smooths it
-end</code></pre><h3 id="Composed-Indicator-(DEMA-via-StatDAG)"><a class="docs-heading-anchor" href="#Composed-Indicator-(DEMA-via-StatDAG)">Composed Indicator (DEMA via StatDAG)</a><a id="Composed-Indicator-(DEMA-via-StatDAG)-1"></a><a class="docs-heading-anchor-permalink" href="#Composed-Indicator-(DEMA-via-StatDAG)" title="Permalink"></a></h3><pre class="mermaid">
-flowchart LR
+end</code></pre><h3 id="Composed-Indicator-(DEMA-via-StatDAG)"><a class="docs-heading-anchor" href="#Composed-Indicator-(DEMA-via-StatDAG)">Composed Indicator (DEMA via StatDAG)</a><a id="Composed-Indicator-(DEMA-via-StatDAG)-1"></a><a class="docs-heading-anchor-permalink" href="#Composed-Indicator-(DEMA-via-StatDAG)" title="Permalink"></a></h3><div class="mermaid">flowchart LR
     subgraph Input
         D[data: Float64]
     end
 
     subgraph StatDAG
-        EMA1[:ema1<br/>EMA]
-        EMA2[:ema2<br/>EMA]
+        EMA1[:ema1&lt;br/&gt;EMA]
+        EMA2[:ema2&lt;br/&gt;EMA]
     end
 
     subgraph DEMA
-        CALC[_calculate_new_value<br/>2*ema1 - ema2]
+        CALC[_calculate_new_value&lt;br/&gt;2*ema1 - ema2]
         V[value: Float64]
     end
 
-    D --> EMA1
-    EMA1 -->|"filter: !ismissing"| EMA2
-    EMA1 --> CALC
-    EMA2 --> CALC
-    CALC --> V
-</pre><pre><code class="language-julia hljs">dema = DEMA{Float64}(period=10)
+    D --&gt; EMA1
+    EMA1 --&gt;|&quot;filter: !ismissing&quot;| EMA2
+    EMA1 --&gt; CALC
+    EMA2 --&gt; CALC
+    CALC --&gt; V</div><pre><code class="language-julia hljs">dema = DEMA{Float64}(period=10)
 for price in prices
     fit!(dema, price)
     # Internally: data flows through StatDAG
     # ema1 receives data, ema2 receives ema1&#39;s output (when not missing)
     # DEMA = 2 * ema1 - ema2
-end</code></pre><h3 id="Multi-Output-Indicator-(MACD)"><a class="docs-heading-anchor" href="#Multi-Output-Indicator-(MACD)">Multi-Output Indicator (MACD)</a><a id="Multi-Output-Indicator-(MACD)-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Output-Indicator-(MACD)" title="Permalink"></a></h3><pre class="mermaid">
-flowchart LR
+end</code></pre><h3 id="Multi-Output-Indicator-(MACD)"><a class="docs-heading-anchor" href="#Multi-Output-Indicator-(MACD)">Multi-Output Indicator (MACD)</a><a id="Multi-Output-Indicator-(MACD)-1"></a><a class="docs-heading-anchor-permalink" href="#Multi-Output-Indicator-(MACD)" title="Permalink"></a></h3><div class="mermaid">flowchart LR
     subgraph Input
         D[data: Float64]
     end
 
     subgraph MACD
-        FAST[fast_ma<br/>EMA 12]
-        SLOW[slow_ma<br/>EMA 26]
-        SIG[signal_line<br/>EMA 9]
+        FAST[fast_ma&lt;br/&gt;EMA 12]
+        SLOW[slow_ma&lt;br/&gt;EMA 26]
+        SIG[signal_line&lt;br/&gt;EMA 9]
         CALC[_calculate_new_value]
         V[value: MACDVal]
     end
 
-    D --> FAST
-    D --> SLOW
-    FAST --> CALC
-    SLOW --> CALC
-    CALC -->|macd line| SIG
-    SIG --> CALC
-    CALC --> V
-</pre><pre><code class="language-julia hljs">macd = MACD{Float64}(fast_period=12, slow_period=26, signal_period=9)
+    D --&gt; FAST
+    D --&gt; SLOW
+    FAST --&gt; CALC
+    SLOW --&gt; CALC
+    CALC --&gt;|macd line| SIG
+    SIG --&gt; CALC
+    CALC --&gt; V</div><pre><code class="language-julia hljs">macd = MACD{Float64}(fast_period=12, slow_period=26, signal_period=9)
 for price in prices
     fit!(macd, price)
     result = value(macd)
@@ -158,4 +148,9 @@ buffer[end] # 5.0 (newest)</code></pre><h3 id="Efficient-Rolling-Calculations"><
 # When buffer is full and rolling:
 new_value = old_value - (dropped_value - added_value) / period
 
-# This is O(1) instead of O(period)</code></pre><h2 id="Memory-Efficiency"><a class="docs-heading-anchor" href="#Memory-Efficiency">Memory Efficiency</a><a id="Memory-Efficiency-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Efficiency" title="Permalink"></a></h2><p>Online algorithms are memory-efficient because they only store what&#39;s necessary:</p><table><tr><th style="text-align: right">Indicator</th><th style="text-align: right">Memory Usage</th></tr><tr><td style="text-align: right">SMA(14)</td><td style="text-align: right">~15 values (period + 1)</td></tr><tr><td style="text-align: right">EMA(14)</td><td style="text-align: right">~3 values (current value + smoothing factor)</td></tr><tr><td style="text-align: right">RSI(14)</td><td style="text-align: right">~2 values + 2 SMMA sub-indicators</td></tr><tr><td style="text-align: right">MACD</td><td style="text-align: right">~3 EMA sub-indicators</td></tr><tr><td style="text-align: right">ATR(14)</td><td style="text-align: right">TrueRange + SMMA(14)</td></tr></table><p>Compare this to batch processing which would require storing all historical data.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../architecture/">Architecture</a> for module organization</li><li><a href="../internals/#OnlineTechnicalIndicators-internals">OnlineTechnicalIndicators internals</a> for implementation details</li><li><a href="../implementing_your_indic/#Implementing-your-own-indicator">Implementing your own indicator</a> for creating custom indicators</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../structure/">« Project Structure</a><a class="docs-footer-nextpage" href="../internals/">Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 5 January 2026 14:28">Monday 5 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+# This is O(1) instead of O(period)</code></pre><h2 id="Memory-Efficiency"><a class="docs-heading-anchor" href="#Memory-Efficiency">Memory Efficiency</a><a id="Memory-Efficiency-1"></a><a class="docs-heading-anchor-permalink" href="#Memory-Efficiency" title="Permalink"></a></h2><p>Online algorithms are memory-efficient because they only store what&#39;s necessary:</p><table><tr><th style="text-align: right">Indicator</th><th style="text-align: right">Memory Usage</th></tr><tr><td style="text-align: right">SMA(14)</td><td style="text-align: right">~15 values (period + 1)</td></tr><tr><td style="text-align: right">EMA(14)</td><td style="text-align: right">~3 values (current value + smoothing factor)</td></tr><tr><td style="text-align: right">RSI(14)</td><td style="text-align: right">~2 values + 2 SMMA sub-indicators</td></tr><tr><td style="text-align: right">MACD</td><td style="text-align: right">~3 EMA sub-indicators</td></tr><tr><td style="text-align: right">ATR(14)</td><td style="text-align: right">TrueRange + SMMA(14)</td></tr></table><p>Compare this to batch processing which would require storing all historical data.</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../architecture/">Architecture</a> for module organization</li><li><a href="../internals/#OnlineTechnicalIndicators-internals">OnlineTechnicalIndicators internals</a> for implementation details</li><li><a href="../implementing_your_indic/#Implementing-your-own-indicator">Implementing your own indicator</a> for creating custom indicators</li></ul><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({
+    startOnLoad: true,
+    theme: "neutral"
+});
+</script></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../structure/">« Project Structure</a><a class="docs-footer-nextpage" href="../internals/">Internals »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 5 January 2026 14:39">Monday 5 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

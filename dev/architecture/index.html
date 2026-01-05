@@ -6,8 +6,7 @@
 ├── Patterns         # Candlestick pattern recognition
 ├── Wrappers         # Indicator wrappers (Smoother, DAGWrapper)
 ├── Factories        # Factory functions (MovingAverage)
-└── SampleData       # Sample OHLCV data for testing</code></pre><h3 id="Module-Relationships"><a class="docs-heading-anchor" href="#Module-Relationships">Module Relationships</a><a id="Module-Relationships-1"></a><a class="docs-heading-anchor-permalink" href="#Module-Relationships" title="Permalink"></a></h3><pre class="mermaid">
-flowchart TB
+└── SampleData       # Sample OHLCV data for testing</code></pre><h3 id="Module-Relationships"><a class="docs-heading-anchor" href="#Module-Relationships">Module Relationships</a><a id="Module-Relationships-1"></a><a class="docs-heading-anchor-permalink" href="#Module-Relationships" title="Permalink"></a></h3><div class="mermaid">flowchart TB
     subgraph OnlineTechnicalIndicators
         Main[OnlineTechnicalIndicators.jl]
 
@@ -21,7 +20,7 @@ flowchart TB
             SampleData[SampleData]
         end
 
-        subgraph BaseTypes["Abstract Types"]
+        subgraph BaseTypes[&quot;Abstract Types&quot;]
             TI[TechnicalIndicator]
             TISO[TechnicalIndicatorSingleOutput]
             TIMO[TechnicalIndicatorMultiOutput]
@@ -29,24 +28,23 @@ flowchart TB
         end
     end
 
-    subgraph External["External Dependencies"]
+    subgraph External[&quot;External Dependencies&quot;]
         OSB[OnlineStatsBase.jl]
         OSC[OnlineStatsChains.jl]
         Tables[Tables.jl]
     end
 
-    Main --> Submodules
-    TI --> OSB
-    BaseTypes --> TI
-    TISO --> TI
-    TIMO --> TI
-    MAI --> TISO
+    Main --&gt; Submodules
+    TI --&gt; OSB
+    BaseTypes --&gt; TI
+    TISO --&gt; TI
+    TIMO --&gt; TI
+    MAI --&gt; TISO
 
-    Indicators --> BaseTypes
-    Patterns --> BaseTypes
-    Wrappers --> Indicators
-    Factories --> Indicators
-</pre><h2 id="Type-Hierarchy"><a class="docs-heading-anchor" href="#Type-Hierarchy">Type Hierarchy</a><a id="Type-Hierarchy-1"></a><a class="docs-heading-anchor-permalink" href="#Type-Hierarchy" title="Permalink"></a></h2><p>All technical indicators inherit from a common type hierarchy rooted in <code>OnlineStatsBase.OnlineStat</code>.</p><h3 id="Abstract-Types"><a class="docs-heading-anchor" href="#Abstract-Types">Abstract Types</a><a id="Abstract-Types-1"></a><a class="docs-heading-anchor-permalink" href="#Abstract-Types" title="Permalink"></a></h3><pre><code class="language-julia hljs"># From OnlineStatsBase
+    Indicators --&gt; BaseTypes
+    Patterns --&gt; BaseTypes
+    Wrappers --&gt; Indicators
+    Factories --&gt; Indicators</div><h2 id="Type-Hierarchy"><a class="docs-heading-anchor" href="#Type-Hierarchy">Type Hierarchy</a><a id="Type-Hierarchy-1"></a><a class="docs-heading-anchor-permalink" href="#Type-Hierarchy" title="Permalink"></a></h2><p>All technical indicators inherit from a common type hierarchy rooted in <code>OnlineStatsBase.OnlineStat</code>.</p><h3 id="Abstract-Types"><a class="docs-heading-anchor" href="#Abstract-Types">Abstract Types</a><a id="Abstract-Types-1"></a><a class="docs-heading-anchor-permalink" href="#Abstract-Types" title="Permalink"></a></h3><pre><code class="language-julia hljs"># From OnlineStatsBase
 abstract type OnlineStat{T} end
 
 # Base type for all technical indicators
@@ -59,8 +57,7 @@ abstract type TechnicalIndicatorSingleOutput{T} &lt;: TechnicalIndicator{T} end
 abstract type TechnicalIndicatorMultiOutput{T} &lt;: TechnicalIndicator{T} end
 
 # Moving average indicators
-abstract type MovingAverageIndicator{T} &lt;: TechnicalIndicatorSingleOutput{T} end</code></pre><h3 id="Type-Hierarchy-Diagram"><a class="docs-heading-anchor" href="#Type-Hierarchy-Diagram">Type Hierarchy Diagram</a><a id="Type-Hierarchy-Diagram-1"></a><a class="docs-heading-anchor-permalink" href="#Type-Hierarchy-Diagram" title="Permalink"></a></h3><pre class="mermaid">
-classDiagram
+abstract type MovingAverageIndicator{T} &lt;: TechnicalIndicatorSingleOutput{T} end</code></pre><h3 id="Type-Hierarchy-Diagram"><a class="docs-heading-anchor" href="#Type-Hierarchy-Diagram">Type Hierarchy Diagram</a><a id="Type-Hierarchy-Diagram-1"></a><a class="docs-heading-anchor-permalink" href="#Type-Hierarchy-Diagram" title="Permalink"></a></h3><div class="mermaid">classDiagram
     class OnlineStat~T~ {
         &lt;&lt;OnlineStatsBase&gt;&gt;
     }
@@ -85,11 +82,10 @@ classDiagram
         &lt;&lt;abstract&gt;&gt;
     }
 
-    OnlineStat <|-- TechnicalIndicator
-    TechnicalIndicator <|-- TechnicalIndicatorSingleOutput
-    TechnicalIndicator <|-- TechnicalIndicatorMultiOutput
-    TechnicalIndicatorSingleOutput <|-- MovingAverageIndicator
-</pre><h2 id="Submodule-Details"><a class="docs-heading-anchor" href="#Submodule-Details">Submodule Details</a><a id="Submodule-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Submodule-Details" title="Permalink"></a></h2><h3 id="Candlesticks"><a class="docs-heading-anchor" href="#Candlesticks">Candlesticks</a><a id="Candlesticks-1"></a><a class="docs-heading-anchor-permalink" href="#Candlesticks" title="Permalink"></a></h3><p>Provides OHLCV (Open, High, Low, Close, Volume) data structures.</p><p><strong>Exports:</strong></p><ul><li><a href="../api/#OnlineTechnicalIndicators.Candlesticks.OHLCV"><code>OHLCV</code></a>: Candlestick data structure with optional timestamp</li><li><code>OHLCVFactory</code>: Factory for batch OHLCV creation from vectors</li><li><code>ValueExtractor</code>: Module with extraction functions (<code>extract_open</code>, <code>extract_close</code>, etc.)</li></ul><pre><code class="language-julia hljs">using OnlineTechnicalIndicators.Candlesticks
+    OnlineStat &lt;|-- TechnicalIndicator
+    TechnicalIndicator &lt;|-- TechnicalIndicatorSingleOutput
+    TechnicalIndicator &lt;|-- TechnicalIndicatorMultiOutput
+    TechnicalIndicatorSingleOutput &lt;|-- MovingAverageIndicator</div><h2 id="Submodule-Details"><a class="docs-heading-anchor" href="#Submodule-Details">Submodule Details</a><a id="Submodule-Details-1"></a><a class="docs-heading-anchor-permalink" href="#Submodule-Details" title="Permalink"></a></h2><h3 id="Candlesticks"><a class="docs-heading-anchor" href="#Candlesticks">Candlesticks</a><a id="Candlesticks-1"></a><a class="docs-heading-anchor-permalink" href="#Candlesticks" title="Permalink"></a></h3><p>Provides OHLCV (Open, High, Low, Close, Volume) data structures.</p><p><strong>Exports:</strong></p><ul><li><a href="../api/#OnlineTechnicalIndicators.Candlesticks.OHLCV"><code>OHLCV</code></a>: Candlestick data structure with optional timestamp</li><li><code>OHLCVFactory</code>: Factory for batch OHLCV creation from vectors</li><li><code>ValueExtractor</code>: Module with extraction functions (<code>extract_open</code>, <code>extract_close</code>, etc.)</li></ul><pre><code class="language-julia hljs">using OnlineTechnicalIndicators.Candlesticks
 
 # Create a single candlestick
 candle = OHLCV(100.0, 105.0, 98.0, 103.0; volume=1000.0, time=Date(2024,1,1))
@@ -109,4 +105,9 @@ factory = MovingAverage(Float64)
 ma = factory(SMA, period=10)  # Creates SMA{Float64}(period=10)</code></pre><h3 id="SampleData"><a class="docs-heading-anchor" href="#SampleData">SampleData</a><a id="SampleData-1"></a><a class="docs-heading-anchor-permalink" href="#SampleData" title="Permalink"></a></h3><p>Sample OHLCV data for testing and examples.</p><p><strong>Exports:</strong></p><ul><li><code>OPEN_TMPL</code>, <code>HIGH_TMPL</code>, <code>LOW_TMPL</code>, <code>CLOSE_TMPL</code>, <code>VOLUME_TMPL</code>: Price/volume vectors</li><li><code>V_OHLCV</code>: Vector of OHLCV candlesticks</li><li><code>TAB_OHLCV</code>: Tables.jl-compatible sample data</li></ul><pre><code class="language-julia hljs">using OnlineTechnicalIndicators.SampleData
 
 candles = SampleData.V_OHLCV
-prices = SampleData.CLOSE_TMPL</code></pre><h2 id="External-Dependencies"><a class="docs-heading-anchor" href="#External-Dependencies">External Dependencies</a><a id="External-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#External-Dependencies" title="Permalink"></a></h2><h3 id="OnlineStatsBase.jl"><a class="docs-heading-anchor" href="#OnlineStatsBase.jl">OnlineStatsBase.jl</a><a id="OnlineStatsBase.jl-1"></a><a class="docs-heading-anchor-permalink" href="#OnlineStatsBase.jl" title="Permalink"></a></h3><p>Provides the foundational <code>OnlineStat</code> abstract type and core utilities:</p><ul><li><code>fit!</code>: Update a statistic with new data</li><li><code>value</code>: Get the current value</li><li><code>nobs</code>: Get the number of observations</li><li><code>CircBuff</code>: Circular buffer for rolling windows</li></ul><h3 id="OnlineStatsChains.jl"><a class="docs-heading-anchor" href="#OnlineStatsChains.jl">OnlineStatsChains.jl</a><a id="OnlineStatsChains.jl-1"></a><a class="docs-heading-anchor-permalink" href="#OnlineStatsChains.jl" title="Permalink"></a></h3><p>Provides <code>StatDAG</code> for composing indicators into directed acyclic graphs with automatic value propagation. Used internally by composed indicators like DEMA, TEMA, T3, and TRIX.</p><h3 id="Tables.jl"><a class="docs-heading-anchor" href="#Tables.jl">Tables.jl</a><a id="Tables.jl-1"></a><a class="docs-heading-anchor-permalink" href="#Tables.jl" title="Permalink"></a></h3><p>Enables integration with any Tables.jl-compatible data source (DataFrames, CSV, etc.).</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../structure/#Project-Structure">Project Structure</a> for the directory layout</li><li><a href="../dataflow/#Data-Flow">Data Flow</a> for how data flows through indicators</li><li><a href="../internals/#OnlineTechnicalIndicators-internals">OnlineTechnicalIndicators internals</a> for implementation details</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../examples/">« Examples</a><a class="docs-footer-nextpage" href="../structure/">Project Structure »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 5 January 2026 14:28">Monday 5 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+prices = SampleData.CLOSE_TMPL</code></pre><h2 id="External-Dependencies"><a class="docs-heading-anchor" href="#External-Dependencies">External Dependencies</a><a id="External-Dependencies-1"></a><a class="docs-heading-anchor-permalink" href="#External-Dependencies" title="Permalink"></a></h2><h3 id="OnlineStatsBase.jl"><a class="docs-heading-anchor" href="#OnlineStatsBase.jl">OnlineStatsBase.jl</a><a id="OnlineStatsBase.jl-1"></a><a class="docs-heading-anchor-permalink" href="#OnlineStatsBase.jl" title="Permalink"></a></h3><p>Provides the foundational <code>OnlineStat</code> abstract type and core utilities:</p><ul><li><code>fit!</code>: Update a statistic with new data</li><li><code>value</code>: Get the current value</li><li><code>nobs</code>: Get the number of observations</li><li><code>CircBuff</code>: Circular buffer for rolling windows</li></ul><h3 id="OnlineStatsChains.jl"><a class="docs-heading-anchor" href="#OnlineStatsChains.jl">OnlineStatsChains.jl</a><a id="OnlineStatsChains.jl-1"></a><a class="docs-heading-anchor-permalink" href="#OnlineStatsChains.jl" title="Permalink"></a></h3><p>Provides <code>StatDAG</code> for composing indicators into directed acyclic graphs with automatic value propagation. Used internally by composed indicators like DEMA, TEMA, T3, and TRIX.</p><h3 id="Tables.jl"><a class="docs-heading-anchor" href="#Tables.jl">Tables.jl</a><a id="Tables.jl-1"></a><a class="docs-heading-anchor-permalink" href="#Tables.jl" title="Permalink"></a></h3><p>Enables integration with any Tables.jl-compatible data source (DataFrames, CSV, etc.).</p><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../structure/#Project-Structure">Project Structure</a> for the directory layout</li><li><a href="../dataflow/#Data-Flow">Data Flow</a> for how data flows through indicators</li><li><a href="../internals/#OnlineTechnicalIndicators-internals">OnlineTechnicalIndicators internals</a> for implementation details</li></ul><script type="module">import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+mermaid.initialize({
+    startOnLoad: true,
+    theme: "neutral"
+});
+</script></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../examples/">« Examples</a><a class="docs-footer-nextpage" href="../structure/">Project Structure »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 5 January 2026 14:39">Monday 5 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
