@@ -195,8 +195,8 @@ OnlineTechnicalIndicators.Patterns.AllPatternsVal
 ## Core Types
 ```@docs
 OnlineTechnicalIndicators.SampleData.TabOHLCV
-OnlineTechnicalIndicators.TechnicalIndicatorWrapper
-OnlineTechnicalIndicators.TechnicalIndicatorResults
+OnlineTechnicalIndicators.Indicators.TechnicalIndicatorWrapper
+OnlineTechnicalIndicators.Indicators.TechnicalIndicatorResults
 OnlineTechnicalIndicators.Resample.SamplingPeriod
 OnlineTechnicalIndicators.Resample.Resampler
 OnlineTechnicalIndicators.Resample.TimedEvent
