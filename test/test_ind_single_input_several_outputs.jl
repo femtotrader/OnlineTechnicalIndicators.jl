@@ -3,9 +3,10 @@ using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
 
 @testitem "SIMO - BB" begin
     using OnlineTechnicalIndicators.Indicators: BB, BBVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -32,9 +33,10 @@ end
 
 @testitem "SIMO - MACD" begin
     using OnlineTechnicalIndicators.Indicators: MACD, MACDVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -60,9 +62,10 @@ end
 
 @testitem "SIMO - StochRSI" begin
     using OnlineTechnicalIndicators.Indicators: StochRSI, StochRSIVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -90,9 +93,10 @@ end
 
 @testitem "SIMO - KST" begin
     using OnlineTechnicalIndicators.Indicators: KST, KSTVal
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 

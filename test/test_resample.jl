@@ -45,6 +45,7 @@ end
 
 @testitem "Resample sum" begin
     using OnlineTechnicalIndicators.Resample: SamplingPeriodType, ResamplerBy, TimedEvent, Sum
+    using OnlineStatsBase: fit!, value
     using Dates
 
     sampling_period = SamplingPeriodType.MIN_1
@@ -77,6 +78,7 @@ end
 
 @testitem "Resample OHLC" begin
     using OnlineTechnicalIndicators.Resample: SamplingPeriodType, ResamplerBy, TimedEvent, OHLCStat
+    using OnlineStatsBase: fit!, value
     using Dates
 
     sampling_period = SamplingPeriodType.MIN_1

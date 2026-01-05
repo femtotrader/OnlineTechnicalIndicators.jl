@@ -3,9 +3,10 @@ using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, CLOSE_EQUAL_VALUES_TMPL
 
 @testitem "SISO - SMA" begin
     using OnlineTechnicalIndicators.Indicators: SMA
-    using OnlineTechnicalIndicators: expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Internals: expected_return_type
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -28,7 +29,7 @@ end
 
 @testitem "SISO - Indicator chaining (SMA)" begin
     using OnlineTechnicalIndicators.Indicators: SMA
-    using OnlineStatsChains: StatDAG, add_node!, connect!
+    using OnlineStatsChains: StatDAG, add_node!, connect!, fit!, value
 
     const ATOL = 0.00001
 
@@ -84,7 +85,7 @@ end
     using OnlineTechnicalIndicators.Indicators: EMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -103,7 +104,7 @@ end
     using OnlineTechnicalIndicators.Indicators: SMMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -121,7 +122,7 @@ end
 @testitem "SISO - SMMA vector" begin
     using OnlineTechnicalIndicators.Indicators: SMMA
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -191,7 +192,7 @@ end
     using OnlineTechnicalIndicators.Indicators: RSI
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -210,7 +211,7 @@ end
     using OnlineTechnicalIndicators.Indicators: MeanDev
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -229,7 +230,7 @@ end
     using OnlineTechnicalIndicators.Indicators: StdDev
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -248,7 +249,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ROC
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -267,7 +268,7 @@ end
     using OnlineTechnicalIndicators.Indicators: WMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const P = 20
     const ATOL = 0.00001
@@ -286,7 +287,7 @@ end
     using OnlineTechnicalIndicators.Indicators: DPO
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -304,7 +305,7 @@ end
     using OnlineTechnicalIndicators.Indicators: HMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -322,7 +323,7 @@ end
     using OnlineTechnicalIndicators.Indicators: CoppockCurve
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -340,7 +341,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ALMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -373,7 +374,7 @@ end
     using OnlineTechnicalIndicators.Indicators: DEMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -391,7 +392,7 @@ end
     using OnlineTechnicalIndicators.Indicators: TEMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -409,7 +410,7 @@ end
     using OnlineTechnicalIndicators.Indicators: KAMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -429,7 +430,7 @@ end
     using OnlineTechnicalIndicators.Indicators: McGinleyDynamic
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -447,7 +448,7 @@ end
     using OnlineTechnicalIndicators.Indicators: STC
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -470,7 +471,7 @@ end
     using OnlineTechnicalIndicators.Indicators: ZLEMA
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -488,7 +489,7 @@ end
     using OnlineTechnicalIndicators.Indicators: T3
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -506,7 +507,7 @@ end
     using OnlineTechnicalIndicators.Indicators: TRIX
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -524,7 +525,7 @@ end
     using OnlineTechnicalIndicators.Indicators: TSI
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     const ATOL = 0.00001
 
@@ -542,7 +543,7 @@ end
     using OnlineTechnicalIndicators.Indicators: TSI
     using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_EQUAL_VALUES_TMPL
-    using OnlineStatsBase: nobs
+    using OnlineStatsBase: nobs, fit!, value
 
     ind = TSI(fast_period = 3, slow_period = 5)
     @test nobs(ind) == 0

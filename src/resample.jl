@@ -2,7 +2,8 @@ module Resample
 using Dates
 using OnlineStatsBase
 using OnlineTechnicalIndicators
-using OnlineTechnicalIndicators: TechnicalIndicator, always_true, identity
+using OnlineTechnicalIndicators: TechnicalIndicator
+using OnlineTechnicalIndicators.Internals: always_true
 
 module TimeUnitType
 @enum(TimeUnitTypeEnum, SEC, MIN, HOUR, DAY)

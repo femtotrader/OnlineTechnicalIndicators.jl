@@ -1,5 +1,6 @@
 using Tables
-using OnlineTechnicalIndicators: ismultiinput
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
+using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
 
 const DEFAULT_FIELD_DEFAULT = :Close
 const DEFAULT_FIELD_INDEX = :Index
@@ -116,7 +117,7 @@ function load!(
     Tin =
         default ∈ sch.names ? Tables.columntype(sch, default) :
         throw(ArgumentError("default field `$default` not found"))
-    if !ismultioutput(ti_wrap.indicator_type)
+    if !is_multi_output(ti_wrap.indicator_type)
         Tout = Union{Missing,Tin}
         _expected_return_type = Tin
         results = TechnicalIndicatorResults{Ttime,Tout}(
@@ -134,7 +135,7 @@ function load!(
         )
     end
 
-    if !ismultiinput(ti_wrap.indicator_type)
+    if !is_multi_input(ti_wrap.indicator_type)
         ind = ti_wrap.indicator_type{Tin}(ti_wrap.args...; ti_wrap.kwargs...)
         for row in rows
             tim = index ∈ _names ? row[index] : missing

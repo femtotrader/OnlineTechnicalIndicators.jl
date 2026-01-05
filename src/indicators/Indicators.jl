@@ -42,21 +42,29 @@ using ..OnlineTechnicalIndicators:
     TechnicalIndicatorSingleOutput,
     TechnicalIndicatorMultiOutput,
     MovingAverageIndicator,
-    OHLCV,
     MovingAverage,
-    DAGWrapper,
-    ValueExtractor,
+    DAGWrapper
+
+# Import from Candlesticks submodule
+using ..OnlineTechnicalIndicators.Candlesticks: OHLCV, ValueExtractor
+
+# Import from Internals submodule
+using ..OnlineTechnicalIndicators.Internals:
     has_output_value,
     has_valid_values,
-    always_true
+    always_true,
+    is_valid
 
-# Import functions for extension (allows adding methods to parent's functions)
-import ..OnlineTechnicalIndicators: is_valid, has_output_value, ismultiinput
-import ..OnlineTechnicalIndicators: _calculate_new_value, _calculate_new_value_only_from_incoming_data
+# Import functions for extension (allows adding methods to Internals functions)
+import ..OnlineTechnicalIndicators.Internals: is_multi_input, has_output_value, is_valid
+import ..OnlineTechnicalIndicators.Internals: _calculate_new_value, _calculate_new_value_only_from_incoming_data
 
 using OnlineStatsBase
 using OnlineStatsBase: CircBuff, Series, nobs, value, fit!
 using OnlineStatsChains
+
+# Re-export fit! and value for user convenience
+export fit!, value
 
 # Indicator category lists (for reference)
 const SISO_INDICATORS = [
@@ -207,78 +215,78 @@ export STC
 # Export indicator category lists (for testing and introspection)
 export SISO_INDICATORS, SIMO_INDICATORS, MISO_INDICATORS, MIMO_INDICATORS, OTHERS_INDICATORS
 
-# ismultiinput definitions for indicators
-ismultiinput(::Type{SMA}) = false
-ismultiinput(::Type{EMA}) = false
-ismultiinput(::Type{SMMA}) = false
-ismultiinput(::Type{RSI}) = false
-ismultiinput(::Type{MeanDev}) = false
-ismultiinput(::Type{StdDev}) = false
-ismultiinput(::Type{ROC}) = false
-ismultiinput(::Type{WMA}) = false
-ismultiinput(::Type{KAMA}) = false
-ismultiinput(::Type{HMA}) = false
-ismultiinput(::Type{DPO}) = false
-ismultiinput(::Type{CoppockCurve}) = false
-ismultiinput(::Type{DEMA}) = false
-ismultiinput(::Type{TEMA}) = false
-ismultiinput(::Type{ALMA}) = false
-ismultiinput(::Type{McGinleyDynamic}) = false
-ismultiinput(::Type{ZLEMA}) = false
-ismultiinput(::Type{T3}) = false
-ismultiinput(::Type{TRIX}) = false
-ismultiinput(::Type{TSI}) = false
+# is_multi_input definitions for indicators
+is_multi_input(::Type{SMA}) = false
+is_multi_input(::Type{EMA}) = false
+is_multi_input(::Type{SMMA}) = false
+is_multi_input(::Type{RSI}) = false
+is_multi_input(::Type{MeanDev}) = false
+is_multi_input(::Type{StdDev}) = false
+is_multi_input(::Type{ROC}) = false
+is_multi_input(::Type{WMA}) = false
+is_multi_input(::Type{KAMA}) = false
+is_multi_input(::Type{HMA}) = false
+is_multi_input(::Type{DPO}) = false
+is_multi_input(::Type{CoppockCurve}) = false
+is_multi_input(::Type{DEMA}) = false
+is_multi_input(::Type{TEMA}) = false
+is_multi_input(::Type{ALMA}) = false
+is_multi_input(::Type{McGinleyDynamic}) = false
+is_multi_input(::Type{ZLEMA}) = false
+is_multi_input(::Type{T3}) = false
+is_multi_input(::Type{TRIX}) = false
+is_multi_input(::Type{TSI}) = false
 # SIMO
-ismultiinput(::Type{BB}) = false
-ismultiinput(::Type{MACD}) = false
-ismultiinput(::Type{StochRSI}) = false
-ismultiinput(::Type{KST}) = false
+is_multi_input(::Type{BB}) = false
+is_multi_input(::Type{MACD}) = false
+is_multi_input(::Type{StochRSI}) = false
+is_multi_input(::Type{KST}) = false
 # MISO
-ismultiinput(::Type{AccuDist}) = true
-ismultiinput(::Type{BOP}) = true
-ismultiinput(::Type{CCI}) = true
-ismultiinput(::Type{ChaikinOsc}) = true
-ismultiinput(::Type{VWMA}) = true
-ismultiinput(::Type{VWAP}) = true
-ismultiinput(::Type{AO}) = true
-ismultiinput(::Type{TrueRange}) = true
-ismultiinput(::Type{ATR}) = true
-ismultiinput(::Type{ForceIndex}) = true
-ismultiinput(::Type{OBV}) = true
-ismultiinput(::Type{SOBV}) = true
-ismultiinput(::Type{EMV}) = true
-ismultiinput(::Type{MassIndex}) = true
-ismultiinput(::Type{CHOP}) = true
-ismultiinput(::Type{KVO}) = true
-ismultiinput(::Type{UO}) = true
-ismultiinput(::Type{NATR}) = true
-ismultiinput(::Type{MFI}) = true
-ismultiinput(::Type{IntradayRange}) = true
-ismultiinput(::Type{RelativeIntradayRange}) = true
-ismultiinput(::Type{ADR}) = true
-ismultiinput(::Type{ARDR}) = true
+is_multi_input(::Type{AccuDist}) = true
+is_multi_input(::Type{BOP}) = true
+is_multi_input(::Type{CCI}) = true
+is_multi_input(::Type{ChaikinOsc}) = true
+is_multi_input(::Type{VWMA}) = true
+is_multi_input(::Type{VWAP}) = true
+is_multi_input(::Type{AO}) = true
+is_multi_input(::Type{TrueRange}) = true
+is_multi_input(::Type{ATR}) = true
+is_multi_input(::Type{ForceIndex}) = true
+is_multi_input(::Type{OBV}) = true
+is_multi_input(::Type{SOBV}) = true
+is_multi_input(::Type{EMV}) = true
+is_multi_input(::Type{MassIndex}) = true
+is_multi_input(::Type{CHOP}) = true
+is_multi_input(::Type{KVO}) = true
+is_multi_input(::Type{UO}) = true
+is_multi_input(::Type{NATR}) = true
+is_multi_input(::Type{MFI}) = true
+is_multi_input(::Type{IntradayRange}) = true
+is_multi_input(::Type{RelativeIntradayRange}) = true
+is_multi_input(::Type{ADR}) = true
+is_multi_input(::Type{ARDR}) = true
 # Utility types
-ismultiinput(::Type{Smoother}) = true
+is_multi_input(::Type{Smoother}) = true
 # MIMO
-ismultiinput(::Type{Stoch}) = true
-ismultiinput(::Type{ADX}) = true
-ismultiinput(::Type{SuperTrend}) = true
-ismultiinput(::Type{VTX}) = true
-ismultiinput(::Type{DonchianChannels}) = true
-ismultiinput(::Type{KeltnerChannels}) = true
-ismultiinput(::Type{Aroon}) = true
-ismultiinput(::Type{ChandeKrollStop}) = true
-ismultiinput(::Type{ParabolicSAR}) = true
-ismultiinput(::Type{SFX}) = true
-ismultiinput(::Type{TTM}) = true
-ismultiinput(::Type{PivotsHL}) = true
-ismultiinput(::Type{GannHiloActivator}) = true
-ismultiinput(::Type{GannSwingChart}) = true
-ismultiinput(::Type{PeakValleyDetector}) = true
-ismultiinput(::Type{RetracementCalculator}) = true
-ismultiinput(::Type{SupportResistanceLevel}) = true
+is_multi_input(::Type{Stoch}) = true
+is_multi_input(::Type{ADX}) = true
+is_multi_input(::Type{SuperTrend}) = true
+is_multi_input(::Type{VTX}) = true
+is_multi_input(::Type{DonchianChannels}) = true
+is_multi_input(::Type{KeltnerChannels}) = true
+is_multi_input(::Type{Aroon}) = true
+is_multi_input(::Type{ChandeKrollStop}) = true
+is_multi_input(::Type{ParabolicSAR}) = true
+is_multi_input(::Type{SFX}) = true
+is_multi_input(::Type{TTM}) = true
+is_multi_input(::Type{PivotsHL}) = true
+is_multi_input(::Type{GannHiloActivator}) = true
+is_multi_input(::Type{GannSwingChart}) = true
+is_multi_input(::Type{PeakValleyDetector}) = true
+is_multi_input(::Type{RetracementCalculator}) = true
+is_multi_input(::Type{SupportResistanceLevel}) = true
 # Other
-ismultiinput(::Type{STC}) = false
+is_multi_input(::Type{STC}) = false
 
 # Include array convenience functions (e.g., SMA(array; period=...))
 include("../other/arrays_indicators.jl")

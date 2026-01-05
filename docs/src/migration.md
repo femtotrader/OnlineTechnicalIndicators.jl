@@ -1,6 +1,97 @@
 # Migration Guide
 
-This guide helps you migrate from the deprecated `add_input_indicator!` API to the new OnlineStatsChains-based approach using `StatDAG`.
+This guide helps you migrate to the new version of OnlineTechnicalIndicators.jl.
+
+## Version 0.2.0: Module Reorganization
+
+Version 0.2.0 reorganizes the module structure so that the main module only exports submodule names. Types and functions must now be imported from their respective submodules.
+
+### Breaking Changes
+
+**OHLCV and related types** are now in the `Candlesticks` submodule:
+
+```julia
+# Old (no longer works)
+using OnlineTechnicalIndicators: OHLCV, OHLCVFactory, ValueExtractor
+
+# New
+using OnlineTechnicalIndicators.Candlesticks: OHLCV, OHLCVFactory, ValueExtractor
+```
+
+**Internal utility functions** are now in the `Internals` submodule with renamed functions:
+
+```julia
+# Old (no longer works)
+using OnlineTechnicalIndicators: ismultiinput, ismultioutput, expected_return_type
+
+# New
+using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
+```
+
+**`fit!` and `value`** are no longer re-exported from the main module. Import them from the submodules or `OnlineStatsBase`:
+
+```julia
+# Old (no longer works)
+using OnlineTechnicalIndicators: fit!, value
+
+# New - Option 1: Import from Indicators or Patterns (recommended)
+using OnlineTechnicalIndicators.Indicators: fit!, value
+# or
+using OnlineTechnicalIndicators.Patterns: fit!, value
+
+# New - Option 2: Import from OnlineStatsBase directly
+using OnlineStatsBase: fit!, value
+```
+
+### Function Renames
+
+| Old Name | New Name | Module |
+|----------|----------|--------|
+| `ismultiinput` | `is_multi_input` | `Internals` |
+| `ismultioutput` | `is_multi_output` | `Internals` |
+
+### Complete Import Examples
+
+**Working with indicators:**
+```julia
+using OnlineTechnicalIndicators.Indicators: SMA, EMA, RSI, fit!, value
+
+ind = SMA{Float64}(period=10)
+fit!(ind, 100.0)
+println(value(ind))
+```
+
+**Working with OHLCV data:**
+```julia
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
+using OnlineTechnicalIndicators.Indicators: ATR, fit!, value
+
+candle = OHLCV(100.0, 105.0, 95.0, 102.0, volume=1000.0)
+ind = ATR{OHLCV{Missing,Float64,Float64}}(period=14)
+fit!(ind, candle)
+```
+
+**Working with patterns:**
+```julia
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
+using OnlineTechnicalIndicators.Patterns: Doji, SingleCandlePatternType, fit!, value
+
+candle = OHLCV(100.0, 102.0, 98.0, 100.0)
+ind = Doji{OHLCV{Missing,Float64,Missing}}()
+fit!(ind, candle)
+result = value(ind)
+```
+
+**Custom indicator implementation:**
+```julia
+using OnlineTechnicalIndicators.Internals: is_multi_input, expected_return_type, has_output_value
+```
+
+---
+
+## Migrating from `add_input_indicator!`
+
+This section helps you migrate from the deprecated `add_input_indicator!` API to the new OnlineStatsChains-based approach using `StatDAG`.
 
 ## Why Migrate?
 
