@@ -291,4 +291,7 @@ is_multi_input(::Type{STC}) = false
 # Include array convenience functions (e.g., SMA(array; period=...))
 include("../other/arrays_indicators.jl")
 
+# Include Tables.jl convenience functions (e.g., SMA(tsframe; period=...))
+include("../other/tables_indicators.jl")
+
 end  # module Indicators

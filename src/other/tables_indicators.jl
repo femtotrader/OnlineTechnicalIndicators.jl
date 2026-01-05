@@ -1,6 +1,12 @@
+# Tables.jl integration for Indicators module
+# This file is included inside Indicators module, so we use relative imports
+
 using Tables
-using OnlineTechnicalIndicators.Candlesticks: OHLCV
-using OnlineTechnicalIndicators.Internals: is_multi_input, is_multi_output, expected_return_type
+using ..OnlineTechnicalIndicators.Candlesticks: OHLCV
+using ..OnlineTechnicalIndicators.Internals: is_multi_output
+# Note: is_multi_input is already imported/defined in Indicators module
+# Alias for Internals module to call expected_return_type without conflict
+const _Internals = parentmodule(@__MODULE__).Internals
 
 const DEFAULT_FIELD_DEFAULT = :Close
 const DEFAULT_FIELD_INDEX = :Index
@@ -126,12 +132,12 @@ function load!(
             (Tin,),
         )
     else
-        Tout = Union{Missing,expected_return_type(ti_wrap.indicator_type){Tin}}
-        _expected_return_type = expected_return_type(ti_wrap.indicator_type){Tin}
+        Tout = Union{Missing,_Internals.expected_return_type(ti_wrap.indicator_type){Tin}}
+        _indicator_return_type = _Internals.expected_return_type(ti_wrap.indicator_type){Tin}
         results = TechnicalIndicatorResults{Ttime,Tout}(
             Symbol(ti_wrap.indicator_type),
-            fieldnames(_expected_return_type),
-            fieldtypes(_expected_return_type),
+            fieldnames(_indicator_return_type),
+            fieldtypes(_indicator_return_type),
         )
     end
 
