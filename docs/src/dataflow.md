@@ -14,8 +14,7 @@ OnlineTechnicalIndicators.jl uses **online algorithms** - indicators process dat
 
 When you call `fit!(indicator, data)`, the following sequence occurs:
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 sequenceDiagram
     participant User
     participant Indicator
@@ -52,7 +51,6 @@ sequenceDiagram
 
     User->>Indicator: value(indicator)
     Indicator-->>User: Current indicator value
-</pre>
 ```
 
 ### Step-by-Step Breakdown
@@ -129,8 +127,7 @@ Circular buffers automatically manage the rolling window:
 
 ### Single Input Indicator (SMA)
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 flowchart LR
     subgraph Input
         D[data: Float64]
@@ -145,7 +142,6 @@ flowchart LR
     D --> CB
     CB --> CALC
     CALC --> V
-</pre>
 ```
 
 ```julia
@@ -162,8 +158,7 @@ end
 
 ### Multi-Input Indicator (ATR)
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 flowchart LR
     subgraph Input
         OHLCV[candle: OHLCV]
@@ -178,7 +173,6 @@ flowchart LR
     OHLCV --> TR
     TR --> SMMA_IND
     SMMA_IND --> V
-</pre>
 ```
 
 ```julia
@@ -191,8 +185,7 @@ end
 
 ### Composed Indicator (DEMA via StatDAG)
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 flowchart LR
     subgraph Input
         D[data: Float64]
@@ -213,7 +206,6 @@ flowchart LR
     EMA1 --> CALC
     EMA2 --> CALC
     CALC --> V
-</pre>
 ```
 
 ```julia
@@ -228,8 +220,7 @@ end
 
 ### Multi-Output Indicator (MACD)
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 flowchart LR
     subgraph Input
         D[data: Float64]
@@ -250,7 +241,6 @@ flowchart LR
     CALC -->|macd line| SIG
     SIG --> CALC
     CALC --> V
-</pre>
 ```
 
 ```julia

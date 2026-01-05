@@ -19,8 +19,7 @@ OnlineTechnicalIndicators (main module)
 
 ### Module Relationships
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 flowchart TB
     subgraph OnlineTechnicalIndicators
         Main[OnlineTechnicalIndicators.jl]
@@ -60,7 +59,6 @@ flowchart TB
     Patterns --> BaseTypes
     Wrappers --> Indicators
     Factories --> Indicators
-</pre>
 ```
 
 ## Type Hierarchy
@@ -88,38 +86,36 @@ abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 
 ### Type Hierarchy Diagram
 
-```@raw html
-<pre class="mermaid">
+```mermaid
 classDiagram
     class OnlineStat~T~ {
-        &lt;&lt;OnlineStatsBase&gt;&gt;
+        <<OnlineStatsBase>>
     }
 
     class TechnicalIndicator~T~ {
-        &lt;&lt;abstract&gt;&gt;
+        <<abstract>>
         +value
         +n::Int
     }
 
     class TechnicalIndicatorSingleOutput~T~ {
-        &lt;&lt;abstract&gt;&gt;
+        <<abstract>>
         +value::Union Missing T
     }
 
     class TechnicalIndicatorMultiOutput~T~ {
-        &lt;&lt;abstract&gt;&gt;
+        <<abstract>>
         +value::Union Missing Val
     }
 
     class MovingAverageIndicator~T~ {
-        &lt;&lt;abstract&gt;&gt;
+        <<abstract>>
     }
 
     OnlineStat <|-- TechnicalIndicator
     TechnicalIndicator <|-- TechnicalIndicatorSingleOutput
     TechnicalIndicator <|-- TechnicalIndicatorMultiOutput
     TechnicalIndicatorSingleOutput <|-- MovingAverageIndicator
-</pre>
 ```
 
 ## Submodule Details

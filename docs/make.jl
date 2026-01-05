@@ -6,6 +6,7 @@ using OnlineTechnicalIndicators.Internals
 using OnlineTechnicalIndicators.Indicators
 using OnlineTechnicalIndicators.Patterns
 using Documenter
+using DocumenterMermaid
 makedocs(
     sitename = "OnlineTechnicalIndicators.jl",
     modules = [OnlineTechnicalIndicators, OnlineTechnicalIndicators.Candlesticks, OnlineTechnicalIndicators.Internals, OnlineTechnicalIndicators.Indicators, OnlineTechnicalIndicators.Patterns],
