@@ -1,7 +1,7 @@
 name = "OnlineTechnicalIndicators"
 uuid = "dc2d07fb-478f-4566-8417-81bb3e5a7af1"
 authors = ["FemtoTrader"]
-version = "0.1.2"
+version = "0.2.0"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
@@ -12,7 +12,7 @@ Tables = "bd369af6-aec1-5ad0-b16a-f7cc5008161c"
 [compat]
 OnlineStatsBase = "1"
 Tables = "1"
-julia = "1"
+julia = "1.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"

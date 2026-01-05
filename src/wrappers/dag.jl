@@ -35,7 +35,7 @@ sub_indicators = DAGWrapper(dag, :ma1, [dag.nodes[:ma1].stat])
 When `fit!(indicator, data)` is called on an indicator using DAGWrapper internally,
 data flows to the source node and automatically propagates through all filtered edges.
 
-See also: [`DEMA`](@ref), [`TEMA`](@ref), [`T3`](@ref), [`TRIX`](@ref)
+See also: [`Indicators.DEMA`](@ref), [`Indicators.TEMA`](@ref), [`Indicators.T3`](@ref), [`Indicators.TRIX`](@ref)
 """
 mutable struct DAGWrapper
     dag::StatDAG

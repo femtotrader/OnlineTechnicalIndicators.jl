@@ -12,7 +12,7 @@ factory = MovingAverage(Float64)
 ma = factory(SMA, period = 10)  # Creates SMA{Float64}(period = 10)
 ```
 
-See also: [`SMA`](@ref), [`EMA`](@ref), [`SMMA`](@ref), [`WMA`](@ref), [`DEMA`](@ref), [`TEMA`](@ref), [`KAMA`](@ref), [`HMA`](@ref), [`McGinleyDynamic`](@ref)
+See also: [`Indicators.SMA`](@ref), [`Indicators.EMA`](@ref), [`Indicators.SMMA`](@ref), [`Indicators.WMA`](@ref), [`Indicators.DEMA`](@ref), [`Indicators.TEMA`](@ref), [`Indicators.KAMA`](@ref), [`Indicators.HMA`](@ref), [`Indicators.McGinleyDynamic`](@ref)
 """
 struct MovingAverage
     T::Type

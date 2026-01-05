@@ -383,28 +383,6 @@ for (i, candle) in enumerate(candles)
 end
 ```
 
-## API Reference
-
-```@docs
-SingleCandlePatternVal
-TwoCandlePatternVal
-ThreeCandlePatternVal
-AllPatternsVal
-Doji
-Hammer
-ShootingStar
-Marubozu
-SpinningTop
-Engulfing
-Harami
-PiercingDarkCloud
-Tweezer
-Star
-ThreeSoldiersCrows
-ThreeInside
-CandlestickPatternDetector
-```
-
 ## See Also
 
 - OHLCV Data Structure (see Usage documentation)

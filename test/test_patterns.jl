@@ -2,8 +2,9 @@ using OnlineTechnicalIndicators
 using OnlineStatsBase: nobs
 
 @testitem "Pattern - Doji" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Doji, SingleCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Doji, SingleCandlePatternType, PatternDirection
 
     # Create a perfect doji (open = close)
     doji_candle = OHLCV(100.0, 102.0, 98.0, 100.0)
@@ -20,8 +21,9 @@ using OnlineStatsBase: nobs
 end
 
 @testitem "Pattern - Hammer" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Hammer, SingleCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Hammer, SingleCandlePatternType, PatternDirection
 
     # Create a hammer pattern (small body at top, long lower shadow)
     hammer_candle = OHLCV(100.0, 101.0, 95.0, 100.5)
@@ -38,8 +40,9 @@ end
 end
 
 @testitem "Pattern - Shooting Star" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, ShootingStar, SingleCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        ShootingStar, SingleCandlePatternType, PatternDirection
 
     # Create a shooting star pattern (small body at bottom, long upper shadow)
     star_candle = OHLCV(100.0, 105.0, 99.5, 100.5)
@@ -56,8 +59,9 @@ end
 end
 
 @testitem "Pattern - Marubozu" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Marubozu, SingleCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Marubozu, SingleCandlePatternType, PatternDirection
 
     # Create a bullish marubozu (no shadows)
     marubozu_candle = OHLCV(100.0, 110.0, 100.0, 110.0)
@@ -72,8 +76,9 @@ end
 end
 
 @testitem "Pattern - Spinning Top" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, SpinningTop, SingleCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        SpinningTop, SingleCandlePatternType, PatternDirection
 
     # Create a spinning top (small body, long shadows on both sides)
     spinning_candle = OHLCV(100.0, 105.0, 95.0, 101.0)
@@ -89,8 +94,9 @@ end
 end
 
 @testitem "Pattern - Bullish Engulfing" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Engulfing, TwoCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Engulfing, TwoCandlePatternType, PatternDirection
 
     ind = Engulfing{OHLCV{Missing,Float64,Missing}}()
 
@@ -109,8 +115,9 @@ end
 end
 
 @testitem "Pattern - Bearish Engulfing" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Engulfing, TwoCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Engulfing, TwoCandlePatternType, PatternDirection
 
     ind = Engulfing{OHLCV{Missing,Float64,Missing}}()
 
@@ -129,8 +136,9 @@ end
 end
 
 @testitem "Pattern - Bullish Harami" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Harami, TwoCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Harami, TwoCandlePatternType, PatternDirection
 
     ind = Harami{OHLCV{Missing,Float64,Missing}}()
 
@@ -149,8 +157,9 @@ end
 end
 
 @testitem "Pattern - Piercing Line" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, PiercingDarkCloud, TwoCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        PiercingDarkCloud, TwoCandlePatternType, PatternDirection
 
     ind = PiercingDarkCloud{OHLCV{Missing,Float64,Missing}}()
 
@@ -169,8 +178,9 @@ end
 end
 
 @testitem "Pattern - Tweezer Bottom" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Tweezer, TwoCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Tweezer, TwoCandlePatternType, PatternDirection
 
     ind = Tweezer{OHLCV{Missing,Float64,Missing}}()
 
@@ -190,8 +200,9 @@ end
 end
 
 @testitem "Pattern - Morning Star" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Star, ThreeCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Star, ThreeCandlePatternType, PatternDirection
 
     ind = Star{OHLCV{Missing,Float64,Missing}}()
 
@@ -215,8 +226,9 @@ end
 end
 
 @testitem "Pattern - Evening Star" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, Star, ThreeCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        Star, ThreeCandlePatternType, PatternDirection
 
     ind = Star{OHLCV{Missing,Float64,Missing}}()
 
@@ -240,8 +252,9 @@ end
 end
 
 @testitem "Pattern - Three White Soldiers" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, ThreeSoldiersCrows, ThreeCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        ThreeSoldiersCrows, ThreeCandlePatternType, PatternDirection
 
     ind = ThreeSoldiersCrows{OHLCV{Missing,Float64,Missing}}()
 
@@ -263,8 +276,9 @@ end
 end
 
 @testitem "Pattern - Three Black Crows" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, ThreeSoldiersCrows, ThreeCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        ThreeSoldiersCrows, ThreeCandlePatternType, PatternDirection
 
     ind = ThreeSoldiersCrows{OHLCV{Missing,Float64,Missing}}()
 
@@ -286,8 +300,9 @@ end
 end
 
 @testitem "Pattern - Three Inside Up" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, ThreeInside, ThreeCandlePatternType, PatternDirection
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        ThreeInside, ThreeCandlePatternType, PatternDirection
 
     ind = ThreeInside{OHLCV{Missing,Float64,Missing}}()
 
@@ -311,8 +326,9 @@ end
 end
 
 @testitem "Pattern - CandlestickPatternDetector" begin
-    using OnlineTechnicalIndicators:
-        OHLCV, CandlestickPatternDetector, AllPatternsVal
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Patterns:
+        CandlestickPatternDetector, AllPatternsVal
 
     ind = CandlestickPatternDetector{OHLCV{Missing,Float64,Missing}}()
 
@@ -344,7 +360,8 @@ end
 end
 
 @testitem "Pattern - Detection on Sequences" begin
-    using OnlineTechnicalIndicators: OHLCV, Doji
+    using OnlineTechnicalIndicators.Patterns: Doji
+    using OnlineTechnicalIndicators: OHLCV
     using OnlineStatsBase: nobs
 
     # Test incremental pattern detection with a sequence of candles

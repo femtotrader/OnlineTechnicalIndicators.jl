@@ -1,10 +1,15 @@
 # Inside make.jl
 push!(LOAD_PATH, "../src/")
 using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.Indicators
+using OnlineTechnicalIndicators.Patterns
 using Documenter
 makedocs(
     sitename = "OnlineTechnicalIndicators.jl",
-    modules = [OnlineTechnicalIndicators],
+    modules = [OnlineTechnicalIndicators, OnlineTechnicalIndicators.Indicators, OnlineTechnicalIndicators.Patterns],
+    format = Documenter.HTML(
+        size_threshold = 300_000,  # 300KB threshold for large API reference page
+    ),
     pages = [
         "Home" => "index.md",
         "Package Features" => "features.md",
