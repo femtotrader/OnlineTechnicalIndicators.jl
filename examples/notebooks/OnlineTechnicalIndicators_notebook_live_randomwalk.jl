@@ -1,46 +1,46 @@
 ### A Pluto.jl notebook ###
-# v0.19.40
+# v0.20.21
 
 using Markdown
 using InteractiveUtils
 
 # This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
 macro bind(def, element)
-    quote
-        local iv = try
-            Base.loaded_modules[Base.PkgId(
-                Base.UUID("6e696c72-6542-2067-7265-42206c756150"),
-                "AbstractPlutoDingetjes",
-            )].Bonds.initial_value
-        catch
-            b -> missing
-        end
+    #! format: off
+    return quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
         local el = $(esc(element))
         global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
         el
     end
+    #! format: on
 end
 
 # ╔═╡ 3fd38d00-d413-11ee-35a1-a9c997e0c8fe
 begin
     import Pkg
     Pkg.activate(mktempdir())
-    Pkg.add([
-        Pkg.PackageSpec(
-            url = "https://github.com/femtotrader/OnlineTechnicalIndicators.jl",
-        ),
-    ])
+    #Pkg.add([
+    #    Pkg.PackageSpec(
+    #        url = "https://github.com/femtotrader/OnlineTechnicalIndicators.jl",
+    #    ),
+    #])
+	Pkg.develop("OnlineTechnicalIndicators")
     Pkg.add(["Random", "PlutoUI", "Plots", "DataStructures"])
     using PlutoUI, Plots, DataStructures
     using Dates
     gr()
     using Random
-    using OnlineTechnicalIndicators
+    using OnlineTechnicalIndicators.Indicators: SMA, RSI
+    using OnlineTechnicalIndicators.Indicators: fit!, value
     using OnlineTechnicalIndicators: StatLag
 end
 
 # ╔═╡ f78dc6f0-f725-4829-bda4-827b96bf1517
 md"""# Feed OnlineTechnicalIndicators indicators with live random data"""
+
+# ╔═╡ ac9a8fef-e633-4d2e-851c-0fa2cb2c25a0
+
 
 # ╔═╡ 72e8c266-b3d4-45ad-be3f-36f74a9e3105
 begin
@@ -135,6 +135,7 @@ end;
 # ╔═╡ Cell order:
 # ╠═f78dc6f0-f725-4829-bda4-827b96bf1517
 # ╠═3fd38d00-d413-11ee-35a1-a9c997e0c8fe
+# ╠═ac9a8fef-e633-4d2e-851c-0fa2cb2c25a0
 # ╠═72e8c266-b3d4-45ad-be3f-36f74a9e3105
 # ╠═3b5db701-72c9-4bba-8ea5-7b1d69217c4e
 # ╠═3e4843e6-fcd6-4b7f-bcdc-9fb412aba795

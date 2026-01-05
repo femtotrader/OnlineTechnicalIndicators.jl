@@ -7,8 +7,10 @@ This example demonstrates:
 3. How patterns work incrementally with streaming data
 """
 
-using OnlineTechnicalIndicators
-using OnlineStatsBase: value, fit!
+using OnlineTechnicalIndicators.Patterns: Doji, Engulfing, ThreeSoldiersCrows, CandlestickPatternDetector
+using OnlineTechnicalIndicators.Patterns: SingleCandlePatternType, TwoCandlePatternType, ThreeCandlePatternType
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
+using OnlineTechnicalIndicators.Patterns: value, fit!
 
 println("=== Candlestick Pattern Recognition Examples ===\n")
 

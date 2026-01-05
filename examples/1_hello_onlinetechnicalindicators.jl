@@ -4,7 +4,8 @@ This example demonstrates how to use an OnlineTechnicalIndicators technical anal
 
 =#
 
-using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.Indicators: SMA, BB, ATR, Stoch, fit!, value
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
 using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
 
 
@@ -30,7 +31,9 @@ end
 println("")
 
 println("Show candlestick data")
-println(V_OHLCV)
+for candle in V_OHLCV
+    println(candle)
+end
 
 println("Calculate ATR (Average true range)")
 ind = ATR{OHLCV}(period = 3)  # this is a MISO indicator

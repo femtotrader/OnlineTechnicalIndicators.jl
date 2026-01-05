@@ -5,8 +5,9 @@ This example demonstrates how to use pattern recognition indicators to generate
 trading signals by combining multiple patterns and filtering by confidence.
 """
 
-using OnlineTechnicalIndicators
-using OnlineStatsBase: value, fit!
+using OnlineTechnicalIndicators.Patterns:  CandlestickPatternDetector, AllPatternsVal, PatternDirection
+using OnlineTechnicalIndicators.Patterns: fit!, value
+using OnlineTechnicalIndicators.Candlesticks: OHLCV
 
 println("=== Trading Signal Generation with Pattern Recognition ===\n")
 
