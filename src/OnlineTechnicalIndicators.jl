@@ -1,168 +1,60 @@
 module OnlineTechnicalIndicators
 
+# Core exports (base types, utilities)
 export OHLCV, OHLCVFactory, ValueExtractor
 export fit!
-
-# Re-export from Wrappers submodule
-export Smoother, DAGWrapper
-
-# Re-export from Factories submodule
-export MovingAverage, MAFactory
-
 export SampleData
-export ArraysInterface
 
-# Export submodules for direct access
-export Wrappers, Factories
+# Export Wrappers submodule (for DAGWrapper access)
+export Wrappers
 
-SISO_INDICATORS = [
-    "SMA",
-    "EMA",
-    "SMMA",
-    "RSI",
-    "MeanDev",
-    "StdDev",
-    "ROC",
-    "WMA",
-    "KAMA",
-    "HMA",
-    "DPO",
-    "CoppockCurve",
-    "DEMA",
-    "TEMA",
-    "ALMA",
-    "McGinleyDynamic",
-    "ZLEMA",
-    "T3",
-    "TRIX",
-    "TSI",
-]
-SIMO_INDICATORS = ["BB", "MACD", "StochRSI", "KST"]
-MISO_INDICATORS = [
-    "AccuDist",
-    "BOP",
-    "CCI",
-    "ChaikinOsc",
-    "VWMA",
-    "VWAP",
-    "AO",
-    "TrueRange",
-    "ATR",
-    "ForceIndex",
-    "OBV",
-    "SOBV",
-    "EMV",
-    "MassIndex",
-    "CHOP",
-    "KVO",
-    "UO",
-    "NATR",
-    "MFI",
-    "IntradayRange",
-    "RelativeIntradayRange",
-    "ADR",
-    "ARDR",
-]
-MIMO_INDICATORS = [
-    "Stoch",
-    "ADX",
-    "SuperTrend",
-    "VTX",
-    "DonchianChannels",
-    "KeltnerChannels",
-    "Aroon",
-    "ChandeKrollStop",
-    "ParabolicSAR",
-    "SFX",
-    "TTM",
-    "PivotsHL",
-    "GannHiloActivator",
-    "GannSwingChart",
-    "PeakValleyDetector",
-    "RetracementCalculator",
-    "SupportResistanceLevel",
-]
-# More complex indicators (for example STC is SISO but uses MIMO indicator such as Stoch with input_modifier)
-OTHERS_INDICATORS = ["STC"]
+# Export Factories submodule (for MovingAverage access)
+export Factories
 
-# Pattern Recognition Indicators
-PATTERN_INDICATORS = [
-    "Doji",
-    "Hammer",
-    "ShootingStar",
-    "Marubozu",
-    "SpinningTop",
-    "Engulfing",
-    "Harami",
-    "PiercingDarkCloud",
-    "Tweezer",
-    "Star",
-    "ThreeSoldiersCrows",
-    "ThreeInside",
-    "CandlestickPatternDetector",
-]
+# Export new submodules for indicators and patterns
+export Indicators, Patterns
 
-ALL_INDICATORS = [
-    SISO_INDICATORS...,
-    SIMO_INDICATORS...,
-    MISO_INDICATORS...,
-    MIMO_INDICATORS...,
-    OTHERS_INDICATORS...,
-    PATTERN_INDICATORS...,
-]
-
-# Export indicators
-for ind in ALL_INDICATORS
-    ind = Symbol(ind)
-    @eval export $ind
-end
-export SARTrend, Trend, HLType
-export GannHiloActivatorVal,
-    GannSwingChartVal, PeakValleyVal, RetracementVal, SupportResistanceLevelVal
-
-# Export pattern recognition types and modules
-export SingleCandlePatternType,
-    TwoCandlePatternType, ThreeCandlePatternType, PatternDirection
-export SingleCandlePatternVal, TwoCandlePatternVal, ThreeCandlePatternVal, AllPatternsVal
-
-# Export pattern recognition types and modules
-export SingleCandlePatternType,
-    TwoCandlePatternType, ThreeCandlePatternType, PatternDirection
-export SingleCandlePatternVal, TwoCandlePatternVal, ThreeCandlePatternVal, AllPatternsVal
-
+# Deprecated export (kept for backward compatibility warning)
 export add_input_indicator!
 
 using OnlineStatsBase
 export value
 
+# Base abstract types (needed by submodules)
 abstract type TechnicalIndicator{T} <: OnlineStat{T} end
 abstract type TechnicalIndicatorSingleOutput{T} <: TechnicalIndicator{T} end
 abstract type TechnicalIndicatorMultiOutput{T} <: TechnicalIndicator{T} end
 abstract type MovingAverageIndicator{T} <: TechnicalIndicatorSingleOutput{T} end
 
+# Core utilities
 include("stats.jl")
 include("ohlcv.jl")
 include("sample_data.jl")
 
-# Include MovingAverage factory (needed by SISO indicators like DEMA)
+# Include MovingAverage factory (needed by indicators)
 include("factories/MovingAverage.jl")
 
 # Include DAGWrapper (needed by SISO indicators like DEMA, TEMA, T3, TRIX)
 include("wrappers/dag.jl")
 
+# Helper functions for indicators
 ismultioutput(ind::Type{O}) where {O<:TechnicalIndicator} =
     ind <: TechnicalIndicatorMultiOutput
 expected_return_type(ind::O) where {O<:TechnicalIndicatorSingleOutput} =
     typeof(ind).parameters[end]
 function expected_return_type(ind::O) where {O<:TechnicalIndicatorMultiOutput}
     retval = String(nameof(typeof(ind))) * "Val"  # return value as String "BBVal", "MACDVal"...
-    RETVAL = eval(Meta.parse(retval))
+    # Look up type in the indicator's module (where the Val types are defined)
+    ind_module = parentmodule(typeof(ind))
+    RETVAL = getfield(ind_module, Symbol(retval))
     return RETVAL{typeof(ind).parameters[end]}
 end
 
 function expected_return_type(IND::Type{O}) where {O<:TechnicalIndicatorMultiOutput}
     retval = String(nameof(IND)) * "Val"  # return value as String "BBVal", "MACDVal"...
-    RETVAL = eval(Meta.parse(retval))
+    # Look up type in the indicator's module (where the Val types are defined)
+    ind_module = parentmodule(IND)
+    RETVAL = getfield(ind_module, Symbol(retval))
     return RETVAL
 end
 
@@ -207,20 +99,6 @@ function has_output_value(cb::CircBuff)
         return false
     end
 end
-
-#=
-function has_valid_values(cb::CircBuff, period)
-    try
-        _has_valid_values = true
-        for i in 1:period
-            _has_valid_values = _has_valid_values && !ismissing(cb[end-i+1])
-        end
-        return _has_valid_values
-    catch
-        return false
-    end
-end
-=#
 
 function has_valid_values(sequence::CircBuff, window; exact = false)
     if !exact
@@ -287,6 +165,15 @@ end
 
 always_true(x) = true
 
+# Base function for checking if indicator requires multi-input (OHLCV) data
+# Submodules extend this for their specific indicator types
+ismultiinput(::Type{<:TechnicalIndicator}) = false
+
+# Base functions for indicator calculations - extended by submodules
+# These are called by _fit! and must be defined per-indicator type
+function _calculate_new_value end
+function _calculate_new_value_only_from_incoming_data end
+
 function Base.setindex!(o::CircBuff, val, i::Int)
     if nobs(o) ≤ length(o.rng.rng)
         o.value[i] = val
@@ -303,134 +190,18 @@ function Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)
     end
 end
 
-# include pattern types first
-include("patterns/PatternTypes.jl")
-using .SingleCandlePatternType
-using .TwoCandlePatternType
-using .ThreeCandlePatternType
-using .PatternDirection
+# Include Indicators submodule (defines all technical indicators)
+include("indicators/Indicators.jl")
 
-include("patterns/PatternValues.jl")
-
-# include SISO and SIMO indicators first (no dependencies on Smoother)
-for ind in [
-    SISO_INDICATORS...,
-    SIMO_INDICATORS...,
-]
-    include("indicators/$(ind).jl")
-end
-
-# Include Smoother (after MA indicators are defined, before MISO indicators that use it)
-include("wrappers/smoother.jl")
-
-# include MISO, MIMO and OTHERS indicators
-for ind in [
-    MISO_INDICATORS...,
-    MIMO_INDICATORS...,
-    OTHERS_INDICATORS...,
-]
-    include("indicators/$(ind).jl")
-end
-
-# include pattern indicators
-for ind in PATTERN_INDICATORS
-    include("patterns/$(ind).jl")
-end
-
-# ismultiinput
-# ismultiinput(ind::O) where {O<:TechnicalIndicator} = typeof(ind).parameters[2]
-# SISO
-ismultiinput(::Type{SMA}) = false
-ismultiinput(::Type{EMA}) = false
-ismultiinput(::Type{SMMA}) = false
-ismultiinput(::Type{RSI}) = false
-ismultiinput(::Type{MeanDev}) = false
-ismultiinput(::Type{StdDev}) = false
-ismultiinput(::Type{ROC}) = false
-ismultiinput(::Type{WMA}) = false
-ismultiinput(::Type{KAMA}) = false
-ismultiinput(::Type{HMA}) = false
-ismultiinput(::Type{DPO}) = false
-ismultiinput(::Type{CoppockCurve}) = false
-ismultiinput(::Type{DEMA}) = false
-ismultiinput(::Type{TEMA}) = false
-ismultiinput(::Type{ALMA}) = false
-ismultiinput(::Type{McGinleyDynamic}) = false
-ismultiinput(::Type{ZLEMA}) = false
-ismultiinput(::Type{T3}) = false
-ismultiinput(::Type{TRIX}) = false
-ismultiinput(::Type{TSI}) = false
-# SIMO
-ismultiinput(::Type{BB}) = false
-ismultiinput(::Type{MACD}) = false
-ismultiinput(::Type{StochRSI}) = false
-ismultiinput(::Type{KST}) = false
-# MISO
-ismultiinput(::Type{AccuDist}) = true
-ismultiinput(::Type{BOP}) = true
-ismultiinput(::Type{CCI}) = true
-ismultiinput(::Type{ChaikinOsc}) = true
-ismultiinput(::Type{VWMA}) = true
-ismultiinput(::Type{VWAP}) = true
-ismultiinput(::Type{AO}) = true
-ismultiinput(::Type{TrueRange}) = true
-ismultiinput(::Type{ATR}) = true
-ismultiinput(::Type{ForceIndex}) = true
-ismultiinput(::Type{OBV}) = true
-ismultiinput(::Type{SOBV}) = true
-ismultiinput(::Type{EMV}) = true
-ismultiinput(::Type{MassIndex}) = true
-ismultiinput(::Type{CHOP}) = true
-ismultiinput(::Type{KVO}) = true
-ismultiinput(::Type{UO}) = true
-ismultiinput(::Type{NATR}) = true
-ismultiinput(::Type{MFI}) = true
-ismultiinput(::Type{IntradayRange}) = true
-ismultiinput(::Type{RelativeIntradayRange}) = true
-ismultiinput(::Type{ADR}) = true
-ismultiinput(::Type{ARDR}) = true
-# Utility types (not in indicator lists)
-ismultiinput(::Type{Smoother}) = true
-# MIMO
-ismultiinput(::Type{Stoch}) = true
-ismultiinput(::Type{ADX}) = true
-ismultiinput(::Type{SuperTrend}) = true
-ismultiinput(::Type{VTX}) = true
-ismultiinput(::Type{DonchianChannels}) = true
-ismultiinput(::Type{KeltnerChannels}) = true
-ismultiinput(::Type{Aroon}) = true
-ismultiinput(::Type{ChandeKrollStop}) = true
-ismultiinput(::Type{ParabolicSAR}) = true
-ismultiinput(::Type{SFX}) = true
-ismultiinput(::Type{TTM}) = true
-ismultiinput(::Type{PivotsHL}) = true
-ismultiinput(::Type{GannHiloActivator}) = true
-ismultiinput(::Type{GannSwingChart}) = true
-ismultiinput(::Type{PeakValleyDetector}) = true
-ismultiinput(::Type{RetracementCalculator}) = true
-ismultiinput(::Type{SupportResistanceLevel}) = true
-# Other
-ismultiinput(::Type{STC}) = false
-# Pattern Recognition
-ismultiinput(::Type{Doji}) = true
-ismultiinput(::Type{Hammer}) = true
-ismultiinput(::Type{ShootingStar}) = true
-ismultiinput(::Type{Marubozu}) = true
-ismultiinput(::Type{SpinningTop}) = true
-ismultiinput(::Type{Engulfing}) = true
-ismultiinput(::Type{Harami}) = true
-ismultiinput(::Type{PiercingDarkCloud}) = true
-ismultiinput(::Type{Tweezer}) = true
-ismultiinput(::Type{Star}) = true
-ismultiinput(::Type{ThreeSoldiersCrows}) = true
-ismultiinput(::Type{ThreeInside}) = true
-ismultiinput(::Type{CandlestickPatternDetector}) = true
+# Include Patterns submodule (defines all pattern recognition)
+include("patterns/Patterns.jl")
 
 # Other stuff
 include("resample.jl")
 
-# Integration with Julia ecosystem (Arrays, Iterators...)
-include("other/arrays.jl")
+# Integration with Julia ecosystem (Iterators, Tables)
+# Note: Array convenience functions are now in Indicators module (arrays_indicators.jl)
+# Use OnlineTechnicalIndicators.Indicators.SMA(array, ...) instead of OnlineTechnicalIndicators.SMA(array, ...)
 include("other/iterators.jl")
 include("other/tables.jl")
 

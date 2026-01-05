@@ -2,10 +2,8 @@
 Return value types for pattern detection indicators.
 """
 
-using ..SingleCandlePatternType
-using ..TwoCandlePatternType
-using ..ThreeCandlePatternType
-using ..PatternDirection
+# Pattern type modules are defined in PatternTypes.jl which is included before this file
+# They are available in the current scope (Patterns module) via include
 
 """
     SingleCandlePatternVal{T}

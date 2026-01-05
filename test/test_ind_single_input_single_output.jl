@@ -2,7 +2,8 @@ using OnlineTechnicalIndicators
 using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, CLOSE_EQUAL_VALUES_TMPL
 
 @testitem "SISO - SMA" begin
-    using OnlineTechnicalIndicators: SMA, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: SMA
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -26,7 +27,7 @@ using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, CLOSE_EQUAL_VALUES_TMPL
 end
 
 @testitem "SISO - Indicator chaining (SMA)" begin
-    using OnlineTechnicalIndicators: SMA
+    using OnlineTechnicalIndicators.Indicators: SMA
     using OnlineStatsChains: StatDAG, add_node!, connect!
 
     const ATOL = 0.00001
@@ -63,7 +64,7 @@ end
 end
 
 @testitem "SISO - SMA with Vector as input" begin
-    using OnlineTechnicalIndicators: SMA
+    using OnlineTechnicalIndicators.Indicators: SMA
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
 
     const P = 20
@@ -80,7 +81,8 @@ end
 end
 
 @testitem "SISO - EMA" begin
-    using OnlineTechnicalIndicators: EMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: EMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -98,7 +100,8 @@ end
 end
 
 @testitem "SISO - SMMA last 3 values" begin
-    using OnlineTechnicalIndicators: SMMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: SMMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -116,7 +119,7 @@ end
 end
 
 @testitem "SISO - SMMA vector" begin
-    using OnlineTechnicalIndicators: SMMA
+    using OnlineTechnicalIndicators.Indicators: SMMA
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -185,7 +188,8 @@ end
 end
 
 @testitem "SISO - RSI" begin
-    using OnlineTechnicalIndicators: RSI, StatLag
+    using OnlineTechnicalIndicators.Indicators: RSI
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -203,7 +207,8 @@ end
 end
 
 @testitem "SISO - MeanDev" begin
-    using OnlineTechnicalIndicators: MeanDev, StatLag
+    using OnlineTechnicalIndicators.Indicators: MeanDev
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -221,7 +226,8 @@ end
 end
 
 @testitem "SISO - StdDev" begin
-    using OnlineTechnicalIndicators: StdDev, StatLag
+    using OnlineTechnicalIndicators.Indicators: StdDev
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -239,7 +245,8 @@ end
 end
 
 @testitem "SISO - ROC" begin
-    using OnlineTechnicalIndicators: ROC, StatLag
+    using OnlineTechnicalIndicators.Indicators: ROC
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -257,7 +264,8 @@ end
 end
 
 @testitem "SISO - WMA" begin
-    using OnlineTechnicalIndicators: WMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: WMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -275,7 +283,8 @@ end
 end
 
 @testitem "SISO - DPO" begin
-    using OnlineTechnicalIndicators: DPO, StatLag
+    using OnlineTechnicalIndicators.Indicators: DPO
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -292,7 +301,8 @@ end
 end
 
 @testitem "SISO - HMA" begin
-    using OnlineTechnicalIndicators: HMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: HMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -309,7 +319,8 @@ end
 end
 
 @testitem "SISO - CoppockCurve" begin
-    using OnlineTechnicalIndicators: CoppockCurve, StatLag
+    using OnlineTechnicalIndicators.Indicators: CoppockCurve
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -326,7 +337,8 @@ end
 end
 
 @testitem "SISO - ALMA" begin
-    using OnlineTechnicalIndicators: ALMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: ALMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -358,7 +370,8 @@ end
 end
 
 @testitem "SISO - DEMA" begin
-    using OnlineTechnicalIndicators: DEMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: DEMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -375,7 +388,8 @@ end
 end
 
 @testitem "SISO - TEMA" begin
-    using OnlineTechnicalIndicators: TEMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: TEMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -392,7 +406,8 @@ end
 end
 
 @testitem "SISO - KAMA" begin
-    using OnlineTechnicalIndicators: KAMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: KAMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -411,7 +426,8 @@ end
 end
 
 @testitem "SISO - McGinleyDynamic" begin
-    using OnlineTechnicalIndicators: McGinleyDynamic, StatLag
+    using OnlineTechnicalIndicators.Indicators: McGinleyDynamic
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -428,7 +444,8 @@ end
 end
 
 @testitem "SISO - STC" begin
-    using OnlineTechnicalIndicators: STC, StatLag
+    using OnlineTechnicalIndicators.Indicators: STC
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -450,7 +467,8 @@ end
 end
 
 @testitem "SISO - ZLEMA" begin
-    using OnlineTechnicalIndicators: ZLEMA, StatLag
+    using OnlineTechnicalIndicators.Indicators: ZLEMA
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -467,7 +485,8 @@ end
 end
 
 @testitem "SISO - T3" begin
-    using OnlineTechnicalIndicators: T3, StatLag
+    using OnlineTechnicalIndicators.Indicators: T3
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -484,7 +503,8 @@ end
 end
 
 @testitem "SISO - TRIX" begin
-    using OnlineTechnicalIndicators: TRIX, StatLag
+    using OnlineTechnicalIndicators.Indicators: TRIX
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -501,7 +521,8 @@ end
 end
 
 @testitem "SISO - TSI with CLOSE_TMPL" begin
-    using OnlineTechnicalIndicators: TSI, StatLag
+    using OnlineTechnicalIndicators.Indicators: TSI
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL
     using OnlineStatsBase: nobs
 
@@ -518,7 +539,8 @@ end
 end
 
 @testitem "SISO - TSI with CLOSE_EQUAL_VALUES_TMPL" begin
-    using OnlineTechnicalIndicators: TSI, StatLag
+    using OnlineTechnicalIndicators.Indicators: TSI
+    using OnlineTechnicalIndicators: StatLag
     using OnlineTechnicalIndicators.SampleData: CLOSE_EQUAL_VALUES_TMPL
     using OnlineStatsBase: nobs
 

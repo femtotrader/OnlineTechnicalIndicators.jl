@@ -1,9 +1,10 @@
 using OnlineTechnicalIndicators
-using OnlineTechnicalIndicators: PivotsHLVal, GannHiloActivatorVal
+using OnlineTechnicalIndicators.Indicators: PivotsHLVal, GannHiloActivatorVal
 using OnlineTechnicalIndicators.SampleData: V_OHLCV
 
 @testitem "MIMO - Stoch" begin
-    using OnlineTechnicalIndicators: Stoch, StochVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: Stoch, StochVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -24,7 +25,8 @@ using OnlineTechnicalIndicators.SampleData: V_OHLCV
 end
 
 @testitem "MIMO - SuperTrend" begin
-    using OnlineTechnicalIndicators: SuperTrend, SuperTrendVal, Trend, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: SuperTrend, SuperTrendVal, Trend
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -54,7 +56,8 @@ end
 end
 
 @testitem "MIMO - VTX" begin
-    using OnlineTechnicalIndicators: VTX, VTXVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: VTX, VTXVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -78,7 +81,8 @@ end
 end
 
 @testitem "MIMO - DonchianChannels" begin
-    using OnlineTechnicalIndicators: DonchianChannels, DonchianChannelsVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: DonchianChannels, DonchianChannelsVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -105,7 +109,8 @@ end
 end
 
 @testitem "MIMO - KeltnerChannels" begin
-    using OnlineTechnicalIndicators: KeltnerChannels, KeltnerChannelsVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: KeltnerChannels, KeltnerChannelsVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -137,7 +142,8 @@ end
 end
 
 @testitem "MIMO - ADX" begin
-    using OnlineTechnicalIndicators: ADX, ADXVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: ADX, ADXVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -164,7 +170,8 @@ end
 end
 
 @testitem "MIMO - Aroon" begin
-    using OnlineTechnicalIndicators: Aroon, AroonVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: Aroon, AroonVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -188,7 +195,8 @@ end
 end
 
 @testitem "MIMO - ChandeKrollStop" begin
-    using OnlineTechnicalIndicators: ChandeKrollStop, ChandeKrollStopVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: ChandeKrollStop, ChandeKrollStopVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -212,7 +220,8 @@ end
 end
 
 @testitem "MIMO - ParabolicSAR" begin
-    using OnlineTechnicalIndicators: ParabolicSAR, ParabolicSARVal, SARTrend, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: ParabolicSAR, ParabolicSARVal, SARTrend
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -246,7 +255,8 @@ end
 end
 
 @testitem "MIMO - SFX" begin
-    using OnlineTechnicalIndicators: SFX, SFXVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: SFX, SFXVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -273,7 +283,8 @@ end
 end
 
 @testitem "MIMO - TTM" begin
-    using OnlineTechnicalIndicators: TTM, TTMVal, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: TTM, TTMVal
+    using OnlineTechnicalIndicators: expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -300,7 +311,7 @@ end
 end
 
 @testitem "MIMO - PivotsHL" begin
-    using OnlineTechnicalIndicators: PivotsHL, HLType
+    using OnlineTechnicalIndicators.Indicators: PivotsHL, HLType
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 
@@ -339,7 +350,8 @@ end
 end
 
 @testitem "MIMO - GannHiloActivator" begin
-    using OnlineTechnicalIndicators: GannHiloActivator, GannHiloActivatorVal, OHLCV, expected_return_type, StatLag
+    using OnlineTechnicalIndicators.Indicators: GannHiloActivator, GannHiloActivatorVal
+    using OnlineTechnicalIndicators: OHLCV, expected_return_type, StatLag
     using OnlineTechnicalIndicators.SampleData: V_OHLCV
     using OnlineStatsBase: nobs
 

@@ -10,7 +10,8 @@ using OnlineTechnicalIndicators:
     SupportResistanceLevelVal
 
 @testitem "GannSwingChart" begin
-    using OnlineTechnicalIndicators: GannSwingChart, GannSwingChartVal, OHLCV
+    using OnlineTechnicalIndicators.Indicators: GannSwingChart, GannSwingChartVal
+    using OnlineTechnicalIndicators: OHLCV
 
     # Test basic construction
     ind = GannSwingChart{OHLCV{Missing,Float64,Float64}}(min_bars = 2)
@@ -41,7 +42,8 @@ using OnlineTechnicalIndicators:
 end
 
 @testitem "PeakValleyDetector" begin
-    using OnlineTechnicalIndicators: PeakValleyDetector, PeakValleyVal, OHLCV
+    using OnlineTechnicalIndicators.Indicators: PeakValleyDetector, PeakValleyVal
+    using OnlineTechnicalIndicators: OHLCV
 
     # Test construction
     ind = PeakValleyDetector{OHLCV{Missing,Float64,Float64}}(lookback = 2)
@@ -74,7 +76,8 @@ end
 end
 
 @testitem "RetracementCalculator" begin
-    using OnlineTechnicalIndicators: RetracementCalculator, RetracementVal, OHLCV
+    using OnlineTechnicalIndicators.Indicators: RetracementCalculator, RetracementVal
+    using OnlineTechnicalIndicators: OHLCV
 
     # Test construction
     ind = RetracementCalculator{OHLCV{Missing,Float64,Float64}}(retracement_pct = 0.38)
@@ -103,7 +106,8 @@ end
 end
 
 @testitem "SupportResistanceLevel" begin
-    using OnlineTechnicalIndicators: SupportResistanceLevel, SupportResistanceLevelVal, OHLCV
+    using OnlineTechnicalIndicators.Indicators: SupportResistanceLevel, SupportResistanceLevelVal
+    using OnlineTechnicalIndicators: OHLCV
 
     # Test construction
     ind = SupportResistanceLevel{OHLCV{Missing,Float64,Float64}}()
@@ -133,8 +137,9 @@ end
 end
 
 @testitem "Gann Integration - Multiple Indicators" begin
-    using OnlineTechnicalIndicators:
-        GannSwingChart, PeakValleyDetector, RetracementCalculator, OHLCV
+    using OnlineTechnicalIndicators: OHLCV
+    using OnlineTechnicalIndicators.Indicators:
+        GannSwingChart, PeakValleyDetector, RetracementCalculator
 
     # Test using multiple indicators together
     swing_chart = GannSwingChart{OHLCV{Missing,Float64,Float64}}()

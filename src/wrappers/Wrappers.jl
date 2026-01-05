@@ -30,8 +30,12 @@ See also: [`OnlineTechnicalIndicators.Factories`](@ref)
 """
 module Wrappers
 
-# Re-export from parent module
-using ..OnlineTechnicalIndicators: Smoother, DAGWrapper
-export Smoother, DAGWrapper
+# Re-export DAGWrapper from parent module
+using ..OnlineTechnicalIndicators: DAGWrapper
+export DAGWrapper
+
+# Re-export Smoother from Indicators submodule
+using ..Indicators: Smoother
+export Smoother
 
 end  # module
