@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Project Structure · OnlineTechnicalIndicators.jl</title><meta name="title" content="Project Structure · OnlineTechnicalIndicators.jl"/><meta property="og:title" content="Project Structure · OnlineTechnicalIndicators.jl"/><meta property="twitter:title" content="Project Structure · OnlineTechnicalIndicators.jl"/><meta name="description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="og:description" content="Documentation for OnlineTechnicalIndicators.jl."/><meta property="twitter:description" content="Documentation for OnlineTechnicalIndicators.jl."/><script data-outdated-warner src="../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL=".."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../assets/documenter.js"></script><script src="../search_index.js"></script><script src="../siteinfo.js"></script><script src="../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../assets/themeswap.js"></script></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../">OnlineTechnicalIndicators.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../">Home</a></li><li><a class="tocitem" href="../features/">Package Features</a></li><li><a class="tocitem" href="../install/">Install</a></li><li><a class="tocitem" href="../usage/">Usage</a></li><li><a class="tocitem" href="../indicators_support/">Indicators support</a></li><li><span class="tocitem">Pattern Recognition</span><ul><li><a class="tocitem" href="../patterns/">Overview</a></li><li><a class="tocitem" href="../patterns/quickstart/">Quick Start</a></li><li><a class="tocitem" href="../patterns/implementation/">Implementation</a></li></ul></li><li><a class="tocitem" href="../usage_more/">Learn more about usage</a></li><li><a class="tocitem" href="../examples/">Examples</a></li><li><span class="tocitem">Architecture &amp; Internals</span><ul><li><a class="tocitem" href="../architecture/">Architecture</a></li><li class="is-active"><a class="tocitem" href>Project Structure</a><ul class="internal"><li><a class="tocitem" href="#Directory-Tree"><span>Directory Tree</span></a></li><li><a class="tocitem" href="#Key-Files"><span>Key Files</span></a></li><li><a class="tocitem" href="#Module-Loading-Order"><span>Module Loading Order</span></a></li><li><a class="tocitem" href="#See-Also"><span>See Also</span></a></li></ul></li><li><a class="tocitem" href="../dataflow/">Data Flow</a></li><li><a class="tocitem" href="../internals/">Internals</a></li></ul></li><li><a class="tocitem" href="../migration/">Migration Guide</a></li><li><a class="tocitem" href="../implementing_your_indic/">Implementing your own indicator</a></li><li><a class="tocitem" href="../api/">API</a></li><li><a class="tocitem" href="../projects/">Projects</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Architecture &amp; Internals</a></li><li class="is-active"><a href>Project Structure</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Project Structure</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/femtotrader/OnlineTechnicalIndicators.jl/blob/main/docs/src/structure.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Project-Structure"><a class="docs-heading-anchor" href="#Project-Structure">Project Structure</a><a id="Project-Structure-1"></a><a class="docs-heading-anchor-permalink" href="#Project-Structure" title="Permalink"></a></h1><p>This page describes the directory layout and file organization of OnlineTechnicalIndicators.jl.</p><h2 id="Directory-Tree"><a class="docs-heading-anchor" href="#Directory-Tree">Directory Tree</a><a id="Directory-Tree-1"></a><a class="docs-heading-anchor-permalink" href="#Directory-Tree" title="Permalink"></a></h2><pre><code class="nohighlight hljs">OnlineTechnicalIndicators/
+├── src/                                # Source code
+│   ├── OnlineTechnicalIndicators.jl    # Main module entry point
+│   ├── stats.jl                        # Statistical utilities
+│   ├── sample_data.jl                  # Sample OHLCV data module
+│   ├── resample.jl                     # Time-series resampling utilities
+│   │
+│   ├── candlesticks/                   # OHLCV data structures
+│   │   ├── Candlesticks.jl             # Submodule definition
+│   │   └── ohlcv.jl                    # OHLCV struct and OHLCVFactory
+│   │
+│   ├── internals/                      # Internal utilities
+│   │   └── Internals.jl                # Helper functions for indicators
+│   │
+│   ├── indicators/                     # Technical indicators (60+)
+│   │   ├── Indicators.jl               # Submodule definition and exports
+│   │   │
+│   │   │   # SISO (Single Input, Single Output)
+│   │   ├── SMA.jl                      # Simple Moving Average
+│   │   ├── EMA.jl                      # Exponential Moving Average
+│   │   ├── SMMA.jl                     # Smoothed Moving Average
+│   │   ├── WMA.jl                      # Weighted Moving Average
+│   │   ├── DEMA.jl                     # Double EMA
+│   │   ├── TEMA.jl                     # Triple EMA
+│   │   ├── KAMA.jl                     # Kaufman Adaptive MA
+│   │   ├── HMA.jl                      # Hull Moving Average
+│   │   ├── ALMA.jl                     # Arnaud Legoux MA
+│   │   ├── ZLEMA.jl                    # Zero-Lag EMA
+│   │   ├── McGinleyDynamic.jl          # McGinley Dynamic
+│   │   ├── T3.jl                       # Tillson T3
+│   │   ├── RSI.jl                      # Relative Strength Index
+│   │   ├── ROC.jl                      # Rate of Change
+│   │   ├── DPO.jl                      # Detrended Price Oscillator
+│   │   ├── CoppockCurve.jl             # Coppock Curve
+│   │   ├── MeanDev.jl                  # Mean Deviation
+│   │   ├── StdDev.jl                   # Standard Deviation
+│   │   ├── TRIX.jl                     # Triple Smooth EMA ROC
+│   │   ├── TSI.jl                      # True Strength Index
+│   │   │
+│   │   │   # SIMO (Single Input, Multiple Output)
+│   │   ├── BB.jl                       # Bollinger Bands
+│   │   ├── MACD.jl                     # Moving Average Convergence Divergence
+│   │   ├── StochRSI.jl                 # Stochastic RSI
+│   │   ├── KST.jl                      # Know Sure Thing
+│   │   │
+│   │   │   # MISO (Multiple Input, Single Output)
+│   │   ├── TrueRange.jl                # True Range
+│   │   ├── ATR.jl                      # Average True Range
+│   │   ├── NATR.jl                     # Normalized ATR
+│   │   ├── AccuDist.jl                 # Accumulation/Distribution
+│   │   ├── OBV.jl                      # On Balance Volume
+│   │   ├── SOBV.jl                     # Smoothed OBV
+│   │   ├── MFI.jl                      # Money Flow Index
+│   │   ├── BOP.jl                      # Balance of Power
+│   │   ├── CCI.jl                      # Commodity Channel Index
+│   │   ├── ChaikinOsc.jl               # Chaikin Oscillator
+│   │   ├── VWMA.jl                     # Volume Weighted MA
+│   │   ├── VWAP.jl                     # Volume Weighted Average Price
+│   │   ├── AO.jl                       # Awesome Oscillator
+│   │   ├── ForceIndex.jl               # Force Index
+│   │   ├── EMV.jl                      # Ease of Movement
+│   │   ├── MassIndex.jl                # Mass Index
+│   │   ├── CHOP.jl                     # Choppiness Index
+│   │   ├── KVO.jl                      # Klinger Volume Oscillator
+│   │   ├── UO.jl                       # Ultimate Oscillator
+│   │   ├── IntradayRange.jl            # Intraday Range
+│   │   ├── RelativeIntradayRange.jl    # Relative Intraday Range
+│   │   ├── ADR.jl                      # Average Daily Range
+│   │   ├── ARDR.jl                     # Average Relative Daily Range
+│   │   │
+│   │   │   # MIMO (Multiple Input, Multiple Output)
+│   │   ├── Stoch.jl                    # Stochastic Oscillator
+│   │   ├── ADX.jl                      # Average Directional Index
+│   │   ├── SuperTrend.jl               # SuperTrend
+│   │   ├── VTX.jl                      # Vortex Indicator
+│   │   ├── DonchianChannels.jl         # Donchian Channels
+│   │   ├── KeltnerChannels.jl          # Keltner Channels
+│   │   ├── Aroon.jl                    # Aroon Indicator
+│   │   ├── ChandeKrollStop.jl          # Chande Kroll Stop
+│   │   ├── ParabolicSAR.jl             # Parabolic SAR
+│   │   ├── SFX.jl                      # SFX Indicator
+│   │   ├── TTM.jl                      # TTM Squeeze
+│   │   ├── PivotsHL.jl                 # Pivot High/Low
+│   │   ├── GannHiloActivator.jl        # Gann HiLo Activator
+│   │   ├── GannSwingChart.jl           # Gann Swing Chart
+│   │   ├── PeakValleyDetector.jl       # Peak/Valley Detection
+│   │   ├── RetracementCalculator.jl    # Retracement Levels
+│   │   ├── SupportResistanceLevel.jl   # Support/Resistance
+│   │   │
+│   │   │   # Other
+│   │   └── STC.jl                      # Schaff Trend Cycle
+│   │
+│   ├── patterns/                       # Candlestick patterns (13)
+│   │   ├── Patterns.jl                 # Submodule definition
+│   │   ├── PatternTypes.jl             # Pattern type enumerations
+│   │   ├── PatternValues.jl            # Pattern value structs
+│   │   │
+│   │   │   # Single Candle Patterns
+│   │   ├── Doji.jl                     # Doji pattern
+│   │   ├── Hammer.jl                   # Hammer pattern
+│   │   ├── ShootingStar.jl             # Shooting Star pattern
+│   │   ├── Marubozu.jl                 # Marubozu pattern
+│   │   ├── SpinningTop.jl              # Spinning Top pattern
+│   │   │
+│   │   │   # Two Candle Patterns
+│   │   ├── Engulfing.jl                # Engulfing pattern
+│   │   ├── Harami.jl                   # Harami pattern
+│   │   ├── PiercingDarkCloud.jl        # Piercing/Dark Cloud patterns
+│   │   ├── Tweezer.jl                  # Tweezer pattern
+│   │   │
+│   │   │   # Three Candle Patterns
+│   │   ├── Star.jl                     # Morning/Evening Star
+│   │   ├── ThreeSoldiersCrows.jl       # Three Soldiers/Crows
+│   │   ├── ThreeInside.jl              # Three Inside patterns
+│   │   │
+│   │   │   # Composite
+│   │   └── CandlestickPatternDetector.jl  # All patterns detector
+│   │
+│   ├── wrappers/                       # Indicator wrappers
+│   │   ├── Wrappers.jl                 # Submodule definition
+│   │   ├── dag.jl                      # DAGWrapper for StatDAG
+│   │   └── smoother.jl                 # Generic smoothing wrapper
+│   │
+│   ├── factories/                      # Factory functions
+│   │   ├── Factories.jl                # Submodule definition
+│   │   └── MovingAverage.jl            # MA factory
+│   │
+│   └── other/                          # Integration utilities
+│       ├── arrays_indicators.jl        # Array convenience functions
+│       ├── tables_indicators.jl        # Tables.jl integration
+│       ├── iterators.jl                # Iterator support
+│       └── tsframes.jl                 # TSFrames integration
+│
+├── test/                               # Test suite
+│   ├── runtests.jl                     # Test entry point
+│   ├── test_ohlcv.jl                   # OHLCV tests
+│   ├── test_indicators_interface.jl   # Interface tests
+│   ├── test_ind_single_input_single_output.jl    # SISO tests
+│   ├── test_ind_single_input_several_outputs.jl  # SIMO tests
+│   ├── test_ind_OHLCV_input_single_output.jl     # MISO tests
+│   ├── test_ind_OHLCV_input_several_outputs.jl   # MIMO tests
+│   ├── test_gann_indicators.jl         # Gann indicator tests
+│   ├── test_patterns.jl                # Pattern tests
+│   └── test_resample.jl                # Resampling tests
+│
+├── docs/                               # Documentation
+│   ├── make.jl                         # Documenter.jl build script
+│   ├── Project.toml                    # Docs dependencies
+│   └── src/                            # Documentation source
+│       ├── index.md                    # Home page
+│       ├── features.md                 # Package features
+│       ├── install.md                  # Installation guide
+│       ├── usage.md                    # Basic usage
+│       ├── usage_more.md               # Advanced usage
+│       ├── indicators_support.md       # Supported indicators
+│       ├── examples.md                 # Usage examples
+│       ├── internals.md                # Internal details
+│       ├── implementing_your_indic.md  # Custom indicator guide
+│       ├── migration.md                # Migration guide
+│       ├── api.md                      # API reference
+│       ├── projects.md                 # Related projects
+│       └── patterns/                   # Pattern documentation
+│           ├── index.md                # Pattern overview
+│           ├── quickstart.md           # Pattern quick start
+│           └── implementation.md       # Pattern implementation
+│
+├── Project.toml                        # Package dependencies
+├── README.md                           # Repository readme
+├── LICENSE                             # License file
+└── WIKI.md                             # Comprehensive documentation</code></pre><h2 id="Key-Files"><a class="docs-heading-anchor" href="#Key-Files">Key Files</a><a id="Key-Files-1"></a><a class="docs-heading-anchor-permalink" href="#Key-Files" title="Permalink"></a></h2><h3 id="Entry-Point"><a class="docs-heading-anchor" href="#Entry-Point">Entry Point</a><a id="Entry-Point-1"></a><a class="docs-heading-anchor-permalink" href="#Entry-Point" title="Permalink"></a></h3><p><strong><code>src/OnlineTechnicalIndicators.jl</code></strong> is the main module entry point. It:</p><ol><li>Exports submodule names (<code>Candlesticks</code>, <code>Indicators</code>, <code>Patterns</code>, etc.)</li><li>Defines abstract base types (<code>TechnicalIndicator</code>, etc.)</li><li>Includes core utilities (<code>stats.jl</code>)</li><li>Includes all submodules in dependency order</li></ol><h3 id="Submodule-Definitions"><a class="docs-heading-anchor" href="#Submodule-Definitions">Submodule Definitions</a><a id="Submodule-Definitions-1"></a><a class="docs-heading-anchor-permalink" href="#Submodule-Definitions" title="Permalink"></a></h3><p>Each submodule has a main file (e.g., <code>Indicators.jl</code>) that:</p><ol><li>Imports dependencies from parent/sibling modules</li><li>Includes individual indicator/pattern files</li><li>Exports public types and functions</li><li>Defines <code>is_multi_input</code> for each type</li></ol><h3 id="Indicator-Files"><a class="docs-heading-anchor" href="#Indicator-Files">Indicator Files</a><a id="Indicator-Files-1"></a><a class="docs-heading-anchor-permalink" href="#Indicator-Files" title="Permalink"></a></h3><p>Each indicator file (e.g., <code>SMA.jl</code>) contains:</p><ol><li>Default parameter constants</li><li>Docstring with formula and usage</li><li>Mutable struct definition</li><li>Constructor functions</li><li><code>_calculate_new_value</code> implementation</li></ol><h3 id="Test-Files"><a class="docs-heading-anchor" href="#Test-Files">Test Files</a><a id="Test-Files-1"></a><a class="docs-heading-anchor-permalink" href="#Test-Files" title="Permalink"></a></h3><p>Tests are organized by indicator category:</p><ul><li><strong>SISO</strong>: Single input, single output indicators</li><li><strong>SIMO</strong>: Single input, multiple output indicators</li><li><strong>MISO</strong>: OHLCV input, single output indicators</li><li><strong>MIMO</strong>: OHLCV input, multiple output indicators</li></ul><h2 id="Module-Loading-Order"><a class="docs-heading-anchor" href="#Module-Loading-Order">Module Loading Order</a><a id="Module-Loading-Order-1"></a><a class="docs-heading-anchor-permalink" href="#Module-Loading-Order" title="Permalink"></a></h2><p>The main module includes files in a specific order to satisfy dependencies:</p><ol><li><code>stats.jl</code> - Core utilities</li><li><code>candlesticks/Candlesticks.jl</code> - OHLCV types</li><li><code>internals/Internals.jl</code> - Internal utilities</li><li><code>sample_data.jl</code> - Sample data</li><li><code>factories/MovingAverage.jl</code> - MA factory (needed by indicators)</li><li><code>wrappers/dag.jl</code> - DAGWrapper (needed by composed indicators)</li><li><code>indicators/Indicators.jl</code> - All technical indicators</li><li><code>patterns/Patterns.jl</code> - All pattern detectors</li><li><code>resample.jl</code> - Resampling utilities</li><li><code>other/iterators.jl</code> - Iterator support</li><li><code>wrappers/Wrappers.jl</code> - Re-export module</li><li><code>factories/Factories.jl</code> - Re-export module</li></ol><h2 id="See-Also"><a class="docs-heading-anchor" href="#See-Also">See Also</a><a id="See-Also-1"></a><a class="docs-heading-anchor-permalink" href="#See-Also" title="Permalink"></a></h2><ul><li><a href="../architecture/">Architecture</a> for module relationships and type hierarchy</li><li><a href="../dataflow/#Data-Flow">Data Flow</a> for how data flows through indicators</li></ul></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../architecture/">« Architecture</a><a class="docs-footer-nextpage" href="../dataflow/">Data Flow »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Monday 5 January 2026 14:28">Monday 5 January 2026</span>. Using Julia version 1.10.10.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
