@@ -1,18 +1,24 @@
 ### A Pluto.jl notebook ###
-# v0.19.39
+# v0.20.21
 
 using Markdown
 using InteractiveUtils
 
 # ╔═╡ e5bc1ac4-415c-40e8-b27c-0af01c834ede
-import Pkg;
-Pkg.activate("..");
-
-# ╔═╡ 931da9b9-2de4-425b-8a7a-14934d81b033
-using OnlineTechnicalIndicators
+begin
+	import Pkg;
+	#Pkg.activate("..");
+	#Pkg.add("OnlineTechnicalIndicators")
+	Pkg.develop("OnlineTechnicalIndicators")
+end
 
 # ╔═╡ b22340af-7262-480e-a5dc-74e73a39bddc
-using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
+begin
+	using OnlineTechnicalIndicators.Indicators: SMA, BB, ATR, Stoch
+	using OnlineTechnicalIndicators.Indicators: fit!, value
+	using OnlineTechnicalIndicators.Candlesticks: OHLCV
+	using OnlineTechnicalIndicators.SampleData: CLOSE_TMPL, V_OHLCV
+end
 
 # ╔═╡ c095cbc9-93fc-4f30-b4ac-19e1bcbc2fef
 using MarketData
@@ -61,6 +67,15 @@ begin
     end
     show_sma1()
 end
+
+# ╔═╡ 01fd1937-d9d3-4423-a6aa-1afb3b35be65
+
+
+# ╔═╡ 04374981-a626-413d-9476-1b7c6ec03542
+
+
+# ╔═╡ af3df771-caa4-4daa-b40e-fe11bd2ddb84
+
 
 # ╔═╡ 28e0fb3a-f5fa-407f-981a-84ccc80b074d
 md"""### Calculate BB (Bollinger bands)"""
@@ -180,7 +195,6 @@ Stoch(ts; period = 3)
 # ╟─60ee2452-d281-4456-bc87-b53be3b232f7
 # ╠═e5bc1ac4-415c-40e8-b27c-0af01c834ede
 # ╟─c679d3bf-6611-4e33-88ae-036cf6177be9
-# ╠═931da9b9-2de4-425b-8a7a-14934d81b033
 # ╟─d8b1703a-5847-4b4f-b1c8-5c661b34ddc9
 # ╠═b22340af-7262-480e-a5dc-74e73a39bddc
 # ╟─d00eabf0-947f-4be7-b802-a7880ce87b01
@@ -189,6 +203,9 @@ Stoch(ts; period = 3)
 # ╠═99b0bf9b-2dac-4aa6-b299-048a87e13cf7
 # ╠═68627c9a-e9e6-439e-adca-9a491aaae7f5
 # ╠═13aff320-c058-4436-86e3-b9465ea93b20
+# ╠═01fd1937-d9d3-4423-a6aa-1afb3b35be65
+# ╠═04374981-a626-413d-9476-1b7c6ec03542
+# ╠═af3df771-caa4-4daa-b40e-fe11bd2ddb84
 # ╠═28e0fb3a-f5fa-407f-981a-84ccc80b074d
 # ╠═8c44d1db-f905-4621-b0e9-ca21d5b85ebb
 # ╟─2f8045ca-97ae-4c07-9a46-74be7cfd6632

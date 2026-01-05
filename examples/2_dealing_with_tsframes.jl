@@ -7,9 +7,9 @@ This example demonstrates how to use an OnlineTechnicalIndicators technical anal
 
 using MarketData
 using TSFrames
-using OnlineTechnicalIndicators
+using OnlineTechnicalIndicators.Indicators: SMA, BB, ATR, Stoch
 
-print("Get input data")
+println("Get input data")
 ta = random_ohlcv()  # should return a TimeSeries.TimeArray  (need latest dev version of MarketData) with random prices and volume
 ts = TSFrame(ta)  # converts a TimeSeries.TimeArray to TSFrames.TSFrame
 println(ts)

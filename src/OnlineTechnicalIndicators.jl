@@ -37,23 +37,6 @@ include("factories/MovingAverage.jl")
 # Include DAGWrapper (needed by SISO indicators like DEMA, TEMA, T3, TRIX)
 include("wrappers/dag.jl")
 
-# CircBuff setindex! extensions
-function Base.setindex!(o::CircBuff, val, i::Int)
-    if nobs(o) ≤ length(o.rng.rng)
-        o.value[i] = val
-    else
-        o.value[o.rng[nobs(o)+i]] = val
-    end
-end
-function Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)
-    i = length(o.value) - i + 1
-    if nobs(o) ≤ length(o.rng.rng)
-        o.value[i] = val
-    else
-        o.value[o.rng[nobs(o)+i]] = val
-    end
-end
-
 # Include Indicators submodule (defines all technical indicators)
 include("indicators/Indicators.jl")
 
@@ -63,9 +46,9 @@ include("patterns/Patterns.jl")
 # Other stuff
 include("resample.jl")
 
-# Integration with Julia ecosystem (Iterators, Tables)
+# Integration with Julia ecosystem (Iterators)
 include("other/iterators.jl")
-include("other/tables.jl")
+# Note: Tables.jl integration is now in Indicators submodule (other/tables_indicators.jl)
 
 # Include re-export modules (must be at the end after all types are defined)
 include("wrappers/Wrappers.jl")

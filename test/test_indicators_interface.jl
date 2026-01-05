@@ -266,8 +266,7 @@ end
 
 @testitem "Indicators - Table SISO SMA" begin
     using OnlineTechnicalIndicators
-    using OnlineTechnicalIndicators.Indicators: SMA
-    using OnlineTechnicalIndicators: TechnicalIndicatorWrapper, load!
+    using OnlineTechnicalIndicators.Indicators: SMA, TechnicalIndicatorWrapper, load!
     using OnlineTechnicalIndicators.SampleData: RT_OHLCV
     using Tables
 
@@ -293,8 +292,7 @@ end
 
 @testitem "Indicators - Table SIMO BB" begin
     using OnlineTechnicalIndicators
-    using OnlineTechnicalIndicators.Indicators: BB, BBVal
-    using OnlineTechnicalIndicators: TechnicalIndicatorWrapper, load!
+    using OnlineTechnicalIndicators.Indicators: BB, BBVal, TechnicalIndicatorWrapper, load!
     using OnlineTechnicalIndicators.SampleData: RT_OHLCV
     using Tables
 
@@ -323,8 +321,7 @@ end
 
 @testitem "Indicators - Table MISO ATR" begin
     using OnlineTechnicalIndicators
-    using OnlineTechnicalIndicators.Indicators: ATR
-    using OnlineTechnicalIndicators: TechnicalIndicatorWrapper, load!
+    using OnlineTechnicalIndicators.Indicators: ATR, TechnicalIndicatorWrapper, load!
     using OnlineTechnicalIndicators.SampleData: RT_OHLCV
     using Tables
 
@@ -347,8 +344,7 @@ end
 
 @testitem "Indicators - Table MIMO Stoch" begin
     using OnlineTechnicalIndicators
-    using OnlineTechnicalIndicators.Indicators: Stoch, StochVal
-    using OnlineTechnicalIndicators: TechnicalIndicatorWrapper, load!
+    using OnlineTechnicalIndicators.Indicators: Stoch, StochVal, TechnicalIndicatorWrapper, load!
     using OnlineTechnicalIndicators.SampleData: RT_OHLCV
     using Tables
 

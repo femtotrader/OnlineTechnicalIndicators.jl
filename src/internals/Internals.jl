@@ -205,4 +205,31 @@ function OnlineStatsBase._fit!(ind::O, data) where {O<:TechnicalIndicator}
         _calculate_new_value_only_from_incoming_data(ind, data)
 end
 
+"""
+    Base.setindex!(o::CircBuff, val, i::Int)
+
+Set the value at index `i` in the circular buffer `o` to `val`.
+"""
+function Base.setindex!(o::CircBuff, val, i::Int)
+    if nobs(o) ≤ length(o.rng.rng)
+        o.value[i] = val
+    else
+        o.value[o.rng[nobs(o)+i]] = val
+    end
+end
+
+"""
+    Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)    
+
+Set the value at index `i` in the reversed circular buffer `o` to `val`.
+"""
+function Base.setindex!(o::CircBuff{<:Any,true}, val, i::Int)
+    i = length(o.value) - i + 1
+    if nobs(o) ≤ length(o.rng.rng)
+        o.value[i] = val
+    else
+        o.value[o.rng[nobs(o)+i]] = val
+    end
+end
+
 end # module Internals
