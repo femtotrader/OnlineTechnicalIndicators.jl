@@ -18,6 +18,9 @@ This project implements some Technical Analysis Indicators in Julia in an increm
 
 [![Star History Chart](https://api.star-history.com/svg?repos=femtotrader/OnlineTechnicalIndicators.jl&type=Timeline?refresh=1)](https://www.star-history.com/#femtotrader/OnlineTechnicalIndicators.jl&Timeline)
 
+## Donations / Support
+[Support and donations are appreciated but not required.](https://github.com/femtotrader/support/)
+
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: https://femtotrader.github.io/OnlineTechnicalIndicators.jl/stable/
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
